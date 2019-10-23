@@ -1,0 +1,23 @@
+{
+    "private": true,
+    "name": "nr1-csg-slo-r",
+    "description": "Nerdpack nr1-csg-slo-r",
+    "version": "0.1.0",
+    "scripts": {
+        "start": "nr1 nerdpack:serve",
+        "test": "exit 0"
+    },
+    "nr1": {
+        "uuid": "f28d9cc2-0dc6-4bf4-a3f5-6afde8d54033"
+    },
+    "dependencies": {
+        "prop-types": "^15.6.2",
+        "react": "^16.6.3",
+        "react-dom": "^16.6.3"
+    },
+    "browserslist": [
+        "last 2 versions",
+        "not ie < 11",
+        "not dead"
+    ]
+}

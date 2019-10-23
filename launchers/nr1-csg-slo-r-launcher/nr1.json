@@ -1,0 +1,7 @@
+{
+    "schemaType": "LAUNCHER",
+    "id": "nr1-csg-slo-r-launcher",
+    "description": "Describe me",
+    "displayName": "Nr1CsgSloR",
+    "rootNerdletId": "nr1-csg-slo-r-nerdlet"
+}
