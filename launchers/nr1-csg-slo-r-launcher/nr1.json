@@ -1,7 +1,7 @@
 {
     "schemaType": "LAUNCHER",
     "id": "nr1-csg-slo-r-launcher",
-    "description": "Describe me",
-    "displayName": "Nr1CsgSloR",
-    "rootNerdletId": "nr1-csg-slo-r-nerdlet"
+    "description": "Provides view of all SLO/R SLOs defined on service entities available to this user.",
+    "displayName": "SLO/R",
+    "rootNerdletId": "slo-r-main"
 }
