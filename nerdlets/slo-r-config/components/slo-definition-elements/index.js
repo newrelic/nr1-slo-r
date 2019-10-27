@@ -34,7 +34,8 @@ export default class SLODefinitionElements extends Component {
         accountId: PropTypes.any,
         appName: PropTypes.any,
         type: PropTypes.any,
-        sloElementOnClickHandler: PropTypes.func
+        errorBudgetOnClickHandler: PropTypes.func,
+        genericAlertOnClickHandler: PropTypes.func
     } //propTypes
 
     constructor(props) {
@@ -46,12 +47,46 @@ export default class SLODefinitionElements extends Component {
         } //state
 
         this.addAlert = this._addAlert.bind(this);
-
+        this.removeAlert = this._removeAlert.bind(this);
     } //constructor
 
-    /** creates a new alert object in the array */
-    _addAlert() {
+    /** removes the alert index at the specified location */
+    _removeAlert(_evt, _index) {
 
+        _evt.preventDefault(); /* hoping this stops the submit of the form */
+
+        var __alerts = this.state.alerts;
+
+        // need to loop through the structure and actually reorder the alert indicies because I am saving their state
+        for( var i = 0; i < __alerts.length; i++){ 
+         
+            console.debug("index passed: " + _index);
+            console.debug("iterator: " + i);
+            console.debug();
+            if ( __alerts[i].id === _index) {
+
+                __alerts.splice(_index, 1);  
+              i--;
+            } //if
+            else if (__alerts[i].id !== i) {
+            __alerts[i] = { index: i}
+            } //else if
+
+         } //for
+
+
+
+        this.props.genericAlertOnClickHandler("remove", null, _index);
+        this.setState({alerts: __alerts});
+
+        console.debug("Alerts after delete", __alerts);
+    } //_removeAlert
+
+    /** creates a new alert object in the array */
+    _addAlert(_evt) {
+
+        _evt.preventDefault(); /* hoping this stops the submit of the form */
+console.debug("add fired");
         var __alerts = this.state.alerts;
         var __alert;
 
@@ -69,26 +104,25 @@ export default class SLODefinitionElements extends Component {
 
         __alerts.push(__alert);
 
+        this.props.genericAlertOnClickHandler("add", null, __alerts.length - 1);
+
         this.setState({alerts: __alerts});
 
     } //_addAlert
 
+    /** convinence method to toggle the state of the underlying UI components */
+    _setSLODefinitionType(_slotype) {
+
+        this.setState({slo_type: _slotype});
+    } //_setSLODefinitionType
+
     /** lifecycle - sets the type state to effect conditional rendering */
     componentDidMount() {
 
-        console.debug("Calling sol-elements did mount")
-        console.debug("accountId", this.props.accountId);
-        console.debug("appName"), this.props.appName;
-        console.debug("type", this.props.type);
-
         if (this.props.accountId !== undefined) {
 
-            this.setState({slo_type: this.props.type});
+            this._setSLODefinitionType(this.props.type)
         } //if
-        else {
-
-            console.debug("some undefined sheeeit");
-        } //else
 
     } //componentDidMount
        
@@ -102,31 +136,31 @@ export default class SLODefinitionElements extends Component {
                 <div>
                     <label>Defects</label>
                     <div>
-                        <input type="checkbox" category="defect" name="5%" id="500" onChange={_evt => this.props.sloElementOnClickHandler('defect', '5%', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="5%" id="500" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', '5%', _evt.nativeEvent.target.checked)}/>
                         <label>5xx Errors</label>
                     </div> 
                     <div>
-                        <input type="checkbox" category="defect" name="400" id="400" onChange={_evt => this.props.sloElementOnClickHandler('defect', '400', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="400" id="400" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', '400', _evt.nativeEvent.target.checked)}/>
                         <label>400 Bad Request</label>
                     </div> 
                     <div>
-                        <input type="checkbox" category="defect" name="401" value="off" id="401" onChange={_evt => this.props.sloElementOnClickHandler('defect', '401', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="401" value="off" id="401" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', '401', _evt.nativeEvent.target.checked)}/>
                         <label>401 Unauthorized</label>
                     </div>
                     <div>
-                        <input type="checkbox" category="defect" name="403" value="off" id="403" onChange={_evt => this.props.sloElementOnClickHandler('defect', '403', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="403" value="off" id="403" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', '403', _evt.nativeEvent.target.checked)}/>
                         <label>403 Forbidden</label>
                     </div> 
                     <div>
-                        <input type="checkbox" category="defect" name="404" value="off" id="404" onChange={_evt => this.props.sloElementOnClickHandler('defect', '404', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="404" value="off" id="404" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', '404', _evt.nativeEvent.target.checked)}/>
                         <label>404 Not Found</label>
                     </div>
                     <div>
-                        <input type="checkbox" category="defect" name="409" value="off" id="409" onChange={_evt => this.props.sloElementOnClickHandler('defect', '409', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="409" value="off" id="409" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', '409', _evt.nativeEvent.target.checked)}/>
                         <label>409 Conflict</label>
                     </div>
                     <div>
-                        <input type="checkbox" category="defect" name="Apdex Frustrated" value="off" id="999" onChange={_evt => this.props.sloElementOnClickHandler('defect', 'apdex_frustrated', _evt.nativeEvent.target.checked)}/>
+                        <input type="checkbox" category="defect" name="Apdex Frustrated" value="off" id="999" onChange={_evt => this.props.errorBudgetOnClickHandler('defect', 'apdex_frustrated', _evt.nativeEvent.target.checked)}/>
                         <label>Apdex Frustrated</label>
                     </div> 
                     <br/>
@@ -147,7 +181,7 @@ export default class SLODefinitionElements extends Component {
                                         if (result.metadata.name !== "Other") {
                                             return (
                                                 <div>
-                                                    <input type="checkbox" category="transaction" name={result.metadata.name} value="off" id={i} onChange={_evt => this.props.sloElementOnClickHandler('transaction', result.metadata.name, _evt.nativeEvent.target.checked)}/>
+                                                    <input type="checkbox" category="transaction" name={result.metadata.name} value="off" id={i} onChange={_evt => this.props.errorBudgetOnClickHandler('transaction', result.metadata.name, _evt.nativeEvent.target.checked)}/>
                                                     <label for={i}>{result.metadata.name} {result.count}</label>
                                                 </div> 
                                                 )
@@ -180,14 +214,24 @@ export default class SLODefinitionElements extends Component {
                         <GridItem columnSpan={4}>
                             <div>
                             <table>
-                            {
-                                this.state.alerts.map(__alert =>
+                                <tbody>
+                            { this.state.alerts.map(__alert =>
                                     <tr>
                                 
-                                        <input type="text" name="alert" size="55" id={__alert.index} onChange={this.props.formCallback}/>
+                                        <td>
+                                            <input type="text" name="alert" size="55" id={__alert.index} onChange={_evt => {this.props.genericAlertOnClickHandler(_evt.nativeEvent.target.name, _evt.nativeEvent.target.value, __alert.index)}}/>
+                                        </td>
+                                        <td>
+                                        <Button
+                                            onClick={_evt => {this.removeAlert(_evt, __alert.index)}}
+                                            type={Button.TYPE.NORMAL}
+                                            iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_REMOVE}>
+                                        </Button>
+                                        </td>
                                     </tr>
                             )                            
                             }
+                            </tbody>
                             </table>                             
                             </div>
                             

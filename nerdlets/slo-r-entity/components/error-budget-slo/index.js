@@ -48,24 +48,37 @@ export default class ErrorBudgetSLO extends Component {
     
         _transactions.map(transaction => {
             
-            __ERROR_FILTER = __ERROR_FILTER + "FILTER(count(*), WHERE name = '" + transaction + "'";
-
+            __ERROR_FILTER = __ERROR_FILTER + "FILTER(count(*), WHERE name = '" + transaction + "' AND (";
+            var __defectsIndex = 0;
+            var __DEFECTS_JOIN = "";
             var __DEFECTS_FILTER = "";
+
             _defects.map(defect => {
 
-                //evaluate if the defect is an httpResponseCode releated or apdexPerfZone
-                if (defect === 'apdex') {
+                if (__defectsIndex > 0) {
 
-                    __DEFECTS_FILTER = __DEFECTS_FILTER + " AND apdexPerfZone = 'F'"
+                    __DEFECTS_JOIN = " OR ";
                 } //if
                 else {
 
-                    __DEFECTS_FILTER = __DEFECTS_FILTER + " AND " + this._getAgentHTTPResponseAttributeName() + " LIKE " + "'" + defect + "'";
+                    __DEFECTS_JOIN = "";
                 } //else
 
+
+                //evaluate if the defect is an httpResponseCode releated or apdexPerfZone
+                if (defect === 'apdex_frustrated') {
+
+                    __DEFECTS_FILTER = __DEFECTS_FILTER + __DEFECTS_JOIN + "apdexPerfZone = 'F'"
+                } //if
+                else {
+
+                    __DEFECTS_FILTER = __DEFECTS_FILTER + __DEFECTS_JOIN + this._getAgentHTTPResponseAttributeName() + " LIKE " + "'" + defect + "'";
+                } //else
+
+                __defectsIndex++;
             });
 
-            __ERROR_FILTER = __ERROR_FILTER + __DEFECTS_FILTER + ") + "; //lazy way to account for the array elements
+            __ERROR_FILTER = __ERROR_FILTER + __DEFECTS_FILTER + ")) + "; //lazy way to account for the array elements
         });
 
         __ERROR_FILTER = __ERROR_FILTER + "0"; //completes the expression on the final array element
@@ -133,8 +146,6 @@ export default class ErrorBudgetSLO extends Component {
     _getErrorBudgetNRQL(_transactions, _defects, _begin, _end, _duration, _appName) {
     
         const __NRQL = `SELECT 100 - ((${this._getErrorFilter(_transactions, _defects)}) / (${this._getTotalFilter(_transactions)})) AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${this._getAgentHTTPResponseAttributeName()} IS NOT NULL ${this._formatNRQLTimeRange(_begin, _end, _duration)}`;
-        
-        console.log("NRQL TEST", __NRQL);
         return(__NRQL);    
     } //getErrorBudgerNRQL
 

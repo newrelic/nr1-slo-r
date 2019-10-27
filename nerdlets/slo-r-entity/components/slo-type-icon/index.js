@@ -65,7 +65,7 @@ export default class SLOTypeIcon extends Component {
                 return(
 
                     <div>
-                        <Icon type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING} />
+                        <Icon type={ Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_WARNING } />
                     </div>
     
                 );
@@ -75,7 +75,7 @@ export default class SLOTypeIcon extends Component {
                 return(
 
                     <div>
-                        <Icon type={Icon.TYPE.DATAVIZ__DATAVIZ__LINE_CHART} />
+                        <Icon type={ Icon.TYPE.DATAVIZ__DATAVIZ__LINE_CHART } />
                     </div>
     
                 );
@@ -85,7 +85,7 @@ export default class SLOTypeIcon extends Component {
                 return(
 
                     <div>
-                        <Icon type={Icon.TYPE.Icon.TYPE.INTERFACE__STATE__HEALTHY} />
+                        <Icon type={ Icon.TYPE.INTERFACE__STATE__HEALTHY } />
                     </div>
     
                 );
@@ -95,7 +95,7 @@ export default class SLOTypeIcon extends Component {
                 return(
 
                     <div>
-                        <Icon type={Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION} />
+                        <Icon type={ Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__APPLICATION__S_OK } />
                     </div>
     
                 );

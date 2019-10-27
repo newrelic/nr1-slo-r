@@ -47,7 +47,7 @@ export default class SLOREntityNedlet extends Component {
 
     /** refresh the SLODocuments through a callback */
     _rerenderSLOs() {
-
+        console.debug("ARE YOU AMUSED?!");
         this._getSLODocuments();
     } //_rerenderSLOs
 
