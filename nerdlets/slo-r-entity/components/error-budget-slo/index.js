@@ -100,52 +100,10 @@ export default class ErrorBudgetSLO extends Component {
         return(__TOTAL_FILTER);
     } //getTotalFilter
 
-    //TODO this seems like a general purpose utility for creating a time clause for NRQL
-    /** returns a string that represents the time clause for nrql */
-    _formatNRQLTimeRange(_begin_time, _end_time, _duration) {
-    
-        var __begin = _begin_time;
-        var __end = _end_time;
-        var __duration = _duration;
-        var __durationInMinutes;
-        var __date = new Date();
-        var __time_clause = "";
-        var __apm_begin;
-        var __apm_end;
-    
-        //define the time clause for our NRQL
-        if (__duration !== null) {
-    
-            __durationInMinutes = __duration / 1000 / 60;
-            __time_clause = "SINCE " + __durationInMinutes + " MINUTES AGO";
-        } //if
-        else {
-    
-            if (__begin === null) {
-    
-                __begin = __date.getMilliseconds();
-            } //if
-    
-            if (__end === null) {
-    
-                __end = __date.getMilliseconds();
-            } //if
-    
-            __apm_begin = __begin / 1000;
-            __apm_end = __end / 1000;
-    
-            __time_clause = "SINCE " + Math.round(__apm_begin) + " UNTIL " + Math.round(__apm_end);
-    
-        } //else
-    
-        return(__time_clause);
-    
-    } //_formatNRQLTimeRange
-
     /** returns the full nrql needed to calculate the error budget */
-    _getErrorBudgetNRQL(_transactions, _defects, _begin, _end, _duration, _appName) {
+    _getErrorBudgetNRQL(_transactions, _defects, _begin, _end, _appName) {
     
-        const __NRQL = `SELECT 100 - ((${this._getErrorFilter(_transactions, _defects)}) / (${this._getTotalFilter(_transactions)})) AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${this._getAgentHTTPResponseAttributeName()} IS NOT NULL ${this._formatNRQLTimeRange(_begin, _end, _duration)}`;
+        const __NRQL = `SELECT 100 - ((${this._getErrorFilter(_transactions, _defects)}) / (${this._getTotalFilter(_transactions)})) AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${this._getAgentHTTPResponseAttributeName()} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
         return(__NRQL);    
     } //getErrorBudgerNRQL
 
@@ -166,14 +124,14 @@ export default class ErrorBudgetSLO extends Component {
     async _getErrorBudgetSLOData(_scope) {
 
         var __NRQL;
-        var __beginTS;
-        var __endTS;
-        var __duration;
         var __date = Date.now();
+        var __beginTS = this.props.nerdlet_beginTS;
+        var __endTS = this.props.nerdlet_endTS;
+        var __duration = this.props.nerdlet_duration;
 
         //need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
-        if (__endTS === undefined) {
-
+        if (__endTS === undefined || __endTS === null) {
+            
             __endTS = __date;
         } //if
         else {
@@ -194,12 +152,19 @@ export default class ErrorBudgetSLO extends Component {
         } //else if
         else {
             //assume current time 
-            __beginTS = this.props.nerdlet_beginTS;
-            __endTS = this.props.nerdlet_endTS;
-            __duration = this.props.nerdlet_duration;
+            if (__duration !== null) {
+
+                __beginTS = +__endTS - +__duration;
+            } //if
+            else {
+
+                __beginTS = this.props.nerdlet_beginTS;
+                __endTS = this.props.nerdlet_endTS;
+            } //else
+
         } //else
 
-        var __NRQL = this._getErrorBudgetNRQL(this.props.transactions, this.props.defects, __beginTS, __endTS, __duration, this.props.appName);
+        var __NRQL = this._getErrorBudgetNRQL(this.props.transactions, this.props.defects, __beginTS, __endTS, this.props.appName);
 
         const {data: __SLO} = await NrqlQuery.query({
             accountId: this.props.accountId,

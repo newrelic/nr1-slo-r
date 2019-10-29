@@ -85,6 +85,9 @@ export default class SLOTable extends Component {
     /** Provides the simple table component as a encapsulated <div> */
     render() {
         
+        console.debug("nerdlet being TS " + this.props.nerdlet_beginTS);
+        console.debug("nerdlet end TS " + this.props.nerdlet_endTS);
+        console.debug("nerdlet duration " + this.props.nerdlet_duration);
         //render the table or just the headings if we have no clo_documents defined.
         if (this.props.slo_documents === "EMPTY") {
 

@@ -46,16 +46,13 @@ export default class GenericAlertDetails extends Component {
     /** removes the alert index at the specified location */
     _removeAlert(_evt, _index) {
 
-        _evt.preventDefault(); /* hoping this stops the submit of the form */
+        _evt.preventDefault(); /* stops the submit of the form */
 
         var __alerts = this.state.alerts;
 
         // need to loop through the structure and actually reorder the alert indicies because I am saving their state
         for( var i = 0; i < __alerts.length; i++){ 
          
-            console.debug("index passed: " + _index);
-            console.debug("iterator: " + i);
-            console.debug();
             if ( __alerts[i].id === _index) {
 
                 __alerts.splice(_index, 1);  
@@ -107,7 +104,7 @@ export default class GenericAlertDetails extends Component {
             console.debug("we have no candidate alerts");
             const __query = `{
                 actor {
-                  account(id: 630060) {
+                  account(id: ${this.props.accountId}) {
                     nrql(query: "SELECT count(*) FROM SLOR_ALERTS SINCE 12 MONTHS AGO FACET policy_name") {
                       results
                     }
@@ -116,7 +113,7 @@ export default class GenericAlertDetails extends Component {
               }`;
     
             const __result = await NerdGraphQuery.query({query: __query});
-            console.debug("some results: " +  JSON.stringify(__result));
+//            console.debug("some results: " +  JSON.stringify(__result));
             this.setState({candidate_alerts: __result.data.actor.account.nrql.results});
         } //if
 
