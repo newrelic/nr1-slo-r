@@ -63,6 +63,15 @@ nr1 nerdpack:subscribe [-c [DEV|BETA|STABLE]] [--profile=your_profile_name]
 
 Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerdpack, and :sparkles:
 
+## How to configure and use SLO/R
+
+![Screenshot #2](screenshots/screenshot_02.png)
+![Screenshot #3](screenshots/screenshot_03.png)
+![Screenshot #4](screenshots/screenshot_04.png)
+![Screenshot #5](screenshots/screenshot_05.png)
+![Screenshot #6](screenshots/screenshot_06.png)
+![Screenshot #7](screenshots/screenshot_07.png)
+
 # Support
 
 New Relic has open-sourced this project. This project is provided AS-IS WITHOUT WARRANTY OR DEDICATED SUPPORT. Issues and contributions should be reported to the project here on GitHub.
