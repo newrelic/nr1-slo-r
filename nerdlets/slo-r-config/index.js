@@ -19,7 +19,6 @@ import { NerdGraphQuery } from 'nr1'
 import { PlatformStateContext } from 'nr1'
 import { NerdletStateContext } from 'nr1';
 /** local */
-import SLODefinitionElements from './components/slo-definition-elements'; //TODO this goes away
 import ErrorBudgetDetails from './components/error-budget-details';
 import GenericAlertDetails from './components/generic-alert-details';
 
