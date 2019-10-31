@@ -10,6 +10,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
 import { EntityStorageMutation } from 'nr1';
+import { BlockText } from 'nr1';
+import { Grid } from 'nr1';
+import { GridItem } from 'nr1';
 import { Spinner } from 'nr1';
 import { navigation } from 'nr1';
 import { NerdGraphQuery } from 'nr1'
@@ -31,16 +34,13 @@ export default class SLORConfig extends Component {
 
     static propTypes = {        
         nerdletUrlState: PropTypes.object,
-        launcherUrlState: PropTypes.object,
-        accountID: PropTypes.any, //IS this needed?
-        renderCallback: PropTypes.func //need a render callback but how to implement ... 
+        launcherUrlState: PropTypes.object
     } //propTypes
 
-    //TODO NEED TO FIND A WAY TO PERSIST THE accountid, appname, accountname
     constructor(props) {
         super(props);
 
-        //The component state includes each of the form attributes we want to keep track of
+        //The component state includes each of the form attributes we want to keep track of and rendering variables.
         this.state = {
             slo_name: '',
             transactions: [],
@@ -54,7 +54,7 @@ export default class SLORConfig extends Component {
             showHideEB: false
         } //state
 
-        //on-click thingmies
+        //on-click binds
         this.writeSLO = this.writeSLO.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleEBElementsChange = this._handleEBElementsChange.bind(this);
@@ -62,36 +62,12 @@ export default class SLORConfig extends Component {
     } //constructor
 
     /** manages the creation and deletion of Alerts defined for an SLO */
-    _handleGenericAlertChange(_type, _name, _checked) {
+    _handleGenericAlertChange(_alerts) {
 
-
-        var __name = "alerts";
-        var __value;
-        var __alerts = this.state.alerts; //get the current alerts state ...
-
-        if (_type === 'checkbox') {
-
-            if (_checked) {
-
-                console.debug('item checked');
-                __alerts.push(_name);
-            } //if
-            else {
-
-                console.debug('item UN checked');
-                for( var i = 0; i < __alerts.length; i++){ 
-                    if ( __alerts[i] === _name) {
-                        __alerts.splice(i, 1); 
-                      i--;
-                    } //if
-                 } //for
-            } //else
-
-            this.setState({
-                ["alerts"]: __alerts
-            });
-        } //if
-
+        //update the state object
+        this.setState({
+            ["alerts"]: _alerts
+        });
     } //_handleGenericAlertChange
 
     /** manages the state change in elements related to error budget definition (mostly checkboxes) */
@@ -102,12 +78,10 @@ export default class SLORConfig extends Component {
             var __transactions = this.state.transactions;
             if (_checked) {
 
-                console.debug('item checked');
                 __transactions.push(_name);
             } //if
             else {
 
-                console.debug('item UN checked');
                 for( var i = 0; i < __transactions.length; i++){ 
                     if ( __transactions[i] === _name) {
                         __transactions.splice(i, 1); 
@@ -126,12 +100,10 @@ export default class SLORConfig extends Component {
 
             if (_checked) {
 
-                console.debug('item checked');
                 __defects.push(_name);
             } //if
             else {
 
-                console.debug('item UN checked');
                 for( var i = 0; i < __defects.length; i++){ 
                     if ( __defects[i] === _name) {
                         __defects.splice(i, 1); 
@@ -144,9 +116,6 @@ export default class SLORConfig extends Component {
                 ["defects"]: __defects
             });
         } //else if
-        else {
-            //no opt
-        } //else
 
     } //_handleEBElementsChange
 
@@ -208,6 +177,7 @@ export default class SLORConfig extends Component {
     
         if (this._validateSLOForm()) {
 
+            //assemble the document object
             __slo_document = {
                 slo_name: this.state.slo_name,
                 team: this.state.team,
@@ -221,16 +191,16 @@ export default class SLORConfig extends Component {
                 accountName: this.state.entity_details.accountName,
                 language: this.state.entity_details.language,
                 appName: this.state.entity_details.appName,
-                slo_r_version: "1.0.0"
+                slo_r_version: "1.0.1"
             };
-            //debugger;
-            //write the document please ... 
+
+            //write the document
             this._writeSLODocument(__slo_document);
 
         } //if
         else {
 
-            alert("Problem with SLO definition please validate form and try again.");
+            alert("Problem with SLO definition! Please validate you have an SLO Name, Team, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.");
         } //else
 
     } //addSLO
@@ -238,22 +208,45 @@ export default class SLORConfig extends Component {
     /** validates the structure of the SLO definition and returns an indication of the invalid option */
     _validateSLOForm() {
 
-        var __validForm = true;
+        if (this.state.slo_name === '') {
 
-        //TODO need some validation events brought forward ...
-        // Must have SLO name
-        // Must have numeric target
-        // if error_budget must have at least 1 defect and transaction selected
-        // if alert the alerts must be non-empty input strings
+            return false;
+        } //if
 
-        return(__validForm);
+        if (this.state.target === '') {
+
+            return false;
+        } //if
+
+        if (this.state.team === '') {
+
+            return false;
+        } //if
+
+        if (this.state.type === "error_budget") {
+
+            if (this.state.transactions.length === 0 || this.state.defects.length === 0) {
+
+                return false;
+            } //if
+
+        } //if
+        else {
+
+            if (this.state.alerts.length === 0) {
+
+                return false;
+            } //if
+        } //else
+
+        return true;
     } //validateSLOForm
     
     /** writes the given SLO configuration to nerdstore for the given entity */
     async _writeSLODocument(_slo) { 
             
         const __entityGuid = this.state.entity_details.entityGuid;
-        console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
+        //console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
         const __write_mutation = {
             actionType: EntityStorageMutation.ACTION_TYPE.WRITE_DOCUMENT, 
             collection: "nr1-csg-slo-r", 
@@ -262,28 +255,19 @@ export default class SLORConfig extends Component {
             document: _slo
         } //__write_mutation
     
-        //need to have a real slo name
+        //need to have a real slo name - this is previously validated but acts as a double check.
         if (_slo.slo_name !== "") {
 
             const __write_result = await EntityStorageMutation.mutate(__write_mutation)      
-            console.log("write slo", __write_result);
 
-            //callback to SLOEntity to get the table redrawn. 
-            ///??? this.renderCallback();
-
-console.debug("call back", this.context.renderCallback);
-        //close this slide out thingmy
+            //navigate to the root entity nerdlet for SLO/R
             const __nerdlet = {
                 id: 'nr1-csg-slo-r-nerdlet',
             };
-        
+
             navigation.openNerdlet(__nerdlet);
         } //if
-        else {
-            console.log("no name no do nothing .... ")
-            //TODO REMOVE THIS - an SKLO with no name should not pass validation
-        } //else
-        
+
     } //_writeSLODocument
 
     /** gets the deails needed from the entity we are writing the SLO about */
@@ -291,9 +275,7 @@ console.debug("call back", this.context.renderCallback);
         
         //get the entityGuid react context
         const __service_entity = this.context.entityGuid;
-        //this.renderCallback = this.context.renderCallback; ///TODO might try this again 
-        console.debug("Context: Entity", __service_entity);
-
+        //console.debug("Context: Entity", __service_entity);
         let __result;
         let __entity_details;
         
@@ -324,7 +306,7 @@ console.debug("call back", this.context.renderCallback);
             __result = await NerdGraphQuery.query({query: __query});
         } //else
 
-        console.debug("Entity Result: ", __result);
+        //console.debug("Entity Result: ", __result);
         //check if we have a result object 
         if (__result !== undefined) {
 
@@ -337,7 +319,7 @@ console.debug("call back", this.context.renderCallback);
             };
         } //if
 
-       // this.setState({entity_details: __result.data.actor.entity})
+        //set the entity details state
        this.setState({entity_details: __entity_details});
     } //_getEntityInformation
 
@@ -364,128 +346,86 @@ console.debug("call back", this.context.renderCallback);
             return(
 
                  <div> 
-                    <br/>
-                    <form onSubmit={this.writeSLO}>
-                        <label>SLO Name:
-                            <input type="text" name="slo_name" size="55" id="slo_name" value={this.state.slo_name} onChange={this.handleChange}/>
-                        </label>
+                     <Grid>
+                            <GridItem columnSpan={6}>
+                                <div>
+                                    <br/>
+                                    <form onSubmit={this.writeSLO}>
+                                        <label>SLO Name:
+                                            <input type="text" name="slo_name" size="55" id="slo_name" value={this.state.slo_name} onChange={this.handleChange}/>
+                                        </label>
+                                        <br/>
+                                        <label>Team:
+                                            <input type="text" name="team" size="55" id="team" value={this.state.team} onChange={this.handleChange}/>
+                                        </label>
+                                        <br/>
+                                        <label>Target Attainment:
+                                            <input type="text" name="target" size="55" id="target" value={this.state.target} onChange={this.handleChange}/>
+                                        </label>
+                                        <br/>
+                                        <br/>
+                                        <label>Type</label>
+                                        <br/>
+                                        <input type="radio" id="error_budget" name="type" value="error_budget" onChange={this.handleChange}  id="error_budget"/>
+                                        <label for="error_budget">Error Budget</label>
+                                        <br/>
+                                        <input type="radio" id="availability" name="type"  value="availability" onChange={this.handleChange} id="availability" />
+                                        <label for="availability">Availability</label>
+                                        <br/>
+                                        <input type="radio" id="capacity" name="type"  value="capacity" onChange={this.handleChange}  id="capacity"/>
+                                        <label for="capacity">Capacity</label>
+                                        <br/>
+                                        <input type="radio" id="latency" name="type"  value="latency" onChange={this.handleChange}  id="latency"/>
+                                        <label for="latency">Latency</label>
+                                        <br/>
+                                        <br/>
+                                        <hr></hr>
+                                        <br/>
+                                        { this.state.showHideEB && 
+                                        
+                                            <ErrorBudgetDetails
+                                            accountId={this.state.entity_details.accountId}
+                                            appName={this.state.entity_details.appName}
+                                            errorBudgetOnClickHandler={this.handleEBElementsChange}
+                                            />
+                                        }
+                                        { this.state.showHideAlert &&
+                                                <GenericAlertDetails
+                                                accountId={ this.state.entity_details.accountId }
+                                                genericAlertOnClickHandler={ this.handleGenericAlertChange }
+                                            />
+                                        }
+                                        <br/>
+                                        <input type="submit" value="Create SLO" id="submit"/>
+                                    </form>
+                                </div>
+                                <br/>
+                            </GridItem>
+                            <GridItem columnSpan={5}>
+                                <div>
+                                    <br/>
+                                    <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+                                        SLO Name: Pick a unique name that describes the SLO for this entity. You might want to use a naming convention (e.g. North America DataServices Availability)
+                                    </BlockText>
+                                    <br/>
+                                    <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+                                        Team: Enter the team name with which you wish to associate this SLO. Teams can have multiple SLOs and permit SLO aggregation. 
+                                    </BlockText>
+                                    <br/>
+                                    <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+                                        Target Attainment: Specifiy a numeric target for the SLO (e.g. 99.995). 
+                                    </BlockText>
+                                    <br/>
+                                    <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+                                        Type: Select the type of SLO you wish to calculate. Error Budget SLOs calculate the percentage of transactions that do not exhibit a specified defect. 
+                                        Availability, Latency, and Capacity SLOs are all powered by one or more Alert policies; they calculate the percentage of time that their dependent policies are not in violation. 
+                                    </BlockText>
+                                </div>
+                            </GridItem>
+                        </Grid>
                         <br/>
-                        <label>Team:
-                            <input type="text" name="team" size="55" id="team" value={this.state.team} onChange={this.handleChange}/>
-                        </label>
-                        <br/>
-                        <label>Target Attainment:
-                            <input type="text" name="target" size="55" id="target" value={this.state.target} onChange={this.handleChange}/>
-                        </label>
-                        <br/>
-                        <br/>
-                        <label>Type</label>
-                        <br/>
-                        <input type="radio" id="error_budget" name="type" value="error_budget" onChange={this.handleChange}  id="error_budget"/>
-                        <label for="error_budget">Error Budget</label>
-                        <br/>
-                        <input type="radio" id="availability" name="type"  value="availability" onChange={this.handleChange} id="availability" />
-                        <label for="availability">Availability</label>
-                        <br/>
-                        <input type="radio" id="capacity" name="type"  value="capacity" onChange={this.handleChange}  id="capacity"/>
-                        <label for="capacity">Capacity</label>
-                        <br/>
-                        <input type="radio" id="latency" name="type"  value="latency" onChange={this.handleChange}  id="latency"/>
-                        <label for="latency">Latency</label>
-                        <br/>
-                        <br/>
-                        <hr></hr>
-                        <br/>
-                        { this.state.showHideEB && 
-                         
-                            <ErrorBudgetDetails
-                            accountId={this.state.entity_details.accountId}
-                            appName={this.state.entity_details.appName}
-                            errorBudgetOnClickHandler={this.handleEBElementsChange}
-                            />
-                        }
-                        { this.state.showHideAlert &&
-                                <GenericAlertDetails
-                                accountId={ this.state.entity_details.accountId }
-                                genericAlertOnClickHandler={ this.handleGenericAlertChange }
-                                alertsArray={ this.state.alerts }
-                            />
-                        }
-                        <br/>
-                        <input type="submit" value="Create" id="submit"/>
-                    </form>
-                </div> 
+                    </div> 
             ); 
         } //else
     } //render
 } //SLORConfig
-
-/**
- *    <SLODefinitionElements
-                                accountId={this.state.entity_details.accountId}
-                                appName={this.state.entity_details.appName}
-                                type={this.state.type}
-                                errorBudgetOnClickHandler={this.handleEBElementsChange}
-                                genericAlertOnClickHandler={this.handleGenericAlertChange}
-                            />
- 
- 
- /** manages the creation and deletion of Alerts defined for an SLO 
- _handleGenericAlertChange(_name, _value, _index) {
-
-    console.debug("ALERT Name", _name);
-    console.debug("ALERT Value", _value);
-    console.debug("ALERT Index", _index);
-
-    var __name = "alerts";
-    var __value;
-    var __alerts = this.state.alerts; //get the current alerts state ...
-console.debug("alerts len " + __alerts.length);
-    if (_name === "add") {
-
-        if (_index === __alerts.length) {
-
-            //means the thing I want to add should be at the end.
-            __alerts.push(
-                {
-                    id: _index,
-                    value: null
-                }
-            );
-        } //if
-        else {
-
-            console.debug("I didn't expect this ... ");
-        } //else
-
-    } //if
-    else if (_name === "remove") {
-
-        __alerts.splice(_index, 1);  //remove the selected index
-    } //else if
-    else if (_name === "alert") {
-        //assumes the alert has already been added do a little validation and replace the values in the array element and repack.
-        
-        if(_index < __alerts.length) {
-
-            __alerts[_index] = _value;
-        } //if
-        else {
-
-            console.debug("this shouldn't be what the hell");
-        } //else
-
-    } //else if
-    else {
-
-        console.debug("this should not happen - alert handler");
-    } //else
-    //this is where we do the update state thingy ....
-
-    console.debug("now alerts are", __alerts);
-
-    this.setState({
-        ["alerts"]: __alerts
-    });
-} //_handleGenericAlertChange
-                           */

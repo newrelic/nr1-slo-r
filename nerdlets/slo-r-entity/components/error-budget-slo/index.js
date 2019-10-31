@@ -165,7 +165,6 @@ export default class ErrorBudgetSLO extends Component {
         } //else
 
         var __NRQL = this._getErrorBudgetNRQL(this.props.transactions, this.props.defects, __beginTS, __endTS, this.props.appName);
-
         const {data: __SLO} = await NrqlQuery.query({
             accountId: this.props.accountId,
             query: __NRQL
@@ -193,11 +192,33 @@ export default class ErrorBudgetSLO extends Component {
     /** lifecycle method initiaties the SLO calculation and saves the result to state */
     componentWillMount() {
 
+        this._getErrorBudgetSLOData(this.props.scope);   
+    } //componentWillMount
+
+    /** lifecyce - provides for a subsequent update of the component based on entry criteria of shouldComponentUpdate */
+    componentDidUpdate() {
+
+        this._getErrorBudgetSLOData(this.props.scope);
+    } //componentDidUpdate 
+
+    /** lifecycle - determines if there should be a full component update */
+    shouldComponentUpdate(nextProps) {
+
         if (this.state.slo_results === null) {
 
-            this._getErrorBudgetSLOData(this.props.scope);
-        }//if
-    } //componentWillMount
+            return true;
+        } //if
+
+        if (nextProps.nerdlet_beginTS === this.props.nerdlet_beginTS && nextProps.nerdlet_duration === this.props.nerdlet_duration && nextProps.nerdlet_endTS === this.props.nerdlet_endTS) {
+
+            return false;
+
+        } //if
+        else {
+
+            return true;
+        } //if
+    } //shouldComponentUpdate
 
     /** lifecycle renders the html element for error budget */
     render() {

@@ -1,7 +1,7 @@
 /**
- * Provides an html output of an error budget calculation.
+ * Provides an html output of an alert centric SLO calculation.
  *
- * @file This files defines a component that renders the Error Budget attainment for a given SLO definition for an entity.
+ * @file This files defines a component that renders the a given SLO definition for an entity.
  * @author Gil Rice
  */
 /** core */
@@ -10,7 +10,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
 import { Spinner } from 'nr1';
-import { NrqlQuery } from 'nr1'
 import { NerdGraphQuery } from 'nr1';
 /** local */
 /** 3rd party */
@@ -280,11 +279,33 @@ export default class AlertDrivenSLO extends Component {
     /** lifecycle method initiaties the SLO calculation and saves the result to state */
     componentWillMount() {
 
+        this._getAlertDrivenSLOData();
+    } //componentWillMount
+
+    /** lifecyce - provides for a subsequent update of the component based on entry criteria of shouldComponentUpdate */
+    componentDidUpdate() {
+
+        this._getAlertDrivenSLOData();
+    } //componentDidUpdate 
+
+    /** lifecycle - determines if there should be a full component update */
+    shouldComponentUpdate(nextProps) {
+
         if (this.state.slo_result === null) {
 
-            this._getAlertDrivenSLOData();
-        }//if
-    } //componentWillMount
+            return true;
+        } //if
+
+        if (nextProps.nerdlet_beginTS === this.props.nerdlet_beginTS && nextProps.nerdlet_duration === this.props.nerdlet_duration && nextProps.nerdlet_endTS === this.props.nerdlet_endTS) {
+
+            return false;
+
+        } //if
+        else {
+
+            return true;
+        } //if
+    } //shouldComponentUpdate
 
     /** lifecycle renders the html element for slo based on one or more alerts firing */
     render() {

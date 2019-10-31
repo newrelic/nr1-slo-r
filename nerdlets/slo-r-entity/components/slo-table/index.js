@@ -9,11 +9,11 @@ import React from 'react';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import { Spinner } from 'nr1';
+import { BlockText } from 'nr1';
 import { Button } from 'nr1';
 import { EntityStorageMutation } from 'nr1';
-import { PlatformStateContext } from 'nr1';
-import { NerdletStateContext } from 'nr1';
+import { Grid } from 'nr1';
+import { GridItem } from 'nr1';
 /** local */
 import ErrorBudgetSLO from '../error-budget-slo';
 import AlertDrivenSLO from '../alert-driven-slo';
@@ -38,8 +38,7 @@ export default class SLOTable extends Component {
         super(props)
 
         this.state = {
-            refresh: this.props.refresh,
-            last_render: ''
+            refresh: this.props.refresh
         } //state
 
         //** TO BE IMPLEMENTED this.editSLO = this._editSLO.bind(this);
@@ -49,20 +48,7 @@ export default class SLOTable extends Component {
 
     /** TO BE IMPLEMENTED - 
      * Will allow you to edit an SLO definition ...
-    _editSLO(_slo_document){
-
-        console.log("EDIT");
-
-        const __nerdlet = {
-            id: 'sloer-config',
-            urlState: {
-                slo_document: _slo_document
-            }
-       };
-       
-       navigation.openStackedNerdlet(__nerdlet);
-
-    }//editSLO
+     * _editSLO(_slo_document){ }//editSLO
     */
 
    /** Deletes an SLO definition from the entity's document collection */
@@ -82,33 +68,24 @@ export default class SLOTable extends Component {
         this.props.renderCallback();
     }//deleteSLO
     
-    /** Provides the simple table component as a encapsulated <div> */
+    /** lifecuycle - provides the simple table component as a encapsulated <div> */
     render() {
         
-        console.debug("nerdlet being TS " + this.props.nerdlet_beginTS);
-        console.debug("nerdlet end TS " + this.props.nerdlet_endTS);
-        console.debug("nerdlet duration " + this.props.nerdlet_duration);
+        const { nerdlet_beginTS, nerdlet_duration, nerdlet_endTS } = this.props;
+
         //render the table or just the headings if we have no clo_documents defined.
-        if (this.props.slo_documents === "EMPTY") {
+        if (this.props.slo_documents.length === 0) {
 
             return(
                 <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Type</td>
-                                <td>Name</td>
-                                <td>Current</td>
-                                <td>7 day</td>
-                                <td>30 day</td>
-                                <td>Target</td>
-                                <td>Team</td>
-                                {/** TO BE IMPLEMENTED - <td>Edit</td> */}
-                                <td>Delete</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <Spinner className="centered" size={'small'}/>
+                    <Grid>
+                        <GridItem columnSpan={12}>
+                            <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+                                No SLOs have been defined for this entity. Please click "Define an SLO" and follow the instructions. 
+                                For more information please see https://github.com/newrelic/nr1-csg-slo-r for documentation.
+                            </BlockText>
+                        </GridItem>
+                    </Grid>
                 </div>
             );
         } //if
@@ -128,7 +105,7 @@ export default class SLOTable extends Component {
                                 <td>30 day</td>
                                 <td>Target</td>
                                 <td>Team</td>
-                                {/** <td>Edit</td> */}
+                                {/** TO BE IMPLEMENTED <td>Edit</td> */}
                                 <td>Delete</td>
                             </tr>
                             { this.props.slo_documents.map(slo_document =>
@@ -146,9 +123,9 @@ export default class SLOTable extends Component {
                                             (<ErrorBudgetSLO
                                                 transactions={slo_document.document.transactions}
                                                 defects={slo_document.document.defects}
-                                                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                                                nerdlet_endTS={this.props.nerdlet_endTS}
-                                                nerdlet_duration={this.props.nerdlet_duration}
+                                                nerdlet_beginTS={nerdlet_beginTS}
+                                                nerdlet_endTS={nerdlet_endTS}
+                                                nerdlet_duration={nerdlet_duration}
                                                 appName={slo_document.document.appName}
                                                 accountId={slo_document.document.accountId}
                                                 language={slo_document.document.language}
@@ -158,9 +135,9 @@ export default class SLOTable extends Component {
                                             : 
                                             (<AlertDrivenSLO
                                                 alerts={slo_document.document.alerts}
-                                                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                                                nerdlet_endTS={this.props.nerdlet_endTS}
-                                                nerdlet_duration={this.props.nerdlet_duration}
+                                                nerdlet_beginTS={nerdlet_beginTS}
+                                                nerdlet_endTS={nerdlet_endTS}
+                                                nerdlet_duration={nerdlet_duration}
                                                 accountId={slo_document.document.accountId}
                                                 scope={"current"}
                                                 target={slo_document.document.target}
@@ -251,3 +228,23 @@ export default class SLOTable extends Component {
 } //SLOTable
 
 
+/**
+ *                 <div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Type</td>
+                                <td>Name</td>
+                                <td>Current</td>
+                                <td>7 day</td>
+                                <td>30 day</td>
+                                <td>Target</td>
+                                <td>Team</td>
+                                {/** TO BE IMPLEMENTED - <td>Edit</td> *///}
+                               /** <td>Delete</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <Spinner className="centered" size={'small'}/>
+                </div>
+ */
