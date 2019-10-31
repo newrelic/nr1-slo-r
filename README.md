@@ -63,6 +63,38 @@ nr1 nerdpack:subscribe [-c [DEV|BETA|STABLE]] [--profile=your_profile_name]
 
 Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerdpack, and :sparkles:
 
+## Creating a Webhook to forward Alert incidents to Insights
+
+The Availability, Capacity, and Latency SLO types within SLO/R are calculated using the total duration of Alert violations. In order to record those Alert violations we need to enable an Insights directed Webhook to capture the _open_ and _close_ events. To enable this Webhook please follow the steps below, the Alert payload needs to be as specified for SLO/R to operate as expected. For more information on sending Alerts to insights see [Sending Alerts Data to Insights](https://blog.newrelic.com/product-news/sending-alerts-data-to-insights/).
+
+### 1. Generate an Insights insert token
+
+Insights inser tokens can be generated from the _Manage data_ option in your New Relic Insights account (e.g. https://insights.newrelic.com/accounts/{your-account-id}/manage/summary  
+
+![Screenshot #9](screenshots/screenshot_09.png)
+> Appears on the left hand navigation panel on the Insights landing page.
+
+![Screenshot #11](screenshots/screenshot_11.png)
+> Select the _Add data_ option from the top navigation menu.
+
+![Screenshot #12](screenshots/screenshot_12.png)
+> We will want to create a new _Insert Key_ click the "+" sign to enter the create dialog.
+
+![Screenshot #13](screenshots/screenshot_13.png)
+> You just need to enter a note to configure the key, I recommend SLOR_ALERTS (that will be the name of the Insights event table created)
+
+![Screenshot #14](screenshots/screenshot_14.png)
+> Once your key is created keep it handy, you will need it to configure the Webhook.
+
+
+
+![Screenshot #8](screenshots/screenshot_08.png)
+
+### 2. Create a Webhook notification channel
+
+#
+
+
 ## How to configure and use SLO/R
 
 ![Screenshot #2](screenshots/screenshot_02.png)
