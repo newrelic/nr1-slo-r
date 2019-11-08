@@ -26,21 +26,21 @@ import SLOTable from './components/slo-table';
  * SLOREntityNerdlet
  */
 export default class SLOREntityNedlet extends Component {
-    
+
     static contextType = NerdletStateContext;
 
     static propTypes = {
         nerdletUrlState: PropTypes.object,
         launcherUrlState: PropTypes.object
     };
-    
+
     constructor(props) {
         super(props);
         this.state = {
             entityGuid: this.props.nerdletUrlState.entityGuid,
             slo_documents: null
         } //state
-        
+
         this.openConfig = this._openConfig.bind(this); /** opens the SLO configuration */
         this.rerenderSLOs = this._rerenderSLOs.bind(this); /** forces nerdlet to redraw the SLO table */
     } //constructor
@@ -53,7 +53,7 @@ export default class SLOREntityNedlet extends Component {
 
     /** opens the slo-r configuration nerdlet */
     _openConfig(_evt) {
-       
+
         const __confignerdlet = {
             id: 'slo-r-config',
             urlState: {
@@ -78,7 +78,7 @@ export default class SLOREntityNedlet extends Component {
 
         const __result = await EntityStorageQuery.query(_query);
 
-        //no documents defined - populate the documents object with some innocuous text to have an empty table render 
+        //no documents defined - populate the documents object with some innocuous text to have an empty table render
         if (__result.data === null) {
 
             this.setState({slo_documents: "EMPTY"});
@@ -98,7 +98,9 @@ export default class SLOREntityNedlet extends Component {
     /** lifecycle provides the rendering context for this nerdlet */
     render() {
         //ensure we have state for our slo documents to render the reporting table and configuration options
+
         if (this.state.slo_documents === null) {
+
 
             return(
                 <div>
@@ -107,10 +109,11 @@ export default class SLOREntityNedlet extends Component {
             );
         } //if
         else {
-            
+            let sloHasBeenDefined = this.state.slo_documents.length > 0;
+
             return(
                 <div>
-                    <Grid>
+                    <Grid className={ !sloHasBeenDefined ? 'hidden' : ''}>
                         <GridItem columnSpan={3}>
                             <div>
                                 <Button
@@ -123,9 +126,8 @@ export default class SLOREntityNedlet extends Component {
                             <br/>
                         </GridItem>
                     </Grid>
-                    <Grid>
-                        <GridItem columnSpan={4}>
-                            <div>
+                    <Grid className={!sloHasBeenDefined ? 'no-slos-exist' : ''}>
+                        <GridItem columnSpan={sloHasBeenDefined ? 4 : 12}>
                             <PlatformStateContext.Consumer>
                                 {launcherUrlState => (
                                 <NerdletStateContext.Consumer>
@@ -137,13 +139,13 @@ export default class SLOREntityNedlet extends Component {
                                         nerdlet_endTS={launcherUrlState.timeRange.end_time}
                                         nerdlet_duration={launcherUrlState.timeRange.duration}
                                         renderCallback={this.rerenderSLOs}
+                                        openConfig={this.openConfig}
                                     />
                                     )}
                                 </NerdletStateContext.Consumer>
                                 )}
                             </PlatformStateContext.Consumer>
-                                
-                            </div>
+
                         </GridItem>
                     </Grid>
                 </div>
