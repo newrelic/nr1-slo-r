@@ -40,12 +40,10 @@ export default class SLOREntityNedlet extends Component {
             entityGuid: this.props.nerdletUrlState.entityGuid,
             slo_documents: null,
             newSLOModalActive: true,
-            newSLOData: {
-                name: '',
-                team: '',
-                targetAttainment: '',
-                type: ''
-            }
+            newSLOName: '',
+            newSLOTeam: '',
+            newSLOTargetAttainment: '',
+            newSLOType: ''
         } //state
 
         this.openConfig = this._openConfig.bind(this); /** opens the SLO configuration */
@@ -122,10 +120,10 @@ export default class SLOREntityNedlet extends Component {
                     onChange={() =>
                     this.setState(previousState => ({
                         ...previousState,
-                        newSLOData: {name: event.target.value}
+                        newSLOName: event.target.value
                     }))
                     }
-                    value={this.state.newSLOData.name}
+                    value={this.state.newSLOName}
                 ></TextField>
 
                 <TextField
@@ -134,10 +132,10 @@ export default class SLOREntityNedlet extends Component {
                     onChange={() =>
                     this.setState(previousState => ({
                         ...previousState,
-                        newSLOData: {team: event.target.value}
+                        newSLOTeam: event.target.value
                     }))
                     }
-                    value={this.state.newSLOData.team}
+                    value={this.state.newSLOTeam}
                 ></TextField>
 
                 <TextField
@@ -146,31 +144,43 @@ export default class SLOREntityNedlet extends Component {
                     onChange={() =>
                     this.setState(previousState => ({
                         ...previousState,
-                        newSLOData: {targetAttainment: event.target.value}
+                        newSLOTargetAttainment: event.target.value
                     }))
                     }
-                    value={this.state.newSLOData.targetAttainment}
+                    value={this.state.newSLOTargetAttainment}
                 ></TextField>
 
                 <Dropdown
                     title={
-                    this.state.newSLOData.type === ''
+                    this.state.newSLOType === ''
                         ? 'Select the type of SLO you want to calculate'
-                        : this.state.newSLOData.type
+                        : this.state.newSLOType
                     }
                     label="Type"
                     className="define-slo-input"
                 >
-                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    <DropdownItem onClick={(e) => this.setState(previousState => ({
+                        ...previousState,
+                        newSLOType: event.target.innerHTML
+                    }))}>
                     Error budget
                     </DropdownItem>
-                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    <DropdownItem onClick={(e) => this.setState(previousState => ({
+                        ...previousState,
+                        newSLOType: event.target.innerHTML
+                    }))}>
                     Availablility
                     </DropdownItem>
-                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    <DropdownItem onClick={(e) => this.setState(previousState => ({
+                        ...previousState,
+                        newSLOType: event.target.innerHTML
+                    }))}>
                     Capacity
                     </DropdownItem>
-                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    <DropdownItem onClick={(e) => this.setState(previousState => ({
+                        ...previousState,
+                        newSLOType: event.target.innerHTML
+                    }))}>
                     Latency
                     </DropdownItem>
                 </Dropdown>
@@ -181,7 +191,7 @@ export default class SLOREntityNedlet extends Component {
                 >
                     Cancel
                 </Button>
-                <Button type={Button.TYPE.PRIMARY} onClick={this.handleAddNewService}>
+                <Button type={Button.TYPE.PRIMARY} onClick={this.handleDefineSLOSubmit}>
                     Add new serivce
                 </Button>
             </Modal>
