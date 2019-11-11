@@ -16,7 +16,7 @@ import { GridItem } from 'nr1';
 import { EntityStorageQuery } from 'nr1'
 import { Spinner } from 'nr1';
 import { PlatformStateContext } from 'nr1'
-import { NerdletStateContext } from 'nr1';
+import { NerdletStateContext, Modal, HeadingText, Dropdown, DropdownItem, TextField } from 'nr1';
 /** local */
 import SLOTable from './components/slo-table';
 /** 3rd party */
@@ -38,11 +38,19 @@ export default class SLOREntityNedlet extends Component {
         super(props);
         this.state = {
             entityGuid: this.props.nerdletUrlState.entityGuid,
-            slo_documents: null
+            slo_documents: null,
+            newSLOModalActive: true,
+            newSLOData: {
+                name: '',
+                team: '',
+                targetAttainment: '',
+                type: ''
+            }
         } //state
 
         this.openConfig = this._openConfig.bind(this); /** opens the SLO configuration */
         this.rerenderSLOs = this._rerenderSLOs.bind(this); /** forces nerdlet to redraw the SLO table */
+        this.AddSLOModal = this.AddSLOModal.bind(this);
     } //constructor
 
     /** refresh the SLODocuments through a callback */
@@ -95,8 +103,94 @@ export default class SLOREntityNedlet extends Component {
         this._getSLODocuments();
     } //componentDidMount
 
+    AddSLOModal() {
+        return(
+            <Modal
+                hidden={!this.state.newSLOModalActive}
+                onClose={() => this.setState({newSLOModalActive: false})}
+            >
+                <HeadingText type={HeadingText.TYPE.HEADING_2}>
+                    Define an SLO
+                </HeadingText>
+                <p>
+                Please provide the information needed to create this SLO below. You will be able to edit this information in the future.
+                </p>
+
+                <TextField
+                    label="SLO name"
+                    className="define-slo-input"
+                    onChange={() =>
+                    this.setState(previousState => ({
+                        ...previousState,
+                        newSLOData: {name: event.target.value}
+                    }))
+                    }
+                    value={this.state.newSLOData.name}
+                ></TextField>
+
+                <TextField
+                    label="team"
+                    className="define-slo-input"
+                    onChange={() =>
+                    this.setState(previousState => ({
+                        ...previousState,
+                        newSLOData: {team: event.target.value}
+                    }))
+                    }
+                    value={this.state.newSLOData.team}
+                ></TextField>
+
+                <TextField
+                    label="Target Attainment"
+                    className="define-slo-input"
+                    onChange={() =>
+                    this.setState(previousState => ({
+                        ...previousState,
+                        newSLOData: {targetAttainment: event.target.value}
+                    }))
+                    }
+                    value={this.state.newSLOData.targetAttainment}
+                ></TextField>
+
+                <Dropdown
+                    title={
+                    this.state.newSLOData.type === ''
+                        ? 'Select the type of SLO you want to calculate'
+                        : this.state.newSLOData.type
+                    }
+                    label="Type"
+                    className="define-slo-input"
+                >
+                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    Error budget
+                    </DropdownItem>
+                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    Availablility
+                    </DropdownItem>
+                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    Capacity
+                    </DropdownItem>
+                    <DropdownItem onClick={() => this.handleQuickSetupSelect(event)}>
+                    Latency
+                    </DropdownItem>
+                </Dropdown>
+
+                <Button
+                    type={Button.TYPE.Secondary}
+                    onClick={() => this.setState({ createTileModalActive: false })}
+                >
+                    Cancel
+                </Button>
+                <Button type={Button.TYPE.PRIMARY} onClick={this.handleAddNewService}>
+                    Add new serivce
+                </Button>
+            </Modal>
+        )
+    }
+
     /** lifecycle provides the rendering context for this nerdlet */
     render() {
+        let AddSLOModal = this.AddSLOModal
         //ensure we have state for our slo documents to render the reporting table and configuration options
 
         if (this.state.slo_documents === null) {
@@ -112,7 +206,7 @@ export default class SLOREntityNedlet extends Component {
             let sloHasBeenDefined = this.state.slo_documents.length > 0;
 
             return(
-                <div>
+                <>
                     <Grid className={ !sloHasBeenDefined ? 'hidden' : ''}>
                         <GridItem columnSpan={3}>
                             <div>
@@ -148,7 +242,8 @@ export default class SLOREntityNedlet extends Component {
 
                         </GridItem>
                     </Grid>
-                </div>
+                    <AddSLOModal />
+                </>
             );
         } //else
     } //render
