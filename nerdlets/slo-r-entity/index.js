@@ -9,14 +9,20 @@ import React from 'react';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import { Button } from 'nr1';
-import { navigation } from 'nr1';
-import { Grid } from 'nr1';
-import { GridItem } from 'nr1';
-import { EntityStorageQuery } from 'nr1'
-import { Spinner } from 'nr1';
-import { PlatformStateContext } from 'nr1'
-import { NerdletStateContext, Modal, HeadingText, Dropdown, DropdownItem, TextField } from 'nr1';
+import {
+    Button,
+    navigation,
+    Grid,
+    GridItem,
+    EntityStorageQuery,
+    Spinner,
+    PlatformStateContext,
+    NerdletStateContext,
+    Modal,
+    HeadingText,
+    Dropdown,
+    DropdownItem,
+    TextField } from 'nr1';
 /** local */
 import SLOTable from './components/slo-table';
 /** 3rd party */
