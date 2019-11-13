@@ -5,9 +5,9 @@
  * @author Gil Rice
  */
 /** core */
-import React from "react"
-import { Component } from "react"
-import PropTypes from "prop-types"
+import React from "react";
+import { Component } from "react";
+import PropTypes from "prop-types";
 /** nr1 */
 import {
   Button,
@@ -23,24 +23,25 @@ import {
   Dropdown,
   DropdownItem,
   TextField
-} from "nr1"
+} from "nr1";
 /** local */
-import SLOTable from "./components/slo-table"
+import SLOTable from "./components/slo-table";
 /** 3rd party */
+import { Multiselect } from "react-widgets";
 
 /**
  * SLOREntityNerdlet
  */
 export default class SLOREntityNedlet extends Component {
-  static contextType = NerdletStateContext
+  static contextType = NerdletStateContext;
 
   static propTypes = {
     nerdletUrlState: PropTypes.object,
     launcherUrlState: PropTypes.object
-  }
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       entityGuid: this.props.nerdletUrlState.entityGuid,
       slo_documents: null,
@@ -48,21 +49,22 @@ export default class SLOREntityNedlet extends Component {
       newSLOName: "",
       newSLOTeam: "",
       newSLOTargetAttainment: "",
-      newSLOType: ""
-    } //state
+      newSLOType: "",
+      newSLOSelectedDefects: ""
+    }; //state
 
     this.openConfig = this._openConfig.bind(
       this
-    ) /** opens the SLO configuration */
+    ); /** opens the SLO configuration */
     this.rerenderSLOs = this._rerenderSLOs.bind(
       this
-    ) /** forces nerdlet to redraw the SLO table */
-    this.AddSLOModal = this.AddSLOModal.bind(this)
+    ); /** forces nerdlet to redraw the SLO table */
+    this.AddSLOModal = this.AddSLOModal.bind(this);
   } //constructor
 
   /** refresh the SLODocuments through a callback */
   _rerenderSLOs() {
-    this._getSLODocuments()
+    this._getSLODocuments();
   } //_rerenderSLOs
 
   /** opens the slo-r configuration nerdlet */
@@ -73,38 +75,52 @@ export default class SLOREntityNedlet extends Component {
         entityGuid: this.state.entityGuid,
         renderCallback: this.rerenderSLOs
       }
-    }
+    };
 
-    navigation.openStackedNerdlet(__confignerdlet)
+    navigation.openStackedNerdlet(__confignerdlet);
   } //openConfig
 
   /** gets all the SLO documents defined for this entity */
   async _getSLODocuments() {
-    const __entityGuid = this.state.entityGuid
+    const __entityGuid = this.state.entityGuid;
 
     const _query = {
       actionType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
       entityGuid: __entityGuid,
       collection: "nr1-csg-slo-r"
-    } //_query
+    }; //_query
 
-    const __result = await EntityStorageQuery.query(_query)
+    const __result = await EntityStorageQuery.query(_query);
 
     //no documents defined - populate the documents object with some innocuous text to have an empty table render
     if (__result.data === null) {
-      this.setState({ slo_documents: "EMPTY" })
+      this.setState({ slo_documents: "EMPTY" });
     } //if
     else {
-      this.setState({ slo_documents: __result.data })
+      this.setState({ slo_documents: __result.data });
     } //else
   } //_getSLODocuments
 
   /** lifecycle prompts the fetching of the SLO documents for this entity */
   componentDidMount() {
-    this._getSLODocuments()
+    this._getSLODocuments();
   } //componentDidMount
 
   AddSLOModal() {
+    const defectOptions = [
+      { value: "5xErrors", label: "5xx Errors" },
+      { value: 400, label: "400 Bad Request" },
+      { value: 401, label: "401 Unauthorized" },
+      { value: 403, label: "403 Forbidden" },
+      { value: 404, label: "404 Not Found" },
+      { value: 409, label: "409 Conflict" },
+      { value: "apdexFrustrated", label: "Apdex Frustrated" }
+    ];
+
+    // * Where I left off on 11/12/19 at 3:27 PM:
+    // Need to style the dropdown arrow and tokens of the
+    // multiselect that I'm using
+
     return (
       <Modal
         hidden={!this.state.newSLOModalActive}
@@ -205,6 +221,24 @@ export default class SLOREntityNedlet extends Component {
           </DropdownItem>
         </Dropdown>
 
+        <div className="error-budget-dependancy">
+          <div className="defects-dropdown-container">
+            <h4 className="defects-dropdown-label">Defects</h4>
+            <Multiselect
+              valueField="value"
+              textField="label"
+              data={defectOptions}
+              className="defects-dropdown react-select-dropdown"
+              placeholder="Select one or more defects"
+            />
+
+            <small className="input-description">
+              Defects that occur on the selected transactions will be counted
+              against error budget attainment.
+            </small>
+          </div>
+        </div>
+
         <Button
           type={Button.TYPE.Secondary}
           onClick={() => this.setState({ createTileModalActive: false })}
@@ -215,12 +249,12 @@ export default class SLOREntityNedlet extends Component {
           Add new serivce
         </Button>
       </Modal>
-    )
+    );
   }
 
   /** lifecycle provides the rendering context for this nerdlet */
   render() {
-    let AddSLOModal = this.AddSLOModal
+    let AddSLOModal = this.AddSLOModal;
     //ensure we have state for our slo documents to render the reporting table and configuration options
 
     if (this.state.slo_documents === null) {
@@ -228,10 +262,10 @@ export default class SLOREntityNedlet extends Component {
         <div>
           <Spinner className="centered" size={"small"} />
         </div>
-      )
+      );
     } //if
     else {
-      let sloHasBeenDefined = this.state.slo_documents.length > 0
+      let sloHasBeenDefined = this.state.slo_documents.length > 0;
 
       return (
         <>
@@ -272,7 +306,7 @@ export default class SLOREntityNedlet extends Component {
           </Grid>
           <AddSLOModal />
         </>
-      )
+      );
     } //else
   } //render
 } //SLOREntityNedlet

@@ -1,84 +1,107 @@
-@import './NRDS.scss';
-
+@import "./NRDS.scss";
+@import "./multi-select.scss";
 #root > div {
-    height: 100%;
+  height: 100%;
 }
 
 .no-slos-exist {
-    height: 100%;
+  height: 100%;
 
-    & > div {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .no-slos-container {
-    display: flex;
-    max-width: 490px;
-    margin: 0 auto;
-    padding: 32px 24px;
-    box-sizing: border-box;
-    background: #FFFFFF;
-    box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11), 0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03), 0px 4px 7px rgba(70, 107, 111, 0.05);
-    border-radius: 5px;
+  display: flex;
+  max-width: 490px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  box-sizing: border-box;
+  background: #ffffff;
+  box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11),
+    0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03),
+    0px 4px 7px rgba(70, 107, 111, 0.05);
+  border-radius: 5px;
 }
 
 .empty-state-header {
-    margin-bottom: 10px;
-    font-size: 24px;
-    line-height: 32px;
-    font-weight: 600;
-    text-align: center;
-    color: #2A3434;
+  margin-bottom: 10px;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  text-align: center;
+  color: #2a3434;
 }
 
 .empty-state-description {
-    text-align: center;
-    margin-bottom: 10px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-[class*='InnerModal-content'] {
-    [class*='Text--type-heading'] {
-        margin-bottom: 16px;
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 32px;
-        color: #000d0d;
-    }
+[class*="InnerModal-content"] {
+  [class*="Text--type-heading"] {
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #000d0d;
+  }
 
-    p {
-        margin-bottom: 16px;
-    }
+  p {
+    margin-bottom: 16px;
+  }
 
-    button {
-        margin-right: 8px;
-    }
+  button {
+    margin-right: 8px;
+  }
 }
 
-[class*='InnerModal'] {
-    background-color: #fff;
+[class*="InnerModal"] {
+  background-color: #fff;
 }
 
-[class*='InnerModal-content'] {
-    button[class*='Dropdown-trigger'] {
-      width: 100%;
-    }
+[class*="InnerModal-content"] {
+  button[class*="Dropdown-trigger"] {
+    width: 100%;
+  }
 
-    [class*='Dropdown-trigger-content'] {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  [class*="Dropdown-trigger-content"] {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .define-slo-input {
-    display: block;
-    margin-bottom: 16px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.defects-dropdown-label {
+  padding-bottom: 4px;
+  padding-top: 0;
+  font-size: 14px;
+  color: #000e0e;
+  text-align: left;
+  line-height: 19px;
+  text-transform: none;
+  font-weight: 600;
+  letter-spacing: 0px;
+}
+
+.error-budget-dependancy {
+  margin-bottom: 16px;
+}
+
+.input-description {
+  margin-top: 8px;
+  display: inline-block;
 }
