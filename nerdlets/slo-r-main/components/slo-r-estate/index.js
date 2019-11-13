@@ -42,36 +42,37 @@ export default class SLOREstate extends Component {
     } //constructor
 
     _orgAddOrAppend() {} //_orgAddOrAppend
+    async _lookupSLOs() {} //_lookupSLOs
 
-    async assembleOrgSLOs() {
+    // async assembleOrgSLOs() {
 
-        var __orgSLOs = [];
-        var __candidateSLO = null;
+    //     // var __orgSLOs = [];
+    //     // var __candidateSLO = null;
 
-        if (this.props.entities_data.entities !== null) {
+    //     // if (this.props.entities_data.entities !== null) {
 
-            this.props.entities_data.entities.map(_entity => {
+    //     //     this.props.entities_data.entities.map(_entity => {
 
-                __candidateSLO = await this._lookupSLOs(_entity.guid);
+    //     //         __candidateSLO = await this._lookupSLOs(_entity.guid);
 
-                if (__candidateSLO !== null) {
+    //     //         if (__candidateSLO !== null) {
 
-                    __orgSLOs = this._orgAddOrAppend(__orgSLOs, __candidateSLO);
-                } //if
-            });
+    //     //             __orgSLOs = this._orgAddOrAppend(__orgSLOs, __candidateSLO);
+    //     //         } //if
+    //     //     });
 
-            //set the entity details state
-            this.setState({org_slos: __org_slos});
-        } //if
-        else {
+    //     //     //set the entity details state
+    //     //     this.setState({org_slos: __org_slos});
+    //     } //if
+    //     else {
 
-            //provide some error message ...
-        } //else
-    } //assembleOrgSLOs
+    //         //provide some error message ...
+    //     } //else
+    // } //assembleOrgSLOs
 
     componentWillMount() {
 
-        _this.assembleOrgSLOs();
+        //_this.assembleOrgSLOs();
     } //componentWillMount
 
     render() {
