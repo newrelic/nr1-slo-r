@@ -149,7 +149,7 @@ export default class AlertDrivenSLO extends Component {
         var __tempAlertWindow;
 
         //looping through the closed alerts defines those alert violations that have opened and closed during the current time period. It does not contemplate 
-        //alerts that are open pending a close operation.
+        //alerts that are open pending a close operation.   
         __resultClosedAlerts.data.actor.account.nrql.results.map(_alertClosed => {
 
             var __openAlertInfo = this._getOpenAlert(_alertClosed.incident_id, __resultOpenAlerts.data.actor.account.nrql.results, __beginTS);

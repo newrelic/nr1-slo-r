@@ -1,0 +1,82 @@
+[
+   {
+      "timestamp":1572263700000
+      "current_state":"open"
+      "duration":500
+      "incident_id":999100
+      "policy_name":"TEST_A"
+      "comment":"October 28 755"
+   },
+   {
+      "timestamp":1572264540000
+      "current_state":"closed"
+      "duration":840000
+      "incident_id":999100
+      "policy_name":"TEST_A"
+      "comment":"October 28 0809"
+   },
+   {
+      "timestamp":1572285300000
+      "current_state":"open"
+      "duration":300
+      "incident_id":999101
+      "policy_name":"TEST_A"
+      "comment":"October 28 1335"
+   },
+   {
+      "timestamp":1572286860000
+      "current_state":"closed"
+      "duration":
+      "incident_id":999101
+      "policy_name":"TEST_A"
+      "comment":"October 28 1421"
+   },
+   {
+      "timestamp":1571687722000
+      "current_state":"open"
+      "duration":400
+      "incident_id":999103
+      "policy_name":"TEST_A"
+      "comment":"October 21 1555"
+   },
+   {
+      "timestamp":1571691726000
+      "current_state":"closed"
+      "duration":
+      "incident_id":999103
+      "policy_name":"TEST_A"
+      "comment":"October 21 1702"
+   },
+   {
+      "timestamp":1570952822000
+      "current_state":"open"
+      "duration":
+      "incident_id":999104
+      "policy_name":"TEST_A"
+      "comment":"October 13 0347"
+   },
+   {
+      "timestamp":1570953128000
+      "current_state":"closed"
+      "duration":
+      "incident_id":999104
+      "policy_name":"TEST_A"
+      "comment":"October 13 0352"
+   },
+   {
+      "timestamp":1570975140000
+      "current_state":"open"
+      "duration":
+      "incident_id":999105
+      "policy_name":"TEST_A"
+      "comment":"October 13 0959"
+   },
+   {
+      "timestamp":1570977660000
+      "current_state":"closed"
+      "duration":
+      "incident_id":999105
+      "policy_name":"TEST_A"
+      "comment":"October 13 1041"
+   }
+]
