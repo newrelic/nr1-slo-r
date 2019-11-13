@@ -276,19 +276,21 @@ fieldset[disabled] .rw-input {
   user-select: none;
   color: #333;
   cursor: pointer;
-  border: 1px solid transparent;
+  height: 24px;
+  line-height: 20px;
 }
+
 .rw-list-option.rw-state-focus,
 .rw-list-option.rw-state-focus:hover {
-  background-color: transparent;
-  border-color: #66afe9;
-  color: #333;
+  border: none;
+  background-color: #c9f3f5;
+  color: #2a3434;
 }
 .rw-list-option:hover,
 .rw-list-option:hover.rw-state-focus {
-  background-color: #e6e6e6;
-  border-color: #e6e6e6;
-  color: #333;
+  border: none;
+  background-color: #007e8a;
+  color: #fff;
 }
 .rw-list-option.rw-state-selected,
 .rw-list-option.rw-state-selected:hover {
