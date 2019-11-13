@@ -51,13 +51,14 @@ export default class SLOREntityNedlet extends Component {
       newSLOName: "",
       newSLOTeam: "",
       newSLOTargetAttainment: "",
+      newSLOSelectedAlerts: [],
       newSLOType: "",
       newSLOSelectedDefects: "",
       newSLOSelectedTransactions: "",
       transactions: null,
       entityDetails: null,
-      transactionOptions: [],
-      alerts: []
+      alertOptions: "",
+      transactionOptions: []
     }; //state
 
     this.openConfig = this._openConfig.bind(
@@ -140,6 +141,7 @@ export default class SLOREntityNedlet extends Component {
     this.setState({ entityDetails: __entity_details });
 
     this._loadEntityTransactions();
+    this._updateAlertConfig();
   }
 
   async _loadEntityTransactions() {
@@ -216,7 +218,7 @@ export default class SLOREntityNedlet extends Component {
       } //if
     } //if
     else {
-      if (this.state.alerts.length === 0) {
+      if (this.state.newSLOSelectedAlerts.length === 0) {
         return false;
       } //if
     } //else
@@ -232,11 +234,15 @@ export default class SLOREntityNedlet extends Component {
     var __slo_document;
 
     if (this._validateSLOForm()) {
-      const formattedSelectedDefects = this.state.newSLOSelectedDefects.map(
-        defect => {
-          return defect.value;
-        }
-      );
+      let formattedSelectedDefects = "";
+
+      if (formattedSelectedDefects) {
+        formattedSelectedDefects = this.state.newSLOSelectedDefects.map(
+          defect => {
+            return defect.value;
+          }
+        );
+      }
 
       //assemble the document object
       __slo_document = {
@@ -244,7 +250,7 @@ export default class SLOREntityNedlet extends Component {
         team: this.state.newSLOTeam,
         target: this.state.newSLOTargetAttainment,
         type: this.state.newSLOType,
-        alerts: this.state.alerts,
+        alerts: this.state.newSLOSelectedAlerts,
         defects: formattedSelectedDefects,
         transactions: this.state.newSLOSelectedTransactions,
         entityGuid: this.state.entityGuid,
@@ -263,6 +269,25 @@ export default class SLOREntityNedlet extends Component {
         "Problem with SLO definition! Please validate you have an SLO Name, Team, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert."
       );
     } //else
+  }
+
+  async _updateAlertConfig() {
+    if (this.state.newSLOSelectedAlerts.length < 1) {
+      const __query = `{
+            actor {
+              account(id: ${this.state.entityDetails.accountId}) {
+                nrql(query: "SELECT count(*) FROM SLOR_ALERTS SINCE 12 MONTHS AGO FACET policy_name") {
+                  results
+                }
+              }
+            }
+          }`;
+
+      const __result = await NerdGraphQuery.query({ query: __query });
+      this.setState({
+        alertOptions: __result.data.actor.account.nrql.results
+      });
+    }
   }
 
   /** gets all the SLO documents defined for this entity */
@@ -407,10 +432,10 @@ export default class SLOREntityNedlet extends Component {
           </DropdownItem>
         </Dropdown>
         {this.state.newSLOType === "error_budget" && (
-          <>
+          <div>
             <div className="error-budget-dependancy">
               <div className="defects-dropdown-container">
-                <h4 className="defects-dropdown-label">Defects</h4>
+                <h4 className="dropdown-label">Defects</h4>
                 <Multiselect
                   valueField="value"
                   textField="label"
@@ -431,7 +456,7 @@ export default class SLOREntityNedlet extends Component {
 
             <div className="error-budget-dependancy">
               <div className="transactions-dropdown-container">
-                <h4 className="transactions-dropdown-label">Transactions</h4>
+                <h4 className="dropdown-label">Transactions</h4>
                 <Multiselect
                   data={this.state.transactionOptions}
                   className="transactions-dropdown react-select-dropdown"
@@ -447,7 +472,49 @@ export default class SLOREntityNedlet extends Component {
                 </small>
               </div>
             </div>
-          </>
+          </div>
+        )}
+        {this.state.newSLOType !== "error_budget" &&
+        this.state.newSLOType !== "" ? (
+          <div className="error-budget-dependancy">
+            <div className="alerts-dropdown-container">
+              <h4 className="dropdown-label">Alerts</h4>
+              <Multiselect
+                data={this.state.alertOptions}
+                valueField="policy_name"
+                value={this.state.newSLOSelectedAlerts}
+                allowCreate={true}
+                onCreate={name => {
+                  this.setState(prevState => ({
+                    newSLOSelectedAlerts: [
+                      ...prevState.newSLOSelectedAlerts,
+                      name
+                    ]
+                  }));
+                  this.setState(prevState => ({
+                    alertOptions: [...prevState.alertOptions, name]
+                  }));
+                }}
+                textField="policy_name"
+                className="transactions-dropdown react-select-dropdown"
+                placeholder="Select one or more Alerts"
+                onChange={value =>
+                  this.setState({ newSLOSelectedAlerts: value })
+                }
+              />
+
+              <small className="input-description">
+                Select one or more Alerts that appear in the SLOR_ALERTS event
+                table in Insights, or click the "Add Alert" button below to
+                enter the policy name of an Alert you your like to associate
+                with this SLO. For more information about configuring alerts to
+                be used with SLO/R please see the "Configuring Alerts" section
+                of the SLO/R readme (https://github.com/newrelic/nr1-csg-slo-r).
+              </small>
+            </div>
+          </div>
+        ) : (
+          ""
         )}
 
         <Button
