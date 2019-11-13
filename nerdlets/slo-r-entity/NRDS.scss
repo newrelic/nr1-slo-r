@@ -1,0 +1,326 @@
+// ==============================================================
+// Dropdown & TextField styles
+// ==============================================================
+
+[class*="Dropdown-label"],
+[class*="TextField-label"] {
+  padding-bottom: 4px;
+  padding-top: 0;
+  font-size: 14px;
+  color: #000e0e;
+  text-align: left;
+  line-height: 19px;
+  text-transform: none;
+  font-weight: 600;
+  letter-spacing: 0px;
+}
+
+button[class*="Dropdown-trigger"],
+[class*="TextField-input"] {
+  min-width: 128px;
+  min-height: 32px;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 6.5px 8px 6.5px 8px; // visual centering, rather than being mathematically accurate
+  font-size: 14px;
+  position: relative;
+  line-height: 19px;
+  border: none;
+  box-shadow: inset 0 0 0 1px #d5d7d7;
+  background-position: right 8px top 56%;
+  border-radius: 2px;
+  background-color: #ffffff;
+  transition: 0.075s all ease-in-out;
+
+  &:hover {
+    background-color: #fff;
+    box-shadow: inset 0 0 0 1px #8e9494, 0 1px 0 0 #edeeee;
+    border: none;
+  }
+
+  &:active {
+    background-color: #fff;
+    border: none;
+    box-shadow: inset 0 0 0 1px #8e9494, 0 1px 0 0 #f4f5f5;
+  }
+
+  &:focus {
+    background-color: #fff;
+    box-shadow: inset 0 0 0 1px #d5d7d7, 0 1px 0 0 #f4f5f5;
+    border-radius: 2px 2px 0 0;
+    border: none;
+
+    &:after {
+      content: "";
+      width: 100%;
+      height: 2px;
+      position: absolute;
+      z-index: 100000;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #70ccd3;
+    }
+  }
+
+  &:disabled {
+    border: 1px solid #d5d7d7;
+    background-color: #f4f5f5;
+
+    [class*="Dropdown-label"],
+    [class*="TextField-label"] {
+      color: #8e9494;
+    }
+
+    &:hover {
+      border: 1px solid #d5d7d7;
+      background-color: #f4f5f5;
+    }
+  }
+}
+
+[class*="TextField-input"] {
+  &:disabled {
+    border: none;
+    box-shadow: 0 0 0 1px #d5d7d7;
+
+    &:hover {
+      border: none;
+      box-shadow: 0 0 0 1px #d5d7d7;
+    }
+  }
+}
+
+[class*="Dropdown-content"] {
+  margin-top: -1px;
+  border-color: #d5d7d7;
+  border-radius: 0 2px 2px 2px;
+  box-shadow: 0 1px 0 #f4f5f5;
+}
+
+[class*="DropdownItem"]:not([class*="DropdownItem-search"]):hover {
+  background-color: #c9f3f5;
+  box-shadow: none;
+}
+
+[class*="TextField-input"]:focus {
+  border-radius: 2px;
+  box-shadow: inset 0 -2px 0 #70ccd3, inset 0 0 0 1px #8e9494, 0 1px 0 0 #edeeee;
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #8e9494;
+}
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #8e9494;
+}
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #8e9494;
+}
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: #8e9494;
+}
+
+// ==============================================================
+// Checkboxes
+// ==============================================================
+
+[class*="Checkbox-input"] {
+  border-color: #d5d7d7;
+  box-shadow: 0 1px 0 #f4f5f5;
+  background-color: #fff;
+
+  &:focus {
+    border-color: #007e8a;
+    box-shadow: 0 0 0 4px #70ccd245;
+  }
+
+  &:hover {
+    border-color: #8e9494;
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 0 #edeeee;
+  }
+
+  &.is-checked,
+  &.is-indeterminate {
+    background-color: #008c99;
+    border-color: #008c99;
+    box-shadow: none;
+
+    &:hover {
+      background-color: #008c99;
+      border-color: #008c99;
+    }
+
+    &:focus {
+      border-color: #005054;
+      box-shadow: 0 0 0 4px #70ccd245;
+    }
+  }
+
+  &[class*="is-disabled"] {
+    background-color: #f4f5f5;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAAAXNSR0IArs4c6QAAAbBJREFUOBGtkj9Lw0AYxu+a/rciFOwUhJQW+wmcLFatg7g5Ci6OfgLBycmp4OLmopODi4j2Czi5SJE2KRKDVkJta0iraEvB87nglbQ4tNUMufd97n1/ee69EPLPD/0LT9O0yS/G9gilU6FAYFdRlKp3XKBpmmG71bpkhKQJY+Sj0+HmtsYCGoYRtJvNcwcmHDH2xEOPyIddGWO+z3b7DLCs6IG123AweMDzkRwC5lU17RSwNQHD/Ao0EllRZNkeCQiYp1QuH6NpXcAopXcSpdlZWX4VmuNQ1/WZdrebg/UH3NY+bsv5migCjAJ2hOFvCA21RZ8kLSeTyYbQ+AqdkJKmnaBpk8c4wo2E+aRSqTcnxwv7h9jfFjlq1JDfvxiPx1962k/gXAqK670Nxubwb11UKpUQ14qqmnPDcMxyOBBY+g3G6x2H1Wp1wrLtPBrTXOQPGnleQLjjCFwj5N5DaQbuTaENrg6Qi7VaLdKwrCs3tK+YUt0vSRnM7LlPH0h6QK5zaN2y8hj+vLsObg2/17uQSCQqbv23uO/HjsVi79PR6CrOey2K8cVHggsYBsZ7vgHrfaPHGc9IvwAAAABJRU5ErkJggg==");
+    background-size: 8px 6px;
+    box-shadow: 0 1px 0 #f4f5f5;
+
+    &:hover,
+    &[class*="is-checked"]:checked,
+    &:not([class*="is-checked"]) {
+      background-color: #f4f5f5;
+      border-color: #d5d7d7;
+    }
+
+    &:not([class*="is-checked"]) {
+      background-image: none;
+
+      &:hover {
+        background-color: #f4f5f5;
+        border-color: #d5d7d7;
+      }
+    }
+  }
+}
+
+// ==============================================================
+// Radio Buttons
+// ==============================================================
+
+[class*="Radio-input"],
+input[type="radio"] {
+  background-color: #fff;
+  border-color: #d5d7d7;
+
+  &:hover {
+    border-color: #8e9494;
+    background-color: inherit;
+    box-shadow: 0 1px 0 rgba(36, 37, 37, 0.05);
+  }
+
+  &:focus {
+    border-color: #007e8a;
+    box-shadow: 0 0 0 4px #70ccd245;
+  }
+}
+
+[class*="Radio-input"]:checked,
+input[type="radio"]:checked {
+  background-color: #007e8a;
+  border: none;
+
+  &:before {
+    width: 6px;
+    height: 6px;
+  }
+
+  &:hover {
+    background-color: #007e8a;
+    box-shadow: 0 1px 0 rgba(36, 37, 37, 0.05);
+  }
+
+  &:focus {
+    border: 1px solid #005054;
+    box-shadow: 0 0 0 4px #70ccd245;
+
+    &:before {
+      left: 4px;
+      top: 4px;
+    }
+  }
+}
+
+[class*="Radio-input"]:disabled,
+input[type="radio"]:disabled,
+[class*="Radio-input"].is-disabled {
+  border-color: #d5d7d7;
+  background-color: #f4f5f5;
+
+  &:hover {
+    border-color: #d5d7d7;
+    background-color: #f4f5f5;
+  }
+
+  &:checked {
+    border: 1px solid #d5d7d7;
+    background-color: #f4f5f5;
+
+    &:before {
+      background-color: #d5d7d7;
+      top: 4px;
+      left: 4px;
+    }
+  }
+}
+
+// ==============================================================
+// Typography
+// ==============================================================
+
+[class*="Text--type-heading"],
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #464e4e;
+  font-weight: 600;
+}
+
+h1,
+[class*="Text--type-heading-1"] {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 100;
+}
+
+h2,
+[class*="Text--type-heading-2"] {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h3,
+[class*="Text--type-heading-3"] {
+  font-size: 21px;
+  line-height: 28px;
+}
+
+h4,
+[class*="Text--type-heading-4"] {
+  font-size: 16px;
+  line-height: 24px;
+  text-transform: none;
+}
+
+[class*="Text--type-normal"] {
+  font-size: 14px;
+  line-height: 16px;
+  color: #464e4e;
+}
+
+[class*="Text--type-paragraph"] {
+  font-size: 14px;
+  line-height: 20px;
+  color: #464e4e;
+}
+
+small {
+  font-size: 12px;
+  line-height: 16px;
+  color: #464e4e;
+}
+
+.micro {
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #464e4e;
+  font-weight: 600;
+}
