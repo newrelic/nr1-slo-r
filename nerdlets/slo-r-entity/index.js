@@ -22,7 +22,8 @@ import {
   HeadingText,
   Dropdown,
   DropdownItem,
-  TextField
+  TextField,
+  NerdGraphQuery
 } from "nr1";
 /** local */
 import SLOTable from "./components/slo-table";
@@ -50,7 +51,10 @@ export default class SLOREntityNedlet extends Component {
       newSLOTeam: "",
       newSLOTargetAttainment: "",
       newSLOType: "",
-      newSLOSelectedDefects: ""
+      newSLOSelectedDefects: "",
+      transactions: null,
+      entityDetails: null,
+      transactionOptions: []
     }; //state
 
     this.openConfig = this._openConfig.bind(
@@ -60,6 +64,8 @@ export default class SLOREntityNedlet extends Component {
       this
     ); /** forces nerdlet to redraw the SLO table */
     this.AddSLOModal = this.AddSLOModal.bind(this);
+    this._loadEntityTransactions = this._loadEntityTransactions.bind(this);
+    this._getEntityInformation = this._getEntityInformation.bind(this);
   } //constructor
 
   /** refresh the SLODocuments through a callback */
@@ -79,6 +85,83 @@ export default class SLOREntityNedlet extends Component {
 
     navigation.openStackedNerdlet(__confignerdlet);
   } //openConfig
+
+  async _getEntityInformation() {
+    //get the entityGuid react context
+    const __service_entity = this.context.entityGuid;
+    //console.debug("Context: Entity", __service_entity);
+    let __result;
+    let __entity_details;
+
+    //ensure we have a service entity from the context
+    if (__service_entity === undefined) {
+      __result.data.actor.entity == "UNKNOWN";
+    } //if
+    else {
+      const __query = `{
+            actor {
+                entity(guid: "${__service_entity}") {
+                account {
+                    id
+                    name
+                }
+                name
+                accountId
+                ... on ApmApplicationEntity {
+                    language
+                }
+                tags {
+                    key
+                }
+                }
+            }}`;
+
+      __result = await NerdGraphQuery.query({ query: __query });
+    } //else
+
+    //console.debug("Entity Result: ", __result);
+    //check if we have a result object
+    if (__result !== undefined) {
+      __entity_details = {
+        accountId: __result.data.actor.entity.accountId,
+        appName: __result.data.actor.entity.name,
+        language: __result.data.actor.entity.language,
+        entityGuid: __service_entity,
+        accountName: __result.data.actor.entity.account.name
+      };
+    } //if
+
+    //set the entity details state
+    this.setState({ entityDetails: __entity_details });
+
+    this._loadEntityTransactions();
+  }
+
+  async _loadEntityTransactions() {
+    //we only want to run this the one time to gather transactions
+    if (this.state.transactions === null) {
+      const __query = `{
+            actor {
+              account(id: ${this.state.entityDetails.accountId}) {
+                nrql(query: "SELECT count(*) FROM Transaction WHERE appName='${this.state.entityDetails.appName}' SINCE 1 MONTH AGO FACET name LIMIT 100") {
+                  results
+                }
+              }
+            }
+          }`;
+
+      const __result = await NerdGraphQuery.query({ query: __query });
+      this.setState({ transactions: __result.data.actor.account.nrql.results });
+
+      const transactionOptions = this.state.transactions.map(
+        (transaction, index) => {
+          return transaction.name;
+        }
+      );
+
+      this.setState({ transactionOptions: transactionOptions });
+    } //if
+  }
 
   /** gets all the SLO documents defined for this entity */
   async _getSLODocuments() {
@@ -104,9 +187,11 @@ export default class SLOREntityNedlet extends Component {
   /** lifecycle prompts the fetching of the SLO documents for this entity */
   componentDidMount() {
     this._getSLODocuments();
+    this._getEntityInformation();
   } //componentDidMount
 
   AddSLOModal() {
+    const { transactions } = this.state;
     const defectOptions = [
       { value: "5xErrors", label: "5xx Errors" },
       { value: 400, label: "400 Bad Request" },
@@ -116,10 +201,6 @@ export default class SLOREntityNedlet extends Component {
       { value: 409, label: "409 Conflict" },
       { value: "apdexFrustrated", label: "Apdex Frustrated" }
     ];
-
-    // * Where I left off on 11/12/19 at 3:27 PM:
-    // Need to style the dropdown arrow and tokens of the
-    // multiselect that I'm using
 
     return (
       <Modal
@@ -220,24 +301,43 @@ export default class SLOREntityNedlet extends Component {
             Latency
           </DropdownItem>
         </Dropdown>
+        {this.state.newSLOType === "Error budget" && (
+          <>
+            <div className="error-budget-dependancy">
+              <div className="defects-dropdown-container">
+                <h4 className="defects-dropdown-label">Defects</h4>
+                <Multiselect
+                  valueField="value"
+                  textField="label"
+                  data={defectOptions}
+                  className="defects-dropdown react-select-dropdown"
+                  placeholder="Select one or more defects"
+                />
 
-        <div className="error-budget-dependancy">
-          <div className="defects-dropdown-container">
-            <h4 className="defects-dropdown-label">Defects</h4>
-            <Multiselect
-              valueField="value"
-              textField="label"
-              data={defectOptions}
-              className="defects-dropdown react-select-dropdown"
-              placeholder="Select one or more defects"
-            />
+                <small className="input-description">
+                  Defects that occur on the selected transactions will be
+                  counted against error budget attainment.
+                </small>
+              </div>
+            </div>
 
-            <small className="input-description">
-              Defects that occur on the selected transactions will be counted
-              against error budget attainment.
-            </small>
-          </div>
-        </div>
+            <div className="error-budget-dependancy">
+              <div className="transactions-dropdown-container">
+                <h4 className="transactions-dropdown-label">Transactions</h4>
+                <Multiselect
+                  data={this.state.transactionOptions}
+                  className="transactions-dropdown react-select-dropdown"
+                  placeholder="Select one or more transactions"
+                />
+
+                <small className="input-description">
+                  Select one or more transactions evaluate for defects for this
+                  error budget.
+                </small>
+              </div>
+            </div>
+          </>
+        )}
 
         <Button
           type={Button.TYPE.Secondary}
