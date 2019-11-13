@@ -118,8 +118,8 @@ export default class SLOTable extends Component {
                                 {/** TO BE IMPLEMENTED <td>Edit</td> */}
                                 <td>Delete</td>
                             </tr>
-                            { this.props.slo_documents.map(slo_document =>
-                                <tr>
+                            { this.props.slo_documents.map((slo_document, index) =>
+                                <tr key={index}>
                                     <td>
                                         <SLOTypeIcon
                                             slo_type={slo_document.document.type}

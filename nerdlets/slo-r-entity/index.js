@@ -15,6 +15,7 @@ import {
   Grid,
   GridItem,
   EntityStorageQuery,
+  EntityStorageMutation,
   Spinner,
   PlatformStateContext,
   NerdletStateContext,
@@ -52,9 +53,11 @@ export default class SLOREntityNedlet extends Component {
       newSLOTargetAttainment: "",
       newSLOType: "",
       newSLOSelectedDefects: "",
+      newSLOSelectedTransactions: "",
       transactions: null,
       entityDetails: null,
-      transactionOptions: []
+      transactionOptions: [],
+      alerts: []
     }; //state
 
     this.openConfig = this._openConfig.bind(
@@ -66,6 +69,8 @@ export default class SLOREntityNedlet extends Component {
     this.AddSLOModal = this.AddSLOModal.bind(this);
     this._loadEntityTransactions = this._loadEntityTransactions.bind(this);
     this._getEntityInformation = this._getEntityInformation.bind(this);
+    this._validateSLOForm = this._validateSLOForm.bind(this);
+    this.writeSLO = this.writeSLO.bind(this);
   } //constructor
 
   /** refresh the SLODocuments through a callback */
@@ -163,6 +168,103 @@ export default class SLOREntityNedlet extends Component {
     } //if
   }
 
+  async _writeSLODocument(_slo) {
+    const __entityGuid = this.state.entityGuid;
+    //console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
+    const __write_mutation = {
+      actionType: EntityStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
+      collection: "nr1-csg-slo-r",
+      entityGuid: __entityGuid,
+      documentId: _slo.slo_name,
+      document: _slo
+    }; //__write_mutation
+
+    //need to have a real slo name - this is previously validated but acts as a double check.
+    if (_slo.slo_name !== "") {
+      const __write_result = await EntityStorageMutation.mutate(
+        __write_mutation
+      );
+
+      //navigate to the root entity nerdlet for SLO/R
+      const __nerdlet = {
+        id: "nr1-csg-slo-r-nerdlet"
+      };
+
+      navigation.openNerdlet(__nerdlet);
+    } //if
+  }
+
+  _validateSLOForm() {
+    if (this.state.newSLOName === "") {
+      return false;
+    } //if
+
+    if (this.state.newSLOTargetAttainment === "") {
+      return false;
+    } //if
+
+    if (this.state.newSLOTeam === "") {
+      return false;
+    } //if
+
+    if (this.state.newSLOType === "error_budget") {
+      if (
+        this.state.newSLOSelectedTransactions.length === 0 ||
+        this.state.newSLOSelectedDefects.length === 0
+      ) {
+        return false;
+      } //if
+    } //if
+    else {
+      if (this.state.alerts.length === 0) {
+        return false;
+      } //if
+    } //else
+
+    return true;
+  }
+
+  writeSLO(e) {
+    //prevent default used to stop form submission to iframe
+    e.preventDefault();
+
+    //the SLO definition document we are about to write to nerdstore
+    var __slo_document;
+
+    if (this._validateSLOForm()) {
+      const formattedSelectedDefects = this.state.newSLOSelectedDefects.map(
+        defect => {
+          return defect.value;
+        }
+      );
+
+      //assemble the document object
+      __slo_document = {
+        slo_name: this.state.newSLOName,
+        team: this.state.newSLOTeam,
+        target: this.state.newSLOTargetAttainment,
+        type: this.state.newSLOType,
+        alerts: this.state.alerts,
+        defects: formattedSelectedDefects,
+        transactions: this.state.newSLOSelectedTransactions,
+        entityGuid: this.state.entityGuid,
+        accountId: this.state.entityDetails.accountId,
+        accountName: this.state.entityDetails.accountName,
+        language: this.state.entityDetails.language,
+        appName: this.state.entityDetails.appName,
+        slo_r_version: "1.0.1"
+      };
+
+      //write the document
+      this._writeSLODocument(__slo_document);
+    } //if
+    else {
+      alert(
+        "Problem with SLO definition! Please validate you have an SLO Name, Team, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert."
+      );
+    } //else
+  }
+
   /** gets all the SLO documents defined for this entity */
   async _getSLODocuments() {
     const __entityGuid = this.state.entityGuid;
@@ -193,13 +295,13 @@ export default class SLOREntityNedlet extends Component {
   AddSLOModal() {
     const { transactions } = this.state;
     const defectOptions = [
-      { value: "5xErrors", label: "5xx Errors" },
-      { value: 400, label: "400 Bad Request" },
-      { value: 401, label: "401 Unauthorized" },
-      { value: 403, label: "403 Forbidden" },
-      { value: 404, label: "404 Not Found" },
-      { value: 409, label: "409 Conflict" },
-      { value: "apdexFrustrated", label: "Apdex Frustrated" }
+      { value: "5%", label: "5xx Errors" },
+      { value: "400", label: "400 Bad Request" },
+      { value: "401", label: "401 Unauthorized" },
+      { value: "403", label: "403 Forbidden" },
+      { value: "404", label: "404 Not Found" },
+      { value: "409", label: "409 Conflict" },
+      { value: "apdex_frustrated", label: "Apdex Frustrated" }
     ];
 
     return (
@@ -264,7 +366,10 @@ export default class SLOREntityNedlet extends Component {
             onClick={e =>
               this.setState(previousState => ({
                 ...previousState,
-                newSLOType: event.target.innerHTML
+                newSLOType:
+                  event.target.innerHTML === "Error budget"
+                    ? "error_budget"
+                    : event.target.innerHTML
               }))
             }
           >
@@ -301,7 +406,7 @@ export default class SLOREntityNedlet extends Component {
             Latency
           </DropdownItem>
         </Dropdown>
-        {this.state.newSLOType === "Error budget" && (
+        {this.state.newSLOType === "error_budget" && (
           <>
             <div className="error-budget-dependancy">
               <div className="defects-dropdown-container">
@@ -312,6 +417,9 @@ export default class SLOREntityNedlet extends Component {
                   data={defectOptions}
                   className="defects-dropdown react-select-dropdown"
                   placeholder="Select one or more defects"
+                  onChange={value =>
+                    this.setState({ newSLOSelectedDefects: value })
+                  }
                 />
 
                 <small className="input-description">
@@ -328,6 +436,9 @@ export default class SLOREntityNedlet extends Component {
                   data={this.state.transactionOptions}
                   className="transactions-dropdown react-select-dropdown"
                   placeholder="Select one or more transactions"
+                  onChange={value =>
+                    this.setState({ newSLOSelectedTransactions: value })
+                  }
                 />
 
                 <small className="input-description">
@@ -345,7 +456,7 @@ export default class SLOREntityNedlet extends Component {
         >
           Cancel
         </Button>
-        <Button type={Button.TYPE.PRIMARY} onClick={this.handleDefineSLOSubmit}>
+        <Button type={Button.TYPE.PRIMARY} onClick={this.writeSLO}>
           Add new serivce
         </Button>
       </Modal>
@@ -368,7 +479,7 @@ export default class SLOREntityNedlet extends Component {
       let sloHasBeenDefined = this.state.slo_documents.length > 0;
 
       return (
-        <>
+        <div>
           <Grid className={!sloHasBeenDefined ? "hidden" : ""}>
             <GridItem columnSpan={3}>
               <div>
@@ -405,7 +516,7 @@ export default class SLOREntityNedlet extends Component {
             </GridItem>
           </Grid>
           <AddSLOModal />
-        </>
+        </div>
       );
     } //else
   } //render
