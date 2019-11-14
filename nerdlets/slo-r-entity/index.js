@@ -14,6 +14,8 @@ import {
   navigation,
   Grid,
   GridItem,
+  Stack,
+  StackItem,
   EntityStorageQuery,
   EntityStorageMutation,
   Spinner,
@@ -547,9 +549,24 @@ export default class SLOREntityNedlet extends Component {
 
       return (
         <div>
-          <Grid className={!sloHasBeenDefined ? "hidden" : ""}>
-            <GridItem columnSpan={3}>
-              <div>
+          <Stack
+            className="toolbar-container"
+            fullWidth
+            horizontalType={Stack.HORIZONTAL_TYPE.FILL}
+            verticalType={Stack.VERTICAL_TYPE.CENTER}
+            gapType={Stack.GAP_TYPE.NONE}
+          >
+            <StackItem className="toolbar-left-side">
+              grid/list toggle here
+
+              <hr />
+            </StackItem>
+            <StackItem>
+              <Stack
+                className="toolbar-right-side"
+                fullWidth
+                horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+              >
                 <Button
                   onClick={() => this.setState({ newSLOModalActive: true })}
                   type={Button.TYPE.PRIMARY}
@@ -557,10 +574,9 @@ export default class SLOREntityNedlet extends Component {
                 >
                   Define an SLO
                 </Button>
-              </div>
-              <br />
-            </GridItem>
-          </Grid>
+              </Stack>
+            </StackItem>
+          </Stack>
           <Grid className={!sloHasBeenDefined ? "no-slos-exist" : ""}>
             <GridItem columnSpan={sloHasBeenDefined ? 4 : 12}>
               <PlatformStateContext.Consumer>
