@@ -47,18 +47,18 @@ export default class SLOTable extends Component {
      * _editSLO(_slo_document){ }//editSLO
     */
 
-   /** Deletes an SLO definition from the entity's document collection */
-    async _deleteSLO(_slo_document){
+    /** Deletes an SLO definition from the entity's document collection */
+    async _deleteSLO(_slo_document) {
 
-         const __mutation = {
-             actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
-             collection: "nr1-csg-slo-r",
-             entityGuid: _slo_document.entityGuid,
-             documentId: _slo_document.slo_name
-         } //mutation
+        const __mutation = {
+            actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
+            collection: "nr1-csg-slo-r",
+            entityGuid: _slo_document.entityGuid,
+            documentId: _slo_document.slo_name
+        } //mutation
 
-         //TODO Provide message of the successful deletion
-         const __result = await EntityStorageMutation.mutate(__mutation);
+        //TODO Provide message of the successful deletion
+        const __result = await EntityStorageMutation.mutate(__mutation);
 
         //callback to SLOREntityNerdlet to get the table redrawn.
         this.props.renderCallback();
@@ -72,7 +72,7 @@ export default class SLOTable extends Component {
         //render the table or just the headings if we have no clo_documents defined.
         if (this.props.slo_documents.length === 0) {
 
-            return(
+            return (
                 <Stack
                     className="no-slos-container empty-state-container"
                     directionType={Stack.DIRECTION_TYPE.VERTICAL}
@@ -90,7 +90,7 @@ export default class SLOTable extends Component {
                     </StackItem>
                     <StackItem>
                         <Button
-                            onClick={this.props.openConfig}
+                            onClick={this.props.openDefineSLOModal}
                             sizeType={Button.SIZE_TYPE.LARGE}
                             type={Button.TYPE.PRIMARY}
                             iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
@@ -102,7 +102,7 @@ export default class SLOTable extends Component {
         else {
 
             //for now put together a simple table with each of the elements ... build the table data structure
-            return(
+            return (
 
                 <div>
                     <table>
@@ -118,7 +118,7 @@ export default class SLOTable extends Component {
                                 {/** TO BE IMPLEMENTED <td>Edit</td> */}
                                 <td>Delete</td>
                             </tr>
-                            { this.props.slo_documents.map((slo_document, index) =>
+                            {this.props.slo_documents.map((slo_document, index) =>
                                 <tr key={index}>
                                     <td>
                                         <SLOTypeIcon
@@ -224,8 +224,8 @@ export default class SLOTable extends Component {
                                         </Button>
                                     </td>
                                 </tr>
-                        )
-                    }
+                            )
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -251,10 +251,10 @@ export default class SLOTable extends Component {
                                 <td>Target</td>
                                 <td>Team</td>
                                 {/** TO BE IMPLEMENTED - <td>Edit</td> *///}
-                               /** <td>Delete</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <Spinner className="centered" size={'small'}/>
-                </div>
- */
+/** <td>Delete</td>
+</tr>
+</tbody>
+</table>
+<Spinner className="centered" size={'small'}/>
+</div>
+*/

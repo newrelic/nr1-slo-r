@@ -47,7 +47,7 @@ export default class SLOREntityNedlet extends Component {
     this.state = {
       entityGuid: this.props.nerdletUrlState.entityGuid,
       slo_documents: null,
-      newSLOModalActive: true,
+      newSLOModalActive: false,
       newSLOName: "",
       newSLOTeam: "",
       newSLOTargetAttainment: "",
@@ -475,47 +475,47 @@ export default class SLOREntityNedlet extends Component {
           </div>
         )}
         {this.state.newSLOType !== "error_budget" &&
-        this.state.newSLOType !== "" ? (
-          <div className="error-budget-dependancy">
-            <div className="alerts-dropdown-container">
-              <h4 className="dropdown-label">Alerts</h4>
-              <Multiselect
-                data={this.state.alertOptions}
-                valueField="policy_name"
-                value={this.state.newSLOSelectedAlerts}
-                allowCreate={true}
-                onCreate={name => {
-                  this.setState(prevState => ({
-                    newSLOSelectedAlerts: [
-                      ...prevState.newSLOSelectedAlerts,
-                      name
-                    ]
-                  }));
-                  this.setState(prevState => ({
-                    alertOptions: [...prevState.alertOptions, name]
-                  }));
-                }}
-                textField="policy_name"
-                className="transactions-dropdown react-select-dropdown"
-                placeholder="Select one or more Alerts"
-                onChange={value =>
-                  this.setState({ newSLOSelectedAlerts: value })
-                }
-              />
+          this.state.newSLOType !== "" ? (
+            <div className="error-budget-dependancy">
+              <div className="alerts-dropdown-container">
+                <h4 className="dropdown-label">Alerts</h4>
+                <Multiselect
+                  data={this.state.alertOptions}
+                  valueField="policy_name"
+                  value={this.state.newSLOSelectedAlerts}
+                  allowCreate={true}
+                  onCreate={name => {
+                    this.setState(prevState => ({
+                      newSLOSelectedAlerts: [
+                        ...prevState.newSLOSelectedAlerts,
+                        name
+                      ]
+                    }));
+                    this.setState(prevState => ({
+                      alertOptions: [...prevState.alertOptions, name]
+                    }));
+                  }}
+                  textField="policy_name"
+                  className="transactions-dropdown react-select-dropdown"
+                  placeholder="Select one or more Alerts"
+                  onChange={value =>
+                    this.setState({ newSLOSelectedAlerts: value })
+                  }
+                />
 
-              <small className="input-description">
-                Select one or more Alerts that appear in the SLOR_ALERTS event
-                table in Insights, or click the "Add Alert" button below to
-                enter the policy name of an Alert you your like to associate
-                with this SLO. For more information about configuring alerts to
-                be used with SLO/R please see the "Configuring Alerts" section
-                of the SLO/R readme (https://github.com/newrelic/nr1-csg-slo-r).
+                <small className="input-description">
+                  Select one or more Alerts that appear in the SLOR_ALERTS event
+                  table in Insights, or click the "Add Alert" button below to
+                  enter the policy name of an Alert you your like to associate
+                  with this SLO. For more information about configuring alerts to
+                  be used with SLO/R please see the "Configuring Alerts" section
+                  of the SLO/R readme (https://github.com/newrelic/nr1-csg-slo-r).
               </small>
+              </div>
             </div>
-          </div>
-        ) : (
-          ""
-        )}
+          ) : (
+            ""
+          )}
 
         <Button
           type={Button.TYPE.Secondary}
@@ -551,9 +551,9 @@ export default class SLOREntityNedlet extends Component {
             <GridItem columnSpan={3}>
               <div>
                 <Button
-                  onClick={this.openConfig}
-                  type={Button.TYPE.NORMAL}
-                  iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__FILE__A_ADD}
+                  onClick={() => this.setState({ newSLOModalActive: true })}
+                  type={Button.TYPE.PRIMARY}
+                  iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
                 >
                   Define an SLO
                 </Button>
@@ -574,7 +574,7 @@ export default class SLOREntityNedlet extends Component {
                         nerdlet_endTS={launcherUrlState.timeRange.end_time}
                         nerdlet_duration={launcherUrlState.timeRange.duration}
                         renderCallback={this.rerenderSLOs}
-                        openConfig={this.openConfig}
+                        openDefineSlOModal={() => this.setState({ newSLOModalActive: true })}
                       />
                     )}
                   </NerdletStateContext.Consumer>
