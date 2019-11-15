@@ -105,3 +105,33 @@
   margin-top: 4px;
   display: inline-block;
 }
+
+
+.toolbar-container {
+  height: 70px;
+  box-sizing: border-box;
+  border-top: 1px solid #d5d7d7;
+  border-bottom: 1px solid #e3e4e4;
+  box-shadow: inset 0px 2px 0px rgba(0, 0, 0, 0.02);
+  background: #edeeee;
+  padding: 0 16px;
+}
+
+.toolbar-left-side {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-left-side hr {
+  width: 1px;
+  height: 70px;
+  background-color: #e3e4e4;
+  margin: 0 16px;
+  border: none;
+}
+
+.toolbar-right-side {
+  button {
+    margin-left: 16px;
+  }
+}
