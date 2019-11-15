@@ -272,6 +272,42 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &.status-good {
+    position: relative;
+    background-color: transparent;
+    box-shadow: none;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      left: 6px;
+      bottom: 6px;
+      color: #085300;
+      background-color: #dbf8dba2;
+      border-radius: 3px;
+    }
+  }
+  
+  &.status-poor {
+    position: relative;
+    background-color: transparent;
+    box-shadow: none;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      left: 6px;
+      bottom: 6px;
+      color: #bf0015;
+      background-color: #fcf2f3da;
+      border-radius: 3px;
+    }
+  }
 }
 
 .section-current {
@@ -296,14 +332,35 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
 }
 
 .slo-grid-item-section-value {
+  position: relative;
+  z-index: 10;
   font-size: 16px;
   color: #000D0D;
+
+  .status-good & {
+    color: #085300;
+  }
+
+  .status-poor & {
+    color: #bf0015;
+  }
 }
 
 .slo-grid-item-section-label {
+  position: relative;
+  z-index: 10;
   font-weight: 600;
   font-size: 11px;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #8E9494;
+
+  .status-good & {
+    color: #085300;
+    opacity: .65;
+  }
+
+  .status-poor & {
+    color: #bf0015;
+  }
 }

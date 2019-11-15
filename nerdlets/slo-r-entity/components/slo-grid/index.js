@@ -16,6 +16,8 @@ export default class SLOGrid extends Component {
     render() {
         const data = this.props.data;
 
+
+        // todo: The color coding for 7 and 30 day are not working. Fix that.
         const SLOGridItems = data.map((sloData, index) => {
             return (
                 <GridItem className="slo-grid-item" key={index} columnSpan={3}>
@@ -29,7 +31,7 @@ export default class SLOGrid extends Component {
                             className="slo-grid-item-section-settings-button"
                         />
                     </header>
-                    <div className="slo-grid-item-section section-current">
+                    <div className={`slo-grid-item-section section-current ${sloData.current < sloData.target ? 'status-poor' : 'status-good'}`}>
                         <span className="slo-grid-item-section-value">{sloData.current}</span>
                         <span className="slo-grid-item-section-label">Current</span>
                     </div>
@@ -37,11 +39,11 @@ export default class SLOGrid extends Component {
                         <span className="slo-grid-item-section-value">{sloData.org}</span>
                         <span className="slo-grid-item-section-label">Org</span>
                     </div>
-                    <div className="slo-grid-item-section section-7day">
+                    <div className={`slo-grid-item-section section-7day ${sloData.sevenDay < sloData.target ? 'status-poor' : ''}`}>
                         <span className="slo-grid-item-section-value">{sloData.sevenDay}</span>
                         <span className="slo-grid-item-section-label">7 day</span>
                     </div>
-                    <div className="slo-grid-item-section section-30day">
+                    <div className={`slo-grid-item-section section-30day ${sloData.thirtyDay < sloData.target ? 'status-poor' : ''}`}>
                         <span className="slo-grid-item-section-value">{sloData.thirtyDay}</span>
                         <span className="slo-grid-item-section-label">30 day</span>
                     </div>

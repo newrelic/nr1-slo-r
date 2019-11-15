@@ -60,7 +60,8 @@ export default class SLOREntityNedlet extends Component {
       transactions: null,
       entityDetails: null,
       alertOptions: "",
-      transactionOptions: []
+      transactionOptions: [],
+      SLOTableView: false,
     }; //state
 
     this.openConfig = this._openConfig.bind(
@@ -557,7 +558,10 @@ export default class SLOREntityNedlet extends Component {
             gapType={Stack.GAP_TYPE.NONE}
           >
             <StackItem className="toolbar-left-side">
-              grid/list toggle here
+              <div className="segmented-control-container">
+                <button className="grid-view-button" onClick={() => this.setState({ SLOTableView: false })}>Grid</button>
+                <button className="table-view-button" onClick={() => this.setState({ SLOTableView: true })}>Table</button>
+              </div>
 
               <hr />
             </StackItem>
@@ -591,6 +595,7 @@ export default class SLOREntityNedlet extends Component {
                         nerdlet_duration={launcherUrlState.timeRange.duration}
                         renderCallback={this.rerenderSLOs}
                         openDefineSlOModal={() => this.setState({ newSLOModalActive: true })}
+                        tableView={this.state.SLOTableView}
                       />
                     )}
                   </NerdletStateContext.Consumer>
