@@ -135,3 +135,232 @@
     margin-left: 16px;
   }
 }
+
+.slo-table-container {
+  margin-top: 16px;
+}
+
+.slo-table {
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11), 0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03), 0px 8px 7px rgba(70, 107, 111, 0.05);
+}
+
+.status-good {
+  color: #085300;
+  background-color: #dbf8db;
+  box-shadow: 0 0 0 3px #dbf8db;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.status-poor {
+  color: #bf0015;
+  background-color: #fcf2f3;
+  box-shadow: 0 0 0 3px #fcf2f3;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+[class*='viz-table'] .list-item-label {
+  padding: 0;
+}
+
+[class*='viz-table'] .list-item-label__text {
+  overflow: visible;
+}
+
+[class*='nr-css-TableHeaderCell'] {
+  background-color: #fff;
+}
+
+div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
+  background-color: #fff;
+}
+
+[class*='nr-css-TableCell'] {
+  box-shadow: inset 0 1px 0 #F4F5F5;
+}
+
+[class*='nr-css-TableHeaderCell'] {
+  box-shadow: none;
+  
+  &:hover {
+    cursor: pointer;
+    background-color: #fafbfb;
+    
+    [class*='nr-css-TableHeaderCell-title'] {
+      background-color: #fafbfb;
+    }
+    
+    [class*='nr-css-TableHeaderCell-arrow'] {
+      background-color: #fafbfb;
+    }
+  }
+}
+
+.slo-grid-container {
+  grid-gap: 16px;
+  position: relative;
+  grid-auto-rows: 232px;
+  align-items: stretch;
+}
+
+.slo-grid-item {
+  display: grid;
+  grid-template-columns: repeat(6, 16.66666667%);
+  grid-template-rows: 114px 59px 59px;
+  grid-template-areas: 
+    "header header header header header header"
+    "   a      a      a      b      b      b  "
+    "   c      c      d      d      e      e  ";
+  height: 100%;
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11),
+    0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03),
+    0px 8px 7px rgba(70, 107, 111, 0.05);
+  border-radius: 2px;
+  perspective: 2000px;
+  transition: all 100ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.slo-grid-item-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 114px;
+  text-align: center;
+  border-bottom: 1px solid #EDEEEE;
+  grid-area: header;
+}
+
+.slo-grid-item-header-title {
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 28px;
+  text-align: center;
+  color: #2A3434;
+}
+
+.slo-grid-item-header-type {
+  font-size: 12px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #464E4E;
+  background-color: #EDEEEE;
+  padding: 2px 5px;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+.slo-grid-item-section-settings-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  span {
+    pointer-events: none;
+  }
+}
+
+.slo-grid-item-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &.status-good {
+    position: relative;
+    background-color: transparent;
+    box-shadow: none;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      left: 6px;
+      bottom: 6px;
+      color: #085300;
+      background-color: #dbf8dba2;
+      border-radius: 3px;
+    }
+  }
+  
+  &.status-poor {
+    position: relative;
+    background-color: transparent;
+    box-shadow: none;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      left: 6px;
+      bottom: 6px;
+      color: #bf0015;
+      background-color: #fcf2f3da;
+      border-radius: 3px;
+    }
+  }
+}
+
+.section-current {
+  grid-area: a;
+  border-right: 1px solid #edeeee;
+  border-bottom: 1px solid #edeeee;
+}
+.section-org {
+  grid-area: b;
+  border-bottom: 1px solid #edeeee;
+}
+.section-7day {
+  grid-area: c;
+  border-right: 1px solid #edeeee;
+}
+.section-30day {
+  grid-area: d;
+  border-right: 1px solid #edeeee;
+}
+.section-target {
+  grid-area: e;
+}
+
+.slo-grid-item-section-value {
+  position: relative;
+  z-index: 10;
+  font-size: 16px;
+  color: #000D0D;
+
+  .status-good & {
+    color: #085300;
+  }
+
+  .status-poor & {
+    color: #bf0015;
+  }
+}
+
+.slo-grid-item-section-label {
+  position: relative;
+  z-index: 10;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #8E9494;
+
+  .status-good & {
+    color: #085300;
+    opacity: .65;
+  }
+
+  .status-poor & {
+    color: #bf0015;
+  }
+}

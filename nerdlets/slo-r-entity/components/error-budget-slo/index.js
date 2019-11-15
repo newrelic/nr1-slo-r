@@ -17,7 +17,7 @@ import { NrqlQuery } from 'nr1'
 /**
  * ErrorBudgetSLO
  */
-export default class ErrorBudgetSLO extends Component { 
+export default class ErrorBudgetSLO extends Component {
 
     static propTypes = {
         entityGuid: PropTypes.any,
@@ -45,9 +45,9 @@ export default class ErrorBudgetSLO extends Component {
     _getErrorFilter(_transactions, _defects) {
 
         var __ERROR_FILTER = "";
-    
+
         _transactions.map(transaction => {
-            
+
             __ERROR_FILTER = __ERROR_FILTER + "FILTER(count(*), WHERE name = '" + transaction + "' AND (";
             var __defectsIndex = 0;
             var __DEFECTS_JOIN = "";
@@ -82,29 +82,29 @@ export default class ErrorBudgetSLO extends Component {
         });
 
         __ERROR_FILTER = __ERROR_FILTER + "0"; //completes the expression on the final array element
-    
-        return(__ERROR_FILTER);
+
+        return (__ERROR_FILTER);
     } //getErrorFilter
 
     /** returns an nrql fragment string that desribes the total number of transactions */
     _getTotalFilter(_transactions) {
-    
+
         var __TOTAL_FILTER = "";
-    
+
         _transactions.map(transaction => {
-            
+
             __TOTAL_FILTER = __TOTAL_FILTER + "FILTER(count(*), WHERE name = '" + transaction + "') + ";
         });
         __TOTAL_FILTER = __TOTAL_FILTER + "0"; //completes the expression on the array element
-    
-        return(__TOTAL_FILTER);
+
+        return (__TOTAL_FILTER);
     } //getTotalFilter
 
     /** returns the full nrql needed to calculate the error budget */
     _getErrorBudgetNRQL(_transactions, _defects, _begin, _end, _appName) {
-    
+
         const __NRQL = `SELECT 100 - ((${this._getErrorFilter(_transactions, _defects)}) / (${this._getTotalFilter(_transactions)})) AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${this._getAgentHTTPResponseAttributeName()} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
-        return(__NRQL);    
+        return (__NRQL);
     } //getErrorBudgerNRQL
 
     /** returns a string the describes the attribute name for the http response code for our language agents */
@@ -112,11 +112,11 @@ export default class ErrorBudgetSLO extends Component {
 
         if (this.props.language === "dotnet" || this.props.language === "python") {
 
-            return("response.status");
+            return ("response.status");
         } //if
         else {
 
-            return("httpResponseCode");
+            return ("httpResponseCode");
         } //else
     } //_getAgentHTTPResponseAttributeName
 
@@ -131,11 +131,11 @@ export default class ErrorBudgetSLO extends Component {
 
         //need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
         if (__endTS === undefined || __endTS === null) {
-            
+
             __endTS = __date;
         } //if
         else {
-            
+
             __endTS = this.props.nerdlet_endTS;
         } //else
 
@@ -146,7 +146,7 @@ export default class ErrorBudgetSLO extends Component {
             __beginTS = +__endTS - +"604800000";
         } //if
         else if (_scope === "30_day") {
-            
+
             __duration = null;
             __beginTS = +__endTS - +"2592000000";
         } //else if
@@ -165,7 +165,7 @@ export default class ErrorBudgetSLO extends Component {
         } //else
 
         var __NRQL = this._getErrorBudgetNRQL(this.props.transactions, this.props.defects, __beginTS, __endTS, this.props.appName);
-        const {data: __SLO} = await NrqlQuery.query({
+        const { data: __SLO } = await NrqlQuery.query({
             accountId: this.props.accountId,
             query: __NRQL
         });
@@ -181,18 +181,18 @@ export default class ErrorBudgetSLO extends Component {
                 }]
             };
 
-            this.setState({slo_results: __ERR_SLO});
+            this.setState({ slo_results: __ERR_SLO });
         } //if
         else {
 
-            this.setState({slo_results: __SLO});
+            this.setState({ slo_results: __SLO });
         } //else
     } //_getErrorBudgetSLOData
 
     /** lifecycle method initiaties the SLO calculation and saves the result to state */
     componentWillMount() {
 
-        this._getErrorBudgetSLOData(this.props.scope);   
+        this._getErrorBudgetSLOData(this.props.scope);
     } //componentWillMount
 
     /** lifecyce - provides for a subsequent update of the component based on entry criteria of shouldComponentUpdate */
@@ -223,45 +223,24 @@ export default class ErrorBudgetSLO extends Component {
     /** lifecycle renders the html element for error budget */
     render() {
 
-        var __colour;
-        const __red = "#C70039";
-        const __green = "#00922F";
+        let status;
 
         if (this.state.slo_results === null) {
 
-            return(
+            return (
                 <div>
-                    <Spinner className="centered" size={'small'}/>
+                    <Spinner className="centered" size={'small'} />
                 </div>
             );
         } //if
-        else{
+        else {
 
             //unable to format what has been returned
             if (this.state.slo_results === null) {
-                return(
-                    <div>
-                        <p>NaN</p>
-                    </div>
-                );
+                return ('NaN');
             } //if
             else {
-
-                if ((Math.round(this.state.slo_results.chart[0].data[0].SLO * 1000) / 1000) < this.props.target) {
-
-                    __colour = __red;
-                } //if
-                else {
-
-                    __colour = __green;
-                } //else
-
-                return(
-
-                    <div>
-                        <p style={{color: __colour}}>{Math.round(this.state.slo_results.chart[0].data[0].SLO * 1000) / 1000}</p>
-                    </div>  
-                );
+                return (Math.round(this.state.slo_results.chart[0].data[0].SLO * 1000) / 1000);
             } //else
         }//else
     }//render    
