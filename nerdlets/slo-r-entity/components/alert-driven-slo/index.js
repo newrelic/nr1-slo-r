@@ -329,15 +329,7 @@ export default class AlertDrivenSLO extends Component {
                 return ('NaN');
             } //if
             else {
-
-                if ((Math.round(this.state.slo_result * 1000) / 1000) < this.props.target) {
-                    status = 'status-poor';
-                } //if
-                else {
-                    status = 'status-good';
-                } //else
-
-                return (<span className={status}>{Math.round(this.state.slo_result * 1000) / 1000}</span>);
+                return (Math.round(this.state.slo_result * 1000) / 1000);
             } //else
         }//else
 

@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { EntityStorageMutation, Button, Stack, StackItem, TableChart } from 'nr1';
 /** local */
 import ErrorBudgetSLO from '../error-budget-slo';
+import SLOGrid from '../slo-grid';
 import AlertDrivenSLO from '../alert-driven-slo';
 import SLOTypeIcon from '../slo-type-icon';
 /** 3rd party */
@@ -27,7 +28,8 @@ export default class SLOTable extends Component {
         nerdlet_beginTS: PropTypes.any,
         nerdlet_endTS: PropTypes.any,
         nerdlet_duration: PropTypes.any,
-        renderCallback: PropTypes.func
+        renderCallback: PropTypes.func,
+        tableView: PropTypes.string
     } //propTypes
 
     constructor(props) {
@@ -201,15 +203,20 @@ export default class SLOTable extends Component {
             const tableHeight = (this.props.slo_documents.length + 1) * 40 + 'px';
 
             //for now put together a simple table with each of the elements ... build the table data structure
+
+            // Todo: figure out a way to enable sorting on columns that include a color
+            // The blocker here is that color is included by wrapping the cell value in an html element.
+            // When the cell is provided an html element rather than a string or number it can't sort
             return (
 
                 <React.Fragment>
-                    {/* 
-                        Todo: figure out a way to enable sorting on columns that include a color
-                        The blocker here is that color is included by wrapping the cell value in an html element.
-                        When the cell is provided an html element rather than a string or number it can't sort
-                    */}
-                    <TableChart className="slo-table" data={data} fullWidth fullHeight style={{ height: tableHeight }} />
+                    {this.props.tableView ? (
+                        <TableChart className="slo-table" data={data} fullWidth fullHeight style={{ height: tableHeight }} />
+                    ) : (
+                            <SLOGrid data={data[0].data}></SLOGrid>
+                            // <div className="slo-grid">I'm the SLO Grid</div>
+                        )}
+
                 </React.Fragment>
 
             );
