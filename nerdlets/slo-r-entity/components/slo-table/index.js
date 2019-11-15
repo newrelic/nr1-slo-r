@@ -148,7 +148,7 @@ export default class SLOTable extends Component {
                     />),
                 target: slo_document.document.target,
                 org: slo_document.document.team,
-                delete: <Button iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH} onClick={() => this.deleteSLO(slo_document.document)}></Button>
+                delete: <Button iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH} sizeType={Button.SIZE_TYPE.SMALL} onClick={() => this.deleteSLO(slo_document.document)}></Button>
             }
         });
 
@@ -204,7 +204,12 @@ export default class SLOTable extends Component {
             return (
 
                 <React.Fragment>
-                    <TableChart className="SLO-table" data={data} fullWidth fullHeight style={{ height: tableHeight }} />
+                    {/* 
+                        Todo: figure out a way to enable sorting on columns that include a color
+                        The blocker here is that color is included by wrapping the cell value in an html element.
+                        When the cell is provided an html element rather than a string or number it can't sort
+                    */}
+                    <TableChart className="slo-table" data={data} fullWidth fullHeight style={{ height: tableHeight }} />
                 </React.Fragment>
 
             );
