@@ -24,12 +24,11 @@ export default class SLOGrid extends Component {
                     <header className="slo-grid-item-header">
                         <h4 className="slo-grid-item-header-title">{sloData.name}</h4>
                         <span className="slo-grid-item-header-type">{sloData.type}</span>
-                        <Button
-                            sizeType={Button.SIZE_TYPE.SMALL}
-                            type={Button.TYPE.NORMAL}
-                            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__MORE}
+                        <div
                             className="slo-grid-item-section-settings-button"
-                        />
+                        >
+                            {sloData.delete}
+                        </div>
                     </header>
                     <div className={`slo-grid-item-section section-current ${sloData.current < sloData.target ? 'status-poor' : 'status-good'}`}>
                         <span className="slo-grid-item-section-value">{sloData.current}</span>
