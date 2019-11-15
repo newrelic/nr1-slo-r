@@ -9,7 +9,7 @@ import React from 'react';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import { EntityStorageMutation, Button, Stack, StackItem } from 'nr1';
+import { EntityStorageMutation, Button, Stack, StackItem, TableChart } from 'nr1';
 /** local */
 import ErrorBudgetSLO from '../error-budget-slo';
 import AlertDrivenSLO from '../alert-driven-slo';
@@ -64,10 +64,106 @@ export default class SLOTable extends Component {
         this.props.renderCallback();
     }//deleteSLO
 
+    calculateCurrent() {
+
+    }
+
     /** lifecuycle - provides the simple table component as a encapsulated <div> */
     render() {
 
         const { nerdlet_beginTS, nerdlet_duration, nerdlet_endTS } = this.props;
+        const tableData = this.props.slo_documents.map((slo_document, index) => {
+            return {
+                name: slo_document.document.slo_name,
+                type: slo_document.document.type,
+                current: slo_document.document.type === 'error_budget' ?
+                    (<ErrorBudgetSLO
+                        transactions={slo_document.document.transactions}
+                        defects={slo_document.document.defects}
+                        nerdlet_beginTS={this.props.nerdlet_beginTS}
+                        nerdlet_endTS={this.props.nerdlet_endTS}
+                        nerdlet_duration={this.props.nerdlet_duration}
+                        appName={slo_document.document.appName}
+                        accountId={slo_document.document.accountId}
+                        language={slo_document.document.language}
+                        scope={"7_day"}
+                        target={slo_document.document.target}
+                    />)
+                    :
+                    (<AlertDrivenSLO
+                        alerts={slo_document.document.alerts}
+                        nerdlet_beginTS={nerdlet_beginTS}
+                        nerdlet_endTS={nerdlet_endTS}
+                        nerdlet_duration={nerdlet_duration}
+                        accountId={slo_document.document.accountId}
+                        scope={"current"}
+                        target={slo_document.document.target}
+                    />)
+                ,
+                sevenDay: slo_document.document.type === 'error_budget' ?
+                    (<ErrorBudgetSLO
+                        transactions={slo_document.document.transactions}
+                        defects={slo_document.document.defects}
+                        nerdlet_beginTS={this.props.nerdlet_beginTS}
+                        nerdlet_endTS={this.props.nerdlet_endTS}
+                        nerdlet_duration={this.props.nerdlet_duration}
+                        appName={slo_document.document.appName}
+                        accountId={slo_document.document.accountId}
+                        language={slo_document.document.language}
+                        scope={"7_day"}
+                        target={slo_document.document.target}
+                    />)
+                    :
+                    (<AlertDrivenSLO
+                        alerts={slo_document.document.alerts}
+                        nerdlet_beginTS={this.props.nerdlet_beginTS}
+                        nerdlet_endTS={this.props.nerdlet_endTS}
+                        nerdlet_duration={this.props.nerdlet_duration}
+                        accountId={slo_document.document.accountId}
+                        scope={"7_day"}
+                        target={slo_document.document.target}
+                    />),
+                thirtyDay: slo_document.document.type === 'error_budget' ?
+                    (<ErrorBudgetSLO
+                        transactions={slo_document.document.transactions}
+                        defects={slo_document.document.defects}
+                        nerdlet_beginTS={this.props.nerdlet_beginTS}
+                        nerdlet_endTS={this.props.nerdlet_endTS}
+                        nerdlet_duration={this.props.nerdlet_duration}
+                        appName={slo_document.document.appName}
+                        accountId={slo_document.document.accountId}
+                        language={slo_document.document.language}
+                        scope={"30_day"}
+                        target={slo_document.document.target}
+                    />)
+                    :
+                    (<AlertDrivenSLO
+                        alerts={slo_document.document.alerts}
+                        nerdlet_beginTS={this.props.nerdlet_beginTS}
+                        nerdlet_endTS={this.props.nerdlet_endTS}
+                        nerdlet_duration={this.props.nerdlet_duration}
+                        accountId={slo_document.document.accountId}
+                        scope={"30_day"}
+                        target={slo_document.document.target}
+                    />),
+                target: slo_document.document.target,
+                org: slo_document.document.team,
+                delete: <Button iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH} onClick={() => this.deleteSLO(slo_document.document)}></Button>
+            }
+        });
+
+        const data = [
+            {
+                metadata: {
+                    id: 'slo-table',
+                    name: 'SLO Table',
+                    color: '#008c99',
+                    viz: 'main',
+                    columns: ['name', 'type', 'current', 'sevenDay', 'thirtyDay', 'target', 'org', 'delete'],
+                },
+                data: tableData
+            }
+        ];
 
         //render the table or just the headings if we have no clo_documents defined.
         if (this.props.slo_documents.length === 0) {
@@ -100,135 +196,16 @@ export default class SLOTable extends Component {
             );
         } //if
         else {
+            // calculate the height of the table including the header row.
+            // (#ofRows + headerRow) * heightOfSingleRow + 'px'
+            const tableHeight = (this.props.slo_documents.length + 1) * 40 + 'px';
 
             //for now put together a simple table with each of the elements ... build the table data structure
             return (
 
-                <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Type</td>
-                                <td>Name</td>
-                                <td>Current</td>
-                                <td>7 day</td>
-                                <td>30 day</td>
-                                <td>Target</td>
-                                <td>Team</td>
-                                {/** TO BE IMPLEMENTED <td>Edit</td> */}
-                                <td>Delete</td>
-                            </tr>
-                            {this.props.slo_documents.map((slo_document, index) =>
-                                <tr key={index}>
-                                    <td>
-                                        <SLOTypeIcon
-                                            slo_type={slo_document.document.type}
-                                        />
-                                    </td>
-                                    <td>
-                                        <p>{slo_document.document.slo_name}</p>
-                                    </td>
-                                    <td>
-                                        {slo_document.document.type === 'error_budget' ?
-                                            (<ErrorBudgetSLO
-                                                transactions={slo_document.document.transactions}
-                                                defects={slo_document.document.defects}
-                                                nerdlet_beginTS={nerdlet_beginTS}
-                                                nerdlet_endTS={nerdlet_endTS}
-                                                nerdlet_duration={nerdlet_duration}
-                                                appName={slo_document.document.appName}
-                                                accountId={slo_document.document.accountId}
-                                                language={slo_document.document.language}
-                                                scope={"current"}
-                                                target={slo_document.document.target}
-                                            />)
-                                            :
-                                            (<AlertDrivenSLO
-                                                alerts={slo_document.document.alerts}
-                                                nerdlet_beginTS={nerdlet_beginTS}
-                                                nerdlet_endTS={nerdlet_endTS}
-                                                nerdlet_duration={nerdlet_duration}
-                                                accountId={slo_document.document.accountId}
-                                                scope={"current"}
-                                                target={slo_document.document.target}
-                                            />)
-                                        }
-                                    </td>
-                                    <td>
-                                        {slo_document.document.type === 'error_budget' ?
-                                            (<ErrorBudgetSLO
-                                                transactions={slo_document.document.transactions}
-                                                defects={slo_document.document.defects}
-                                                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                                                nerdlet_endTS={this.props.nerdlet_endTS}
-                                                nerdlet_duration={this.props.nerdlet_duration}
-                                                appName={slo_document.document.appName}
-                                                accountId={slo_document.document.accountId}
-                                                language={slo_document.document.language}
-                                                scope={"7_day"}
-                                                target={slo_document.document.target}
-                                            />)
-                                            :
-                                            (<AlertDrivenSLO
-                                                alerts={slo_document.document.alerts}
-                                                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                                                nerdlet_endTS={this.props.nerdlet_endTS}
-                                                nerdlet_duration={this.props.nerdlet_duration}
-                                                accountId={slo_document.document.accountId}
-                                                scope={"7_day"}
-                                                target={slo_document.document.target}
-                                            />)
-                                        }
-                                    </td>
-                                    <td>
-                                        {slo_document.document.type === 'error_budget' ?
-                                            (<ErrorBudgetSLO
-                                                transactions={slo_document.document.transactions}
-                                                defects={slo_document.document.defects}
-                                                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                                                nerdlet_endTS={this.props.nerdlet_endTS}
-                                                nerdlet_duration={this.props.nerdlet_duration}
-                                                appName={slo_document.document.appName}
-                                                accountId={slo_document.document.accountId}
-                                                language={slo_document.document.language}
-                                                scope={"30_day"}
-                                                target={slo_document.document.target}
-                                            />)
-                                            :
-                                            (<AlertDrivenSLO
-                                                alerts={slo_document.document.alerts}
-                                                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                                                nerdlet_endTS={this.props.nerdlet_endTS}
-                                                nerdlet_duration={this.props.nerdlet_duration}
-                                                accountId={slo_document.document.accountId}
-                                                scope={"30_day"}
-                                                target={slo_document.document.target}
-                                            />)
-                                        }
-                                    </td>
-                                    <td>{slo_document.document.target}</td>
-                                    <td>{slo_document.document.team}</td>
-                                    {/** TODO implement edit
-                                    <td>
-                                        <Button
-                                            onClick={() => this.editSLO(slo_document.document)}
-                                            type={Button.TYPE.NORMAL}
-                                            iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_EDIT}>
-                                        </Button>
-                                    </td> */}
-                                    <td>
-                                        <Button
-                                            onClick={() => this.deleteSLO(slo_document.document)}
-                                            type={Button.TYPE.NORMAL}
-                                            iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_REMOVE}>
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                <React.Fragment>
+                    <TableChart className="SLO-table" data={data} fullWidth fullHeight style={{ height: tableHeight }} />
+                </React.Fragment>
 
             );
         } //else

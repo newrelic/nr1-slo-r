@@ -135,3 +135,27 @@
     margin-left: 16px;
   }
 }
+
+.slo-table-container {
+  margin-top: 16px;
+}
+
+.status-good {
+  color: #085300;
+  background-color: #dbf8db;
+  box-shadow: 0 0 0 3px #dbf8db;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.status-poor {
+  color: #bf0015;
+  background-color: #fcf2f3;
+  box-shadow: 0 0 0 3px #fcf2f3;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+[class*='viz-table'] .list-item-label__text {
+  overflow: visible;
+}

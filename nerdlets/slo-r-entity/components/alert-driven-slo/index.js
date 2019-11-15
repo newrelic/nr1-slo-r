@@ -17,7 +17,7 @@ import { NerdGraphQuery } from 'nr1';
 /**
  * AlertDrivenSLO
  */
-export default class AlertDrivenSLO extends Component { 
+export default class AlertDrivenSLO extends Component {
 
     static propTypes = {
         alerts: PropTypes.array,
@@ -54,24 +54,24 @@ export default class AlertDrivenSLO extends Component {
 
         _alertsClause = _alertsClause + ")"
 
-        return(_alertsClause);
+        return (_alertsClause);
     } //_getAlertsWhereClause
 
     /** returns the full nrql needed to collect the alert policy violations that caused an open alert to fire */
     _getOpenedAlertNRQL(_alerts, _begin, _end) {
 
         const __NRQL = `SELECT latest(duration), latest(timestamp) FROM SLOR_ALERTS WHERE ${this._getAlertsWhereClause(_alerts)} AND current_state = 'open' FACET incident_id SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)} LIMIT MAX`;
-        return(__NRQL);    
+        return (__NRQL);
     } //getErrorBudgerNRQL
 
     /** returns the full nrql needed to collect the alert policy violations that caused an close alert to fire */
     _getClosedAlertNRQL(_alerts, _begin, _end) {
 
-       const __NRQL = `SELECT latest(duration), latest(timestamp) FROM SLOR_ALERTS WHERE ${this._getAlertsWhereClause(_alerts)} AND current_state = 'closed' FACET incident_id SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)} LIMIT MAX`;
-        return(__NRQL);    
+        const __NRQL = `SELECT latest(duration), latest(timestamp) FROM SLOR_ALERTS WHERE ${this._getAlertsWhereClause(_alerts)} AND current_state = 'closed' FACET incident_id SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)} LIMIT MAX`;
+        return (__NRQL);
     } //getErrorBudgerNRQL
 
-    
+
     /** provides the SLO attainment for the given SLO document for the time scope provided */
     async _getAlertDrivenSLOData() {
 
@@ -88,7 +88,7 @@ export default class AlertDrivenSLO extends Component {
             __endTS = __date;
         } //if
         else {
-            
+
             __endTS = this.props.nerdlet_endTS;
         } //else
 
@@ -139,8 +139,8 @@ export default class AlertDrivenSLO extends Component {
             }
           }`;
 
-        const __resultOpenAlerts = await NerdGraphQuery.query({query: __queryOpenAlerts});
-        const __resultClosedAlerts = await NerdGraphQuery.query({query: __queryClosedAlerts});
+        const __resultOpenAlerts = await NerdGraphQuery.query({ query: __queryOpenAlerts });
+        const __resultClosedAlerts = await NerdGraphQuery.query({ query: __queryClosedAlerts });
 
 
         //process the finished alerts and determine if the start time exists in this time period - 
@@ -175,7 +175,7 @@ export default class AlertDrivenSLO extends Component {
         var __SLO_RESULT = 100 - (__accumulatedMillisecondsInAlertState / (__endTS - __beginTS));
 
         //set thw SLO result as 100 - the percentage of time in violation
-        this.setState({slo_result: __SLO_RESULT});
+        this.setState({ slo_result: __SLO_RESULT });
 
     } //_getAlertDrivenSLOData
 
@@ -188,10 +188,10 @@ export default class AlertDrivenSLO extends Component {
             if (_candidateOpens[i].incident_id === _incidentId) {
 
                 __openAlertInfo = {
-                    timestamp:  _candidateOpens[i]["latest.timestamp"],
-                    duration:  _candidateOpens[i]["latest.duration"]
+                    timestamp: _candidateOpens[i]["latest.timestamp"],
+                    duration: _candidateOpens[i]["latest.duration"]
                 }
-                 break;
+                break;
             } //if
         };
 
@@ -199,12 +199,12 @@ export default class AlertDrivenSLO extends Component {
         if (__openAlertInfo === null) {
 
             __openAlertInfo = {
-                timestamp:  _beginTS,
-                duration:  0
+                timestamp: _beginTS,
+                duration: 0
             }
 
         } //if
-        return(__openAlertInfo);
+        return (__openAlertInfo);
 
     } //_getOpenAlert
 
@@ -237,7 +237,7 @@ export default class AlertDrivenSLO extends Component {
                     } //if
                 } //if
                 //need to check that this candidate range doesn't wholly overlap the given range ...
-                else if(_candidateRange.closedTimeStamp >= _range.openedTimeStamp && _candidateRange.closedTimeStamp <= _range.closedTimeStamp) {
+                else if (_candidateRange.closedTimeStamp >= _range.openedTimeStamp && _candidateRange.closedTimeStamp <= _range.closedTimeStamp) {
 
                     if (_candidateRange.openedTimeStamp < _range.openedTimeStamp) {
 
@@ -247,7 +247,7 @@ export default class AlertDrivenSLO extends Component {
                     } //if
                 } //else if
                 // the begin and end events are greater than the cadidate range
-                else if (_candidateRange.openedTimeStamp < _range.openedTimeStamp && _candidateRange.closedTimeStamp > _range.closedTimeStamp) { 
+                else if (_candidateRange.openedTimeStamp < _range.openedTimeStamp && _candidateRange.closedTimeStamp > _range.closedTimeStamp) {
 
                     _range.openedTimeStamp = _candidateRange.openedTimeStamp;
                     _range.closedTimeStamp = _candidateRange.closedTimeStamp;
@@ -255,11 +255,11 @@ export default class AlertDrivenSLO extends Component {
                     __addRange = false;
                 } //else if
                 //the begin and end events are entirely contained within the candidate range         
-                else if (_candidateRange.openedTimeStamp >= _range.openedTimeStamp && _candidateRange.closedTimeStamp <= _range.closedTimeStamp) { 
+                else if (_candidateRange.openedTimeStamp >= _range.openedTimeStamp && _candidateRange.closedTimeStamp <= _range.closedTimeStamp) {
 
                     __addRange = false;
                 } //else if
-           
+
             });
 
         } //else
@@ -275,7 +275,7 @@ export default class AlertDrivenSLO extends Component {
             //TODO
         } //if
 
-        return(__alertRanges);
+        return (__alertRanges);
     } //_reconcileCandidateRange
 
     /** lifecycle method initiaties the SLO calculation and saves the result to state */
@@ -312,45 +312,32 @@ export default class AlertDrivenSLO extends Component {
     /** lifecycle renders the html element for slo based on one or more alerts firing */
     render() {
 
-        var __colour;
-        const __red = "#C70039";
-        const __green = "#00922F";
+        let status;
 
         if (this.state.slo_result === null) {
 
-            return(
+            return (
                 <div>
-                    <Spinner/>
+                    <Spinner />
                 </div>
             );
         } //if
-        else{
+        else {
 
             //unable to format what has been returned
             if (this.state.slo_result === null) {
-                return(
-                    <div>
-                        <p>NaN</p>
-                    </div>
-                );
+                return ('NaN');
             } //if
             else {
 
                 if ((Math.round(this.state.slo_result * 1000) / 1000) < this.props.target) {
-
-                    __colour = __red;
+                    status = 'status-poor';
                 } //if
                 else {
-
-                    __colour = __green;
+                    status = 'status-good';
                 } //else
 
-                return(
-
-                    <div>
-                        <p style={{color: __colour}}>{Math.round(this.state.slo_result * 1000) / 1000}</p>
-                    </div>  
-                );
+                return (<span className={status}>{Math.round(this.state.slo_result * 1000) / 1000}</span>);
             } //else
         }//else
 

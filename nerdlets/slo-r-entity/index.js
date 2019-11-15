@@ -577,8 +577,8 @@ export default class SLOREntityNedlet extends Component {
               </Stack>
             </StackItem>
           </Stack>
-          <Grid className={!sloHasBeenDefined ? "no-slos-exist" : ""}>
-            <GridItem columnSpan={sloHasBeenDefined ? 4 : 12}>
+          <Grid className={!sloHasBeenDefined ? "no-slos-exist" : "slo-table-container"}>
+            <GridItem columnSpan={!sloHasBeenDefined ? 4 : 12}>
               <PlatformStateContext.Consumer>
                 {launcherUrlState => (
                   <NerdletStateContext.Consumer>
