@@ -77,7 +77,7 @@ export default class SLOTable extends Component {
         const tableData = this.props.slo_documents.map((slo_document, index) => {
             return {
                 name: slo_document.document.slo_name,
-                type: slo_document.document.type,
+                type: slo_document.document.type === 'error_budget' ? 'Error budget' : slo_document.document.type,
                 current: slo_document.document.type === 'error_budget' ?
                     (<ErrorBudgetSLO
                         transactions={slo_document.document.transactions}

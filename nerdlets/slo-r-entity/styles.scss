@@ -255,6 +255,7 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   padding: 2px 5px;
   border-radius: 2px;
   margin-top: 4px;
+  text-transform: capitalize;
 }
 
 .slo-grid-item-section-settings-button {
@@ -286,7 +287,7 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
       left: 6px;
       bottom: 6px;
       color: #085300;
-      background-color: #dbf8dba2;
+      background-color: rgba(219, 248, 219, 0.4);
       border-radius: 3px;
     }
   }
@@ -362,5 +363,52 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
 
   .status-poor & {
     color: #bf0015;
+  }
+}
+
+.segmented-control-container {
+  box-shadow: inset 0 0 0 1px #007E8A;
+  border-radius: 2px;
+  height: 26px;
+}
+
+
+div.segmented-control-container button.grid-view-button,
+div.segmented-control-container button.table-view-button {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  min-height: auto;
+  height: 26px;
+  background-color: transparent;
+  color: #007E8A;
+
+  
+  &:first-child {
+    border-radius: 3px 0 0 3px;
+  }
+  
+  &:last-child {
+    border-radius: 0 3px 3px 0;
+  }
+
+  &.active {
+    background-color: #007E8A;
+    color: #fff;
+  }
+
+  &:focus {
+    background: transparent;
+    box-shadow: 0 0 0 2px #007e8a3a;
+
+    &.active {
+      background-color: #007E8A
+    }
+  }
+
+  .ic-Icon {
+    display:inline-block;
+    margin-right: 6px;
   }
 }

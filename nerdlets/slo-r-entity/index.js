@@ -26,7 +26,8 @@ import {
   Dropdown,
   DropdownItem,
   TextField,
-  NerdGraphQuery
+  NerdGraphQuery,
+  Icon
 } from "nr1";
 /** local */
 import SLOTable from "./components/slo-table";
@@ -559,8 +560,14 @@ export default class SLOREntityNedlet extends Component {
           >
             <StackItem className="toolbar-left-side">
               <div className="segmented-control-container">
-                <button className="grid-view-button" onClick={() => this.setState({ SLOTableView: false })}>Grid</button>
-                <button className="table-view-button" onClick={() => this.setState({ SLOTableView: true })}>Table</button>
+                <button className={`grid-view-button ${!this.state.SLOTableView ? 'active' : ''}`} onClick={() => this.setState({ SLOTableView: false })}>
+                  <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP} color={this.state.SLOTableView ? '#007e8a' : '#ffffff'} />
+                  Grid
+                </button>
+                <button className={`table-view-button ${this.state.SLOTableView ? 'active' : ''}`} onClick={() => this.setState({ SLOTableView: true })}>
+                  <Icon type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW} color={this.state.SLOTableView ? '#ffffff' : '#007e8a'} />
+                  Table
+                </button>
               </div>
 
               <hr />
