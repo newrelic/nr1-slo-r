@@ -22,6 +22,8 @@
     "not dead"
   ],
   "devDependencies": {
-    "@newrelic/eslint-plugin-newrelic": "^0.3.0"
+    "@newrelic/eslint-plugin-newrelic": "^0.3.0",
+    "eslint": "^6.6.0",
+    "prettier": "^1.19.1"
   }
 }
