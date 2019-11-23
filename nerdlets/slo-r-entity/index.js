@@ -618,20 +618,18 @@ export default class SLOREntityNedlet extends React.Component {
             <GridItem columnSpan={!sloHasBeenDefined ? 4 : 12}>
               <PlatformStateContext.Consumer>
                 {launcherUrlState => (
-                  <NerdletStateContext.Consumer>
-                    {nerdletUrlState => (
-                      <SLOTable
-                        entityGuid={this.state.entity}
-                        slo_documents={this.state.slo_documents}
-                        nerdlet_beginTS={launcherUrlState.timeRange.begin_time}
-                        nerdlet_endTS={launcherUrlState.timeRange.end_time}
-                        nerdlet_duration={launcherUrlState.timeRange.duration}
-                        renderCallback={this.rerenderSLOs}
-                        openDefineSlOModal={() => this.setState({ newSLOModalActive: true })}
-                        tableView={this.state.SLOTableView}
-                      />
-                    )}
-                  </NerdletStateContext.Consumer>
+                  <SLOTable
+                    entityGuid={this.state.entity}
+                    slo_documents={this.state.slo_documents}
+                    nerdlet_beginTS={launcherUrlState.timeRange.begin_time}
+                    nerdlet_endTS={launcherUrlState.timeRange.end_time}
+                    nerdlet_duration={launcherUrlState.timeRange.duration}
+                    renderCallback={this.rerenderSLOs}
+                    openDefineSlOModal={() =>
+                      this.setState({ newSLOModalActive: true })
+                    }
+                    tableView={this.state.SLOTableView}
+                  />
                 )}
               </PlatformStateContext.Consumer>
             </GridItem>
