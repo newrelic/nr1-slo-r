@@ -167,16 +167,13 @@ export default class SLOREntityNedlet extends React.Component {
           }`;
 
       const __result = await NerdGraphQuery.query({ query: __query });
-      this.setState({ transactions: __result.data.actor.account.nrql.results });
+      const transactions = __result.data.actor.account.nrql.results;
+      const transactionOptions = transactions.map(transaction => {
+        return transaction.name;
+      });
 
-      const transactionOptions = this.state.transactions.map(
-        (transaction, index) => {
-          return transaction.name;
-        }
-      );
-
-      this.setState({ transactionOptions: transactionOptions });
-    } //if
+      this.setState({ transactions, transactionOptions });
+    } // if
   }
 
   async _writeSLODocument(_slo) {
