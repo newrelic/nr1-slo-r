@@ -393,43 +393,40 @@ export default class SLOREntityNedlet extends React.Component {
           className="define-slo-input"
         >
           <DropdownItem
-            onClick={event =>
+            onClick={() => {
               this.setState(previousState => ({
                 ...previousState,
-                newSLOType:
-                  event.target.innerHTML === 'Error budget'
-                    ? 'error_budget'
-                    : event.target.innerHTML
-              }))
-            }
+                newSLOType: 'error_budget'
+              }));
+            }}
           >
             Error budget
           </DropdownItem>
           <DropdownItem
-            onClick={event =>
+            onClick={() =>
               this.setState(previousState => ({
                 ...previousState,
-                newSLOType: event.target.innerHTML
+                newSLOType: 'Availability'
               }))
             }
           >
             Availablility
           </DropdownItem>
           <DropdownItem
-            onClick={event =>
+            onClick={() =>
               this.setState(previousState => ({
                 ...previousState,
-                newSLOType: event.target.innerHTML
+                newSLOType: 'Capacity'
               }))
             }
           >
             Capacity
           </DropdownItem>
           <DropdownItem
-            onClick={event =>
+            onClick={() =>
               this.setState(previousState => ({
                 ...previousState,
-                newSLOType: event.target.innerHTML
+                newSLOType: 'Latency'
               }))
             }
           >
