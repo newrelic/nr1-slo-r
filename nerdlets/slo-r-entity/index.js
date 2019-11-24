@@ -529,7 +529,7 @@ export default class SLOREntityNedlet extends React.Component {
           Cancel
         </Button>
         <Button type={Button.TYPE.PRIMARY} onClick={this.writeSLO}>
-          Add new serivce
+          Add new service
         </Button>
       </Modal>
     );
