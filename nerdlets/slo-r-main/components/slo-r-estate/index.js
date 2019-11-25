@@ -91,7 +91,7 @@ export default class SLOREstate extends React.Component {
   } // _lookupSLOs
 
   async assembleOrgSLOs() {
-    let __orgSLOs = [];
+    const __orgSLOs = [];
     let __candidateSLOs = null;
 
     if (this.props.entities_data.entities !== null) {
@@ -102,14 +102,15 @@ export default class SLOREstate extends React.Component {
 
         if (__candidateSLOs !== null) {
           //   console.debug('candidate SLOs', __candidateSLOs);
+          // eslint-disable-next-line array-callback-return
           __candidateSLOs.map(_candidateSLO => {
-            __orgSLOs = this._orgAddOrAppend(__orgSLOs, _candidateSLO);
+            this._orgAddOrAppend(__orgSLOs, _candidateSLO);
           });
         } // if
       }
 
       // set the entity details state
-      this.setState({ org_slos: __org_slos });
+      this.setState({ org_slos: __orgSLOs });
     } // if
     else {
       // provide some error message ...
