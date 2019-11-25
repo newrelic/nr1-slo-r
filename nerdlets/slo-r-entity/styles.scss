@@ -345,7 +345,13 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   .status-poor & {
     color: #bf0015;
   }
+
+  [class*='wnd-Spinner'] {
+    padding-bottom: 28px;
+    margin-top: -8px;
+  }
 }
+
 
 .slo-grid-item-section-label {
   position: relative;

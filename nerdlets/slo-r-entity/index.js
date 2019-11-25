@@ -609,7 +609,10 @@ export default class SLOREntityNedlet extends React.Component {
               !sloHasBeenDefined ? 'no-slos-exist' : 'slo-table-container'
             }
           >
-            <GridItem columnSpan={!sloHasBeenDefined ? 4 : 12}>
+            <GridItem
+              columnSpan={!sloHasBeenDefined ? 4 : 12}
+              columnStart={!sloHasBeenDefined && 5}
+            >
               <PlatformStateContext.Consumer>
                 {launcherUrlState => (
                   <SLOTable
@@ -619,7 +622,7 @@ export default class SLOREntityNedlet extends React.Component {
                     nerdlet_endTS={launcherUrlState.timeRange.end_time}
                     nerdlet_duration={launcherUrlState.timeRange.duration}
                     renderCallback={this.rerenderSLOs}
-                    openDefineSlOModal={() =>
+                    openDefineSLOModal={() =>
                       this.setState({ newSLOModalActive: true })
                     }
                     tableView={this.state.SLOTableView}
