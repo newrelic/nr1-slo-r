@@ -11,6 +11,7 @@
     "uuid": "4380103d-eb2f-4465-80df-98cd6dbe9597"
   },
   "dependencies": {
+    "lodash": "^4.17.15",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.0.0-beta.2",
@@ -20,5 +21,10 @@
     "last 2 versions",
     "not ie < 11",
     "not dead"
-  ]
+  ],
+  "devDependencies": {
+    "@newrelic/eslint-plugin-newrelic": "^0.3.0",
+    "eslint": "^6.6.0",
+    "prettier": "^1.19.1"
+  }
 }
