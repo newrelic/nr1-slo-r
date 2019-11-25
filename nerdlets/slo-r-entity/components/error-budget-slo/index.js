@@ -173,7 +173,7 @@ const ErrorBudgetSLO = {
     props.nerdlet_endTS = props.timeRange.nerdlet_endTS;
     props.nerdlet_duration = props.timeRange.nerdlet_duration;
 
-    props.defects = props.slo_document.document.defects;
+    props.defects = props.slo_document.document.defects || [];
     props.transactions = props.slo_document.document.transactions;
     props.appName = props.slo_document.document.appName;
     props.accountId = props.slo_document.document.accountId;
