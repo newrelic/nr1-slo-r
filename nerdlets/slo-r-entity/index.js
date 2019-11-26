@@ -116,7 +116,7 @@ export default class SLOREntityNedlet extends React.Component {
       throw new Error('Error writing SLO Document to Entity Storage');
     }
 
-    this.addDocumentToList({ document });
+    this.addDocumentToList({ mutationResult: document });
     // this.setState({ newSloModalActive: false, refresh: true });
   }
 
@@ -140,10 +140,11 @@ export default class SLOREntityNedlet extends React.Component {
     // this.setState({ refresh: true });
   }
 
-  addDocumentToList({ document }) {
-    console.debug(document);
+  addDocumentToList({ mutationResult }) {
+    const { documentId, document } = mutationResult;
+    const newRecords = [{ id: documentId, document }];
     this.setState(prevState => ({
-      slo_documents: prevState.slo_documents.concat(document),
+      slo_documents: prevState.slo_documents.concat(newRecords),
       newSloModalActive: false
     }));
   }

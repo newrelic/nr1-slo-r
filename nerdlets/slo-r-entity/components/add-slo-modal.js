@@ -291,7 +291,7 @@ export default class AddSLOModal extends React.Component {
             onClick={() =>
               this.inputHandler({
                 field: 'type',
-                value: 'Availability'
+                value: 'availability'
               })
             }
           >
@@ -301,7 +301,7 @@ export default class AddSLOModal extends React.Component {
             onClick={() =>
               this.inputHandler({
                 field: 'type',
-                value: 'Capacity'
+                value: 'capacity'
               })
             }
           >
@@ -311,7 +311,7 @@ export default class AddSLOModal extends React.Component {
             onClick={() =>
               this.inputHandler({
                 field: 'type',
-                value: 'Latency'
+                value: 'latency'
               })
             }
           >
