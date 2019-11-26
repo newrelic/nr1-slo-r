@@ -22,9 +22,9 @@ import {
 } from 'nr1';
 
 /** local */
-import ErrorBudgetSLO from '../error-budget-slo';
+import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo';
 import SLOGrid from '../slo-grid';
-import AlertDrivenSLO from '../alert-driven-slo';
+import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo';
 /** 3rd party */
 /**
  * SLOTable
