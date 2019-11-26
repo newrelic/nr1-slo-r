@@ -611,7 +611,7 @@ export default class SLOREntityNedlet extends React.Component {
           >
             <GridItem
               columnSpan={!sloHasBeenDefined ? 4 : 12}
-              columnStart={!sloHasBeenDefined && 5}
+              columnStart={!sloHasBeenDefined ? 5 : null}
             >
               <PlatformStateContext.Consumer>
                 {launcherUrlState => (
