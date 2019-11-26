@@ -154,7 +154,7 @@ export default class AddSLOModal extends React.Component {
     if (!isValid) {
       // eslint-disable-next-line no-alert
       alert(
-        'Problem with SLO definition! Please validate you have an SLO Name, Team, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.'
+        'Problem with SLO definition! Please validate you have an SLO Name, Organization, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.'
       );
       return;
     }
@@ -171,7 +171,7 @@ export default class AddSLOModal extends React.Component {
     // the SLO definition document we are about to write to nerdstore
     const __slo_document = {
       name: newSloDocument.name,
-      team: newSloDocument.team,
+      organization: newSloDocument.organization,
       target: newSloDocument.target,
       type: newSloDocument.type,
       alerts: newSloDocument.alerts,
@@ -245,15 +245,15 @@ export default class AddSLOModal extends React.Component {
         />
 
         <TextField
-          label="team"
+          label="organization"
           className="define-slo-input"
           onChange={() =>
             this.inputHandler({
-              field: 'team',
+              field: 'organization',
               value: event.target.value
             })
           }
-          value={this.state.newSloDocument.team}
+          value={this.state.newSloDocument.organization}
         />
 
         <TextField

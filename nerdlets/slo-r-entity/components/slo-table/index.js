@@ -26,6 +26,9 @@ import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo';
 import SLOGrid from '../slo-grid';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo';
 /** 3rd party */
+
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+
 /**
  * SLOTable
  */
@@ -130,7 +133,7 @@ export default class SLOTable extends React.Component {
           sevenDay: '',
           thirtyDay: '',
           target: slo_document.document.target,
-          org: slo_document.document.team,
+          org: slo_document.document.organization,
           delete: (
             <Button
               iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
@@ -259,7 +262,7 @@ export default class SLOTable extends React.Component {
                                 <td>7 day</td>
                                 <td>30 day</td>
                                 <td>Target</td>
-                                <td>Team</td>
+                                <td>Organization</td>
                                 {/** TO BE IMPLEMENTED - <td>Edit</td> */ // }
 /** <td>Delete</td>
 </tr>

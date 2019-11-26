@@ -45,7 +45,7 @@ export default class SLOREstate extends React.Component {
     // console.debug('the passed candidate SLOs', _candidateSLO);
 
     const __SLOsForCandidate = _orgSLOs.filter(function(value) {
-      return value.orgName === _candidateSLO.document.team;
+      return value.orgName === _candidateSLO.document.organization;
     });
 
     // console.debug('candidate slos', __SLOsForCandidate);
@@ -56,7 +56,7 @@ export default class SLOREstate extends React.Component {
     } // if
     else if (__SLOsForCandidate.length === 0) {
       _orgSLOs.push({
-        orgName: _candidateSLO.document.team,
+        orgName: _candidateSLO.document.organization,
         slos: [_candidateSLO.document]
       });
 

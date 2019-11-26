@@ -48,7 +48,7 @@ export const validateSlo = function(document) {
     return false;
   } // if
 
-  if (document.team === '') {
+  if (document.organization === '') {
     return false;
   } // if
 
@@ -71,7 +71,7 @@ export const sloDocumentModel = {
   create: function() {
     return {
       name: '',
-      team: '',
+      organization: '',
       target: '',
       alerts: [],
       type: '',
