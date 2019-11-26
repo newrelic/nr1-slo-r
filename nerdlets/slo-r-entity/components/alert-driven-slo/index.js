@@ -256,10 +256,11 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
 
 const AlertDrivenSLO = {
   query: async props => {
+    props.nerdlet_beginTS = props.timeRange.begin_time;
+    props.nerdlet_endTS = props.timeRange.end_time;
+    props.nerdlet_duration = props.timeRange.duration;
+
     props.alerts = props.slo_document.document.alerts;
-    props.nerdlet_beginTS = props.timeRange.nerdlet_beginTS;
-    props.nerdlet_endTS = props.timeRange.nerdlet_endTS;
-    props.nerdlet_duration = props.timeRange.nerdlet_duration;
     props.accountId = props.slo_document.document.accountId;
     props.target = props.slo_document.document.target;
 

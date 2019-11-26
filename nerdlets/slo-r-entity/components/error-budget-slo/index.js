@@ -19,34 +19,40 @@ const _getErrorFilter = function(_transactions, _defects) {
   let __ERROR_FILTER = '';
 
   _transactions.map(transaction => {
-    __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name = '${transaction}' AND (`;
-    let __defectsIndex = 0;
-    let __DEFECTS_JOIN = '';
-    let __DEFECTS_FILTER = '';
+    __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name = '${transaction}' `;
 
-    _defects.map(defect => {
-      if (__defectsIndex > 0) {
-        __DEFECTS_JOIN = ' OR ';
-      } // if
-      else {
-        __DEFECTS_JOIN = '';
-      } // else
+    if (_defects.length > 0) {
+      __ERROR_FILTER += `AND (`;
 
-      // evaluate if the defect is an httpResponseCode releated or apdexPerfZone
-      if (defect === 'apdex_frustrated') {
-        __DEFECTS_FILTER = `${__DEFECTS_FILTER +
-          __DEFECTS_JOIN}apdexPerfZone = 'F'`;
-      } // if
-      else {
-        __DEFECTS_FILTER = `${__DEFECTS_FILTER +
-          __DEFECTS_JOIN +
-          _getAgentHTTPResponseAttributeName()} LIKE '${defect}'`;
-      } // else
+      let __defectsIndex = 0;
+      let __DEFECTS_JOIN = '';
+      let __DEFECTS_FILTER = '';
 
-      __defectsIndex++;
-    });
+      _defects.map(defect => {
+        if (__defectsIndex > 0) {
+          __DEFECTS_JOIN = ' OR ';
+        } // if
+        else {
+          __DEFECTS_JOIN = '';
+        } // else
 
-    __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER})) + `; // lazy way to account for the array elements
+        // evaluate if the defect is an httpResponseCode releated or apdexPerfZone
+        if (defect === 'apdex_frustrated') {
+          __DEFECTS_FILTER = `${__DEFECTS_FILTER +
+            __DEFECTS_JOIN}apdexPerfZone = 'F'`;
+        } // if
+        else {
+          __DEFECTS_FILTER = `${__DEFECTS_FILTER +
+            __DEFECTS_JOIN +
+            _getAgentHTTPResponseAttributeName()} LIKE '${defect}'`;
+        } // else
+
+        __defectsIndex++;
+      });
+
+      __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER})`;
+    }
+    __ERROR_FILTER += `) + `; // lazy way to account for the array elements
   });
 
   __ERROR_FILTER = `${__ERROR_FILTER}0`; // completes the expression on the final array element
@@ -169,9 +175,9 @@ const _getErrorBudgetSLOData = async function(props) {
 
 const ErrorBudgetSLO = {
   query: async props => {
-    props.nerdlet_beginTS = props.timeRange.nerdlet_beginTS;
-    props.nerdlet_endTS = props.timeRange.nerdlet_endTS;
-    props.nerdlet_duration = props.timeRange.nerdlet_duration;
+    props.nerdlet_beginTS = props.timeRange.begin_time;
+    props.nerdlet_endTS = props.timeRange.end_time;
+    props.nerdlet_duration = props.timeRange.duration;
 
     props.defects = props.slo_document.document.defects || [];
     props.transactions = props.slo_document.document.transactions;

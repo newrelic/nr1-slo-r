@@ -10,11 +10,11 @@
 /** core */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual, pick } from 'lodash';
+import { isEqual } from 'lodash';
 
 /** nr1 */
 import {
-  EntityStorageMutation,
+  // EntityStorageMutation,
   Button,
   Stack,
   StackItem,
@@ -32,20 +32,18 @@ import AlertDrivenSLO from '../alert-driven-slo';
 export default class SLOTable extends React.Component {
   static propTypes = {
     slo_documents: PropTypes.array,
-    nerdlet_beginTS: PropTypes.string,
-    nerdlet_endTS: PropTypes.string,
-    nerdlet_duration: PropTypes.number,
-    renderCallback: PropTypes.func,
+    timeRange: PropTypes.object,
     tableView: PropTypes.bool,
-    openDefineSLOModal: PropTypes.func
+    openDefineSLOModal: PropTypes.func,
+    addSloDocumentCallback: PropTypes.func,
+    deleteCallback: PropTypes.func
   }; // propTypes
 
   constructor(props) {
     super(props);
 
     this.state = {
-      tableData: [],
-      timeFields: ['nerdlet_beginTS', 'nerdlet_endTS', 'nerdlet_duration']
+      tableData: []
     }; // state
 
     //* * TO BE IMPLEMENTED this.editSLO = this._editSLO.bind(this);
@@ -53,16 +51,16 @@ export default class SLOTable extends React.Component {
   } // constructor
 
   componentDidMount() {
-    const timeRange = pick(this.props, this.state.timeFields);
-    this.loadData(timeRange, this.props.slo_documents);
+    const { timeRange, slo_documents } = this.props;
+    this.loadData(timeRange, slo_documents);
   }
 
   componentDidUpdate(prevProps) {
     const updatedDocs = this.props.slo_documents;
 
     // Time change - reload all
-    const prevTimeRange = pick(prevProps, this.state.timeFields);
-    const currentTimeRange = pick(this.props, this.state.timeFields);
+    const prevTimeRange = prevProps.timeRange;
+    const currentTimeRange = this.props.timeRange;
 
     if (!isEqual(prevTimeRange, currentTimeRange)) {
       this.loadData(currentTimeRange, updatedDocs);
@@ -88,7 +86,8 @@ export default class SLOTable extends React.Component {
         scopes.forEach(scope => {
           let sloPromise;
 
-          if (slo_document.document.type === 'error_budget') {
+          console.debug(slo_document);
+          if (slo_document.type === 'error_budget') {
             sloPromise = ErrorBudgetSLO.query({
               scope,
               slo_document,
@@ -156,22 +155,7 @@ export default class SLOTable extends React.Component {
 
   /** Deletes an SLO definition from the entity's document collection */
   async _deleteSLO(_slo_document) {
-    const __mutation = {
-      actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
-      collection: 'nr1-csg-slo-r',
-      entityGuid: _slo_document.entityGuid,
-      documentId: _slo_document.slo_name
-    }; // mutation
-
-    // TODO Provide message of the successful deletion
-    const __result = await EntityStorageMutation.mutate(__mutation);
-
-    if (!__result) {
-      throw new Error('Error deleting SLO document from Entity Storage');
-    }
-
-    // callback to SLOREntityNerdlet to get the table redrawn.
-    this.props.renderCallback();
+    this.props.deleteCallback(_slo_document);
   } // deleteSLO
 
   /** lifecycle - provides the simple table component as a encapsulated <div> */
