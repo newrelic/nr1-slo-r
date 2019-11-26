@@ -10,24 +10,24 @@
 /** core */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
 
 /** nr1 */
-import {
-  // EntityStorageMutation,
-  Button,
-  Stack,
-  StackItem,
-  TableChart
-} from 'nr1';
+import { Button, HeadingText, Stack, StackItem, TableChart } from 'nr1';
+
+/** 3rd party */
+import { isEqual } from 'lodash';
+import BootstrapTable from 'react-bootstrap-table-next';
+
+import filterFactory, {
+  selectFilter,
+  textFilter
+} from 'react-bootstrap-table2-filter';
 
 /** local */
-import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo';
 import SLOGrid from '../slo-grid';
+import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo';
-/** 3rd party */
-
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import { SLO_TYPES } from '../../../shared/constants';
 
 /**
  * SLOTable
@@ -89,7 +89,6 @@ export default class SLOTable extends React.Component {
         scopes.forEach(scope => {
           let sloPromise;
 
-          console.debug(slo_document);
           if (slo_document.type === 'error_budget') {
             sloPromise = ErrorBudgetSLO.query({
               scope,
@@ -161,10 +160,137 @@ export default class SLOTable extends React.Component {
     this.props.deleteCallback(_slo_document);
   } // deleteSLO
 
-  /** lifecycle - provides the simple table component as a encapsulated <div> */
-  render() {
-    const { tableData } = this.state;
+  async updateSloDocument(e, row, rowIndex) {
+    console.debug(e);
+    console.debug(row);
+    console.debug(rowIndex);
+  }
 
+  renderGettingStarted() {
+    return (
+      <Stack
+        className="no-slos-container empty-state-container"
+        directionType={Stack.DIRECTION_TYPE.VERTICAL}
+        horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+        verticalType={Stack.VERTICAL_TYPE.CENTER}
+      >
+        <StackItem>
+          <h3 className="empty-state-header">Get started</h3>
+          <p className="empty-state-description">
+            It looks like no SLOs have been defined for this entity. To get
+            started, define an SLO using the button below and follow the
+            instructions. For more information please see the{' '}
+            <a href="https://github.com/newrelic/nr1-csg-slo-r">
+              documentation
+            </a>
+            .
+          </p>
+        </StackItem>
+        <StackItem>
+          <Button
+            onClick={this.props.openDefineSLOModal}
+            sizeType={Button.SIZE_TYPE.LARGE}
+            type={Button.TYPE.PRIMARY}
+            iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
+          >
+            Define an SLO
+          </Button>
+        </StackItem>
+      </Stack>
+    );
+  }
+
+  renderGridView() {
+    const data = this.getTableData();
+    return <SLOGrid data={data[0].data} />;
+  }
+
+  renderTableView() {
+    const { slo_documents } = this.props;
+    const data = this.getTableData();
+    // calculate the height of the table including the header row.
+    // (#ofRows + headerRow) * heightOfSingleRow + 'px'
+    const tableHeight = `${(slo_documents.length + 1) * 40}px`;
+
+    return (
+      <TableChart
+        className="slo-table"
+        data={data}
+        fullWidth
+        fullHeight
+        style={{ height: tableHeight }}
+      />
+    );
+  }
+
+  renderBootStrapTableView() {
+    const { tableData } = this.state;
+    const typeOptions = SLO_TYPES.reduce((previousValue, currentValue) => {
+      previousValue[currentValue.field] = currentValue.name;
+      return previousValue;
+    }, {});
+    const columns = [
+      {
+        dataField: 'name',
+        text: 'Name',
+        filter: textFilter()
+      },
+      {
+        dataField: 'type',
+        text: 'Type',
+        formatter: cell => typeOptions[cell],
+        filter: selectFilter({
+          options: typeOptions
+        })
+      },
+      {
+        dataField: 'current',
+        text: 'Current'
+      },
+      {
+        dataField: 'sevenDay',
+        text: 'Seven Day'
+      },
+      {
+        dataField: 'thirtyDay',
+        text: 'Thirty Day'
+      },
+      {
+        dataField: 'target',
+        text: 'Target'
+      },
+      {
+        dataField: 'org',
+        text: 'Organization',
+        filter: textFilter()
+      }
+    ];
+
+    const rowEvents = {
+      onClick: (e, row, rowIndex) => this.updateSloDocument(e, row, rowIndex)
+    };
+
+    return (
+      <>
+        <HeadingText spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}>
+          Service Level Objectives
+        </HeadingText>
+        <BootstrapTable
+          keyField="name"
+          data={tableData}
+          columns={columns}
+          filter={filterFactory()}
+          rowEvents={rowEvents}
+          striped={false}
+          wrapperClasses="slo-table-container"
+          classes="slo-table"
+        />
+      </>
+    );
+  }
+
+  getTableData() {
+    const { tableData } = this.state;
     const data = [
       {
         metadata: {
@@ -186,88 +312,32 @@ export default class SLOTable extends React.Component {
         data: tableData
       }
     ];
+    return data;
+  }
+
+  /** lifecycle - provides the simple table component as a encapsulated <div> */
+  render() {
+    const gettingStarted = this.renderGettingStarted();
+    const gridView = this.renderGridView();
+    const tableView = this.renderTableView();
+
+    const bootstrapTable = true;
+    const bootstrapTableView = this.renderBootStrapTableView();
 
     // render the table or just the headings if we have no clo_documents defined.
     if (this.props.slo_documents.length === 0) {
-      return (
-        <Stack
-          className="no-slos-container empty-state-container"
-          directionType={Stack.DIRECTION_TYPE.VERTICAL}
-          horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
-          verticalType={Stack.VERTICAL_TYPE.CENTER}
-        >
-          <StackItem>
-            <h3 className="empty-state-header">Get started</h3>
-            <p className="empty-state-description">
-              It looks like no SLOs have been defined for this entity. To get
-              started, define an SLO using the button below and follow the
-              instructions. For more information please see the{' '}
-              <a href="https://github.com/newrelic/nr1-csg-slo-r">
-                documentation
-              </a>
-              .
-            </p>
-          </StackItem>
-          <StackItem>
-            <Button
-              onClick={this.props.openDefineSLOModal}
-              sizeType={Button.SIZE_TYPE.LARGE}
-              type={Button.TYPE.PRIMARY}
-              iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
-            >
-              Define an SLO
-            </Button>
-          </StackItem>
-        </Stack>
-      );
-    } // if
-    else {
-      // calculate the height of the table including the header row.
-      // (#ofRows + headerRow) * heightOfSingleRow + 'px'
-      const tableHeight = `${(this.props.slo_documents.length + 1) * 40}px`;
-
-      // for now put together a simple table with each of the elements ... build the table data structure
-
+      return { gettingStarted };
+    } else {
       // Todo: figure out a way to enable sorting on columns that include a color
       // The blocker here is that color is included by wrapping the cell value in an html element.
       // When the cell is provided an html element rather than a string or number it can't sort
       return (
         <>
-          {this.props.tableView ? (
-            <TableChart
-              className="slo-table"
-              data={data}
-              fullWidth
-              fullHeight
-              style={{ height: tableHeight }}
-            />
-          ) : (
-            <SLOGrid data={data[0].data} />
-            // <div className="slo-grid">I'm the SLO Grid</div>
-          )}
+          {this.props.tableView && tableView}
+          {this.props.tableView && bootstrapTable && bootstrapTableView}
+          {!this.props.tableView && gridView}
         </>
       );
     } // else
   } // render
 } // SLOTable
-
-/**
- *                 <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Type</td>
-                                <td>Name</td>
-                                <td>Current</td>
-                                <td>7 day</td>
-                                <td>30 day</td>
-                                <td>Target</td>
-                                <td>Organization</td>
-                                {/** TO BE IMPLEMENTED - <td>Edit</td> */ // }
-/** <td>Delete</td>
-</tr>
-</tbody>
-</table>
-<Spinner className="centered" size={'small'}/>
-</div>
-*/

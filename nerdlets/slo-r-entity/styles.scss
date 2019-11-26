@@ -1,3 +1,5 @@
+@import '~react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css';
+@import '~react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 @import "./NRDS.scss";
 @import "./multi-select.scss";
 #root > div {
@@ -144,6 +146,12 @@
   border-radius: 2px;
   overflow: hidden;
   box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11), 0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03), 0px 8px 7px rgba(70, 107, 111, 0.05);
+  width: 100%;
+}
+
+.slo-table > tbody > tr > td {
+  background-color: #fff;
+  box-shadow: inset 0 1px 0 #F4F5F5;
 }
 
 .status-good {
