@@ -28,7 +28,8 @@ import { fetchSloDocuments } from '../shared/services/slo-documents';
 
 /** local */
 import SLOTable from './components/slo-table';
-import AddSLOModal from './components/add-slo-modal';
+import SloForm from './components/slo-form';
+import ModalWrapper from './components/modal-wrapper';
 
 /**
  * SLOREntityNerdlet
@@ -56,7 +57,7 @@ export default class SLOREntityNedlet extends React.Component {
       this
     ); /** opens the SLO configuration */
 
-    this.addDocumentCallback = this.addDocumentCallback.bind(this);
+    this.createDocumentCallback = this.createDocumentCallback.bind(this);
     this.deleteDocumentCallback = this.deleteDocumentCallback.bind(this);
   } // constructor
 
@@ -111,7 +112,14 @@ export default class SLOREntityNedlet extends React.Component {
     this.setState({ slo_documents });
   } // _getSLODocuments
 
-  async addDocumentCallback({ document, response }) {
+  toggleCreateModal() {
+    this.setState(prevState => ({
+      newSloModalActive: !prevState.newSloModalActive
+    }));
+  }
+
+  // Form Callbacks
+  async createDocumentCallback({ document, response }) {
     if (!response) {
       throw new Error('Error writing SLO Document to Entity Storage');
     }
@@ -255,16 +263,18 @@ export default class SLOREntityNedlet extends React.Component {
               </PlatformStateContext.Consumer>
             </GridItem>
           </Grid>
-          <AddSLOModal
-            addDocumentCallback={this.addDocumentCallback}
-            entityGuid={this.state.entityGuid}
-            isActive={this.state.newSloModalActive}
-            toggleIsActiveCallback={() => {
-              this.setState(prevState => ({
-                newSloModalActive: !prevState.newSloModalActive
-              }));
-            }}
-          />
+
+          {/* Allow wrapper and form to control modal visibility */}
+          <ModalWrapper
+            modalIsActive={this.state.newSloModalActive}
+            modalToggleCallback={() => this.toggleCreateModal()}
+          >
+            <SloForm
+              entityGuid={this.state.entityGuid}
+              createDocumentCallback={this.createDocumentCallback}
+              modalToggleCallback={() => this.toggleCreateModal()}
+            />
+          </ModalWrapper>
         </div>
       );
     } // else

@@ -7,7 +7,6 @@ import {
   Dropdown,
   DropdownItem,
   HeadingText,
-  Modal,
   NerdGraphQuery,
   TextField
 } from 'nr1';
@@ -24,11 +23,11 @@ import {
 // entities
 import { fetchEntity } from '../../shared/services/entity';
 
-export default class AddSLOModal extends React.Component {
+export default class SloForm extends React.Component {
   static propTypes = {
-    addDocumentCallback: PropTypes.func,
-    isActive: PropTypes.bool,
-    toggleIsActiveCallback: PropTypes.func,
+    createDocumentCallback: PropTypes.func,
+    // isActive: PropTypes.bool,
+    modalToggleCallback: PropTypes.func,
     entityGuid: PropTypes.string
   };
 
@@ -36,7 +35,6 @@ export default class AddSLOModal extends React.Component {
     super(props);
 
     this.state = {
-      isActive: props.isActive || false,
       newSloDocument: sloDocumentModel.create(),
 
       // Related data
@@ -66,16 +64,10 @@ export default class AddSLOModal extends React.Component {
     await this._loadEntityTransactions();
   }
 
-  // TO DO - Clean this up, we shouldn't need to do this in an ideal design
-  /*
-   * Map changes from this.props.isActive to this.state.isActive
-   * This ensures we have a way to have UI controls
-   * inside and outside of this component that control it's visibility
-   */
   async componentDidUpdate(prevProps) {
-    if (prevProps.isActive !== this.props.isActive) {
-      this.setState({ isActive: this.props.isActive });
-    }
+    // if (prevProps.isActive !== this.props.isActive) {
+    //   this.setState({ isActive: this.props.isActive });
+    // }
 
     if (prevProps.entityGuid !== this.props.entityGuid) {
       await this._getEntityInformation();
@@ -195,7 +187,7 @@ export default class AddSLOModal extends React.Component {
     const { entityGuid } = this.props;
 
     const { mutation, result } = await writeSloDocument({ entityGuid, _slo });
-    this.props.addDocumentCallback({ document: mutation, response: result });
+    this.props.createDocumentCallback({ document: mutation, response: result });
 
     // TO DO - reset this.state.newSloDocument if successful, keep if error?
     if (result) {
@@ -220,10 +212,7 @@ export default class AddSLOModal extends React.Component {
   render() {
     const { transactionOptions } = this.state;
     return (
-      <Modal
-        hidden={!this.state.isActive}
-        onClose={() => this.props.toggleIsActiveCallback()}
-      >
+      <>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
           Define an SLO
         </HeadingText>
@@ -414,14 +403,14 @@ export default class AddSLOModal extends React.Component {
 
         <Button
           type={Button.TYPE.Secondary}
-          onClick={() => this.props.toggleIsActiveCallback()}
+          onClick={() => this.props.modalToggleCallback()}
         >
           Cancel
         </Button>
         <Button type={Button.TYPE.PRIMARY} onClick={this.addNewHandler}>
           Add new service
         </Button>
-      </Modal>
+      </>
     );
   }
 }
