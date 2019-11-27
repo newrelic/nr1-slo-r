@@ -121,11 +121,12 @@ export default class SLOREntityNedlet extends React.Component {
   }
 
   async deleteDocumentCallback(_slo_document) {
+  async deleteDocumentCallback({ document }) {
     const __mutation = {
       actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
       collection: 'nr1-csg-slo-r',
-      entityGuid: _slo_document.entityGuid,
-      documentId: _slo_document.name || _slo_document.slo_name
+      entityGuid: document.entityGuid,
+      documentId: document.name || document.slo_name
     }; // mutation
 
     // TODO Provide message of the successful deletion
@@ -135,8 +136,7 @@ export default class SLOREntityNedlet extends React.Component {
       throw new Error('Error deleting SLO document from Entity Storage');
     }
 
-    // console.debug(_slo_document);
-    this.removeDocumentFromList({ document: _slo_document });
+    this.removeDocumentFromList({ document });
     // this.setState({ refresh: true });
   }
 

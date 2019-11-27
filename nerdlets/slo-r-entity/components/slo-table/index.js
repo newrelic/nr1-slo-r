@@ -40,6 +40,7 @@ export default class SLOTable extends React.Component {
     openDefineSLOModal: PropTypes.func,
     addSloDocumentCallback: PropTypes.func,
     deleteCallback: PropTypes.func
+    // editCallback: PropTypes.func
   }; // propTypes
 
   constructor(props) {
@@ -48,9 +49,6 @@ export default class SLOTable extends React.Component {
     this.state = {
       tableData: []
     }; // state
-
-    //* * TO BE IMPLEMENTED this.editSLO = this._editSLO.bind(this);
-    this.deleteSLO = this._deleteSLO.bind(this);
   } // constructor
 
   componentDidMount() {
@@ -137,9 +135,12 @@ export default class SLOTable extends React.Component {
             <Button
               iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
               sizeType={Button.SIZE_TYPE.SMALL}
-              onClick={() => this.deleteSLO(slo_document.document)}
+              onClick={() =>
+                this.props.deleteCallback({ document: slo_document.document })
+              }
             />
           )
+          // TO DO - Add edit click callback as well
         };
       }
 
@@ -149,16 +150,6 @@ export default class SLOTable extends React.Component {
 
     return Object.values(formatted);
   }
-
-  /** TO BE IMPLEMENTED -
-   * Will allow you to edit an SLO definition ...
-   * _editSLO(_slo_document){ }//editSLO
-   */
-
-  /** Deletes an SLO definition from the entity's document collection */
-  async _deleteSLO(_slo_document) {
-    this.props.deleteCallback(_slo_document);
-  } // deleteSLO
 
   async updateSloDocument(e, row, rowIndex) {
     console.debug(e);
