@@ -4,3 +4,5 @@ export const SLO_TYPES = [
   { field: 'capacity', name: 'Capacity' },
   { field: 'latency', name: 'Latency' }
 ];
+
+export const ENTITY_COLLECTION_NAME = 'nr1-csg-slo-r';

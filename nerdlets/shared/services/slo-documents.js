@@ -1,11 +1,12 @@
 import { EntityStorageMutation, EntityStorageQuery } from 'nr1';
+import { ENTITY_COLLECTION_NAME } from '../constants';
 
 export const fetchSloDocuments = async function({ entityGuid }) {
   const _query = {
     actionType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
     entityGuid: entityGuid,
-    collection: 'nr1-csg-slo-r'
-  }; // _query
+    collection: ENTITY_COLLECTION_NAME
+  };
 
   const result = await EntityStorageQuery.query(_query);
   const documents = result.data || [];
@@ -17,7 +18,7 @@ export const writeSloDocument = async function({ entityGuid, _slo }) {
   // console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
   const __write_mutation = {
     actionType: EntityStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
-    collection: 'nr1-csg-slo-r',
+    collection: ENTITY_COLLECTION_NAME,
     entityGuid: entityGuid,
     documentId: _slo.name,
     document: _slo
@@ -29,7 +30,7 @@ export const writeSloDocument = async function({ entityGuid, _slo }) {
   }
 
   // eslint-disable-next-line no-console
-  console.debug(JSON.stringify(__write_mutation, null, 2));
+  // console.debug(JSON.stringify(__write_mutation, null, 2));
   const __write_result = await EntityStorageMutation.mutate(__write_mutation);
 
   if (!__write_result) {
