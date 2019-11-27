@@ -14,6 +14,21 @@ export const fetchSloDocuments = async function({ entityGuid }) {
   return documents;
 };
 
+// TO DO - Return null, undefined, false?
+export const fetchDocumentById = async function({ entityGuid, documentId }) {
+  const query = {
+    actionType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
+    collection: ENTITY_COLLECTION_NAME,
+    documentId,
+    entityGuid
+  };
+
+  const result = await EntityStorageQuery.query(query);
+  const documents = result.data || null;
+
+  return documents;
+};
+
 export const writeSloDocument = async function({ entityGuid, _slo }) {
   // console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
   const __write_mutation = {
