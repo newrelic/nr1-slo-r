@@ -47,7 +47,7 @@ export default class SLOREntityNedlet extends React.Component {
       SLOTableView: false,
 
       // New SLO
-      newSloModalActive: false,
+      isActiveCreateModal: false,
       isActiveUpdateModal: false,
 
       // Update SLO
@@ -64,6 +64,8 @@ export default class SLOREntityNedlet extends React.Component {
     this.createDocumentCallback = this.createDocumentCallback.bind(this);
     this.updateDocumentCallback = this.updateDocumentCallback.bind(this);
     this.deleteDocumentCallback = this.deleteDocumentCallback.bind(this);
+
+    this.toggleCreateModal = this.toggleCreateModal.bind(this);
     this.toggleUpdateModal = this.toggleUpdateModal.bind(this);
   } // constructor
 
@@ -83,7 +85,7 @@ export default class SLOREntityNedlet extends React.Component {
     ) {
       this.load();
     }
-    // console.debug(this.state.newSloModalActive);
+    // console.debug(this.state.isActiveCreateModal);
   }
 
   static contextType = NerdletStateContext;
@@ -120,7 +122,7 @@ export default class SLOREntityNedlet extends React.Component {
 
   toggleCreateModal() {
     this.setState(prevState => ({
-      newSloModalActive: !prevState.newSloModalActive
+      isActiveCreateModal: !prevState.isActiveCreateModal
     }));
   }
 
@@ -155,7 +157,6 @@ export default class SLOREntityNedlet extends React.Component {
     this.updateDocumentInList({ mutationResult: document });
   }
 
-  async deleteDocumentCallback(_slo_document) {
   async deleteDocumentCallback({ document }) {
     const __mutation = {
       actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
@@ -180,7 +181,7 @@ export default class SLOREntityNedlet extends React.Component {
     const newRecords = [{ id: documentId, document }];
     this.setState(prevState => ({
       slo_documents: prevState.slo_documents.concat(newRecords),
-      newSloModalActive: false
+      isActiveCreateModal: false
     }));
   }
 
@@ -258,9 +259,7 @@ export default class SLOREntityNedlet extends React.Component {
                 horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
               >
                 <Button
-                  onClick={() => {
-                    this.setState({ newSloModalActive: true });
-                  }}
+                  onClick={this.toggleCreateModal}
                   type={Button.TYPE.PRIMARY}
                   iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
                 >
@@ -284,9 +283,7 @@ export default class SLOREntityNedlet extends React.Component {
                     entityGuid={this.state.entity}
                     slo_documents={this.state.slo_documents}
                     timeRange={launcherUrlState.timeRange}
-                    openDefineSLOModal={() => {
-                      this.setState({ newSloModalActive: true });
-                    }}
+                    toggleCreateModal={this.toggleCreateModal}
                     toggleUpdateModal={this.toggleUpdateModal}
                     tableView={this.state.SLOTableView}
                     deleteCallback={this.deleteDocumentCallback}
@@ -296,15 +293,15 @@ export default class SLOREntityNedlet extends React.Component {
             </GridItem>
           </Grid>
 
-          {/* Allow wrapper and form to control modal visibility */}
+          {/* Create Modal */}
           <ModalWrapper
-            modalIsActive={this.state.newSloModalActive}
-            modalToggleCallback={() => this.toggleCreateModal()}
+            modalIsActive={this.state.isActiveCreateModal}
+            modalToggleCallback={this.toggleCreateModal}
           >
             <SloForm
               entityGuid={this.state.entityGuid}
               createDocumentCallback={this.createDocumentCallback}
-              modalToggleCallback={() => this.toggleCreateModal()}
+              modalToggleCallback={this.toggleCreateModal}
             />
           </ModalWrapper>
 

@@ -37,7 +37,7 @@ export default class SLOTable extends React.Component {
     slo_documents: PropTypes.array,
     timeRange: PropTypes.object,
     tableView: PropTypes.bool,
-    openDefineSLOModal: PropTypes.func,
+    toggleCreateModal: PropTypes.func,
     toggleUpdateModal: PropTypes.func,
     addSloDocumentCallback: PropTypes.func,
     deleteCallback: PropTypes.func
@@ -191,7 +191,7 @@ export default class SLOTable extends React.Component {
         </StackItem>
         <StackItem>
           <Button
-            onClick={this.props.openDefineSLOModal}
+            onClick={() => this.props.toggleCreateModal()}
             sizeType={Button.SIZE_TYPE.LARGE}
             type={Button.TYPE.PRIMARY}
             iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
