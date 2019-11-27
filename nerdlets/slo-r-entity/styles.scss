@@ -266,10 +266,20 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   text-transform: capitalize;
 }
 
-.slo-grid-item-section-settings-button {
+.slo-grid-item-section-delete-button {
   position: absolute;
   top: 8px;
   right: 8px;
+
+  span {
+    pointer-events: none;
+  }
+}
+
+.slo-grid-item-section-update-button {
+  position: absolute;
+  top: 8px;
+  right: 40px;
 
   span {
     pointer-events: none;

@@ -38,6 +38,7 @@ export default class SLOTable extends React.Component {
     timeRange: PropTypes.object,
     tableView: PropTypes.bool,
     openDefineSLOModal: PropTypes.func,
+    toggleUpdateModal: PropTypes.func,
     addSloDocumentCallback: PropTypes.func,
     deleteCallback: PropTypes.func
     // editCallback: PropTypes.func
@@ -131,6 +132,17 @@ export default class SLOTable extends React.Component {
           thirtyDay: '',
           target: slo_document.document.target,
           org: slo_document.document.organization,
+          update: (
+            <Button
+              iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_EDIT}
+              sizeType={Button.SIZE_TYPE.SMALL}
+              onClick={() => {
+                this.props.toggleUpdateModal({
+                  document: slo_document.document
+                });
+              }}
+            />
+          ),
           delete: (
             <Button
               iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}

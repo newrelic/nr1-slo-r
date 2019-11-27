@@ -48,6 +48,10 @@ export default class SLOREntityNedlet extends React.Component {
 
       // New SLO
       newSloModalActive: false,
+      isActiveUpdateModal: false,
+
+      // Update SLO
+      editDocumentId: null,
 
       // UI State
       refresh: false
@@ -58,7 +62,9 @@ export default class SLOREntityNedlet extends React.Component {
     ); /** opens the SLO configuration */
 
     this.createDocumentCallback = this.createDocumentCallback.bind(this);
+    this.updateDocumentCallback = this.updateDocumentCallback.bind(this);
     this.deleteDocumentCallback = this.deleteDocumentCallback.bind(this);
+    this.toggleUpdateModal = this.toggleUpdateModal.bind(this);
   } // constructor
 
   /** lifecycle prompts the fetching of the SLO documents for this entity */
@@ -118,6 +124,19 @@ export default class SLOREntityNedlet extends React.Component {
     }));
   }
 
+  toggleUpdateModal(options = { document: {} }) {
+    const idField = 'name'; // TO DO - Why is our "id" field the user definable "name"?
+    const { document } = options;
+    const documentId = document[idField] || undefined;
+
+    this.setState(prevState => {
+      return {
+        isActiveUpdateModal: !prevState.isActiveUpdateModal,
+        editDocumentId: documentId
+      };
+    });
+  }
+
   // Form Callbacks
   async createDocumentCallback({ document, response }) {
     if (!response) {
@@ -125,7 +144,15 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.addDocumentToList({ mutationResult: document });
-    // this.setState({ newSloModalActive: false, refresh: true });
+    // this.setState({ isActiveCreateModal: false, refresh: true });
+  }
+
+  async updateDocumentCallback({ document, response }) {
+    if (!response) {
+      throw new Error('Error updating SLO Document to Entity Storage');
+    }
+
+    this.updateDocumentInList({ mutationResult: document });
   }
 
   async deleteDocumentCallback(_slo_document) {
@@ -155,6 +182,10 @@ export default class SLOREntityNedlet extends React.Component {
       slo_documents: prevState.slo_documents.concat(newRecords),
       newSloModalActive: false
     }));
+  }
+
+  updateDocumentInList({ mutationResult }) {
+    //
   }
 
   removeDocumentFromList({ document }) {
@@ -256,6 +287,7 @@ export default class SLOREntityNedlet extends React.Component {
                     openDefineSLOModal={() => {
                       this.setState({ newSloModalActive: true });
                     }}
+                    toggleUpdateModal={this.toggleUpdateModal}
                     tableView={this.state.SLOTableView}
                     deleteCallback={this.deleteDocumentCallback}
                   />
@@ -273,6 +305,19 @@ export default class SLOREntityNedlet extends React.Component {
               entityGuid={this.state.entityGuid}
               createDocumentCallback={this.createDocumentCallback}
               modalToggleCallback={() => this.toggleCreateModal()}
+            />
+          </ModalWrapper>
+
+          {/* Update Modal */}
+          <ModalWrapper
+            modalIsActive={this.state.isActiveUpdateModal}
+            modalToggleCallback={this.toggleUpdateModal}
+          >
+            <SloForm
+              entityGuid={this.state.entityGuid}
+              documentId={this.state.editDocumentId}
+              updateDocumentCallback={this.updateDocumentCallback}
+              modalToggleCallback={this.toggleUpdateModal}
             />
           </ModalWrapper>
         </div>

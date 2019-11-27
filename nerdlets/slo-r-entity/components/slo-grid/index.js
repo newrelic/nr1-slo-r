@@ -22,7 +22,10 @@ export default class SLOGrid extends Component {
           <header className="slo-grid-item-header">
             <h4 className="slo-grid-item-header-title">{sloData.name}</h4>
             <span className="slo-grid-item-header-type">{sloData.type}</span>
-            <div className="slo-grid-item-section-settings-button">
+            <div className="slo-grid-item-section-update-button">
+              {sloData.update}
+            </div>
+            <div className="slo-grid-item-section-delete-button">
               {sloData.delete}
             </div>
           </header>
