@@ -1,7 +1,7 @@
 /**
- * Foo
+ * Provides the inital react context for assembling the complete list of ORG SLOs.
  *
- * @file Foo
+ * @file 
  * @author Gil Rice
  */
 /** core */
@@ -12,7 +12,6 @@ import { EntitiesByDomainTypeQuery, Spinner } from 'nr1';
 /** local */
 import SLOREstate from './components/slo-r-estate';
 
-// https://docs.newrelic.com/docs/new-relic-programmable-platform-introduction
 
 export default class SloRMain extends React.Component {
   static propTypes = {

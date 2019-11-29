@@ -1,6 +1,6 @@
 {
     "schemaType": "NERDLET",
     "id": "slo-r-main",
-    "displayName": "SloRMain",
-    "description": ""
+    "displayName": "SLO/R Overview",
+    "description": "View composite reports for your SLOs"
 }
