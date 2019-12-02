@@ -161,7 +161,7 @@ export default class OrgDisplayer extends React.Component {
                             })}
                          
                          <tr>
-                                <td>Total</td>
+                                <td>Total Attainment</td>
                                 <td>{ Math.round((100 - (__total_current_numerator / __total_current_denominator) * 100) * 1000) / 1000 }</td>
                                 <td>{ Math.round((100 - (__total_7_day_numerator / __total_7_day_denominator) * 100) * 1000) / 1000 }</td>
                                 <td>{ Math.round((100 - (__total_30_day_numerator / __total_30_day_denominator) * 100) * 1000) / 1000 }</td>
@@ -178,20 +178,4 @@ export default class OrgDisplayer extends React.Component {
 
     } //render
 
-}//OrgDisplayer
-
-/**
- *                                 
- * __total_current_numerator =+ __total_current_numerator + _slo_data.numerator;
-                                __total_current_denominator =+ __total_current_denominator + _slo_data.denominator;
-
-                                   <tr>
-                                <td>Total</td>
-                                <td>{Math.round()}</td>
-                            </tr>
-
-
-__SLO_RESULT._current.result = Math.round((100 - (__SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) * 100) * 1000) / 1000;
-
- */
- 
+}//OrgDisplayer 
