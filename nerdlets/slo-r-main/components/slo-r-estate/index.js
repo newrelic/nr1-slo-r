@@ -9,7 +9,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import { BlockText, EntityStorageQuery, Grid, GridItem, Spinner } from 'nr1';
+import {   
+  PlatformStateContext,
+  NerdletStateContext,
+  BlockText, 
+  EntityStorageQuery, 
+  Grid, 
+  GridItem, 
+  Spinner 
+} from 'nr1';
 /** local */
 import OrgSelector from './components/org-selector';
 import OrgDisplayer from './components/org-displayer';
@@ -23,8 +31,10 @@ export default class SLOREstate extends React.Component {
     // nerdlet_beginTS: PropTypes.string,
     // nerdlet_endTS: PropTypes.string,
     // nerdlet_duration: PropTypes.string,
-    entities_data: PropTypes.object
-    // entities_fetchmoar: PropTypes.object
+    entities_data: PropTypes.object,
+    entities_fetchmoar: PropTypes.object,
+    launcherUrlState: PropTypes.object,
+    nerdletUrlState: PropTypes.object
   }; // propTypes
 
   constructor(props) {
@@ -42,7 +52,6 @@ export default class SLOREstate extends React.Component {
 
     console.debug("the big event", _org);
     this.setState({ render_org: _org });
-    console.debug("set state dun");
   }//_sloSelectorCallback
   
 
@@ -169,12 +178,16 @@ export default class SLOREstate extends React.Component {
             </Grid>
             <Grid>
               <GridItem columnSpan={10}>
-                {this.state.render_org && 
-                
-                (<OrgDisplayer
-                  org={this.state.render_org}
-                />) 
-                }                
+                {this.state.render_org && (
+                <PlatformStateContext.Consumer>
+                  {launcherUrlState => (
+                    <OrgDisplayer
+                      org={this.state.render_org}
+                      timeRange={launcherUrlState.timeRange}
+                    />
+                  )}
+                </PlatformStateContext.Consumer>
+                )}                
               </GridItem>
             </Grid>
           </div>
@@ -183,3 +196,5 @@ export default class SLOREstate extends React.Component {
     } // else
   } // render
 } // SLOREstate
+
+

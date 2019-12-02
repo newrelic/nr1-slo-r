@@ -8,7 +8,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import { EntitiesByDomainTypeQuery, Spinner } from 'nr1';
+import {   PlatformStateContext,
+  NerdletStateContext,
+  EntitiesByDomainTypeQuery, Spinner } from 'nr1';
 /** local */
 import SLOREstate from './components/slo-r-estate';
 
@@ -36,13 +38,23 @@ export default class SloRMain extends React.Component {
               return 'Error!';
             }
             return (
-              <SLOREstate
-                entities_data={data}
-                entities_fetchmoar={fetchMore}
-                nerdlet_beginTS={this.props.nerdlet_beginTS}
-                nerdlet_endTS={this.props.nerdlet_endTS}
-                nerdlet_duration={this.props.nerdlet_duration}
-              />
+
+              <PlatformStateContext.Consumer>
+              {launcherUrlState => (
+                <NerdletStateContext.Consumer>
+                  {nerdletUrlState => (
+                    <SLOREstate
+                    entities_data={data}
+                    entities_fetchmoar={fetchMore}
+                    launcherUrlState={launcherUrlState}
+                    nerdletUrlState={nerdletUrlState}
+                  />
+                  )}
+                </NerdletStateContext.Consumer>
+              )}
+            </PlatformStateContext.Consumer>
+
+
             );
           }}
         </EntitiesByDomainTypeQuery>
