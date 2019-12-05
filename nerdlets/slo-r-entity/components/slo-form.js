@@ -472,7 +472,7 @@ export default class SloForm extends React.Component {
   render() {
     const { documentId } = this.props;
     const { document, isNew } = this.state;
-    const documentIsReady = documentId && document;
+    const documentIsReady = (documentId && document) || !documentId;
 
     return (
       <>
