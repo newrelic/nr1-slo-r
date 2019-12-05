@@ -1,6 +1,8 @@
 import { EntityStorageMutation, EntityStorageQuery } from 'nr1';
 import { ENTITY_COLLECTION_NAME } from '../constants';
 
+const uuid = require('uuid/v4');
+
 export const fetchSloDocuments = async function({ entityGuid }) {
   const _query = {
     actionType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
@@ -31,6 +33,11 @@ export const fetchDocumentById = async function({ entityGuid, documentId }) {
 
 export const writeSloDocument = async function({ entityGuid, _slo }) {
   // console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
+  // Add a documentId to any we update that are missing one
+  if (!document.documentId) {
+    document.documentId = uuid();
+  }
+
   const __write_mutation = {
     actionType: EntityStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
     collection: ENTITY_COLLECTION_NAME,
@@ -86,6 +93,7 @@ export const validateSlo = function(document) {
 export const sloDocumentModel = {
   create: function() {
     return {
+      documentId: uuid(),
       name: '',
       organization: '',
       target: '',

@@ -127,9 +127,9 @@ export default class SLOREntityNedlet extends React.Component {
   }
 
   toggleUpdateModal(options = { document: {} }) {
-    const idField = 'name'; // TO DO - Why is our "id" field the user definable "name"?
+    const idField = 'documentId';
     const { document } = options;
-    const documentId = document[idField] || undefined;
+    const documentId = document[idField] || null;
 
     this.setState(prevState => {
       return {
