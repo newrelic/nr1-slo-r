@@ -125,7 +125,7 @@ export default class SLOTable extends React.Component {
 
       if (!result[id]) {
         result[id] = {
-          name: id,
+          name: slo_document.document.name,
           type: '',
           current: '',
           sevenDay: '',
@@ -163,9 +163,13 @@ export default class SLOTable extends React.Component {
     return Object.values(formatted);
   }
 
+  // TO DO - Do we want per cell editing?
   async updateSloDocument(e, row, rowIndex) {
+    // eslint-disable-next-line no-console
     console.debug(e);
+    // eslint-disable-next-line no-console
     console.debug(row);
+    // eslint-disable-next-line no-console
     console.debug(rowIndex);
   }
 
@@ -229,7 +233,7 @@ export default class SLOTable extends React.Component {
   renderBootStrapTableView() {
     const { tableData } = this.state;
     const typeOptions = SLO_TYPES.reduce((previousValue, currentValue) => {
-      previousValue[currentValue.field] = currentValue.name;
+      previousValue[currentValue.value] = currentValue.label;
       return previousValue;
     }, {});
     const columns = [
@@ -320,16 +324,17 @@ export default class SLOTable extends React.Component {
 
   /** lifecycle - provides the simple table component as a encapsulated <div> */
   render() {
+    const { slo_documents } = this.props;
+    const hasDocuments = slo_documents.length > 0;
     const gettingStarted = this.renderGettingStarted();
     const gridView = this.renderGridView();
     const tableView = this.renderTableView();
-
     const bootstrapTable = true;
     const bootstrapTableView = this.renderBootStrapTableView();
 
     // render the table or just the headings if we have no clo_documents defined.
-    if (this.props.slo_documents.length === 0) {
-      return { gettingStarted };
+    if (!hasDocuments) {
+      return <>{gettingStarted}</>;
     } else {
       // Todo: figure out a way to enable sorting on columns that include a color
       // The blocker here is that color is included by wrapping the cell value in an html element.

@@ -22,12 +22,13 @@ import {
 
 // entities
 import { fetchEntity } from '../../shared/services/entity';
+import { SLO_TYPES, SLO_DEFECTS } from '../../shared/constants';
 
 export default class SloForm extends React.Component {
   static propTypes = {
     entityGuid: PropTypes.string,
     documentId: PropTypes.string,
-    createDocumentCallback: PropTypes.func,
+    upsertDocumentCallback: PropTypes.func,
     modalToggleCallback: PropTypes.func
   };
 
@@ -39,35 +40,31 @@ export default class SloForm extends React.Component {
     super(props);
 
     this.state = {
-      newSloDocument: sloDocumentModel.create(),
-      updateSloDocument: undefined,
+      isNew: false,
+      document: undefined,
 
       // Related data
       entityDetails: null,
       transactions: null,
 
-      // Form options
+      // Form options populated from nrql
       alertOptions: [],
-      defectOptions: [
-        { value: '5%', label: '5xx Errors' },
-        { value: '400', label: '400 Bad Request' },
-        { value: '401', label: '401 Unauthorized' },
-        { value: '403', label: '403 Forbidden' },
-        { value: '404', label: '404 Not Found' },
-        { value: '409', label: '409 Conflict' },
-        { value: 'apdex_frustrated', label: 'Apdex Frustrated' }
-      ],
       transactionOptions: []
     };
 
-    this.addNewHandler = this.addNewHandler.bind(this);
+    if (!props.documentId) {
+      this.state.isNew = true;
+      this.state.document = sloDocumentModel.create();
+    }
+
+    this.upsertHandler = this.upsertHandler.bind(this);
   }
 
   async componentDidMount() {
     const { entityGuid, documentId } = this.props;
 
-    if (this.props.documentId !== undefined) {
-      await this.fetchDocumentById({ entityGuid, documentId });
+    if (this.props.documentId) {
+      await this.getDocumentById({ entityGuid, documentId });
     }
 
     // TO DO - change to something that executes all 3 at once
@@ -80,8 +77,8 @@ export default class SloForm extends React.Component {
   async componentDidUpdate(prevProps) {
     const { entityGuid, documentId } = this.props;
 
-    if (prevProps.documentId !== documentId) {
-      await this.fetchDocumentById({ entityGuid, documentId });
+    if (documentId && prevProps.documentId !== documentId) {
+      await this.getDocumentById({ entityGuid, documentId });
     }
 
     if (prevProps.entityGuid !== entityGuid) {
@@ -91,12 +88,15 @@ export default class SloForm extends React.Component {
     }
   }
 
-  async fetchDocumentById({ entityGuid, documentId }) {
-    const response = await fetchDocumentById({ entityGuid, documentId });
+  async getDocumentById({ entityGuid, documentId }) {
+    if (entityGuid && documentId) {
+      const response = await fetchDocumentById({ entityGuid, documentId });
 
-    this.setState({
-      updateSloDocument: response
-    });
+      this.setState({
+        document: response,
+        isNew: false
+      });
+    }
   }
 
   async _getEntityInformation() {
@@ -111,9 +111,9 @@ export default class SloForm extends React.Component {
   }
 
   async _updateAlertConfig() {
-    const { entityDetails, newSloDocument } = this.state;
+    const { entityDetails, document } = this.state;
 
-    if (entityDetails && newSloDocument.alerts.length < 1) {
+    if (entityDetails && document.alerts.length < 1) {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
@@ -159,12 +159,12 @@ export default class SloForm extends React.Component {
   /*
    * Handle user submission of a new SLO document
    */
-  addNewHandler(e) {
+  upsertHandler(e) {
     // prevent default used to stop form submission to iframe
     e.preventDefault();
 
-    const { entityDetails, newSloDocument } = this.state;
-    const isValid = validateSlo(newSloDocument);
+    const { entityDetails, document } = this.state;
+    const isValid = validateSlo(document);
 
     if (!isValid) {
       // eslint-disable-next-line no-alert
@@ -174,24 +174,17 @@ export default class SloForm extends React.Component {
       return;
     }
 
-    let formattedSelectedDefects = '';
-
+    let formattedSelectedDefects = [];
     if (formattedSelectedDefects) {
-      formattedSelectedDefects = newSloDocument.defects.map(defect => {
+      formattedSelectedDefects = document.defects.map(defect => {
         return defect.value;
       });
     }
 
-    // assemble the document object
-    // the SLO definition document we are about to write to nerdstore
-    const __slo_document = {
-      name: newSloDocument.name,
-      organization: newSloDocument.organization,
-      target: newSloDocument.target,
-      type: newSloDocument.type,
-      alerts: newSloDocument.alerts,
-      defects: formattedSelectedDefects,
-      transactions: newSloDocument.transactions,
+    // Merge in entityDetails
+    const newDocument = {
+      ...document,
+      defects: formattedSelectedDefects || [],
       entityGuid: entityDetails.entityGuid,
       accountId: entityDetails.accountId,
       accountName: entityDetails.accountName,
@@ -200,62 +193,78 @@ export default class SloForm extends React.Component {
     };
 
     // write the document
-    this.writeNewSloDocument(__slo_document);
+    this.writeNewSloDocument(newDocument);
   }
 
   /*
    * Add to NerdStorage and navigate
    */
-  async writeNewSloDocument(_slo) {
+  async writeNewSloDocument(document) {
     const { entityGuid } = this.props;
 
-    const { mutation, result } = await writeSloDocument({ entityGuid, _slo });
-    this.props.createDocumentCallback({ document: mutation, response: result });
+    const { mutation, result } = await writeSloDocument({
+      entityGuid,
+      document
+    });
+
+    this.props.upsertDocumentCallback({ document: mutation, response: result });
 
     // TO DO - reset this.state.newSloDocument if successful, keep if error?
     if (result) {
-      this.setState({ newSloDocument: sloDocumentModel.create() });
+      this.setState({ document: sloDocumentModel.create() });
     }
   }
 
   inputHandler({ field, value }) {
     this.setState(previousState => {
       const updatedDocument = {
-        ...previousState.newSloDocument
+        ...previousState.document
       };
       updatedDocument[field] = value;
 
       return {
         ...previousState,
-        newSloDocument: updatedDocument
+        document: updatedDocument
       };
     });
   }
 
   getValue({ field }) {
     const { documentId } = this.props;
-    const { newSloDocument, updateSloDocument } = this.state;
+    const { document } = this.state;
 
-    if (documentId && !updateSloDocument) {
-      // console.debug(documentId);
-      // console.debug(updateSloDocument);
+    // Error loading document for editing
+    if (documentId && !document) {
       throw new Error('Error populating document for edit');
     }
 
-    if (documentId && updateSloDocument) {
-      const value = updateSloDocument[field];
-      return value;
-    }
+    // Find value on the document being edited
+    if ((documentId && document) || !documentId) {
+      const value = document[field];
 
-    if (!documentId && this.state.newSloDocument) {
-      return newSloDocument[field];
+      if (value === undefined) {
+        throw new Error(`SLO Document field: ${field} not defined`);
+      }
+
+      return value;
     }
   }
 
-  renderErrorBudget() {
-    const { defectOptions, newSloDocument, transactionOptions } = this.state;
+  dropdownTitleLookup({ name, options }) {
+    const value = this.getValue({ field: name });
+    const option = options.find(o => o.value === value);
 
-    if (newSloDocument.type !== 'error_budget') {
+    if (option) {
+      return option.label;
+    }
+
+    return null;
+  }
+
+  renderErrorBudget() {
+    const { document, transactionOptions } = this.state;
+
+    if (document.type !== 'error_budget') {
       return null;
     }
 
@@ -267,7 +276,7 @@ export default class SloForm extends React.Component {
             <Multiselect
               valueField="value"
               textField="label"
-              data={defectOptions}
+              data={SLO_DEFECTS}
               className="defects-dropdown react-select-dropdown"
               placeholder="Select one or more defects"
               onChange={value =>
@@ -313,12 +322,12 @@ export default class SloForm extends React.Component {
   }
 
   renderAlerts() {
-    const { newSloDocument } = this.state;
-    if (newSloDocument.type === 'error_budget') {
+    const { document } = this.state;
+    if (document.type === 'error_budget') {
       return null;
     }
 
-    if (newSloDocument.type === '') {
+    if (document.type === '') {
       return null;
     }
 
@@ -329,7 +338,7 @@ export default class SloForm extends React.Component {
           <Multiselect
             data={this.state.alertOptions}
             valueField="policy_name"
-            value={this.state.newSloDocument.alerts}
+            value={this.state.document.alerts}
             allowCreate
             onCreate={value => {
               this.inputHandler({
@@ -367,14 +376,6 @@ export default class SloForm extends React.Component {
   }
 
   renderFormFields() {
-    const { documentId } = this.props;
-    const { updateSloDocument } = this.state;
-
-    // Don't render until we've fetched the document
-    if (!documentId || !updateSloDocument) {
-      return null;
-    }
-
     return (
       <>
         <TextField
@@ -414,7 +415,12 @@ export default class SloForm extends React.Component {
         />
 
         <Dropdown
-          title={this.getValue({ field: 'type' })}
+          title={
+            this.dropdownTitleLookup({
+              name: 'type',
+              options: SLO_TYPES
+            }) || 'Choose a Type'
+          }
           label="Type"
           className="define-slo-input"
         >
@@ -464,7 +470,10 @@ export default class SloForm extends React.Component {
   }
 
   render() {
-    // const { updateSloDocument, transactionOptions } = this.state;
+    const { documentId } = this.props;
+    const { document, isNew } = this.state;
+    const documentIsReady = documentId && document;
+
     return (
       <>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
@@ -475,9 +484,9 @@ export default class SloForm extends React.Component {
           will be able to edit this information in the future.
         </p>
 
-        {this.renderFormFields()}
-        {this.renderErrorBudget()}
-        {this.renderAlerts()}
+        {documentIsReady && this.renderFormFields()}
+        {documentIsReady && this.renderErrorBudget()}
+        {documentIsReady && this.renderAlerts()}
 
         <Button
           type={Button.TYPE.Secondary}
@@ -485,8 +494,8 @@ export default class SloForm extends React.Component {
         >
           Cancel
         </Button>
-        <Button type={Button.TYPE.PRIMARY} onClick={this.addNewHandler}>
-          Add new service
+        <Button type={Button.TYPE.PRIMARY} onClick={this.upsertHandler}>
+          {isNew ? 'Add new service' : 'Update service'}
         </Button>
       </>
     );

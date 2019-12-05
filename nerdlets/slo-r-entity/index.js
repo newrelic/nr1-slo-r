@@ -61,8 +61,7 @@ export default class SLOREntityNedlet extends React.Component {
       this
     ); /** opens the SLO configuration */
 
-    this.createDocumentCallback = this.createDocumentCallback.bind(this);
-    this.updateDocumentCallback = this.updateDocumentCallback.bind(this);
+    this.upsertDocumentCallback = this.upsertDocumentCallback.bind(this);
     this.deleteDocumentCallback = this.deleteDocumentCallback.bind(this);
 
     this.toggleCreateModal = this.toggleCreateModal.bind(this);
@@ -140,21 +139,12 @@ export default class SLOREntityNedlet extends React.Component {
   }
 
   // Form Callbacks
-  async createDocumentCallback({ document, response }) {
+  async upsertDocumentCallback({ document, response }) {
     if (!response) {
       throw new Error('Error writing SLO Document to Entity Storage');
     }
 
-    this.addDocumentToList({ mutationResult: document });
-    // this.setState({ isActiveCreateModal: false, refresh: true });
-  }
-
-  async updateDocumentCallback({ document, response }) {
-    if (!response) {
-      throw new Error('Error updating SLO Document to Entity Storage');
-    }
-
-    this.updateDocumentInList({ mutationResult: document });
+    this.upsertDocumentInList({ mutationResult: document });
   }
 
   async deleteDocumentCallback({ document }) {
@@ -162,8 +152,10 @@ export default class SLOREntityNedlet extends React.Component {
       actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
       collection: 'nr1-csg-slo-r',
       entityGuid: document.entityGuid,
-      documentId: document.name || document.slo_name
-    }; // mutation
+
+      // TO DO - Remove document.name and document.slo_name after we've reached an initial release
+      documentId: document.documentId || document.name || document.slo_name
+    };
 
     // TODO Provide message of the successful deletion
     const __result = await EntityStorageMutation.mutate(__mutation);
@@ -176,17 +168,33 @@ export default class SLOREntityNedlet extends React.Component {
     // this.setState({ refresh: true });
   }
 
-  addDocumentToList({ mutationResult }) {
+  upsertDocumentInList({ mutationResult }) {
+    const { slo_documents } = this.state;
     const { documentId, document } = mutationResult;
-    const newRecords = [{ id: documentId, document }];
-    this.setState(prevState => ({
-      slo_documents: prevState.slo_documents.concat(newRecords),
-      isActiveCreateModal: false
-    }));
-  }
 
-  updateDocumentInList({ mutationResult }) {
-    //
+    const documentIndex = slo_documents.findIndex(
+      d => d.document.documentId === mutationResult.documentId
+    );
+
+    // Update item in list without mutating state
+    if (documentIndex >= 0) {
+      this.setState(({ slo_documents }) => ({
+        slo_documents: [
+          ...slo_documents.slice(0, documentIndex),
+          { id: documentId, document },
+          ...slo_documents.slice(documentIndex + 1)
+        ],
+        isActiveUpdateModal: false
+      }));
+    }
+
+    if (documentIndex < 0) {
+      const newRecords = [{ id: documentId, document }];
+      this.setState(prevState => ({
+        slo_documents: prevState.slo_documents.concat(newRecords),
+        isActiveCreateModal: false
+      }));
+    }
   }
 
   removeDocumentFromList({ document }) {
@@ -278,17 +286,23 @@ export default class SLOREntityNedlet extends React.Component {
               columnStart={!sloHasBeenDefined ? 5 : null}
             >
               <PlatformStateContext.Consumer>
-                {launcherUrlState => (
-                  <SLOTable
-                    entityGuid={this.state.entity}
-                    slo_documents={this.state.slo_documents}
-                    timeRange={launcherUrlState.timeRange}
-                    toggleCreateModal={this.toggleCreateModal}
-                    toggleUpdateModal={this.toggleUpdateModal}
-                    tableView={this.state.SLOTableView}
-                    deleteCallback={this.deleteDocumentCallback}
-                  />
-                )}
+                {launcherUrlState => {
+                  // if (this.state.slo_documents === null) {
+                  //   return null;
+                  // }
+
+                  return (
+                    <SLOTable
+                      entityGuid={this.state.entity}
+                      slo_documents={this.state.slo_documents}
+                      timeRange={launcherUrlState.timeRange}
+                      toggleCreateModal={this.toggleCreateModal}
+                      toggleUpdateModal={this.toggleUpdateModal}
+                      tableView={this.state.SLOTableView}
+                      deleteCallback={this.deleteDocumentCallback}
+                    />
+                  );
+                }}
               </PlatformStateContext.Consumer>
             </GridItem>
           </Grid>
@@ -300,7 +314,7 @@ export default class SLOREntityNedlet extends React.Component {
           >
             <SloForm
               entityGuid={this.state.entityGuid}
-              createDocumentCallback={this.createDocumentCallback}
+              upsertDocumentCallback={this.upsertDocumentCallback}
               modalToggleCallback={this.toggleCreateModal}
             />
           </ModalWrapper>
@@ -313,7 +327,7 @@ export default class SLOREntityNedlet extends React.Component {
             <SloForm
               entityGuid={this.state.entityGuid}
               documentId={this.state.editDocumentId}
-              updateDocumentCallback={this.updateDocumentCallback}
+              upsertDocumentCallback={this.upsertDocumentCallback}
               modalToggleCallback={this.toggleUpdateModal}
             />
           </ModalWrapper>

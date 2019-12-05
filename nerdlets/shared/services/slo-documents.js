@@ -18,6 +18,10 @@ export const fetchSloDocuments = async function({ entityGuid }) {
 
 // TO DO - Return null, undefined, false?
 export const fetchDocumentById = async function({ entityGuid, documentId }) {
+  if (!entityGuid || !documentId) {
+    return null;
+  }
+
   const query = {
     actionType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
     collection: ENTITY_COLLECTION_NAME,
@@ -31,8 +35,7 @@ export const fetchDocumentById = async function({ entityGuid, documentId }) {
   return documents;
 };
 
-export const writeSloDocument = async function({ entityGuid, _slo }) {
-  // console.debug("SLO DOCUMENT ---> " + JSON.stringify(_slo));
+export const writeSloDocument = async function({ entityGuid, document }) {
   // Add a documentId to any we update that are missing one
   if (!document.documentId) {
     document.documentId = uuid();
@@ -42,12 +45,12 @@ export const writeSloDocument = async function({ entityGuid, _slo }) {
     actionType: EntityStorageMutation.ACTION_TYPE.WRITE_DOCUMENT,
     collection: ENTITY_COLLECTION_NAME,
     entityGuid: entityGuid,
-    documentId: _slo.name,
-    document: _slo
-  }; // __write_mutation
+    documentId: document.documentId,
+    document
+  };
 
   // need to have a real slo name - this is previously validated but acts as a double check.
-  if (!_slo.name) {
+  if (!document.name) {
     throw new Error('Error - no SLO name provided');
   }
 
@@ -65,27 +68,29 @@ export const writeSloDocument = async function({ entityGuid, _slo }) {
 export const validateSlo = function(document) {
   if (document.name === '') {
     return false;
-  } // if
+  }
 
   if (document.target === '') {
     return false;
-  } // if
+  }
 
   if (document.organization === '') {
     return false;
-  } // if
+  }
 
+  // Error Driven SLO
   if (document.type === 'error_budget') {
     if (document.transactions.length === 0 || document.defects.length === 0) {
       return false;
-    } // if
-  } // if
-  else {
-    // eslint-disable-next-line no-lonely-if
+    }
+  }
+
+  // Alert Driven SLO
+  if (document.type !== 'error_budget') {
     if (document.alerts.length === 0) {
       return false;
-    } // if
-  } // else
+    }
+  }
 
   return true;
 };
@@ -99,8 +104,8 @@ export const sloDocumentModel = {
       target: '',
       alerts: [],
       type: '',
-      defects: '',
-      transactions: '',
+      defects: [],
+      transactions: [],
       slo_r_version: '1.0.1'
     };
   }
