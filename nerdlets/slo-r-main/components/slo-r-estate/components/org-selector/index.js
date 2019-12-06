@@ -8,7 +8,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import { 
+import {
+    BlockText,
     Dropdown,
     DropdownItem 
 } from 'nr1'
@@ -37,15 +38,15 @@ export default class OrgSelector extends React.Component {
     render() {
 
         console.debug("selector callback?",  this.props.onChange);
+
         return(
             <div>
                 <Dropdown title="Select an SLO Organization to display" items={this.props.orgs}>
                     {({item, index}) => ( 
-                       
+                        
                             <DropdownItem key={index} onClick={() => this.props.onChange(item)}>
                                 {item.orgName}
                             </DropdownItem>
-                        
                     )}
                     
                 </Dropdown>

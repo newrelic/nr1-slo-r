@@ -53,8 +53,6 @@ export default class SloRMain extends React.Component {
                 </NerdletStateContext.Consumer>
               )}
             </PlatformStateContext.Consumer>
-
-
             );
           }}
         </EntitiesByDomainTypeQuery>

@@ -62,7 +62,7 @@ export default class SLOREstate extends React.Component {
 
     const __SLOsForCandidate = _orgSLOs.filter(function(value) {
       //return value.orgName === _candidateSLO.document.organization;
-      return value.orgName === _candidateSLO.document.team; //TODO this will need to be transitionsed to ORG ... 
+      return value.orgName === _candidateSLO.document.organization;  
     });
 
     console.debug('candidate slos', __SLOsForCandidate);
@@ -73,7 +73,7 @@ export default class SLOREstate extends React.Component {
     } // if
     else if (__SLOsForCandidate.length === 0) {
       _orgSLOs.push({
-        orgName: _candidateSLO.document.team,
+        orgName: _candidateSLO.document.organization,
         slos: [_candidateSLO.document]
       });
 
@@ -139,6 +139,28 @@ export default class SLOREstate extends React.Component {
     this.assembleOrgSLOs();
   } // componentDidMount
 
+  shouldComponentUpdate(nextProps, nextState) {
+
+    if (this.state.org_slos === null){
+      return true;
+    }//if
+
+    if (this.state.org_slos != nextState.org_slos) {
+      return true;
+    }
+
+    if (this.state.render_org != nextState.render_org) {
+      return true;
+    } //if
+    
+    console.debug("returning false");
+    console.debug("current state", this.state);
+    console.debug("next state", nextState)
+
+    return false;
+
+  } //shouldComponentUpdate
+
   render() {
     // console.debug('entities', this.props.entities_data);
     // console.debug('moar', this.props.entities_fetchmoar);
@@ -151,7 +173,7 @@ export default class SLOREstate extends React.Component {
       );
     } // if
     else {
-      if (this.state.org_slos === 'NONE') {
+      if (this.state.org_slos.length < 1) {
         return (
           <div>
             <Grid>

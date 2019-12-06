@@ -116,7 +116,7 @@ export default class OrgDisplayer extends React.Component {
                 <div>
                     <p>ORGANIZATION: {this.props.org.orgName}</p>
                     <br/>   
-                    <p>SLO TYPE: Error Budgie</p>
+                    <p>SLO TYPE: Error</p>
                     <table>
                         <thead>
                             <tr>
@@ -142,7 +142,7 @@ export default class OrgDisplayer extends React.Component {
                                 return(
                                     <tr>
                                         <td>
-                                            {_slo_data.slo_document.slo_name}
+                                            {_slo_data.slo_document.name}
                                         </td>
                                         <td>
                                             {_slo_data.result_current.result}
@@ -160,7 +160,7 @@ export default class OrgDisplayer extends React.Component {
                                 )
                             })}
                          
-                         <tr>
+                            <tr>
                                 <td>Total Attainment</td>
                                 <td>{ Math.round((100 - (__total_current_numerator / __total_current_denominator) * 100) * 1000) / 1000 }</td>
                                 <td>{ Math.round((100 - (__total_7_day_numerator / __total_7_day_denominator) * 100) * 1000) / 1000 }</td>
