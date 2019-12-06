@@ -179,16 +179,16 @@ const ErrorBudgetSLO = {
     props.nerdlet_endTS = props.timeRange.end_time;
     props.nerdlet_duration = props.timeRange.duration;
 
-    props.defects = props.slo_document.document.defects || [];
-    props.transactions = props.slo_document.document.transactions;
-    props.appName = props.slo_document.document.appName;
-    props.accountId = props.slo_document.document.accountId;
-    props.language = props.slo_document.document.language;
+    props.defects = props.document.defects || [];
+    props.transactions = props.document.transactions;
+    props.appName = props.document.appName;
+    props.accountId = props.document.accountId;
+    props.language = props.document.language;
 
     const slo_results = await _getErrorBudgetSLOData(props);
 
     return {
-      slo_document: props.slo_document,
+      document: props.document,
       scope: props.scope,
       data: Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
     };

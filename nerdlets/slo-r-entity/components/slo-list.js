@@ -24,10 +24,10 @@ import filterFactory, {
 } from 'react-bootstrap-table2-filter';
 
 /** local */
-import SLOGrid from '../slo-grid';
-import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo';
-import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo';
-import { SLO_TYPES } from '../../../shared/constants';
+import SLOGrid from './slo-grid';
+import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
+import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
+import { SLO_TYPES } from '../../shared/constants';
 
 /**
  * SLOTable
@@ -78,101 +78,78 @@ export default class SLOTable extends React.Component {
     }
   }
 
-  /*
-   * Generate and execute all of the queries we need to make against NRQL and Nerdgraph for each row of data and each column
-   */
-  async loadData(timeRange, slo_documents) {
-    if (slo_documents) {
-      const queryPromises = slo_documents.reduce((result, slo_document) => {
-        const scopes = ['current', '7_day', '30_day'];
+  async loadData(timeRange, documents) {
+    const scopes = ['current', '7_day', '30_day'];
+
+    if (documents) {
+      documents.forEach(documentObject => {
+        const { document } = documentObject;
 
         scopes.forEach(scope => {
-          let sloPromise;
-
-          if (slo_document.type === 'error_budget') {
-            sloPromise = ErrorBudgetSLO.query({
+          if (document.type === 'error_budget') {
+            ErrorBudgetSLO.query({
               scope,
-              slo_document,
+              document,
               timeRange
-            });
+            }).then(result => this.handleScopeResult(result));
           } else {
-            sloPromise = AlertDrivenSLO.query({
+            AlertDrivenSLO.query({
               scope,
-              slo_document,
+              document,
               timeRange
-            });
+            }).then(result => this.handleScopeResult(result));
           }
-
-          result.push(sloPromise);
         });
-
-        return result;
-      }, []);
-
-      const results = await Promise.all(queryPromises);
-      const newTableData = this.transformQueryResultsForTable(results);
-
-      this.setState({ tableData: newTableData });
+      });
     }
   }
 
-  /*
-   * Create a row object from a query result
-   */
-  transformQueryResultsForTable(results) {
-    const formatted = results.reduce((result, item) => {
-      const { slo_document, scope, data } = item;
-      const id = slo_document.id;
+  handleScopeResult(result) {
+    const { tableData } = this.state;
+    const { document } = result;
 
-      if (!result[id]) {
-        result[id] = {
-          name: slo_document.document.name,
-          type: '',
-          current: '',
-          sevenDay: '',
-          thirtyDay: '',
-          target: slo_document.document.target,
-          org: slo_document.document.organization,
-          view: (
-            <Button
-              iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__LOGS}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              onClick={() => {
-                this.props.toggleViewModal({
-                  document: slo_document.document
-                });
-              }}
-            />
-          ),
-          update: (
-            <Button
-              iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_EDIT}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              onClick={() => {
-                this.props.toggleUpdateModal({
-                  document: slo_document.document
-                });
-              }}
-            />
-          ),
-          delete: (
-            <Button
-              iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
-              sizeType={Button.SIZE_TYPE.SMALL}
-              onClick={() =>
-                this.props.deleteCallback({ document: slo_document.document })
-              }
-            />
-          )
-          // TO DO - Add edit click callback as well
-        };
-      }
+    const index = tableData.findIndex(value => {
+      return value.documentId === document.documentId;
+    });
 
-      result[id][scope] = data;
-      return result;
-    }, {});
+    if (index < 0) {
+      this.addScopeResult(result);
+    }
 
-    return Object.values(formatted);
+    if (index >= 0) {
+      this.updateScopeResult({ result, index });
+    }
+  }
+
+  addScopeResult(result) {
+    const { document, scope, data } = result;
+    const formattedDocument = {
+      documentId: document.documentId,
+      name: document.name,
+      type: document.type,
+      target: document.target,
+      org: document.organization
+    };
+    formattedDocument[scope] = data;
+
+    this.setState(prevState => ({
+      tableData: [...prevState.tableData, formattedDocument]
+    }));
+  }
+
+  updateScopeResult({ result, index }) {
+    const { tableData } = this.state;
+    const { scope, data } = result;
+    const updatedDocument = { ...tableData[index] };
+    updatedDocument[scope] = data;
+
+    this.setState(prevState => ({
+      tableData: [
+        ...prevState.tableData.slice(0, index),
+        updatedDocument,
+        ...prevState.tableData.slice(index + 1)
+      ]
+    }));
   }
 
   // TO DO - Do we want per cell editing?
@@ -220,8 +197,15 @@ export default class SLOTable extends React.Component {
   }
 
   renderGridView() {
-    const data = this.getTableData();
-    return <SLOGrid data={data[0].data} />;
+    const { tableData } = this.state;
+    return (
+      <SLOGrid
+        data={tableData}
+        toggleViewModal={this.props.toggleViewModal}
+        toggleUpdateModal={this.props.toggleUpdateModal}
+        deleteCallback={this.props.deleteCallback}
+      />
+    );
   }
 
   renderTableView() {

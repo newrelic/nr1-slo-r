@@ -260,13 +260,13 @@ const AlertDrivenSLO = {
     props.nerdlet_endTS = props.timeRange.end_time;
     props.nerdlet_duration = props.timeRange.duration;
 
-    props.alerts = props.slo_document.document.alerts;
-    props.accountId = props.slo_document.document.accountId;
-    props.target = props.slo_document.document.target;
+    props.alerts = props.document.alerts;
+    props.accountId = props.document.accountId;
+    props.target = props.document.target;
 
     const slo_result = await _getAlertDrivenSLOData(props);
     return {
-      slo_document: props.slo_document,
+      document: props.document,
       scope: props.scope,
       data: Math.round(slo_result * 1000) / 1000
     };

@@ -28,7 +28,7 @@ import {
 import { fetchSloDocuments } from '../shared/services/slo-documents';
 
 /** local */
-import SLOTable from './components/slo-table';
+import SloList from './components/slo-list';
 import SloForm from './components/slo-form';
 import ViewDocument from './components/view-document';
 
@@ -313,7 +313,7 @@ export default class SLOREntityNedlet extends React.Component {
                 }
 
                 return (
-                  <SLOTable
+                  <SloList
                     entityGuid={this.state.entity}
                     slo_documents={this.state.slo_documents}
                     timeRange={launcherUrlState.timeRange}
