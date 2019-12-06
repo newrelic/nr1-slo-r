@@ -446,3 +446,62 @@ div.segmented-control-container button.table-view-button {
     margin-right: 6px;
   }
 }
+
+/* settings-menu.js from Status Pages */
+
+.service-settings-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  span {
+    pointer-events: none;
+  }
+}
+
+.service-settings-dropdown {
+  display: none;
+  width: 150px;
+  position: absolute;
+  top: 37px;
+  right: 8px;
+  background: #ffffff;
+  border: 1px solid #e3e4e4;
+  box-sizing: border-box;
+  box-shadow: 0px 16px 32px rgba(0, 13, 13, 0.2),
+    0px 16px 32px rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  list-style-type: none;
+  text-align: left;
+  z-index: 11; /* Only difference between this and status pages is incrementing this one */
+
+  .settings-popover-active & {
+    display: block;
+  }
+}
+
+.service-settings-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #000d0d;
+  height: 32px;
+  padding: 0 8px;
+  border-bottom: 1px solid #e3e4e4;
+
+  &:last-child {
+    border: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .ic-Icon {
+    margin-right: 8px;
+  }
+
+  &.destructive {
+    color: #bf0016;
+  }
+}

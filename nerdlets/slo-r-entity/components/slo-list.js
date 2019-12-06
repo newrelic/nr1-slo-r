@@ -30,9 +30,9 @@ import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
 import { SLO_TYPES } from '../../shared/constants';
 
 /**
- * SLOTable
+ * SloList
  */
-export default class SLOTable extends React.Component {
+export default class SloList extends React.Component {
   static propTypes = {
     slo_documents: PropTypes.array,
     timeRange: PropTypes.object,
@@ -134,7 +134,8 @@ export default class SLOTable extends React.Component {
       name: document.name,
       type: document.type,
       target: document.target,
-      org: document.organization
+      org: document.organization,
+      entityGuid: document.entityGuid
     };
     formattedDocument[scope] = data;
 
@@ -204,6 +205,7 @@ export default class SLOTable extends React.Component {
 
   renderGridView() {
     const { tableData } = this.state;
+
     return (
       <SLOGrid
         data={tableData}

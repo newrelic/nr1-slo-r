@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Grid, GridItem } from 'nr1';
+import { Button, Grid, GridItem, Icon } from 'nr1';
+
+import SettingsMenu from './settings-menu';
 
 export default class SLOGrid extends Component {
   static propTypes = {
@@ -25,37 +27,41 @@ export default class SLOGrid extends Component {
           <header className="slo-grid-item-header">
             <h4 className="slo-grid-item-header-title">{document.name}</h4>
             <span className="slo-grid-item-header-type">{document.type}</span>
-            <div className="slo-grid-item-section-update-view-button">
-              <Button
-                iconType={
-                  Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__LOGS
-                }
-                sizeType={Button.SIZE_TYPE.SMALL}
+
+            <SettingsMenu>
+              <li
+                className="service-settings-dropdown-item"
                 onClick={() => {
                   this.props.toggleViewModal({
                     document
                   });
                 }}
-              />
-            </div>
-            <div className="slo-grid-item-section-update-button">
-              <Button
-                iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_EDIT}
-                sizeType={Button.SIZE_TYPE.SMALL}
+              >
+                <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
+                View details
+              </li>
+              <li
+                className="service-settings-dropdown-item"
                 onClick={() => {
                   this.props.toggleUpdateModal({
                     document
                   });
                 }}
-              />
-            </div>
-            <div className="slo-grid-item-section-delete-button">
-              <Button
-                iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
-                sizeType={Button.SIZE_TYPE.SMALL}
+              >
+                <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
+                Edit
+              </li>
+              <li
+                className="service-settings-dropdown-item destructive"
                 onClick={() => this.props.deleteCallback({ document })}
-              />
-            </div>
+              >
+                <Icon
+                  type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}
+                  color="#BF0016"
+                />
+                Delete
+              </li>
+            </SettingsMenu>
           </header>
           <div
             className={`slo-grid-item-section section-current ${
