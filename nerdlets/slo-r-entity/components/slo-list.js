@@ -73,9 +73,15 @@ export default class SLOTable extends React.Component {
     // Reload all if anything is different
     // TO DO - a more intelligent diff between prev and updated
     const prevDocs = prevProps.slo_documents;
-    if (!isEqual(updatedDocs, prevDocs)) {
-      this.loadData(currentTimeRange, updatedDocs);
+    const hasChanged = !isEqual(updatedDocs, prevDocs);
+
+    if (hasChanged) {
+      this.reloadData(currentTimeRange, updatedDocs);
     }
+  }
+
+  reloadData(timeRange, documents) {
+    this.setState({ tableData: [] }, () => this.loadData(timeRange, documents));
   }
 
   async loadData(timeRange, documents) {

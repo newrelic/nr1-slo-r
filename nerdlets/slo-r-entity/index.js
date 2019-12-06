@@ -214,9 +214,9 @@ export default class SLOREntityNedlet extends React.Component {
 
   removeDocumentFromList({ document }) {
     this.setState(prevState => ({
-      slo_documents: prevState.slo_documents.filter(
-        doc => doc.document.name !== document.name
-      )
+      slo_documents: prevState.slo_documents.filter(doc => {
+        return doc.document.documentId !== document.documentId;
+      })
     }));
   }
 
