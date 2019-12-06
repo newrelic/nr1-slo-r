@@ -13,13 +13,14 @@ import {
   EntityStorageMutation,
   Grid,
   GridItem,
+  Icon,
+  Modal,
   navigation,
+  NerdletStateContext,
+  PlatformStateContext,
   Stack,
   StackItem,
-  Spinner,
-  PlatformStateContext,
-  NerdletStateContext,
-  Icon
+  Spinner
 } from 'nr1';
 /** shared */
 
@@ -29,7 +30,7 @@ import { fetchSloDocuments } from '../shared/services/slo-documents';
 /** local */
 import SLOTable from './components/slo-table';
 import SloForm from './components/slo-form';
-import ModalWrapper from './components/modal-wrapper';
+import ViewDocument from './components/view-document';
 
 /**
  * SLOREntityNerdlet
@@ -49,9 +50,13 @@ export default class SLOREntityNedlet extends React.Component {
       // New SLO
       isActiveCreateModal: false,
       isActiveUpdateModal: false,
+      isActiveViewModal: false,
 
       // Update SLO
       editDocumentId: null,
+
+      // View SLO
+      viewDocumentId: null,
 
       // UI State
       refresh: false
@@ -66,6 +71,7 @@ export default class SLOREntityNedlet extends React.Component {
 
     this.toggleCreateModal = this.toggleCreateModal.bind(this);
     this.toggleUpdateModal = this.toggleUpdateModal.bind(this);
+    this.toggleViewModal = this.toggleViewModal.bind(this);
   } // constructor
 
   /** lifecycle prompts the fetching of the SLO documents for this entity */
@@ -138,6 +144,15 @@ export default class SLOREntityNedlet extends React.Component {
     });
   }
 
+  toggleViewModal(options = { document: {} }) {
+    const { document } = options;
+
+    this.setState(prevState => ({
+      viewDocumentId: document.documentId,
+      isActiveViewModal: !prevState.isActiveViewModal
+    }));
+  }
+
   // Form Callbacks
   async upsertDocumentCallback({ document, response }) {
     if (!response) {
@@ -205,6 +220,66 @@ export default class SLOREntityNedlet extends React.Component {
     }));
   }
 
+  renderToolbar() {
+    return (
+      <Stack
+        className="toolbar-container"
+        fullWidth
+        horizontalType={Stack.HORIZONTAL_TYPE.FILL}
+        verticalType={Stack.VERTICAL_TYPE.CENTER}
+        gapType={Stack.GAP_TYPE.NONE}
+      >
+        <StackItem className="toolbar-left-side">
+          <div className="segmented-control-container">
+            <button
+              type="button"
+              className={`grid-view-button ${
+                !this.state.SLOTableView ? 'active' : ''
+              }`}
+              onClick={() => this.setState({ SLOTableView: false })}
+            >
+              <Icon
+                type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
+                color={this.state.SLOTableView ? '#007e8a' : '#ffffff'}
+              />
+              Grid
+            </button>
+            <button
+              type="button"
+              className={`table-view-button ${
+                this.state.SLOTableView ? 'active' : ''
+              }`}
+              onClick={() => this.setState({ SLOTableView: true })}
+            >
+              <Icon
+                type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
+                color={this.state.SLOTableView ? '#ffffff' : '#007e8a'}
+              />
+              Table
+            </button>
+          </div>
+
+          <hr />
+        </StackItem>
+        <StackItem>
+          <Stack
+            className="toolbar-right-side"
+            fullWidth
+            horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+          >
+            <Button
+              onClick={this.toggleCreateModal}
+              type={Button.TYPE.PRIMARY}
+              iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
+            >
+              Define an SLO
+            </Button>
+          </Stack>
+        </StackItem>
+      </Stack>
+    );
+  }
+
   /** lifecycle provides the rendering context for this nerdlet */
   render() {
     // ensure we have state for our slo documents to render the reporting table and configuration options
@@ -215,124 +290,81 @@ export default class SLOREntityNedlet extends React.Component {
           <Spinner className="centered" size="small" />
         </div>
       );
-    } // if
-    else {
-      const sloHasBeenDefined = this.state.slo_documents.length > 0;
+    }
 
-      return (
-        <div>
-          <Stack
-            className="toolbar-container"
-            fullWidth
-            horizontalType={Stack.HORIZONTAL_TYPE.FILL}
-            verticalType={Stack.VERTICAL_TYPE.CENTER}
-            gapType={Stack.GAP_TYPE.NONE}
+    const sloHasBeenDefined = this.state.slo_documents.length > 0;
+
+    return (
+      <div>
+        {this.renderToolbar()}
+        <Grid
+          className={
+            !sloHasBeenDefined ? 'no-slos-exist' : 'slo-table-container'
+          }
+        >
+          <GridItem
+            columnSpan={!sloHasBeenDefined ? 4 : 12}
+            columnStart={!sloHasBeenDefined ? 5 : null}
           >
-            <StackItem className="toolbar-left-side">
-              <div className="segmented-control-container">
-                <button
-                  type="button"
-                  className={`grid-view-button ${
-                    !this.state.SLOTableView ? 'active' : ''
-                  }`}
-                  onClick={() => this.setState({ SLOTableView: false })}
-                >
-                  <Icon
-                    type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
-                    color={this.state.SLOTableView ? '#007e8a' : '#ffffff'}
+            <PlatformStateContext.Consumer>
+              {launcherUrlState => {
+                if (this.state.slo_documents === null) {
+                  return null;
+                }
+
+                return (
+                  <SLOTable
+                    entityGuid={this.state.entity}
+                    slo_documents={this.state.slo_documents}
+                    timeRange={launcherUrlState.timeRange}
+                    toggleCreateModal={this.toggleCreateModal}
+                    toggleUpdateModal={this.toggleUpdateModal}
+                    toggleViewModal={this.toggleViewModal}
+                    tableView={this.state.SLOTableView}
+                    deleteCallback={this.deleteDocumentCallback}
                   />
-                  Grid
-                </button>
-                <button
-                  type="button"
-                  className={`table-view-button ${
-                    this.state.SLOTableView ? 'active' : ''
-                  }`}
-                  onClick={() => this.setState({ SLOTableView: true })}
-                >
-                  <Icon
-                    type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
-                    color={this.state.SLOTableView ? '#ffffff' : '#007e8a'}
-                  />
-                  Table
-                </button>
-              </div>
+                );
+              }}
+            </PlatformStateContext.Consumer>
+          </GridItem>
+        </Grid>
 
-              <hr />
-            </StackItem>
-            <StackItem>
-              <Stack
-                className="toolbar-right-side"
-                fullWidth
-                horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
-              >
-                <Button
-                  onClick={this.toggleCreateModal}
-                  type={Button.TYPE.PRIMARY}
-                  iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
-                >
-                  Define an SLO
-                </Button>
-              </Stack>
-            </StackItem>
-          </Stack>
-          <Grid
-            className={
-              !sloHasBeenDefined ? 'no-slos-exist' : 'slo-table-container'
-            }
-          >
-            <GridItem
-              columnSpan={!sloHasBeenDefined ? 4 : 12}
-              columnStart={!sloHasBeenDefined ? 5 : null}
-            >
-              <PlatformStateContext.Consumer>
-                {launcherUrlState => {
-                  // if (this.state.slo_documents === null) {
-                  //   return null;
-                  // }
-
-                  return (
-                    <SLOTable
-                      entityGuid={this.state.entity}
-                      slo_documents={this.state.slo_documents}
-                      timeRange={launcherUrlState.timeRange}
-                      toggleCreateModal={this.toggleCreateModal}
-                      toggleUpdateModal={this.toggleUpdateModal}
-                      tableView={this.state.SLOTableView}
-                      deleteCallback={this.deleteDocumentCallback}
-                    />
-                  );
-                }}
-              </PlatformStateContext.Consumer>
-            </GridItem>
-          </Grid>
-
-          {/* Create Modal */}
-          <ModalWrapper
-            modalIsActive={this.state.isActiveCreateModal}
+        {/* Create Modal */}
+        <Modal
+          hidden={!this.state.isActiveCreateModal}
+          onClose={() => this.setState({ isActiveCreateModal: false })}
+        >
+          <SloForm
+            entityGuid={this.state.entityGuid}
+            upsertDocumentCallback={this.upsertDocumentCallback}
             modalToggleCallback={this.toggleCreateModal}
-          >
-            <SloForm
-              entityGuid={this.state.entityGuid}
-              upsertDocumentCallback={this.upsertDocumentCallback}
-              modalToggleCallback={this.toggleCreateModal}
-            />
-          </ModalWrapper>
+          />
+        </Modal>
 
-          {/* Update Modal */}
-          <ModalWrapper
-            modalIsActive={this.state.isActiveUpdateModal}
+        {/* Update Modal */}
+        <Modal
+          hidden={!this.state.isActiveUpdateModal}
+          onClose={() => this.setState({ isActiveUpdateModal: false })}
+        >
+          <SloForm
+            entityGuid={this.state.entityGuid}
+            documentId={this.state.editDocumentId}
+            upsertDocumentCallback={this.upsertDocumentCallback}
             modalToggleCallback={this.toggleUpdateModal}
-          >
-            <SloForm
-              entityGuid={this.state.entityGuid}
-              documentId={this.state.editDocumentId}
-              upsertDocumentCallback={this.upsertDocumentCallback}
-              modalToggleCallback={this.toggleUpdateModal}
-            />
-          </ModalWrapper>
-        </div>
-      );
-    } // else
+          />
+        </Modal>
+
+        {/* View Modal */}
+        <Modal
+          hidden={!this.state.isActiveViewModal}
+          onClose={() => this.setState({ isActiveViewModal: false })}
+        >
+          <ViewDocument
+            entityGuid={this.state.entityGuid}
+            documentId={this.state.viewDocumentId}
+          />
+        </Modal>
+      </div>
+    );
   } // render
 } // SLOREntityNedlet

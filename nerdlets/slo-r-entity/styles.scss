@@ -286,6 +286,16 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   }
 }
 
+.slo-grid-item-section-update-view-button {
+  position: absolute;
+  top: 8px;
+  right: 72px;
+
+  span {
+    pointer-events: none;
+  }
+}
+
 .slo-grid-item-section {
   display: flex;
   flex-direction: column;
