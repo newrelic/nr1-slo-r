@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Grid, GridItem, Icon } from 'nr1';
+import { Grid, GridItem, Icon } from 'nr1';
 
 import SettingsMenu from './settings-menu';
 

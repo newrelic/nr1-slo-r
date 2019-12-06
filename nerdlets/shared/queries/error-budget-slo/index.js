@@ -192,6 +192,16 @@ const ErrorBudgetSLO = {
       scope: props.scope,
       data: Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
     };
+  },
+  generateQuery: props => {
+    return _getErrorBudgetNRQL(
+      props.document.transactions,
+      props.document.defects,
+      props.timeRange.begin_time,
+      props.timeRange.end_time,
+      props.document.appName,
+      props.document.language
+    );
   }
 };
 
