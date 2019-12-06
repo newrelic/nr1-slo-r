@@ -251,11 +251,11 @@ export default class SLOTable extends React.Component {
         text: 'Current'
       },
       {
-        dataField: 'sevenDay',
+        dataField: '7_day',
         text: 'Seven Day'
       },
       {
-        dataField: 'thirtyDay',
+        dataField: '30_day',
         text: 'Thirty Day'
       },
       {
@@ -305,8 +305,8 @@ export default class SLOTable extends React.Component {
             'name',
             'type',
             'current',
-            'sevenDay',
-            'thirtyDay',
+            '7_day',
+            '30_day',
             'target',
             'org',
             'delete'
