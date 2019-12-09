@@ -9,14 +9,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import {   
+import {
   PlatformStateContext,
   NerdletStateContext,
-  BlockText, 
-  EntityStorageQuery, 
-  Grid, 
-  GridItem, 
-  Spinner 
+  BlockText,
+  EntityStorageQuery,
+  Grid,
+  GridItem,
+  Spinner
 } from 'nr1';
 /** local */
 import OrgSelector from './components/org-selector';
@@ -49,27 +49,25 @@ export default class SLOREstate extends React.Component {
   } // constructor
 
   _sloSelectorCallback(_org) {
-
-    console.debug("the big event", _org);
+    console.debug('the big event', _org);
     this.setState({ render_org: _org });
-  }//_sloSelectorCallback
-  
+  } // _sloSelectorCallback
 
   _orgAddOrAppend(_orgSLOs, _candidateSLO) {
-//    console.debug('the passed _orgSLOs', _orgSLOs);
-//    console.debug('the passed candidate SLO', _candidateSLO);
-//    console.debug('the passed candidate SLO TEAM', _candidateSLO.document.team);
+    //    console.debug('the passed _orgSLOs', _orgSLOs);
+    //    console.debug('the passed candidate SLO', _candidateSLO);
+    //    console.debug('the passed candidate SLO TEAM', _candidateSLO.document.team);
 
     const __SLOsForCandidate = _orgSLOs.filter(function(value) {
-      //return value.orgName === _candidateSLO.document.organization;
-      return value.orgName === _candidateSLO.document.organization;  
+      // return value.orgName === _candidateSLO.document.organization;
+      return value.orgName === _candidateSLO.document.organization;
     });
 
     console.debug('candidate slos', __SLOsForCandidate);
     if (__SLOsForCandidate.length === 1) {
       __SLOsForCandidate[0].slos.push(_candidateSLO.document);
-//
-//      console.debug('adding a new slo/org', _orgSLOs);
+      //
+      //      console.debug('adding a new slo/org', _orgSLOs);
     } // if
     else if (__SLOsForCandidate.length === 0) {
       _orgSLOs.push({
@@ -77,7 +75,7 @@ export default class SLOREstate extends React.Component {
         slos: [_candidateSLO.document]
       });
 
-//      console.debug('adding a new slo/org', _orgSLOs);
+      //      console.debug('adding a new slo/org', _orgSLOs);
     } // else
     else {
       console.log(`candidate length is weird: ${__SLOsForCandidate.length}`);
@@ -103,35 +101,37 @@ export default class SLOREstate extends React.Component {
       } // if
     } // if
 
-   // console.debug('candidate slo', __slo_document);
+    // console.debug('candidate slo', __slo_document);
     return __slo_document;
   } // _lookupSLOs
 
   async assembleOrgSLOs() {
-    var __orgSLOs = [];
-    var __candidateSLOs = null;
+    let __orgSLOs = [];
+    let __candidateSLOs = null;
 
     if (this.props.entities_data.entities !== null) {
       for (let i = 0; i < this.props.entities_data.entities.length; i++) {
-        __candidateSLOs = await this._lookupSLOs(this.props.entities_data.entities[i].guid);
+        __candidateSLOs = await this._lookupSLOs(
+          this.props.entities_data.entities[i].guid
+        );
 
         if (__candidateSLOs !== null) {
           //   console.debug('candidate SLOs', __candidateSLOs);
-   
+
           __candidateSLOs.map(_candidateSLO => {
             __orgSLOs = this._orgAddOrAppend(__orgSLOs, _candidateSLO);
           });
         } // if
       }
 
-      console.debug("The SLO assembly looks like what? ", __orgSLOs);
+      console.debug('The SLO assembly looks like what? ', __orgSLOs);
       // set the entity details state
       this.setState({ org_slos: __orgSLOs });
     } // if
     else {
       // provide some error message ...
-      //do we really need this the rendering aspect of the component should just handle the fact there are no orgs defined therefore no slo docs .. 
-      this.setState({ org_slos: "NONE" });
+      // do we really need this the rendering aspect of the component should just handle the fact there are no orgs defined therefore no slo docs ..
+      this.setState({ org_slos: 'NONE' });
     } // else
   } // assembleOrgSLOs
 
@@ -140,26 +140,24 @@ export default class SLOREstate extends React.Component {
   } // componentDidMount
 
   shouldComponentUpdate(nextProps, nextState) {
-
-    if (this.state.org_slos === null){
+    if (this.state.org_slos === null) {
       return true;
-    }//if
+    } // if
 
-    if (this.state.org_slos != nextState.org_slos) {
+    if (this.state.org_slos !== nextState.org_slos) {
       return true;
     }
 
-    if (this.state.render_org != nextState.render_org) {
+    if (this.state.render_org !== nextState.render_org) {
       return true;
-    } //if
-    
-    console.debug("returning false");
-    console.debug("current state", this.state);
-    console.debug("next state", nextState)
+    } // if
+
+    console.debug('returning false');
+    console.debug('current state', this.state);
+    console.debug('next state', nextState);
 
     return false;
-
-  } //shouldComponentUpdate
+  } // shouldComponentUpdate
 
   render() {
     // console.debug('entities', this.props.entities_data);
@@ -201,15 +199,16 @@ export default class SLOREstate extends React.Component {
             <Grid>
               <GridItem columnSpan={10}>
                 {this.state.render_org && (
-                <PlatformStateContext.Consumer>
-                  {launcherUrlState => (
-                    <OrgDisplayer
-                      org={this.state.render_org}
-                      timeRange={launcherUrlState.timeRange}
-                    />
-                  )}
-                </PlatformStateContext.Consumer>
-                )}                
+                  <PlatformStateContext.Consumer>
+                    {launcherUrlState => (
+                      <OrgDisplayer
+                        org={this.state.render_org}
+                        timeRange={launcherUrlState.timeRange}
+                      />
+                    )}
+                  </PlatformStateContext.Consumer>
+                )}
+                {!this.state.render_org && <></>}
               </GridItem>
             </Grid>
           </div>
@@ -218,5 +217,3 @@ export default class SLOREstate extends React.Component {
     } // else
   } // render
 } // SLOREstate
-
-
