@@ -1,4 +1,4 @@
-/* eslint-disable no-lonely-if */
+/* eslint-disable no-console */
 /**
  * Provides the component that displays the aggregation of SLOs by defined Org.
  *
@@ -10,13 +10,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
 import {
-  PlatformStateContext,
-  NerdletStateContext,
+  Button,
   BlockText,
   EntityStorageQuery,
   Grid,
   GridItem,
-  Spinner
+  PlatformStateContext,
+  Spinner,
+  Stack,
+  StackItem,
+  TextField
 } from 'nr1';
 /** local */
 import OrgSelector from './components/org-selector';
@@ -159,61 +162,143 @@ export default class SLOREstate extends React.Component {
     return false;
   } // shouldComponentUpdate
 
+  renderNoneDefined() {
+    return (
+      <StackItem>
+        <BlockText>
+          Unable to find any SLOs defined. Use the Entity Explorer to find a
+          Service and define an SLO.
+        </BlockText>
+      </StackItem>
+    );
+  }
+
+  renderNoOrganizationSelected() {
+    return (
+      <>
+        <StackItem>
+          <h4 className="empty-state-header">Choose an Organization</h4>
+        </StackItem>
+        <StackItem>
+          <p className="empty-state-description">
+            Select an organization from the dropdown above.
+          </p>
+        </StackItem>
+      </>
+    );
+  }
+
   render() {
     // console.debug('entities', this.props.entities_data);
     // console.debug('moar', this.props.entities_fetchmoar);
 
-    if (this.state.org_slos === null) {
-      return (
-        <div>
-          <Spinner />
-        </div>
-      );
-    } // if
-    else {
-      if (this.state.org_slos.length < 1) {
-        return (
-          <div>
-            <Grid>
-              <GridItem columnSpan={10}>
-                <BlockText>
-                  Unable to find any SLOs defined. Use the Entity Explorer to
-                  find a Service and define an SLO.
-                </BlockText>
-              </GridItem>
-            </Grid>
-          </div>
-        );
-      } // if
-      else {
-        return (
-          <div>
-            <Grid>
-              <GridItem columnSpan={10}>
+    return (
+      <>
+        <Stack
+          className="toolbar-container"
+          fullWidth
+          gapType={Stack.GAP_TYPE.NONE}
+          horizontalType={Stack.HORIZONTAL_TYPE.FILL_EVENLY}
+          verticalType={Stack.VERTICAL_TYPE.FILL}
+        >
+          <StackItem className="toolbar-section1">
+            <Stack
+              gapType={Stack.GAP_TYPE.NONE}
+              fullWidth
+              verticalType={Stack.VERTICAL_TYPE.FILL}
+            >
+              <StackItem className="toolbar-item has-separator">
                 <OrgSelector
                   orgs={this.state.org_slos}
                   onChange={this.sloSelectorCallback}
                 />
-              </GridItem>
-            </Grid>
-            <Grid>
-              <GridItem columnSpan={10}>
-                {this.state.render_org && (
-                  <PlatformStateContext.Consumer>
-                    {launcherUrlState => (
-                      <OrgDisplayer
-                        org={this.state.render_org}
-                        timeRange={launcherUrlState.timeRange}
-                      />
-                    )}
-                  </PlatformStateContext.Consumer>
+              </StackItem>
+              <StackItem className="toolbar-item">
+                <TextField label="Search" placeholder="e.g. example query" />
+              </StackItem>
+            </Stack>
+          </StackItem>
+          <StackItem className="toolbar-section2">
+            <Stack
+              fullWidth
+              fullHeight
+              verticalType={Stack.VERTICAL_TYPE.CENTER}
+              horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
+            >
+              <StackItem>
+                <Button
+                  onClick={() => alert('You clicked me!')}
+                  type={Button.TYPE.PRIMARY}
+                >
+                  Primary button
+                </Button>
+              </StackItem>
+            </Stack>
+          </StackItem>
+        </Stack>
+        <Grid
+          className="primary-grid"
+          spacingType={[Grid.SPACING_TYPE.NONE, Grid.SPACING_TYPE.NONE]}
+        >
+          {/*
+            Note: This sidebar does _not_ have to be a list of links/navigation.
+            It can just as easily contain content. This is just an example of how it
+            may be used.
+          */}
+          <GridItem className="sidebar-container" columnSpan={3}>
+            <ul className="sidebar-list">
+              {/* Create an array that we'll use to display a bunch of list items */}
+              {Array.from(Array(25).keys()).map((item, index) => {
+                return (
+                  <li key={index} className="sidebar-list-item">
+                    List item {item}
+                  </li>
+                );
+              })}
+            </ul>
+          </GridItem>
+          <GridItem className="primary-content-container" columnSpan={9}>
+            <main className="primary-content full-height">
+              <Stack
+                className="empty-state"
+                fullWidth
+                fullHeight
+                verticalType={Stack.VERTICAL_TYPE.CENTER}
+                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+                directionType={Stack.DIRECTION_TYPE.VERTICAL}
+                gapType={Stack.GAP_TYPE.NONE}
+              >
+                {/* No organization selected */}
+                {!this.state.render_org && this.renderNoOrganizationSelected()}
+
+                {/* Org selected but loading */}
+                {this.state.render_org && this.state.org_slos === null && (
+                  <Spinner />
                 )}
-                {!this.state.render_org && <></>}
-              </GridItem>
-            </Grid>
-          </div>
-        );
-      } // else
-    } // else
+
+                {/* Org selected but no results */}
+                {this.state.render_org &&
+                  this.state.org_slos.length < 1 &&
+                  this.renderNoneDefined()}
+
+                <StackItem>
+                  {this.state.render_org && (
+                    <PlatformStateContext.Consumer>
+                      {launcherUrlState => (
+                        <OrgDisplayer
+                          org={this.state.render_org}
+                          timeRange={launcherUrlState.timeRange}
+                        />
+                      )}
+                    </PlatformStateContext.Consumer>
+                  )}
+                  {!this.state.render_org && <></>}
+                </StackItem>
+              </Stack>
+            </main>
+          </GridItem>
+        </Grid>
+      </>
+    );
   } // render
 } // SLOREstate

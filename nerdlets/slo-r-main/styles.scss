@@ -1,0 +1,147 @@
+@import "./nrds.scss";
+
+/* -------------------- */
+// Utility Classes
+/* -------------------- */
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.toolbar-container {
+  height: 74px;
+  box-sizing: border-box;
+  border-top: 1px solid #d5d7d7;
+  border-bottom: 1px solid #e3e4e4;
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.02);
+  background: #edeeee;
+  padding: 0 16px;
+}
+
+.toolbar-section1 .toolbar-item:first-child {
+  padding-left: 0;
+}
+
+.toolbar-item {
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px;
+  align-items: center;
+
+  &.has-separator {
+    border-right: 1px dotted #d5d7d7;
+  }
+}
+
+.primary-grid {
+  grid-gap: 0;
+  overflow: hidden;
+  position: relative;
+  height: calc(100% - 74px);
+}
+
+.sidebar-container {
+  height: 100%;
+  overflow: scroll;
+  border-right: 1px solid #eeeeee;
+  background-color: #fff;
+}
+
+.primary-content-container {
+  overflow: scroll;
+  padding: 16px;
+}
+
+.sidebar-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.sidebar-list-item {
+  padding: 12px 16px;
+  list-style-type: none;
+  color: #2a3434;
+  font-size: 12px;
+  overflow-wrap: break-word;
+  border-bottom: 1px solid #f4f4f4;
+
+  &:hover {
+    background-color: #fafbfb;
+    cursor: pointer;
+  }
+}
+
+.primary-content {
+  box-sizing: border-box;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 11px 15px -10px rgba(31, 75, 116, 0.15),
+    0 1px 3px 1px rgba(0, 134, 148, 0.03), 0 3px 0 0 rgba(0, 49, 54, 0.04),
+    0 1px 0 0 rgba(0, 75, 82, 0.04);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 12px;
+  }
+  p {
+    font-size: 14px;
+    color: #464e4e;
+    line-height: 21px;
+  }
+
+  ul {
+    padding: 16px 32px;
+    font-size: 14px;
+    color: #464e4e;
+    line-height: 21px;
+  }
+}
+
+.empty-state {
+  height: 100%;
+  box-sizing: border-box;
+  border: 3px dashed #e3e4e4;
+  border-radius: 10px;
+  padding: 24px;
+  margin: 16px;
+  text-align: center;
+
+  .empty-state-header {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #464e4e;
+    text-transform: none;
+    margin-bottom: 10px;
+  }
+
+  .primary-content > & {
+    margin: 0;
+  }
+}
+
+p.empty-state-description {
+  font-size: 14px;
+  line-height: 20px;
+  color: #8e9494;
+  padding: 0 25%;
+}
+
+code {
+  .primary-content p & {
+    font-size: 12px;
+    background-color: #edeeee;
+    border-radius: 3px;
+    padding: 2px 5px;
+    color: #464e4ec7;
+  }
+}
