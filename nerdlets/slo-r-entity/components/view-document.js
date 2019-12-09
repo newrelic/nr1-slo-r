@@ -82,7 +82,9 @@ export default class ViewDocument extends React.Component {
     }
 
     const nrqlFunction =
-      document.type === 'error_budget' ? ErrorBudgetSLO : AlertDrivenSLO;
+      document.indicator === 'error_budget' || document.type === 'error_budget'
+        ? ErrorBudgetSLO
+        : AlertDrivenSLO;
 
     const scopes = ['current', '7_day', '30_day'];
 

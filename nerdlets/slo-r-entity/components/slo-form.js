@@ -22,7 +22,7 @@ import {
 
 // entities
 import { fetchEntity } from '../../shared/services/entity';
-import { SLO_TYPES, SLO_DEFECTS } from '../../shared/constants';
+import { SLO_INDICATORS, SLO_DEFECTS } from '../../shared/constants';
 
 export default class SloForm extends React.Component {
   static propTypes = {
@@ -240,7 +240,13 @@ export default class SloForm extends React.Component {
 
     // Find value on the document being edited
     if ((documentId && document) || !documentId) {
-      const value = document[field];
+      let value = document[field];
+
+      // TO DO - Remove for v1
+      // We've changed the SLO attributes, account for pre-existing documents that include 'type'
+      if (field === 'indicator' && !value) {
+        value = document.type;
+      }
 
       if (value === undefined) {
         throw new Error(`SLO Document field: ${field} not defined`);
@@ -264,7 +270,7 @@ export default class SloForm extends React.Component {
   renderErrorBudget() {
     const { document, transactionOptions } = this.state;
 
-    if (document.type !== 'error_budget') {
+    if (document.indicator !== 'error_budget') {
       return null;
     }
 
@@ -323,11 +329,11 @@ export default class SloForm extends React.Component {
 
   renderAlerts() {
     const { document } = this.state;
-    if (document.type === 'error_budget') {
+    if (document.indicator === 'error_budget') {
       return null;
     }
 
-    if (document.type === '') {
+    if (document.indicator === '') {
       return null;
     }
 
@@ -417,17 +423,17 @@ export default class SloForm extends React.Component {
         <Dropdown
           title={
             this.dropdownTitleLookup({
-              name: 'type',
-              options: SLO_TYPES
-            }) || 'Choose a Type'
+              name: 'indicator',
+              options: SLO_INDICATORS
+            }) || 'Choose an Indicator'
           }
-          label="Type"
+          label="Indicator"
           className="define-slo-input"
         >
           <DropdownItem
             onClick={() => {
               this.inputHandler({
-                field: 'type',
+                field: 'indicator',
                 value: 'error_budget'
               });
             }}
@@ -437,7 +443,7 @@ export default class SloForm extends React.Component {
           <DropdownItem
             onClick={() =>
               this.inputHandler({
-                field: 'type',
+                field: 'indicator',
                 value: 'availability'
               })
             }
@@ -447,7 +453,7 @@ export default class SloForm extends React.Component {
           <DropdownItem
             onClick={() =>
               this.inputHandler({
-                field: 'type',
+                field: 'indicator',
                 value: 'capacity'
               })
             }
@@ -457,7 +463,7 @@ export default class SloForm extends React.Component {
           <DropdownItem
             onClick={() =>
               this.inputHandler({
-                field: 'type',
+                field: 'indicator',
                 value: 'latency'
               })
             }

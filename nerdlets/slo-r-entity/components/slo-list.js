@@ -27,7 +27,7 @@ import filterFactory, {
 import SLOGrid from './slo-grid';
 import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
 import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
-import { SLO_TYPES } from '../../shared/constants';
+import { SLO_INDICATORS } from '../../shared/constants';
 
 /**
  * SloList
@@ -92,7 +92,7 @@ export default class SloList extends React.Component {
         const { document } = documentObject;
 
         scopes.forEach(scope => {
-          if (document.type === 'error_budget') {
+          if (document.indicator === 'error_budget') {
             ErrorBudgetSLO.query({
               scope,
               document,
@@ -132,7 +132,7 @@ export default class SloList extends React.Component {
     const formattedDocument = {
       documentId: document.documentId,
       name: document.name,
-      type: document.type,
+      type: document.indicator,
       target: document.target,
       org: document.organization,
       entityGuid: document.entityGuid
@@ -236,10 +236,13 @@ export default class SloList extends React.Component {
 
   renderBootStrapTableView() {
     const { tableData } = this.state;
-    const typeOptions = SLO_TYPES.reduce((previousValue, currentValue) => {
-      previousValue[currentValue.value] = currentValue.label;
-      return previousValue;
-    }, {});
+    const indicatorOptions = SLO_INDICATORS.reduce(
+      (previousValue, currentValue) => {
+        previousValue[currentValue.value] = currentValue.label;
+        return previousValue;
+      },
+      {}
+    );
     const columns = [
       {
         dataField: 'name',
@@ -247,11 +250,11 @@ export default class SloList extends React.Component {
         filter: textFilter()
       },
       {
-        dataField: 'type',
-        text: 'Type',
-        formatter: cell => typeOptions[cell],
+        dataField: 'indicator',
+        text: 'Indicator',
+        formatter: cell => indicatorOptions[cell],
         filter: selectFilter({
-          options: typeOptions
+          options: indicatorOptions
         })
       },
       {
@@ -311,7 +314,7 @@ export default class SloList extends React.Component {
           viz: 'main',
           columns: [
             'name',
-            'type',
+            'indicator',
             'current',
             '7_day',
             '30_day',

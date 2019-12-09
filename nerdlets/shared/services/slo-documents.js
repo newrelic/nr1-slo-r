@@ -79,14 +79,14 @@ export const validateSlo = function(document) {
   }
 
   // Error Driven SLO
-  if (document.type === 'error_budget') {
+  if (document.indicator === 'error_budget') {
     if (document.transactions.length === 0 || document.defects.length === 0) {
       return false;
     }
   }
 
   // Alert Driven SLO
-  if (document.type !== 'error_budget') {
+  if (document.indicator !== 'error_budget') {
     if (document.alerts.length === 0) {
       return false;
     }

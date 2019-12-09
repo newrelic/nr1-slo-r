@@ -26,7 +26,7 @@ export default class SLOGrid extends Component {
         <GridItem className="slo-grid-item" key={index} columnSpan={3}>
           <header className="slo-grid-item-header">
             <h4 className="slo-grid-item-header-title">{document.name}</h4>
-            <span className="slo-grid-item-header-type">{document.type}</span>
+            <span className="slo-grid-item-header-type">{document.indicator}</span>
 
             <SettingsMenu>
               <li

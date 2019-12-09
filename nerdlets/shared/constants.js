@@ -1,5 +1,5 @@
-export const SLO_TYPES = [
-  { value: 'error_budget', label: 'Error Budget' },
+export const SLO_INDICATORS = [
+  { value: 'error_budget', label: 'Errors' },
   { value: 'availability', label: 'Availability' },
   { value: 'capacity', label: 'Capacity' },
   { value: 'latency', label: 'Latency' }
