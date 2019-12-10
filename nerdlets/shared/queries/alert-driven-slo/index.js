@@ -14,16 +14,20 @@ import { NerdGraphQuery } from 'nr1';
  */
 /** provides the where clause for the queries given the alerts array provided by the component properties */
 const _getAlertsWhereClause = function(_alerts) {
-  let _alertsClause = 'policy_name IN (';
+
+  let _alertsClause = "policy_name IN ('";
 
   for (let i = 0; i < _alerts.length; i++) {
-    if (i > 0) {
-      _alertsClause = `${_alertsClause}, `;
-    } // if
-    _alertsClause = `${_alertsClause}'${_alerts[i]}'`;
+    
+    if (i < 1) {
+      _alertsClause += _alerts[i].policy_name + "'";
+    } //if
+    else {
+      _alertsClause += ", '" + _alerts[i].policy_name + "'";
+    } //else
   } // for
 
-  _alertsClause = `${_alertsClause})`;
+  _alertsClause += ')';
 
   return _alertsClause;
 }; // _getAlertsWhereClause
