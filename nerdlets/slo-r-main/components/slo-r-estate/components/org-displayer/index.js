@@ -17,10 +17,13 @@ import ComponentErrorBudgetSLO from './component_eb_slo';
 
 /** 3rd party */
 import BootstrapTable from 'react-bootstrap-table-next';
+
+/*
 import filterFactory, {
-  // selectFilter,
+  selectFilter,
   textFilter
 } from 'react-bootstrap-table2-filter';
+*/
 
 /**
  * OrgDisplayer
