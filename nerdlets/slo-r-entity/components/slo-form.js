@@ -24,12 +24,15 @@ import {
 import { fetchEntity } from '../../shared/services/entity';
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../shared/constants';
 
+import { timeRangeToNrql } from '../../shared/helpers';
+
 export default class SloForm extends React.Component {
   static propTypes = {
     entityGuid: PropTypes.string,
     documentId: PropTypes.string,
     upsertDocumentCallback: PropTypes.func,
-    modalToggleCallback: PropTypes.func
+    modalToggleCallback: PropTypes.func,
+    timeRange: PropTypes.object
   };
 
   static defaultProps = {
@@ -61,7 +64,7 @@ export default class SloForm extends React.Component {
   }
 
   async componentDidMount() {
-    const { entityGuid, documentId } = this.props;
+    const { documentId, entityGuid } = this.props;
 
     if (this.props.documentId) {
       await this.getDocumentById({ entityGuid, documentId });
@@ -75,16 +78,21 @@ export default class SloForm extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { entityGuid, documentId } = this.props;
+    const { documentId, entityGuid, timeRange } = this.props;
+    const entityChanged = prevProps.entityGuid !== entityGuid;
+    const timeRangeChanged = prevProps.timeRange !== timeRange;
 
     if (documentId && prevProps.documentId !== documentId) {
       await this.getDocumentById({ entityGuid, documentId });
     }
 
-    if (prevProps.entityGuid !== entityGuid) {
+    if (entityChanged) {
       await this._getEntityInformation();
-      await this._updateAlertConfig();
+    }
+
+    if (entityChanged || timeRangeChanged) {
       await this._loadEntityTransactions();
+      await this._updateAlertConfig();
     }
   }
 
@@ -112,12 +120,15 @@ export default class SloForm extends React.Component {
 
   async _updateAlertConfig() {
     const { entityDetails, document } = this.state;
+    const { timeRange } = this.props;
+
+    const timeRangeNrql = timeRangeToNrql(timeRange);
 
     if (entityDetails && document.alerts.length < 1) {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
-                nrql(query: "SELECT count(*) FROM SLOR_ALERTS SINCE 12 MONTHS AGO FACET policy_name") {
+                nrql(query: "SELECT count(*) FROM SLOR_ALERTS ${timeRangeNrql} FACET policy_name") {
                   results
                 }
               }
@@ -133,13 +144,16 @@ export default class SloForm extends React.Component {
 
   async _loadEntityTransactions() {
     const { entityDetails, transactions } = this.state;
+    const { timeRange } = this.props;
+
+    const timeRangeNrql = timeRangeToNrql(timeRange);
 
     // we only want to run this the one time to gather transactions
     if (entityDetails && transactions === null) {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
-                nrql(query: "SELECT count(*) FROM Transaction WHERE appName='${entityDetails.appName}' SINCE 1 MONTH AGO FACET name LIMIT 100") {
+                nrql(query: "SELECT count(*) FROM Transaction WHERE appName='${entityDetails.appName}' ${timeRangeNrql} FACET name LIMIT 100") {
                   results
                 }
               }
@@ -371,7 +385,7 @@ export default class SloForm extends React.Component {
           <small className="input-description">
             Select one or more Alerts that appear in the SLOR_ALERTS event table
             in Insights, or click the "Add Alert" button below to enter the
-            policy name of an Alert you your like to associate with this SLO.
+            policy name of an Alert you would like to associate with this SLO.
             For more information about configuring alerts to be used with SLO/R
             please see the "Configuring Alerts" section of the SLO/R readme
             (https://github.com/newrelic/nr1-csg-slo-r).

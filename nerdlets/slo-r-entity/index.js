@@ -334,11 +334,18 @@ export default class SLOREntityNedlet extends React.Component {
           hidden={!this.state.isActiveCreateModal}
           onClose={() => this.setState({ isActiveCreateModal: false })}
         >
-          <SloForm
-            entityGuid={this.state.entityGuid}
-            upsertDocumentCallback={this.upsertDocumentCallback}
-            modalToggleCallback={this.toggleCreateModal}
-          />
+          <PlatformStateContext.Consumer>
+            {launcherUrlState => {
+              return (
+                <SloForm
+                  entityGuid={this.state.entityGuid}
+                  upsertDocumentCallback={this.upsertDocumentCallback}
+                  modalToggleCallback={this.toggleCreateModal}
+                  timeRange={launcherUrlState.timeRange}
+                />
+              );
+            }}
+          </PlatformStateContext.Consumer>
         </Modal>
 
         {/* Update Modal */}
