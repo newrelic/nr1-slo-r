@@ -17,9 +17,9 @@ As stated on the referring page, Alert Driven SLOs measure the total amount of t
 ### Example: Availability SLO calculation over 7 days
  
 - Assume for a given 7 day period the Alerts tied to your Availability SLO were triggered three times:
--- Event 1: Sunday morning 0005-0021 (16 minute duration)
--- Event 2: Monday afternoon 1515-1520 (5 minute duration)
--- Event 3: Friday night 2100-2107 (7 minutes duration)
+    - Event 1: Sunday morning 0005-0021 (16 minute duration)
+    - Event 2: Monday afternoon 1515-1520 (5 minute duration)
+    - Event 3: Friday night 2100-2107 (7 minutes duration)
  
 SLO/R issues an Insights query to get the Alert Events for the defined SLO - it looks them up by the Alert names you specify for the SLO. Since these alert violations have happened discreetly (there is no overlap), it just aggregates the total amount of time spent in those three events. In this case, 29 minutes. We then take the total number of minutes in that 7 day week, 10,080 and derive the fraction of time this SLO was in abeyance 29/10080 or 0.0028769 - then we just subtract that from 1 and multiply by 100 to calculate the percentage of time the SLO was in compliance, in this case 99.71231% of the time you were available.
  

@@ -15,9 +15,9 @@ As you have probably already guessed, Error SLOs are calculating the percentage 
 ### Example: Error SLO calculation over 7 days
  
 - Assume the execution behaviour for a transaction "Foo" over a 7 day period:
--- Total Transactions: 399,992
--- 500 Errors: 56
--- Apdex Frustrated: 157
+    - Total Transactions: 399,992
+    - 500 Errors: 56
+    - Apdex Frustrated: 157
  
 There are a lot of other things that could have been happening to Foo over the 7 day period, but for the sake of argument let's just say we want to calculate the Error SLO based on 500 and Apdex F observations. So, (56 + 957) / 399,992 = 0.0025325. Turning that into a percentage of attainment we get 99.74675%
  
