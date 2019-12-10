@@ -3,11 +3,15 @@
 
 ## Usage
 
-SLO/R is a New Relic One application intended to calculate SLO attainment for a Service. It allows you to quickly define SLOs for Error Budget, Availability, Capacity, and Latency. 
+SLO/R is a New Relic One Application intended to calculate SLO attainment for a Service. It allows you to quickly define SLOs for Error, Availability, Capacity, and Latency. 
 
 By measuring SLO attainment accross your Service estate you will be able to determine which signals are most important for a given Service, or set of Services developed and supported by a Team/Organization. Using New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.
 
 We are keen to see SLO/R evolve and have many additional features and visualizations to include. For version 1.0.1 we wanted to ship the core SLO calculation capabilities. We expect to rapidly build upon this core through several releases. Please add an issue to the repo is there is a feature you would like to see.
+
+SLO/R provides two mechanisms for calcuating SLOs: Error Type (calculated by defects on transactions) and Availability, Capacity, and Latency Type (calculated by total duration of Alert violation). 
+
+- For more details about the SLOs that will be calculated and their calculations please see [Error Driven SLOs](./docs/error_slos.md) and [Alert Driven SLOs](./docs/alert_slos.md).  
 
 ![Screenshot #1](screenshots/screenshot_01.png)
 
@@ -19,9 +23,12 @@ This project is distributed under the [Apache 2 license](LICENSE).
 
 Required:
 
-- [New Relic APM agent(s) installed](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/compatibility-requirements-new-relic-agents-products). SLO/R version 1.0.1 is intended to work specifically with Services reporting to New Relic via an APM Agent. The Service provides an Entity upon which to define SLOs. Error Budget SLOs are defined directly from APM Transaction events in Insights, the other SLO types are defined with Alerts (see "Configuring SLOR Alert Webhook" section below).  
+- [New Relic APM agent(s) installed](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/compatibility-requirements-new-relic-agents-products). 
 
-You'll get the best possible data out of this application if you also:
+- To calculate total duration Alert SLOs for  Availability, Capacity, and Latency 
+- SLO/R version 1.0.1 is intended to work specifically with Services reporting to New Relic via an APM Agent. The Service provides an Entity upon which to define SLOs. Error Budget SLOs are defined directly from APM Transaction events in Insights, the other SLO types are defined with Alerts (see "Configuring SLOR Alert Webhook" section below).  
+
+
 
 - A New Relic Alert webhook to forward Alert events to a SLOR_ALERTS Insights table. See "Configuring SLOR Alert Webhook" section for more details.
 
@@ -65,34 +72,12 @@ Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerd
 
 ## Creating a Webhook to forward Alert incidents to Insights
 
-The Availability, Capacity, and Latency SLO types within SLO/R are calculated using the total duration of Alert violations. In order to record those Alert violations we need to enable an Insights directed Webhook to capture the _open_ and _close_ events. To enable this Webhook please follow the steps below, the Alert payload needs to be as specified for SLO/R to operate as expected. For more information on sending Alerts to insights see [Sending Alerts Data to Insights](https://blog.newrelic.com/product-news/sending-alerts-data-to-insights/).
-
-### 1. Generate an Insights insert token
-
-Insights inser tokens can be generated from the _Manage data_ option in your New Relic Insights account (e.g. https://insights.newrelic.com/accounts/{your-account-id}/manage/summary  
-
-![Screenshot #9](screenshots/screenshot_09.png)
-> Appears on the left hand navigation panel on the Insights landing page.
-
-![Screenshot #11](screenshots/screenshot_11.png)
-> Select the _Add data_ option from the top navigation menu.
-
-![Screenshot #12](screenshots/screenshot_12.png)
-> We will want to create a new _Insert Key_ click the "+" sign to enter the create dialog.
-
-![Screenshot #13](screenshots/screenshot_13.png)
-> You just need to enter a note to configure the key, I recommend SLOR_ALERTS (that will be the name of the Insights event table created)
-
-![Screenshot #14](screenshots/screenshot_14.png)
-> Once your key is created keep it handy, you will need it to configure the Webhook.
+The Availability, Capacity, and Latency SLO types within SLO/R are calculated using the total duration of Alert violations. In order to record those Alert violations we need to enable an Insights directed Webhook to capture the _open_ and _close_ events. To enable this Webhook please follow the steps below, the Alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](./docs/slor_alerts_config.md) to enable the Alert event forwarding.
 
 
+For more information on sending Alerts to insights see [Sending Alerts Data to Insights](https://blog.newrelic.com/product-news/sending-alerts-data-to-insights/).
 
-![Screenshot #8](screenshots/screenshot_08.png)
 
-### 2. Create a Webhook notification channel
-
-#
 
 
 ## How to configure and use SLO/R
