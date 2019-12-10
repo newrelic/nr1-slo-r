@@ -430,46 +430,21 @@ export default class SloForm extends React.Component {
           label="Indicator"
           className="define-slo-input"
         >
-          <DropdownItem
-            onClick={() => {
-              this.inputHandler({
-                field: 'indicator',
-                value: 'error_budget'
-              });
-            }}
-          >
-            Error budget
-          </DropdownItem>
-          <DropdownItem
-            onClick={() =>
-              this.inputHandler({
-                field: 'indicator',
-                value: 'availability'
-              })
-            }
-          >
-            Availablility
-          </DropdownItem>
-          <DropdownItem
-            onClick={() =>
-              this.inputHandler({
-                field: 'indicator',
-                value: 'capacity'
-              })
-            }
-          >
-            Capacity
-          </DropdownItem>
-          <DropdownItem
-            onClick={() =>
-              this.inputHandler({
-                field: 'indicator',
-                value: 'latency'
-              })
-            }
-          >
-            Latency
-          </DropdownItem>
+          {SLO_INDICATORS.map((indicator, index) => {
+            return (
+              <DropdownItem
+                key={index}
+                onClick={() => {
+                  this.inputHandler({
+                    field: 'indicator',
+                    value: indicator.value
+                  });
+                }}
+              >
+                {indicator.label}
+              </DropdownItem>
+            );
+          })}
         </Dropdown>
       </>
     );
