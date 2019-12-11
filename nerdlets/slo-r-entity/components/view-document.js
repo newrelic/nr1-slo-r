@@ -110,13 +110,14 @@ export default class ViewDocument extends React.Component {
     });
   }
 
+  debugger;
   render() {
     const { document } = this.state;
 
     return (
       <>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
-          Placeholder header
+          {document !== null && document.name}
         </HeadingText>
 
         <hr />
