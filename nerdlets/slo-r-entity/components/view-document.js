@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { navigation, PlatformStateContext } from 'nr1';
+import { navigation, PlatformStateContext, HeadingText } from 'nr1';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { monoBlue } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import { fetchDocumentById } from '../../shared/services/slo-documents';
 import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
@@ -21,15 +23,17 @@ function openChartBuilder(query) {
 }
 
 // eslint-disable-next-line react/prop-types
-function Nrql({ query, scope }) {
+function Nrql({ query, scope, activeViewNRQLQuery }) {
+  const scopeNormalized = scope.replace(/\s+/g, '').toLowerCase();
+
   return (
     <div
-      className="nrql-query-container"
+      className={`nrql-query-container ${
+        activeViewNRQLQuery === scopeNormalized ? 'active' : ''
+      }`}
       onClick={() => openChartBuilder(query)}
     >
-      <h4 className="nrql-query-header">View {scope} NRQL</h4>
       <div className="nrql-query">{query}</div>
-      <br />
     </div>
   );
 }
@@ -44,7 +48,8 @@ export default class ViewDocument extends React.Component {
     super(props);
 
     this.state = {
-      document: null
+      document: null,
+      activeViewNRQLQuery: 'current'
     };
   }
 
@@ -75,7 +80,7 @@ export default class ViewDocument extends React.Component {
   }
 
   renderNrql(timeRange) {
-    const { document } = this.state;
+    const { document, activeViewNRQLQuery } = this.state;
 
     if (!document) {
       return null;
@@ -86,7 +91,7 @@ export default class ViewDocument extends React.Component {
         ? ErrorBudgetSLO
         : AlertDrivenSLO;
 
-    const scopes = ['current', '7_day', '30_day'];
+    const scopes = ['current', '7 day', '30 day'];
 
     return scopes.map((scope, index) => {
       const nrql = nrqlFunction.generateQuery({
@@ -94,7 +99,14 @@ export default class ViewDocument extends React.Component {
         document,
         timeRange
       });
-      return <Nrql key={index} query={nrql} scope={scope} />;
+      return (
+        <Nrql
+          key={index}
+          query={nrql}
+          scope={scope}
+          activeViewNRQLQuery={activeViewNRQLQuery}
+        />
+      );
     });
   }
 
@@ -103,10 +115,67 @@ export default class ViewDocument extends React.Component {
 
     return (
       <>
-        <pre>{JSON.stringify(document, null, 2)}</pre>
-        <PlatformStateContext.Consumer>
-          {launcherUrlState => this.renderNrql(launcherUrlState.timeRange)}
-        </PlatformStateContext.Consumer>
+        <HeadingText type={HeadingText.TYPE.HEADING_2}>
+          Placeholder header
+        </HeadingText>
+
+        <hr />
+
+        <div className="document-definition-container">
+          <HeadingText type={HeadingText.TYPE.HEADING_4}>
+            Document definition
+          </HeadingText>
+          <div className="code-snippet-container">
+            <SyntaxHighlighter language="JSON" style={monoBlue}>
+              {JSON.stringify(document, null, 2)}
+            </SyntaxHighlighter>
+          </div>
+        </div>
+
+        <div className="view-nrql-container">
+          <header className="view-nrql-header">
+            <HeadingText type={HeadingText.TYPE.HEADING_4}>
+              View NRQL
+            </HeadingText>
+            <div className="segmented-control-container multiple-segments">
+              <button
+                type="button"
+                className={`${
+                  this.state.activeViewNRQLQuery === 'current' ? 'active' : ''
+                }`}
+                onClick={() =>
+                  this.setState({ activeViewNRQLQuery: 'current' })
+                }
+              >
+                Current
+              </button>
+              <button
+                type="button"
+                className={`${
+                  this.state.activeViewNRQLQuery === '7day' ? 'active' : ''
+                }`}
+                onClick={() => this.setState({ activeViewNRQLQuery: '7day' })}
+              >
+                7 day
+              </button>
+              <button
+                type="button"
+                className={`${
+                  this.state.activeViewNRQLQuery === '30day' ? 'active' : ''
+                }`}
+                onClick={() => this.setState({ activeViewNRQLQuery: '30day' })}
+              >
+                30 day
+              </button>
+            </div>
+          </header>
+
+          <div className="view-nrql-content">
+            <PlatformStateContext.Consumer>
+              {launcherUrlState => this.renderNrql(launcherUrlState.timeRange)}
+            </PlatformStateContext.Consumer>
+          </div>
+        </div>
       </>
     );
   }
