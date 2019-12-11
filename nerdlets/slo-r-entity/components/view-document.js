@@ -22,21 +22,33 @@ function openChartBuilder(query) {
   navigation.openOverlay(nerdlet);
 }
 
-// eslint-disable-next-line react/prop-types
 function Nrql({ query, scope, activeViewNRQLQuery }) {
-  const scopeNormalized = scope.replace(/\s+/g, '').toLowerCase();
+  const scopeNormalized = scope
+    .replace(/_/g, '')
+    .replace(/\s+/g, '')
+    .toLowerCase();
 
   return (
-    <div
-      className={`nrql-query-container ${
-        activeViewNRQLQuery === scopeNormalized ? 'active' : ''
-      }`}
-      onClick={() => openChartBuilder(query)}
-    >
-      <div className="nrql-query">{query}</div>
-    </div>
+    <>
+      <div
+        className={`nrql-query-container ${
+          activeViewNRQLQuery === scopeNormalized ? 'active' : ''
+        }`}
+        onClick={() => openChartBuilder(query)}
+      >
+        <HeadingText type={HeadingText.TYPE.HEADING_4}>
+          {query.name}
+        </HeadingText>
+        <div className="nrql-query">{query.query}</div>
+      </div>
+    </>
   );
 }
+Nrql.propTypes = {
+  query: PropTypes.object,
+  scope: PropTypes.string,
+  activeViewNRQLQuery: PropTypes.string
+};
 
 export default class ViewDocument extends React.Component {
   static propTypes = {
@@ -91,22 +103,27 @@ export default class ViewDocument extends React.Component {
         ? ErrorBudgetSLO
         : AlertDrivenSLO;
 
-    const scopes = ['current', '7 day', '30 day'];
+    const scopes = ['current', '7_day', '30_day'];
 
     return scopes.map((scope, index) => {
-      const nrql = nrqlFunction.generateQuery({
+      const queries = nrqlFunction.generateQueries({
         scope,
         document,
         timeRange
       });
-      return (
-        <Nrql
-          key={index}
-          query={nrql}
-          scope={scope}
-          activeViewNRQLQuery={activeViewNRQLQuery}
-        />
-      );
+
+      // console.debug(queries);
+
+      return queries.map((query, qIndex) => {
+        return (
+          <Nrql
+            key={index + qIndex}
+            query={query}
+            scope={scope}
+            activeViewNRQLQuery={activeViewNRQLQuery}
+          />
+        );
+      });
     });
   }
 
