@@ -139,11 +139,14 @@ const _getAlertDrivenSLOData = async function(props) {
   });
 
   // calculate the percentage of time of this window that the effective alerts were fired
-  const __SLO_RESULT =
-    100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS);
+    const __SLO_RESULT_OBJ = {
+      accumulatedMilliseconds: __accumulatedMillisecondsInAlertState,
+      totalTimeMilliseconds: (__endTS - __beginTS),
+      slo_result: (100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS))
+    }
 
   // set thw SLO result as 100 - the percentage of time in violation
-  return __SLO_RESULT;
+  return __SLO_RESULT_OBJ;
 }; // _getAlertDrivenSLOData
 
 const _getOpenAlert = function(_incidentId, _candidateOpens, _beginTS) {
@@ -321,7 +324,9 @@ const AlertDrivenSLO = {
     return {
       document: props.document,
       scope: props.scope,
-      data: Math.round(slo_result * 1000) / 1000
+      data: Math.round(slo_result.slo_result * 1000) / 1000,
+      numerator: slo_result.accumulatedMilliseconds,
+      denominator: slo_result.totalTimeMilliseconds 
     };
   },
   generateQueries: props => {
