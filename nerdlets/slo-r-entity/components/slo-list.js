@@ -12,7 +12,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /** nr1 */
-import { Button, HeadingText, Stack, StackItem, TableChart } from 'nr1';
+import { Button, Stack, StackItem, TableChart } from 'nr1';
 
 /** 3rd party */
 import { isEqual } from 'lodash';

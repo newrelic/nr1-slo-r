@@ -7,7 +7,7 @@
 }
 
 .no-slos-exist {
-  height: 100%;
+  height: calc(100% - 86px);
 
   & > div {
     display: flex;
@@ -42,9 +42,10 @@
   color: #2a3434;
 }
 
-.empty-state-description {
+.no-slos-exist p.empty-state-description {
   text-align: center;
   margin-bottom: 10px;
+  padding: 0;
 }
 
 [class*="InnerModal-content"] {
