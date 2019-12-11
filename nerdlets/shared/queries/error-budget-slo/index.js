@@ -8,6 +8,9 @@
 /** nr1 */
 import { NrqlQuery } from 'nr1';
 /** local */
+
+import { updateTimeRangeFromScope } from '../../helpers';
+
 /** 3rd party */
 
 /**
@@ -104,46 +107,19 @@ const _getAgentHTTPResponseAttributeName = function(language) {
 
 /** assembles and executes the query to report the error budget for the given SLO scope */
 const _getErrorBudgetSLOData = async function(props) {
-  const __date = Date.now();
-  let __beginTS = props.nerdlet_beginTS;
-  let __endTS = props.nerdlet_endTS;
-  let __duration = props.nerdlet_duration;
-  const _scope = props.scope;
+  const { scope, timeRange } = props;
 
-  // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
-  if (__endTS === undefined || __endTS === null) {
-    __endTS = __date;
-  } // if
-  else {
-    __endTS = props.nerdlet_endTS;
-  } // else
-
-  // determine if this is a fixed or variable time scope
-  if (_scope === '7_day') {
-    __duration = null;
-    __beginTS = +__endTS - +'604800000';
-  } // if
-  else if (_scope === '30_day') {
-    __duration = null;
-    __beginTS = +__endTS - +'2592000000';
-  } // else if
-  else {
-    // assume current time
-    // eslint-disable-next-line no-lonely-if
-    if (__duration !== null) {
-      __beginTS = +__endTS - +__duration;
-    } // if
-    else {
-      __beginTS = props.nerdlet_beginTS;
-      __endTS = props.nerdlet_endTS;
-    } // else
-  } // else
+  // eslint-disable-next-line no-unused-vars
+  const { begin_time, duration, end_time } = updateTimeRangeFromScope({
+    scope,
+    timeRange
+  });
 
   const __NRQL = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
-    __beginTS,
-    __endTS,
+    begin_time,
+    end_time,
     props.appName,
     props.language
   );
@@ -174,11 +150,8 @@ const _getErrorBudgetSLOData = async function(props) {
 }; // _getErrorBudgetSLOData
 
 const ErrorBudgetSLO = {
+  // Expects props.timeRange to exist
   query: async props => {
-    props.nerdlet_beginTS = props.timeRange.begin_time;
-    props.nerdlet_endTS = props.timeRange.end_time;
-    props.nerdlet_duration = props.timeRange.duration;
-
     props.defects = props.document.defects || [];
     props.transactions = props.document.transactions;
     props.appName = props.document.appName;
@@ -193,15 +166,26 @@ const ErrorBudgetSLO = {
       data: Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
     };
   },
-  generateQuery: props => {
-    return _getErrorBudgetNRQL(
-      props.document.transactions,
-      props.document.defects,
-      props.timeRange.begin_time,
-      props.timeRange.end_time,
-      props.document.appName,
-      props.document.language
+  // Expects props.timeRange to exist
+  generateQueries: props => {
+    const { document, scope, timeRange } = props;
+
+    // eslint-disable-next-line no-unused-vars
+    const { begin_time, duration, end_time } = updateTimeRangeFromScope({
+      scope,
+      timeRange
+    });
+
+    const query = _getErrorBudgetNRQL(
+      document.transactions,
+      document.defects,
+      begin_time,
+      end_time,
+      document.appName,
+      document.language
     );
+
+    return [{ name: 'Error Budget NRQL', query }];
   }
 };
 

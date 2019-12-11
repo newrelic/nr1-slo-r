@@ -7,6 +7,8 @@
 /** nr1 */
 import { NerdGraphQuery } from 'nr1';
 /** local */
+import { updateTimeRangeFromScope } from '../../helpers';
+
 /** 3rd party */
 
 /**
@@ -14,17 +16,15 @@ import { NerdGraphQuery } from 'nr1';
  */
 /** provides the where clause for the queries given the alerts array provided by the component properties */
 const _getAlertsWhereClause = function(_alerts) {
-
   let _alertsClause = "policy_name IN ('";
 
   for (let i = 0; i < _alerts.length; i++) {
-    
     if (i < 1) {
-      _alertsClause += _alerts[i].policy_name + "'";
-    } //if
+      _alertsClause += `${_alerts[i].policy_name}'`;
+    } // if
     else {
-      _alertsClause += ", '" + _alerts[i].policy_name + "'";
-    } //else
+      _alertsClause += `, '${_alerts[i].policy_name}'`;
+    } // else
   } // for
 
   _alertsClause += ')';
@@ -54,40 +54,16 @@ const _getClosedAlertNRQL = function(_alerts, _begin, _end) {
 
 /** provides the SLO attainment for the given SLO document for the time scope provided */
 const _getAlertDrivenSLOData = async function(props) {
-  const __scope = props.scope;
-  let __beginTS = props.nerdlet_beginTS;
-  let __endTS = props.nerdlet_endTS;
-  let __duration = props.nerdlet_duration;
-  const __date = Date.now();
+  const { scope, timeRange } = props;
 
-  // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
-  if (__endTS === undefined || __endTS === null) {
-    __endTS = __date;
-  } // if
-  else {
-    __endTS = props.nerdlet_endTS;
-  } // else
-
-  // determine if this is a fixed or variable time scope
-  if (__scope === '7_day') {
-    __duration = null;
-    __beginTS = +__endTS - +'604800000';
-  } // if
-  else if (__scope === '30_day') {
-    __duration = null;
-    __beginTS = +__endTS - +'2592000000';
-  } // else if
-  else {
-    // assume current time
-    // eslint-disable-next-line no-lonely-if
-    if (__duration !== null) {
-      __beginTS = +__endTS - +__duration;
-    } // if
-    else {
-      __beginTS = props.nerdlet_beginTS;
-      __endTS = props.nerdlet_endTS;
-    } // else
-  } // else
+  const {
+    begin_time: __beginTS,
+    // duration: __duration,
+    end_time: __endTS
+  } = updateTimeRangeFromScope({
+    scope,
+    timeRange
+  });
 
   const __NRQL_OPEN = _getOpenedAlertNRQL(props.alerts, __beginTS, __endTS);
   const __NRQL_CLOSED = _getClosedAlertNRQL(props.alerts, __beginTS, __endTS);
@@ -147,8 +123,10 @@ const _getAlertDrivenSLOData = async function(props) {
     );
   });
 
-  //process the effective alert windows to ensure we get a final dedupicated list
-  __deduplicatedAlertWindows = _deduplicateCandidateRanges(__effectiveAlertWindows);
+  // process the effective alert windows to ensure we get a final dedupicated list
+  __deduplicatedAlertWindows = _deduplicateCandidateRanges(
+    __effectiveAlertWindows
+  );
 
   // process the __effectiveAlertWindows to come up with a total in milliseconds of the effective time ranges
   let __accumulatedMillisecondsInAlertState = 0;
@@ -192,62 +170,65 @@ const _getOpenAlert = function(_incidentId, _candidateOpens, _beginTS) {
 }; // _getOpenAlert
 
 const _deduplicateCandidateRanges = function(_candidateRanges) {
-
-  let __sortedCandidateRanges = _candidateRanges.sort(_compareRanges);
-  var __deduplicatedRanges = [];
-  var __duplicateDetected = false;
+  const __sortedCandidateRanges = _candidateRanges.sort(_compareRanges);
+  const __deduplicatedRanges = [];
+  const __duplicateDetected = false;
   var __mergedRange = null;
 
-  for (var i = 0; i < __sortedCandidateRanges.length; i++) {
-
-    //only perform this option if there is another candidate in the queue
-    if (__sortedCandidateRanges.length - ( i + 1) >= 1) {
-
-      //does the preceeding end time stamp land within the next alert timestamp?
-      if ((__sortedCandidateRanges[i].closedTimeStamp > __sortedCandidateRanges[i + 1].openedTimeStamp)) {
-
-        if (__sortedCandidateRanges[i].closedTimeStamp > __sortedCandidateRanges[i + 1].closedTimeStamp) {
-
+  for (let i = 0; i < __sortedCandidateRanges.length; i++) {
+    // only perform this option if there is another candidate in the queue
+    if (__sortedCandidateRanges.length - (i + 1) >= 1) {
+      // does the preceeding end time stamp land within the next alert timestamp?
+      if (
+        __sortedCandidateRanges[i].closedTimeStamp >
+        __sortedCandidateRanges[i + 1].openedTimeStamp
+      ) {
+        if (
+          __sortedCandidateRanges[i].closedTimeStamp >
+          __sortedCandidateRanges[i + 1].closedTimeStamp
+        ) {
           var __mergedRange = {
-            closedDuration: __sortedCandidateRanges[i].closedTimeStamp - __sortedCandidateRanges[i].openedTimeStamp,
+            closedDuration:
+              __sortedCandidateRanges[i].closedTimeStamp -
+              __sortedCandidateRanges[i].openedTimeStamp,
             closedTimeStamp: __sortedCandidateRanges[i].closedTimeStamp,
-            incidentId: __sortedCandidateRanges[i].incidentId + "|" + __sortedCandidateRanges[i + 1].incidentId,
+            incidentId: `${__sortedCandidateRanges[i].incidentId}|${
+              __sortedCandidateRanges[i + 1].incidentId
+            }`,
             openedDuration: __sortedCandidateRanges[i].openedDuration,
             openedTimeStamp: __sortedCandidateRanges[i].openedTimeStamp
           };
-        } //if
+        } // if
         else {
-
           __mergedRange = {
-            closedDuration: __sortedCandidateRanges[i + 1].closedTimeStamp - __sortedCandidateRanges[i].openedTimeStamp,
+            closedDuration:
+              __sortedCandidateRanges[i + 1].closedTimeStamp -
+              __sortedCandidateRanges[i].openedTimeStamp,
             closedTimeStamp: __sortedCandidateRanges[i + 1].closedTimeStamp,
-            incidentId: __sortedCandidateRanges[i].incidentId + "|" + __sortedCandidateRanges[i + 1].incidentId,
+            incidentId: `${__sortedCandidateRanges[i].incidentId}|${
+              __sortedCandidateRanges[i + 1].incidentId
+            }`,
             openedDuration: __sortedCandidateRanges[i].openedDuration,
             openedTimeStamp: __sortedCandidateRanges[i].openedTimeStamp
           };
-        } //else 
+        } // else
 
-        //merge this timestamp into the next one by overwriting the next index of this array
+        // merge this timestamp into the next one by overwriting the next index of this array
         __sortedCandidateRanges[i + 1] = __mergedRange;
-      } //if
+      } // if
       else {
-
         __deduplicatedRanges.push(__sortedCandidateRanges[i]);
-      } //else
-
-    } //if
+      } // else
+    } // if
     else {
-
       __deduplicatedRanges.push(__sortedCandidateRanges[i]);
-    } //else
+    } // else
+  } // for
 
-  } //for
-
-  return(__deduplicatedRanges);
-} //_deduplicateCandidateRanges
+  return __deduplicatedRanges;
+}; // _deduplicateCandidateRanges
 
 const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
-  
   let __addRange = true;
   const __alertRanges = _alertRanges;
 
@@ -268,7 +249,7 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
         if (_candidateRange.closedTimeStamp > _range.closedTimeStamp) {
           // update the new end period of this range timestamp and ignore the start
           _range.closedTimeStamp = _candidateRange.closedTimeStamp;
-          //__integretryCheck = true;
+          // __integretryCheck = true;
           __addRange = false;
         } // if
       } // if
@@ -279,7 +260,7 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
       ) {
         if (_candidateRange.openedTimeStamp < _range.openedTimeStamp) {
           _range.openedTimeStamp = _candidateRange.openedTimeStamp;
-          //__integretryCheck = true;
+          // __integretryCheck = true;
           __addRange = false;
         } // if
       } // else if
@@ -290,7 +271,7 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
       ) {
         _range.openedTimeStamp = _candidateRange.openedTimeStamp;
         _range.closedTimeStamp = _candidateRange.closedTimeStamp;
-        //__integretryCheck = true;
+        // __integretryCheck = true;
         __addRange = false;
       } // else if
       // the begin and end events are entirely contained within the candidate range
@@ -312,20 +293,19 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
 }; // _reconcileCandidateRange
 
 function _compareRanges(_a, _b) {
-
   const __timestampA = _a.openedTimeStamp;
   const __timestampB = _b.openedTimeStamp;
   let __comparison = 0;
-  
+
   if (__timestampA > __timestampB) {
     __comparison = 1;
-  } //if 
+  } // if
   else if (__timestampA < __timestampB) {
     __comparison = -1;
-  } //else if
+  } // else if
 
   return __comparison;
-} //_compareRanges
+} // _compareRanges
 
 const AlertDrivenSLO = {
   query: async props => {
@@ -343,6 +323,24 @@ const AlertDrivenSLO = {
       scope: props.scope,
       data: Math.round(slo_result * 1000) / 1000
     };
+  },
+  generateQueries: props => {
+    const __NRQL_OPEN = _getOpenedAlertNRQL(
+      props.alerts,
+      props.timeRange.begin_time,
+      props.timeRange.end_time
+    );
+
+    const __NRQL_CLOSED = _getClosedAlertNRQL(
+      props.alerts,
+      props.timeRange.begin_time,
+      props.timeRange.end_time
+    );
+
+    return [
+      { name: 'Alert Open NRQL', query: __NRQL_OPEN },
+      { name: 'Alert Closed NRQL', query: __NRQL_CLOSED }
+    ];
   }
 };
 
