@@ -45,6 +45,7 @@ export default class SloForm extends React.Component {
     this.state = {
       isNew: false,
       document: undefined,
+      defaultDocumentFields: sloDocumentModel.create(),
 
       // Related data
       entityDetails: null,
@@ -256,10 +257,9 @@ export default class SloForm extends React.Component {
     if ((documentId && document) || !documentId) {
       let value = document[field];
 
-      // TO DO - Remove for v1
-      // We've changed the SLO attributes, account for pre-existing documents that include 'type'
-      if (field === 'indicator' && !value) {
-        value = document.type;
+      // Get a default value
+      if (value === undefined) {
+        value = this.state.defaultDocumentFields[field];
       }
 
       if (value === undefined) {
@@ -408,6 +408,20 @@ export default class SloForm extends React.Component {
             });
           }}
           value={this.getValue({ field: 'name' })}
+        />
+
+        <TextField
+          label="Description"
+          className="define-slo-input"
+          placeholder="Provide a description"
+          onChange={event => {
+            this.inputHandler({
+              field: 'description',
+              value: event.target.value
+            });
+          }}
+          value={this.getValue({ field: 'description' })}
+          multiline
         />
 
         <TextField

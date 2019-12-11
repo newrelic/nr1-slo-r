@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { navigation, PlatformStateContext, HeadingText } from 'nr1';
+import { BlockText, navigation, PlatformStateContext, HeadingText } from 'nr1';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { monoBlue } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -130,14 +130,19 @@ export default class ViewDocument extends React.Component {
   debugger;
   render() {
     const { document } = this.state;
+    const isLoaded = document !== null;
 
     return (
       <>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
-          {document !== null && document.name}
+          {isLoaded && document.name}
         </HeadingText>
 
         <hr />
+
+        <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+          {isLoaded && document.description}
+        </BlockText>
 
         <div className="document-definition-container">
           <HeadingText type={HeadingText.TYPE.HEADING_4}>

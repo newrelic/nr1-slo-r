@@ -103,10 +103,11 @@ export const sloDocumentModel = {
       organization: '',
       target: '',
       alerts: [],
-      type: '',
+      indicator: '',
       defects: [],
       transactions: [],
-      slo_r_version: '1.0.1'
+      slo_r_version: '1.0.1',
+      description: ''
     };
   }
 };
