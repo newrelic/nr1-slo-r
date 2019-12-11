@@ -122,6 +122,7 @@ const _getAlertDrivenSLOData = async function(props) {
   // process the finished alerts and determine if the start time exists in this time period -
   // if not the alert starts at the beginning of the time bucket .....
   let __effectiveAlertWindows = []; // this variable stores the alert window ranges calculated from the open and closed alert occurances
+  let __deduplicatedAlertWindows = [];
   let __tempAlertWindow;
 
   // looping through the closed alerts defines those alert violations that have opened and closed during the current time period. It does not contemplate
@@ -146,11 +147,14 @@ const _getAlertDrivenSLOData = async function(props) {
     );
   });
 
+  //process the effective alert windows to ensure we get a final dedupicated list
+  __deduplicatedAlertWindows = _deduplicateCandidateRanges(__effectiveAlertWindows);
+
   // process the __effectiveAlertWindows to come up with a total in milliseconds of the effective time ranges
   let __accumulatedMillisecondsInAlertState = 0;
 
   // eslint-disable-next-line array-callback-return
-  __effectiveAlertWindows.map(_window => {
+  __deduplicatedAlertWindows.map(_window => {
     __accumulatedMillisecondsInAlertState =
       __accumulatedMillisecondsInAlertState +
       (+_window.closedTimeStamp - +_window.openedTimeStamp);
@@ -187,9 +191,63 @@ const _getOpenAlert = function(_incidentId, _candidateOpens, _beginTS) {
   return __openAlertInfo;
 }; // _getOpenAlert
 
+const _deduplicateCandidateRanges = function(_candidateRanges) {
+
+  let __sortedCandidateRanges = _candidateRanges.sort(_compareRanges);
+  var __deduplicatedRanges = [];
+  var __duplicateDetected = false;
+  var __mergedRange = null;
+
+  for (var i = 0; i < __sortedCandidateRanges.length; i++) {
+
+    //only perform this option if there is another candidate in the queue
+    if (__sortedCandidateRanges.length - ( i + 1) >= 1) {
+
+      //does the preceeding end time stamp land within the next alert timestamp?
+      if ((__sortedCandidateRanges[i].closedTimeStamp > __sortedCandidateRanges[i + 1].openedTimeStamp)) {
+
+        if (__sortedCandidateRanges[i].closedTimeStamp > __sortedCandidateRanges[i + 1].closedTimeStamp) {
+
+          var __mergedRange = {
+            closedDuration: __sortedCandidateRanges[i].closedTimeStamp - __sortedCandidateRanges[i].openedTimeStamp,
+            closedTimeStamp: __sortedCandidateRanges[i].closedTimeStamp,
+            incidentId: __sortedCandidateRanges[i].incidentId + "|" + __sortedCandidateRanges[i + 1].incidentId,
+            openedDuration: __sortedCandidateRanges[i].openedDuration,
+            openedTimeStamp: __sortedCandidateRanges[i].openedTimeStamp
+          };
+        } //if
+        else {
+
+          __mergedRange = {
+            closedDuration: __sortedCandidateRanges[i + 1].closedTimeStamp - __sortedCandidateRanges[i].openedTimeStamp,
+            closedTimeStamp: __sortedCandidateRanges[i + 1].closedTimeStamp,
+            incidentId: __sortedCandidateRanges[i].incidentId + "|" + __sortedCandidateRanges[i + 1].incidentId,
+            openedDuration: __sortedCandidateRanges[i].openedDuration,
+            openedTimeStamp: __sortedCandidateRanges[i].openedTimeStamp
+          };
+        } //else 
+
+        //merge this timestamp into the next one by overwriting the next index of this array
+        __sortedCandidateRanges[i + 1] = __mergedRange;
+      } //if
+      else {
+
+        __deduplicatedRanges.push(__sortedCandidateRanges[i]);
+      } //else
+
+    } //if
+    else {
+
+      __deduplicatedRanges.push(__sortedCandidateRanges[i]);
+    } //else
+
+  } //for
+
+  return(__deduplicatedRanges);
+} //_deduplicateCandidateRanges
+
 const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
-  // TODO returns the adjusted array of alert ranges
-  let __integretryCheck = false;
+  
   let __addRange = true;
   const __alertRanges = _alertRanges;
 
@@ -210,7 +268,7 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
         if (_candidateRange.closedTimeStamp > _range.closedTimeStamp) {
           // update the new end period of this range timestamp and ignore the start
           _range.closedTimeStamp = _candidateRange.closedTimeStamp;
-          __integretryCheck = true;
+          //__integretryCheck = true;
           __addRange = false;
         } // if
       } // if
@@ -221,7 +279,7 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
       ) {
         if (_candidateRange.openedTimeStamp < _range.openedTimeStamp) {
           _range.openedTimeStamp = _candidateRange.openedTimeStamp;
-          __integretryCheck = true;
+          //__integretryCheck = true;
           __addRange = false;
         } // if
       } // else if
@@ -232,7 +290,7 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
       ) {
         _range.openedTimeStamp = _candidateRange.openedTimeStamp;
         _range.closedTimeStamp = _candidateRange.closedTimeStamp;
-        __integretryCheck = true;
+        //__integretryCheck = true;
         __addRange = false;
       } // else if
       // the begin and end events are entirely contained within the candidate range
@@ -250,13 +308,24 @@ const _reconcileCandidateRange = function(_candidateRange, _alertRanges) {
     __alertRanges.push(_candidateRange);
   } // if
 
-  // perform integrity check, because we might have created a bridge between ranges by expanding and we don't want to double count time
-  if (__integretryCheck) {
-    // TODO
-  } // if
-
   return __alertRanges;
 }; // _reconcileCandidateRange
+
+function _compareRanges(_a, _b) {
+
+  const __timestampA = _a.openedTimeStamp;
+  const __timestampB = _b.openedTimeStamp;
+  let __comparison = 0;
+  
+  if (__timestampA > __timestampB) {
+    __comparison = 1;
+  } //if 
+  else if (__timestampA < __timestampB) {
+    __comparison = -1;
+  } //else if
+
+  return __comparison;
+} //_compareRanges
 
 const AlertDrivenSLO = {
   query: async props => {
