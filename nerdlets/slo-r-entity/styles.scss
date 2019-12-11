@@ -119,6 +119,7 @@
   box-shadow: inset 0px 2px 0px rgba(0, 0, 0, 0.02);
   background: #edeeee;
   padding: 0 16px;
+  margin-bottom: 16px;
 }
 
 .toolbar-left-side {
@@ -141,7 +142,7 @@
 }
 
 .slo-table-container {
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .slo-table {
@@ -595,4 +596,18 @@ div.segmented-control-container button {
   border-top: 0;
   border-bottom: 4px dashed;
   border-bottom: 4px solid \9;
+}
+
+#root input[class*="TextField-input"].table-search-input {
+  box-shadow: none;
+  border-bottom: 1px solid #f4f5f5;
+  height: 40px;
+  border-radius: 3px 3px 0 0;
+  padding-left: 39px;
+  background-repeat: no-repeat;
+  background-position: 12px;
+}
+
+.sr-only {
+  display: none;
 }

@@ -18,16 +18,14 @@ import { Button, HeadingText, Stack, StackItem, TableChart } from 'nr1';
 import { isEqual } from 'lodash';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-import filterFactory, {
-  selectFilter,
-  textFilter
-} from 'react-bootstrap-table2-filter';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 /** local */
 import SLOGrid from './slo-grid';
 import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
 import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
 import { SLO_INDICATORS } from '../../shared/constants';
+import searchIcon from '../../../assets/icon-search.svg';
 
 /**
  * SloList
@@ -236,6 +234,7 @@ export default class SloList extends React.Component {
 
   renderBootStrapTableView() {
     const { tableData } = this.state;
+    const { SearchBar } = Search;
     const indicatorOptions = SLO_INDICATORS.reduce(
       (previousValue, currentValue) => {
         previousValue[currentValue.value] = currentValue.label;
@@ -288,19 +287,30 @@ export default class SloList extends React.Component {
 
     return (
       <>
-        <HeadingText spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}>
-          Service Level Objectives
-        </HeadingText>
-        <BootstrapTable
+        <ToolkitProvider
           keyField="name"
           data={tableData}
           columns={columns}
-          filter={filterFactory()}
           rowEvents={rowEvents}
           striped={false}
-          wrapperClasses="slo-table-container"
-          classes="slo-table"
-        />
+          search
+        >
+          {props => (
+            <div>
+              <SearchBar
+                placeholder="Search for an SLO"
+                className="TextField-input table-search-input"
+                {...props.searchProps}
+                style={{ backgroundImage: `url(${searchIcon})` }}
+              />
+              <BootstrapTable
+                wrapperClasses="slo-table-container"
+                classes="slo-table"
+                {...props.baseProps}
+              />
+            </div>
+          )}
+        </ToolkitProvider>
       </>
     );
   }
@@ -350,7 +360,6 @@ export default class SloList extends React.Component {
       // When the cell is provided an html element rather than a string or number it can't sort
       return (
         <>
-          {this.props.tableView && tableView}
           {this.props.tableView && bootstrapTable && bootstrapTableView}
           {!this.props.tableView && gridView}
         </>
