@@ -247,36 +247,38 @@ export default class SloList extends React.Component {
       {
         dataField: 'name',
         text: 'Name',
-        filter: textFilter()
+        sort: true
       },
       {
         dataField: 'indicator',
         text: 'Indicator',
         formatter: cell => indicatorOptions[cell],
-        filter: selectFilter({
-          options: indicatorOptions
-        })
+        sort: true
       },
       {
         dataField: 'current',
-        text: 'Current'
+        text: 'Current',
+        sort: true
       },
       {
         dataField: '7_day',
-        text: 'Seven Day'
+        text: 'Seven Day',
+        sort: true
       },
       {
         dataField: '30_day',
-        text: 'Thirty Day'
+        text: 'Thirty Day',
+        sort: true
       },
       {
         dataField: 'target',
-        text: 'Target'
+        text: 'Target',
+        sort: true
       },
       {
         dataField: 'org',
         text: 'Organization',
-        filter: textFilter()
+        sort: true
       }
     ];
 
