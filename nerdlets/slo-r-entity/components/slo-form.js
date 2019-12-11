@@ -411,7 +411,7 @@ export default class SloForm extends React.Component {
         />
 
         <TextField
-          label="organization"
+          label="Organization"
           className="define-slo-input"
           onChange={() =>
             this.inputHandler({
