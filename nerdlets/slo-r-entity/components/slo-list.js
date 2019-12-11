@@ -130,7 +130,7 @@ export default class SloList extends React.Component {
     const formattedDocument = {
       documentId: document.documentId,
       name: document.name,
-      type: document.indicator,
+      indicator: document.indicator,
       target: document.target,
       org: document.organization,
       entityGuid: document.entityGuid
