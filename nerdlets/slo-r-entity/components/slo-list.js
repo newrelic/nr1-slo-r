@@ -232,6 +232,23 @@ export default class SloList extends React.Component {
     );
   }
 
+  formatterAttainmentCheck(cell, row, rowIndex, formatExtraData) {
+    const scopeField = formatExtraData.scope;
+    const compareTo = row[scopeField];
+    const target = row.target;
+
+    const label = cell;
+
+    if (parseFloat(compareTo) < parseFloat(target)) {
+      return (
+        <span>
+          <strong style={{ color: 'red' }}>{label}</strong>
+        </span>
+      );
+    }
+    return <span>{label}</span>;
+  }
+
   renderBootStrapTableView() {
     const { tableData } = this.state;
     const { SearchBar } = Search;
@@ -242,6 +259,7 @@ export default class SloList extends React.Component {
       },
       {}
     );
+
     const columns = [
       {
         dataField: 'name',
@@ -251,23 +269,43 @@ export default class SloList extends React.Component {
       {
         dataField: 'indicator',
         text: 'Indicator',
-        formatter: cell => indicatorOptions[cell],
+        formatter: (cell, row, rowIndex, formatExtraData) => {
+          const { indicatorOptions } = formatExtraData;
+          const label = indicatorOptions[cell] || cell;
+
+          return label;
+        },
+        formatExtraData: {
+          indicatorOptions
+        },
         sort: true
       },
       {
         dataField: 'current',
         text: 'Current',
-        sort: true
+        sort: true,
+        formatter: this.formatterAttainmentCheck,
+        formatExtraData: {
+          scope: 'current'
+        }
       },
       {
         dataField: '7_day',
         text: 'Seven Day',
-        sort: true
+        sort: true,
+        formatter: this.formatterAttainmentCheck,
+        formatExtraData: {
+          scope: '7_day'
+        }
       },
       {
         dataField: '30_day',
         text: 'Thirty Day',
-        sort: true
+        sort: true,
+        formatter: this.formatterAttainmentCheck,
+        formatExtraData: {
+          scope: '30_day'
+        }
       },
       {
         dataField: 'target',
