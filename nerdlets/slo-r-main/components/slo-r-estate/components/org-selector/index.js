@@ -28,7 +28,6 @@ export default class OrgSelector extends React.Component {
   } // constructor
 
   render() {
-    console.debug('selector callback?', this.props.onChange);
 
     return (
       <div>

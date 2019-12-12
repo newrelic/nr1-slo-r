@@ -13,6 +13,7 @@ import { HeadingText, Spinner } from 'nr1';
 
 /** local */
 // import SLO_INDICATORS from '../../../../../shared/constants'; // TODO use with type statements
+import ComponentAlertSLO from './component_alert_slo';
 import ComponentErrorBudgetSLO from './component_eb_slo';
 
 /** 3rd party */
@@ -57,19 +58,36 @@ export default class OrgDisplayer extends React.Component {
   }
 
   async _assembleOrganizationData() {
+    
     // var __org_data = [];
     // const __data_promises = [];
     // var __org_slo_data = [];
 
     // get error budget SLOs
     const __eb_slos = this.props.org.slos.filter(function(value) {
-      return value.type === 'error_budget';
+      return value.indicator === 'error_budget';
+    });
+
+    const __availability_slos = this.props.org.slos.filter(function(value) {
+      return value.indicator === 'availability';
+    });
+
+    const __capacity_slos = this.props.org.slos.filter(function(value) {
+      return value.indicator === 'capacity';
+    });
+
+    const __latency_slos = this.props.org.slos.filter(function(value) {
+      return value.indicator === 'latency';
     });
 
     // eslint-disable-next-line no-console
-    console.debug('what is being returned here', __eb_slos);
+    console.debug('error budget slos', __eb_slos);
+    console.debug('availability slos', __availability_slos);
+    console.debug('capacity slos', __capacity_slos);
+    console.debug('latency slos', __latency_slos);
 
-    const __data_promises = __eb_slos.map(_eb_slo => {
+    // indicator = error
+    const __error_data_promises = __eb_slos.map(_eb_slo => {
       const slo_document = _eb_slo;
       const timeRange = this.props.timeRange;
       const sloPromise = ComponentErrorBudgetSLO.query({
@@ -80,14 +98,57 @@ export default class OrgDisplayer extends React.Component {
       return sloPromise;
     });
 
-    const __org_slo_data = await Promise.all(__data_promises);
+    // indicator availability
+    const __availability_data_promises = __availability_slos.map(_availability_slo => {
+      const slo_document = _availability_slo;
+      const timeRange = this.props.timeRange;
+      const sloPromise = ComponentAlertSLO.query({
+        slo_document,
+        timeRange
+      });
+
+      return sloPromise;
+    });
+
+    // indicator capacity
+    const __capacity_data_promises = __capacity_slos.map(_capacity_slo => {
+      const slo_document = _capacity_slo;
+      const timeRange = this.props.timeRange;
+      const sloPromise = ComponentAlertSLO.query({
+        slo_document,
+        timeRange
+      });
+
+      return sloPromise;
+    });
+
+    // indicator latency
+    const __latency_data_promises = __latency_slos.map(_latency_slo => {
+      const slo_document = _latency_slo;
+      const timeRange = this.props.timeRange;
+      const sloPromise = ComponentAlertSLO.query({
+        slo_document,
+        timeRange
+      });
+
+      return sloPromise;
+    });
+    
+    
+    const __org_error_slo_data = await Promise.all(__error_data_promises);
+    const __org_availability_slo_data = await Promise.all(__availability_data_promises);
+    const __org_latency_slo_data = await Promise.all(__latency_data_promises);
+    const __org_capacity_slo_data = await Promise.all(__capacity_data_promises);
+
+
+
 
     // var __org_slo_data = this._getScopedOrgSLOData("7_day");
     // eslint-disable-next-line no-console
-    console.debug('dis is der org data ... ', __org_slo_data);
+    console.debug('dis is der org data ... ', __org_error_slo_data);
 
-    this.setState({ org_slo_data: __org_slo_data });
-    this.transformAndSetTableData({ data: __org_slo_data });
+    this.setState({ org_slo_data: __org_error_slo_data });
+    this.transformAndSetTableData({ data: __org_error_slo_data });
   } // _assembleOrganizationData
 
   transformAndSetTableData({ data }) {

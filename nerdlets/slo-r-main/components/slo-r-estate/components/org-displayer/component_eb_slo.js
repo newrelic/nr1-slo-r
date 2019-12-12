@@ -315,26 +315,6 @@ var __SLO_RESULT = {
     __SLO_RESULT._7_day.result = Math.round((100 - (__SLO_RESULT._7_day.numerator / __SLO_RESULT._7_day.denominator) * 100) * 1000) / 1000;
     __SLO_RESULT._current.result = Math.round((100 - (__SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) * 100) * 1000) / 1000;
 
-//   // ensure we have a valid data object else return a 0 in data structure
-//   if (__SLO.chart.length < 1) {
-//     const __ERR_SLO = {
-//       chart: [
-//         {
-//           data: [
-//             {
-//               SLO: 0.0
-//             }
-//           ]
-//         }
-//       ]
-//     };
-
-//     return __ERR_SLO;
-//   } // if
-//   else {
-//     return __SLO;
-//   } // else
-
   return(__SLO_RESULT);
 }; // _getErrorBudgetSLOData
 
