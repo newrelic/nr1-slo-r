@@ -190,17 +190,9 @@ export default class SloForm extends React.Component {
       return;
     }
 
-    let formattedSelectedDefects = [];
-    if (formattedSelectedDefects) {
-      formattedSelectedDefects = document.defects.map(defect => {
-        return defect.value;
-      });
-    }
-
     // Merge in entityDetails
     const newDocument = {
       ...document,
-      defects: formattedSelectedDefects || [],
       entityGuid: entityDetails.entityGuid,
       accountId: entityDetails.accountId,
       accountName: entityDetails.accountName,
@@ -225,7 +217,6 @@ export default class SloForm extends React.Component {
 
     this.props.upsertDocumentCallback({ document: mutation, response: result });
 
-    // TO DO - reset this.state.newSloDocument if successful, keep if error?
     if (result) {
       this.setState({ document: sloDocumentModel.create() });
     }
