@@ -259,40 +259,49 @@ export default class SLOREntityNedlet extends React.Component {
         gapType={Stack.GAP_TYPE.NONE}
       >
         <StackItem className="toolbar-left-side">
-          <div className="segmented-control-container">
-            <button
-              type="button"
-              className={`grid-view-button ${
-                !this.state.SLOTableView ? 'active' : ''
-              }`}
-              onClick={() => this.setState({ SLOTableView: false })}
-            >
-              <Icon
-                type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
-                color={this.state.SLOTableView ? '#007e8a' : '#ffffff'}
-              />
-              Grid
-            </button>
-            <button
-              type="button"
-              className={`table-view-button ${
-                this.state.SLOTableView ? 'active' : ''
-              }`}
-              onClick={() => this.setState({ SLOTableView: true })}
-            >
-              <Icon
-                type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
-                color={this.state.SLOTableView ? '#ffffff' : '#007e8a'}
-              />
-              Table
-            </button>
-          </div>
+          <Stack
+            horizontalType={Stack.HORIZONTAL_TYPE.FILL}
+            verticalType={Stack.VERTICAL_TYPE.CENTER}
+            gapType={Stack.GAP_TYPE.NONE}
+          >
+            <StackItem className="segmented-control-container">
+              <button
+                type="button"
+                className={`grid-view-button ${
+                  !this.state.SLOTableView ? 'active' : ''
+                }`}
+                onClick={() => this.setState({ SLOTableView: false })}
+              >
+                <Icon
+                  type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
+                  color={this.state.SLOTableView ? '#007e8a' : '#ffffff'}
+                />
+                Grid
+              </button>
+              <button
+                type="button"
+                className={`table-view-button ${
+                  this.state.SLOTableView ? 'active' : ''
+                }`}
+                onClick={() => this.setState({ SLOTableView: true })}
+              >
+                <Icon
+                  type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
+                  color={this.state.SLOTableView ? '#ffffff' : '#007e8a'}
+                />
+                Table
+              </button>
+            </StackItem>
 
-          <hr />
-        </StackItem>
-        <StackItem>
-          Last updated at: {format(lastUpdated, 'hh:mm:ss')}
-          {refreshing && <Spinner />}
+            <StackItem>
+              <hr />
+            </StackItem>
+
+            <StackItem className="updated-timestamp">
+              Last updated at: {format(lastUpdated, 'hh:mm:ss')}
+              {refreshing && <Spinner />}
+            </StackItem>
+          </Stack>
         </StackItem>
         <StackItem>
           <Stack
