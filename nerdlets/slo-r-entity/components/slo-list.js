@@ -215,8 +215,8 @@ export default class SloList extends React.Component {
   }
 
   formatterAttainmentCheck(cell, row, rowIndex, formatExtraData) {
-    const scopeField = formatExtraData.scope;
-    const compareTo = row[scopeField];
+    const { scope, positiveAttainmentHighlight = false } = formatExtraData;
+    const compareTo = row[scope];
     const target = row.target;
 
     const label = cell;
@@ -224,6 +224,11 @@ export default class SloList extends React.Component {
     if (parseFloat(compareTo) < parseFloat(target)) {
       return <span className="warning-cell">{label}</span>;
     }
+
+    if (positiveAttainmentHighlight) {
+      return <span className="success-cell">{label}</span>;
+    }
+
     return <span>{label}</span>;
   }
 
@@ -281,7 +286,8 @@ export default class SloList extends React.Component {
         sort: true,
         formatter: this.formatterAttainmentCheck,
         formatExtraData: {
-          scope: 'current'
+          scope: 'current',
+          positiveAttainmentHighlight: true
         }
       },
       {
