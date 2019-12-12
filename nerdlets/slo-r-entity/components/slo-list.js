@@ -184,7 +184,22 @@ export default class SloList extends React.Component {
             <a href="https://github.com/newrelic/nr1-csg-slo-r">
               documentation
             </a>
-            .
+            . We also have documentation for more specific information about{' '}
+            <a
+              href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/error_slos.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              error driven SLOs
+            </a>{' '}
+            or{' '}
+            <a
+              href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/alert_slos.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              alert driven SLOs
+            </a>
           </p>
         </StackItem>
         <StackItem>
