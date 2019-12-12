@@ -648,3 +648,14 @@ div.segmented-control-container button {
   box-shadow: 0 0 0 3px#fcf2f3;
   border-radius: 1px;
 }
+
+.table-description-tooltip {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+td [class*='Tooltip-text'] {
+  white-space: normal;
+}

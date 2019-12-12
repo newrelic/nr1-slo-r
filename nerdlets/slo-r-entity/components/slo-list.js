@@ -12,7 +12,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /** nr1 */
-import { Button, Stack, StackItem, TableChart } from 'nr1';
+import { Button, Stack, StackItem, Tooltip } from 'nr1';
 
 /** 3rd party */
 import { isEqual } from 'lodash';
@@ -227,6 +227,18 @@ export default class SloList extends React.Component {
     return <span>{label}</span>;
   }
 
+  formatterDescription(cell) {
+    if (cell !== undefined) {
+      return (
+        <Tooltip className="table-description-tooltip" text={cell}>
+          {cell}
+        </Tooltip>
+      );
+    }
+
+    return '';
+  }
+
   renderBootStrapTableView() {
     const { tableData } = this.state;
     const { SearchBar } = Search;
@@ -243,6 +255,11 @@ export default class SloList extends React.Component {
         dataField: 'name',
         text: 'Name',
         sort: true
+      },
+      {
+        dataField: 'description',
+        text: 'Description',
+        formatter: this.formatterDescription
       },
       {
         dataField: 'indicator',
