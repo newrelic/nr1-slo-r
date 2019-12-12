@@ -330,16 +330,24 @@ const AlertDrivenSLO = {
     };
   },
   generateQueries: props => {
+    const { document, scope, timeRange } = props;
+
+    // eslint-disable-next-line no-unused-vars
+    const { begin_time, duration, end_time } = updateTimeRangeFromScope({
+      scope,
+      timeRange
+    });
+
     const __NRQL_OPEN = _getOpenedAlertNRQL(
-      props.alerts,
-      props.timeRange.begin_time,
-      props.timeRange.end_time
+      document.alerts,
+      begin_time,
+      end_time
     );
 
     const __NRQL_CLOSED = _getClosedAlertNRQL(
-      props.alerts,
-      props.timeRange.begin_time,
-      props.timeRange.end_time
+      document.alerts,
+      begin_time,
+      end_time
     );
 
     return [
