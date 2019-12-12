@@ -80,10 +80,11 @@ export default class SloForm extends React.Component {
 
   async componentDidUpdate(prevProps) {
     const { documentId, entityGuid, timeRange } = this.props;
+    const documentChanged = documentId && prevProps.documentId !== documentId;
     const entityChanged = prevProps.entityGuid !== entityGuid;
     const timeRangeChanged = prevProps.timeRange !== timeRange;
 
-    if (documentId && prevProps.documentId !== documentId) {
+    if (documentChanged) {
       await this.getDocumentById({ entityGuid, documentId });
     }
 
