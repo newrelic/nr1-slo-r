@@ -152,16 +152,6 @@ export default class SloList extends React.Component {
     }));
   }
 
-  // TO DO - Do we want per cell editing?
-  async updateSloDocument(e, row, rowIndex) {
-    // eslint-disable-next-line no-console
-    console.debug(e);
-    // eslint-disable-next-line no-console
-    console.debug(row);
-    // eslint-disable-next-line no-console
-    console.debug(rowIndex);
-  }
-
   renderGettingStarted() {
     return (
       <Stack
@@ -220,24 +210,6 @@ export default class SloList extends React.Component {
         toggleViewModal={this.props.toggleViewModal}
         toggleUpdateModal={this.props.toggleUpdateModal}
         deleteCallback={this.props.deleteCallback}
-      />
-    );
-  }
-
-  renderTableView() {
-    const { slo_documents } = this.props;
-    const data = this.getTableData();
-    // calculate the height of the table including the header row.
-    // (#ofRows + headerRow) * heightOfSingleRow + 'px'
-    const tableHeight = `${(slo_documents.length + 1) * 40}px`;
-
-    return (
-      <TableChart
-        className="slo-table"
-        data={data}
-        fullWidth
-        fullHeight
-        style={{ height: tableHeight }}
       />
     );
   }
@@ -391,7 +363,6 @@ export default class SloList extends React.Component {
     const hasDocuments = slo_documents.length > 0;
     const gettingStarted = this.renderGettingStarted();
     const gridView = this.renderGridView();
-    // const tableView = this.renderTableView();
     const bootstrapTable = true;
     const bootstrapTableView = this.renderBootStrapTableView();
 
