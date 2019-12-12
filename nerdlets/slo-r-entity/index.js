@@ -224,7 +224,8 @@ export default class SLOREntityNedlet extends React.Component {
           { id: documentId, document },
           ...slo_documents.slice(documentIndex + 1)
         ],
-        isActiveUpdateModal: false
+        isActiveUpdateModal: false,
+        editDocumentId: null
       }));
     }
 
@@ -232,7 +233,8 @@ export default class SLOREntityNedlet extends React.Component {
       const newRecords = [{ id: documentId, document }];
       this.setState(prevState => ({
         slo_documents: prevState.slo_documents.concat(newRecords),
-        isActiveCreateModal: false
+        isActiveCreateModal: false,
+        editDocumentId: null
       }));
     }
   }
