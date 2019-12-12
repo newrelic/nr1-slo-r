@@ -490,7 +490,13 @@ export default class SloForm extends React.Component {
         </HeadingText>
         <p>
           Please provide the information needed to create this SLO below. You
-          will be able to edit this information in the future.
+          will be able to edit this information in the future. Looking for
+          guidance on <a href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/error_slos.md">
+            error driven SLOs
+          </a> or <a href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/alert_slos.md">
+            alert driven SLOs
+          </a>
+          ?
         </p>
 
         {documentIsReady && this.renderFormFields()}
