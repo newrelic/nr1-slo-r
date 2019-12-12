@@ -613,3 +613,27 @@ div.segmented-control-container button {
 .sr-only {
   display: none;
 }
+
+.view-details-header {
+  margin-bottom: 8px;
+}
+
+.document-description {
+  line-height: 20px;
+  font-size: 14px;
+  color: #464E4E;
+  margin-top: 8px;
+}
+
+.document-description-button {
+  position: absolute;
+  top: 8px;
+  right: 32px;
+}
+
+.warning-cell {
+  background-color:#fcf2f3;
+  color:#bf0016;
+  box-shadow: 0 0 0 3px#fcf2f3;
+  border-radius: 1px;
+}

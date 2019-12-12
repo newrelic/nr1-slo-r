@@ -134,15 +134,18 @@ export default class ViewDocument extends React.Component {
 
     return (
       <>
-        <HeadingText type={HeadingText.TYPE.HEADING_2}>
+        <HeadingText
+          className="view-details-header"
+          type={HeadingText.TYPE.HEADING_2}
+        >
           {isLoaded && document.name}
         </HeadingText>
 
-        <hr />
-
-        <BlockText spacingType={[BlockText.SPACING_TYPE.MEDIUM]}>
+        <p className="document-description">
           {isLoaded && document.description}
-        </BlockText>
+        </p>
+
+        <hr />
 
         <div className="document-definition-container">
           <HeadingText type={HeadingText.TYPE.HEADING_4}>

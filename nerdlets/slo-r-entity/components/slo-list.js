@@ -240,11 +240,7 @@ export default class SloList extends React.Component {
     const label = cell;
 
     if (parseFloat(compareTo) < parseFloat(target)) {
-      return (
-        <span>
-          <strong style={{ color: 'red' }}>{label}</strong>
-        </span>
-      );
+      return <span className="warning-cell">{label}</span>;
     }
     return <span>{label}</span>;
   }
@@ -393,9 +389,6 @@ export default class SloList extends React.Component {
     if (!hasDocuments) {
       return <>{gettingStarted}</>;
     } else {
-      // Todo: figure out a way to enable sorting on columns that include a color
-      // The blocker here is that color is included by wrapping the cell value in an html element.
-      // When the cell is provided an html element rather than a string or number it can't sort
       return (
         <>
           {this.props.tableView && bootstrapTable && bootstrapTableView}
