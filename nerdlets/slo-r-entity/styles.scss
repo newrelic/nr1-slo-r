@@ -649,6 +649,13 @@ div.segmented-control-container button {
   border-radius: 1px;
 }
 
+.success-cell {
+  background-color: rgba(219, 248, 219, 0.4);
+  color: #085300;
+  box-shadow: 0 0 0 3px rgba(219, 248, 219, 0.4);
+  border-radius: 1px;
+}
+
 .table-description-tooltip {
   max-width: 100%;
   overflow: hidden;

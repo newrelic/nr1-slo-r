@@ -53,7 +53,7 @@ export default class SLOREntityNedlet extends React.Component {
     this.state = {
       entityGuid: this.props.nerdletUrlState.entityGuid,
       slo_documents: null,
-      SLOTableView: true,
+      SLOTableView: false,
 
       // New SLO
       isActiveCreateModal: false,
