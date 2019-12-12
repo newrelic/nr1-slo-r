@@ -84,7 +84,9 @@ export default class SLOGrid extends Component {
             <span className="slo-grid-item-section-label">Current</span>
           </div>
           <div className="slo-grid-item-section section-org">
-            <span className="slo-grid-item-section-value">{document.org}</span>
+            <span className="slo-grid-item-section-value">
+              {document.organization}
+            </span>
             <span className="slo-grid-item-section-label">Org</span>
           </div>
           <div

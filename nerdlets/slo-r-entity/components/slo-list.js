@@ -128,12 +128,7 @@ export default class SloList extends React.Component {
   addScopeResult(result) {
     const { document, scope, data } = result;
     const formattedDocument = {
-      documentId: document.documentId,
-      name: document.name,
-      indicator: document.indicator,
-      target: document.target,
-      org: document.organization,
-      entityGuid: document.entityGuid
+      ...document
     };
     formattedDocument[scope] = data;
 
@@ -324,7 +319,7 @@ export default class SloList extends React.Component {
         sort: true
       },
       {
-        dataField: 'org',
+        dataField: 'organization',
         text: 'Organization',
         sort: true
       }
@@ -380,7 +375,7 @@ export default class SloList extends React.Component {
             '7_day',
             '30_day',
             'target',
-            'org',
+            'organization',
             'delete'
           ]
         },
@@ -396,7 +391,7 @@ export default class SloList extends React.Component {
     const hasDocuments = slo_documents.length > 0;
     const gettingStarted = this.renderGettingStarted();
     const gridView = this.renderGridView();
-    const tableView = this.renderTableView();
+    // const tableView = this.renderTableView();
     const bootstrapTable = true;
     const bootstrapTableView = this.renderBootStrapTableView();
 
