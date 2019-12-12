@@ -11,6 +11,7 @@
     "uuid": "4380103d-eb2f-4465-80df-98cd6dbe9597"
   },
   "dependencies": {
+    "date-fns": "^2.8.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",

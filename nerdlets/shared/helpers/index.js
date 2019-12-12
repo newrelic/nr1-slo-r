@@ -59,3 +59,8 @@ export const updateTimeRangeFromScope = ({ scope, timeRange }) => {
     end_time: __endTS
   };
 };
+
+// In seconds
+export const getNow = () => {
+  return Math.floor(new Date().getTime());
+};

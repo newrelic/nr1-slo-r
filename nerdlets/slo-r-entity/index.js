@@ -7,6 +7,7 @@
 /** core */
 import React from 'react';
 import PropTypes from 'prop-types';
+
 /** nr1 */
 import {
   Button,
@@ -22,6 +23,10 @@ import {
   StackItem,
   Spinner
 } from 'nr1';
+
+/** 3rd party */
+import { format } from 'date-fns';
+
 /** shared */
 
 // slo documents
@@ -31,6 +36,8 @@ import { fetchSloDocuments } from '../shared/services/slo-documents';
 import SloList from './components/slo-list';
 import SloForm from './components/slo-form';
 import ViewDocument from './components/view-document';
+
+import { getNow } from '../shared/helpers';
 
 /**
  * SLOREntityNerdlet
@@ -42,10 +49,11 @@ export default class SLOREntityNedlet extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       entityGuid: this.props.nerdletUrlState.entityGuid,
       slo_documents: null,
-      SLOTableView: false,
+      SLOTableView: true,
 
       // New SLO
       isActiveCreateModal: false,
@@ -58,8 +66,10 @@ export default class SLOREntityNedlet extends React.Component {
       // View SLO
       viewDocumentId: null,
 
-      // UI State
-      refresh: false
+      // Refresh
+      refreshInterval: 60000, // in milliseconds
+      refreshing: false,
+      lastUpdated: 0
     }; // state
 
     this.openConfig = this._openConfig.bind(
@@ -74,33 +84,49 @@ export default class SLOREntityNedlet extends React.Component {
     this.toggleViewModal = this.toggleViewModal.bind(this);
   } // constructor
 
-  /** lifecycle prompts the fetching of the SLO documents for this entity */
   componentDidMount() {
     this.load();
-  } // componentDidMount
+    this.startTimer();
+  }
 
   /*
    * Reload if we changed entityGuid or triggered a refresh
    */
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.nerdletUrlState.entityGuid !==
-        this.props.nerdletUrlState.entityGuid ||
-      this.state.refresh
-    ) {
+    const prevEntityGuid = prevProps.nerdletUrlState.entityGuid;
+    const currentEntityGuid = this.props.nerdletUrlState.entityGuid;
+
+    if (prevEntityGuid !== currentEntityGuid) {
       this.load();
     }
-    // console.debug(this.state.isActiveCreateModal);
+  }
+
+  componentWillUnmount() {
+    this.stopTimer();
   }
 
   static contextType = NerdletStateContext;
 
   async load() {
-    // TO DO - setState and then load in callback, or load and then setState??
-    this._getSLODocuments();
+    this.setState({ refreshing: true });
+    this.getSloDocuments();
 
-    if (this.state.refresh) {
-      this.setState({ refresh: false });
+    // if (this.state.refreshing) {
+    //   this.setState({ refreshing: false });
+    // }
+  }
+
+  startTimer() {
+    const { refreshInterval } = this.state;
+
+    this.refresh = setInterval(async () => {
+      this.load();
+    }, refreshInterval);
+  }
+
+  stopTimer() {
+    if (this.refresh) {
+      clearInterval(this.refresh);
     }
   }
 
@@ -115,15 +141,15 @@ export default class SLOREntityNedlet extends React.Component {
     };
 
     navigation.openStackedNerdlet(__confignerdlet);
-  } // openConfig
+  }
 
   /** gets all the SLO documents defined for this entity */
-  async _getSLODocuments() {
+  async getSloDocuments() {
     const { entityGuid } = this.state;
 
     const slo_documents = await fetchSloDocuments({ entityGuid });
-    this.setState({ slo_documents });
-  } // _getSLODocuments
+    this.setState({ slo_documents, refreshing: false, lastUpdated: getNow() });
+  }
 
   toggleCreateModal() {
     this.setState(prevState => ({
@@ -180,7 +206,6 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.removeDocumentFromList({ document });
-    // this.setState({ refresh: true });
   }
 
   upsertDocumentInList({ mutationResult }) {
@@ -221,6 +246,8 @@ export default class SLOREntityNedlet extends React.Component {
   }
 
   renderToolbar() {
+    const { lastUpdated, refreshing } = this.state;
+
     return (
       <Stack
         className="toolbar-container"
@@ -260,6 +287,10 @@ export default class SLOREntityNedlet extends React.Component {
           </div>
 
           <hr />
+        </StackItem>
+        <StackItem>
+          Last updated at: {format(lastUpdated, 'hh:mm:ss')}
+          {refreshing && <Spinner />}
         </StackItem>
         <StackItem>
           <Stack
