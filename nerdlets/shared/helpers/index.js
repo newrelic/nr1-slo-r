@@ -1,3 +1,4 @@
+import { SLO_INDICATORS } from '../constants';
 /*
  * Helper function to turn timeRange into NRQL Since
  */
@@ -63,4 +64,9 @@ export const updateTimeRangeFromScope = ({ scope, timeRange }) => {
 // In seconds
 export const getNow = () => {
   return Math.floor(new Date().getTime());
+};
+
+export const sloIndicatorLabelLookup = ({ value }) => {
+  const indicator = SLO_INDICATORS.find(i => i.value === value);
+  return indicator.label;
 };

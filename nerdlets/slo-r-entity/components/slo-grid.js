@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Grid, GridItem, Icon, Button, Tooltip } from 'nr1';
 
+import { sloIndicatorLabelLookup } from '../../shared/helpers';
+
 import SettingsMenu from './settings-menu';
 
 export default class SLOGrid extends Component {
@@ -26,7 +28,7 @@ export default class SLOGrid extends Component {
           <header className="slo-grid-item-header">
             <h4 className="slo-grid-item-header-title">{document.name}</h4>
             <span className="slo-grid-item-header-type">
-              {document.indicator}
+              {sloIndicatorLabelLookup({ value: document.indicator })}
             </span>
             {document.description !== undefined && (
               <Tooltip
