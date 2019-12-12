@@ -139,11 +139,12 @@ const _getAlertDrivenSLOData = async function(props) {
   });
 
   // calculate the percentage of time of this window that the effective alerts were fired
-    const __SLO_RESULT_OBJ = {
-      accumulatedMilliseconds: __accumulatedMillisecondsInAlertState,
-      totalTimeMilliseconds: (__endTS - __beginTS),
-      slo_result: (100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS))
-    }
+  const __SLO_RESULT_OBJ = {
+    accumulatedMilliseconds: __accumulatedMillisecondsInAlertState,
+    totalTimeMilliseconds: __endTS - __beginTS,
+    slo_result:
+      100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS)
+  };
 
   // set thw SLO result as 100 - the percentage of time in violation
   return __SLO_RESULT_OBJ;
@@ -175,8 +176,7 @@ const _getOpenAlert = function(_incidentId, _candidateOpens, _beginTS) {
 const _deduplicateCandidateRanges = function(_candidateRanges) {
   const __sortedCandidateRanges = _candidateRanges.sort(_compareRanges);
   const __deduplicatedRanges = [];
-  const __duplicateDetected = false;
-  var __mergedRange = null;
+  let __mergedRange = null;
 
   for (let i = 0; i < __sortedCandidateRanges.length; i++) {
     // only perform this option if there is another candidate in the queue
@@ -190,7 +190,7 @@ const _deduplicateCandidateRanges = function(_candidateRanges) {
           __sortedCandidateRanges[i].closedTimeStamp >
           __sortedCandidateRanges[i + 1].closedTimeStamp
         ) {
-          var __mergedRange = {
+          __mergedRange = {
             closedDuration:
               __sortedCandidateRanges[i].closedTimeStamp -
               __sortedCandidateRanges[i].openedTimeStamp,
@@ -326,7 +326,7 @@ const AlertDrivenSLO = {
       scope: props.scope,
       data: Math.round(slo_result.slo_result * 1000) / 1000,
       numerator: slo_result.accumulatedMilliseconds,
-      denominator: slo_result.totalTimeMilliseconds 
+      denominator: slo_result.totalTimeMilliseconds
     };
   },
   generateQueries: props => {
