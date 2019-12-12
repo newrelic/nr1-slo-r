@@ -2,14 +2,15 @@
 @import '~react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 @import "./nrds.scss";
 @import "./multi-select.scss";
-#root > div {
+
+#root>div {
   height: 100%;
 }
 
 .no-slos-exist {
   height: calc(100% - 86px);
 
-  & > div {
+  &>div {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,13 +155,14 @@
 
   th {
     background-color: #fff;
+
     &:hover {
       background-color: #fafbfb;
     }
   }
 }
 
-.slo-table > tbody > tr > td {
+.slo-table>tbody>tr>td {
   background-color: #fff;
   box-shadow: inset 0 1px 0 #F4F5F5;
 }
@@ -356,18 +358,22 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   border-right: 1px solid #edeeee;
   border-bottom: 1px solid #edeeee;
 }
+
 .section-org {
   grid-area: b;
   border-bottom: 1px solid #edeeee;
 }
+
 .section-7day {
   grid-area: c;
   border-right: 1px solid #edeeee;
 }
+
 .section-30day {
   grid-area: d;
   border-right: 1px solid #edeeee;
 }
+
 .section-target {
   grid-area: e;
 }
@@ -455,7 +461,7 @@ div.segmented-control-container button {
   }
 
   .ic-Icon {
-    display:inline-block;
+    display: inline-block;
     margin-right: 6px;
   }
 }
@@ -497,7 +503,8 @@ div.segmented-control-container button {
   border-radius: 4px;
   list-style-type: none;
   text-align: left;
-  z-index: 11; /* Only difference between this and status pages is incrementing this one */
+  z-index: 11;
+  /* Only difference between this and status pages is incrementing this one */
 
   .settings-popover-active & {
     display: block;
@@ -632,8 +639,8 @@ div.segmented-control-container button {
 }
 
 .warning-cell {
-  background-color:#fcf2f3;
-  color:#bf0016;
+  background-color: #fcf2f3;
+  color: #bf0016;
   box-shadow: 0 0 0 3px#fcf2f3;
   border-radius: 1px;
 }
