@@ -28,15 +28,18 @@ export default class SLOGrid extends Component {
             <span className="slo-grid-item-header-type">
               {document.indicator}
             </span>
-
-            <Tooltip text="freedom">
-              <Button
+            {document.description !== undefined && (
+              <Tooltip
                 className="document-description-button"
-                sizeType={Button.SIZE_TYPE.SMALL}
-                type={Button.TYPE.NORMAL}
-                iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
-              />
-            </Tooltip>
+                text={document.description}
+              >
+                <Button
+                  sizeType={Button.SIZE_TYPE.SMALL}
+                  type={Button.TYPE.PLAIN_NEUTRAL}
+                  iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
+                />
+              </Tooltip>
+            )}
 
             <SettingsMenu>
               <li
