@@ -342,7 +342,7 @@ export default class SloForm extends React.Component {
   }
 
   renderAlerts() {
-    const { document } = this.state;
+    const { document, alertOptions } = this.state;
     if (document.indicator === 'error_budget') {
       return null;
     }
@@ -356,9 +356,9 @@ export default class SloForm extends React.Component {
         <div className="alerts-dropdown-container">
           <h4 className="dropdown-label">Alerts</h4>
           <Multiselect
-            data={this.state.alertOptions}
+            data={alertOptions}
             valueField="policy_name"
-            value={this.state.document.alerts}
+            value={document.alerts}
             allowCreate
             onCreate={value => {
               this.inputHandler({
