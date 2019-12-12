@@ -34,8 +34,6 @@ const _getAlertSLOData = async function(props) {
         }
       };
 
-      //const __current_TSObj = _getScopedTimeRange(props.nerdlet_beginTS, props.nerdlet_endTS, props.nerdlet_duration, "current");
-
       const __SLO_current = await AlertDrivenSLO.query(
         {
           scope: "current",
@@ -60,10 +58,23 @@ const _getAlertSLOData = async function(props) {
         }
       );
 
-      console.debug("COMPOSITE CURRENT", __SLO_current);
-      console.debug("COMPOSITE 7D", __SLO_7_day);
-      console.debug("COMPOSITE 30D", __SLO_30_day);
+      console.debug("COMPOSITE CURRENT ALERTS", __SLO_current);
+      console.debug("COMPOSITE 7D ALERTS", __SLO_7_day);
+      console.debug("COMPOSITE 30D ALERTS", __SLO_30_day);
 
+
+    //complete the results for each timerange
+    __SLO_RESULT._current.result = __SLO_current.data;
+    __SLO_RESULT._current.numerator = __SLO_current.numerator;
+    __SLO_RESULT._current.denominator = __SLO_current.denominator;
+    __SLO_RESULT._7_day.result = __SLO_7_day.data;
+    __SLO_RESULT._7_day.numerator = __SLO_7_day.numerator;
+    __SLO_RESULT._7_day.denominator = __SLO_7_day.denominator;
+    __SLO_RESULT._30_day.result = __SLO_30_day.data;
+    __SLO_RESULT._30_day.numerator = __SLO_30_day.numerator;
+    __SLO_RESULT._30_day.denominator = __SLO_30_day.denominator;
+
+    return __SLO_RESULT;
 
 } //_getAlertSLOData
 
@@ -75,21 +86,10 @@ const ComponentAlertSLO = {
       props.alerts = props.slo_document.alerts; //alerts defined for this alert driven SLO
       props.appName = props.slo_document.appName; //name of application for query
       props.accountId = props.slo_document.accountId; //account is of applictaion for query
-  
-      console.debug("BEGIN",props.nerdlet_beginTS );
-      console.debug("END",props.nerdlet_endTS);
-      console.debug("DURATION",props.nerdlet_duration);
-  
+   
       const slo_results = await _getAlertSLOData(props);
   
-      console.debug("RE FRIGGED SLO RESULTS", slo_results);
-      // return {
-      //   slo_document: props.slo_document,
-      //   scope: props.scope,
-      //   numerator: slo_results.numerator,
-      //   denominator: slo_results.demoninator,
-      //   result: Math.round((numerator / denominator) * 1000 / 1000)
-      // };
+      console.debug("RE FRIGGED SLO RESULTS  ALERTS", slo_results);
   
       return {
           slo_document: props.slo_document,
