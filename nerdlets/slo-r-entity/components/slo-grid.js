@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Grid, GridItem, Icon } from 'nr1';
+import { Grid, GridItem, Icon, Button, Tooltip } from 'nr1';
 
 import SettingsMenu from './settings-menu';
 
@@ -20,13 +20,23 @@ export default class SLOGrid extends Component {
   render() {
     const { data } = this.props;
 
-    // todo: The color coding for 7 and 30 day are not working. Fix that.
     const SLOGridItems = data.map((document, index) => {
       return (
         <GridItem className="slo-grid-item" key={index} columnSpan={3}>
           <header className="slo-grid-item-header">
             <h4 className="slo-grid-item-header-title">{document.name}</h4>
-            <span className="slo-grid-item-header-type">{document.indicator}</span>
+            <span className="slo-grid-item-header-type">
+              {document.indicator}
+            </span>
+
+            <Tooltip text="freedom">
+              <Button
+                className="document-description-button"
+                sizeType={Button.SIZE_TYPE.SMALL}
+                type={Button.TYPE.NORMAL}
+                iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
+              />
+            </Tooltip>
 
             <SettingsMenu>
               <li
