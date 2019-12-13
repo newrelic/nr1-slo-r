@@ -22,23 +22,28 @@ Insights insert tokens can be generated from the _Manage data_ option in your Ne
 
 
 ## 2. Create a Webhook notification channel
-> In New Relic Alerts click on "Notification Channel" and then "New notification channel"
-![Screenshot #20](../screenshots/screenshot_20.png)
 
-> Select the "Webhook" channel type
+![Screenshot #20](../screenshots/screenshot_20.png)
+> In New Relic Alerts click on "Notification Channel" and then "New notification channel"
+
+
 ![Screenshot #17](../screenshots/screenshot_17.png)
+> Select the "Webhook" channel type
 
 > Set the "Channel name" as SLOR_ALERTS
 
-> The "Base Url" should be the Insights collector events Url - be sure to specify your Account ID
-```https://insights-collector.newrelic.com/v1/accounts/{your account id}/events```
 
-> You will need to add a custom header and specify the X-Insert-Key you generated in step 1 above
+```https://insights-collector.newrelic.com/v1/accounts/{your account id}/events```
+> The "Base Url" should be the Insights collector events Url - be sure to specify your Account ID
+
+
 ![Screenshot #21](../screenshots/screenshot_21.png)
 ![Screenshot #22](../screenshots/screenshot_22.png)
+> You will need to add a custom header and specify the X-Insert-Key you generated in step 1 above
 
-> Add a Custom Payload
+
 ![Screenshot #23](../screenshots/screenshot_23.png)
+> Add a Custom Payload
 
 > Replace the default payload with the one below ...
 ```
@@ -71,11 +76,13 @@ Insights insert tokens can be generated from the _Manage data_ option in your Ne
   "violation_chart_url": "$VIOLATION_CHART_URL"
 }
 ```
-> Save your changes 
-![Screenshot #24](../screenshots/screenshot_24.png)
 
-> You should have defined a notification channel that looks like the following
+![Screenshot #24](../screenshots/screenshot_24.png)
+> Save your changes 
+
+
  ![Screenshot #19](../screenshots/screenshot_19.png)
+> You should have defined a notification channel that looks like the following
 
 ## 3. Create an Alert and add the SLOR_ALERT notification Webhook
 
