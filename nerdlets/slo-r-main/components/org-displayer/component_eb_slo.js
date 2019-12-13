@@ -8,8 +8,11 @@
  * @author Gil Rice
  */
 /** nr1 */
-import { NrqlQuery, NerdGraphQuery } from 'nr1';
+import { NerdGraphQuery } from 'nr1';
+
 /** local */
+import { updateTimeRangeFromScope } from '../../../shared/helpers';
+
 /** 3rd party */
 
 /** returns an nrql fragment string that describes the errors or defects to contemplate for the error budget slo */
@@ -102,48 +105,6 @@ const _getAgentHTTPResponseAttributeName = function(language) {
   } // else
 }; // _getAgentHTTPResponseAttributeName
 
-const _getScopedTimeRange = function(_beginTS, _endTS, _duration, _scope) {
-  const __date = Date.now();
-  let __beginTS = _beginTS;
-  let __endTS = _endTS;
-  let __duration = _duration;
-  const __scope = _scope;
-
-  // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
-  if (__endTS === undefined || __endTS === null) {
-    __endTS = __date;
-  } // if
-  else {
-    __endTS = _endTS;
-  } // else
-
-  // determine if this is a fixed or variable time scope
-  if (__scope === '7_day') {
-    __duration = null;
-    __beginTS = +__endTS - +'604800000';
-  } // if
-  else if (__scope === '30_day') {
-    __duration = null;
-    __beginTS = +__endTS - +'2592000000';
-  } // else if
-  else {
-    // assume current time
-    // eslint-disable-next-line no-lonely-if
-    if (__duration !== null) {
-      __beginTS = +__endTS - +__duration;
-    } // if
-    else {
-      __beginTS = _beginTS;
-      __endTS = _endTS;
-    } // else
-  } // else
-
-  return {
-    beginTS: __beginTS,
-    endTS: __endTS
-  };
-}; // _getScopedTimeRange
-
 /** assembles and executes the query to report the error budget for the given SLO scope */
 const _getErrorBudgetSLOData = async function(props) {
   const __date = Date.now();
@@ -200,12 +161,17 @@ const _getErrorBudgetSLOData = async function(props) {
     }
   };
 
-  const __current_TSObj = _getScopedTimeRange(
-    props.nerdlet_beginTS,
-    props.nerdlet_endTS,
-    props.nerdlet_duration,
-    'current'
-  );
+  const __current_TSObj = updateTimeRangeFromScope({
+    timeRange: {
+      begin_time: props.nerdlet_beginTS,
+      end_time: props.nerdlet_endTS,
+      duration: props.nerdlet_duration
+    },
+    scope: 'current'
+  });
+
+  console.debug(__current_TSObj);
+
   const __NRQL_current = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
@@ -215,12 +181,15 @@ const _getErrorBudgetSLOData = async function(props) {
     props.language
   );
 
-  const __7_day_TSObj = _getScopedTimeRange(
-    props.nerdlet_beginTS,
-    props.nerdlet_endTS,
-    props.nerdlet_duration,
-    '7_day'
-  );
+  const __7_day_TSObj = updateTimeRangeFromScope({
+    timeRange: {
+      begin_time: props.nerdlet_beginTS,
+      end_time: props.nerdlet_endTS,
+      duration: props.nerdlet_duration
+    },
+    scope: '7_day'
+  });
+
   const __NRQL_7_day = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
@@ -230,12 +199,15 @@ const _getErrorBudgetSLOData = async function(props) {
     props.language
   );
 
-  const __30_day_TSObj = _getScopedTimeRange(
-    props.nerdlet_beginTS,
-    props.nerdlet_endTS,
-    props.nerdlet_duration,
-    '30_day'
-  );
+  const __30_day_TSObj = updateTimeRangeFromScope({
+    timeRange: {
+      begin_time: props.nerdlet_beginTS,
+      end_time: props.nerdlet_endTS,
+      duration: props.nerdlet_duration
+    },
+    scope: '30_day'
+  });
+
   const __NRQL_30_day = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
