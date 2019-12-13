@@ -16,7 +16,8 @@ import {
   PlatformStateContext,
   Spinner,
   Stack,
-  StackItem
+  StackItem,
+  Dropdown
 } from 'nr1';
 
 /** local */
@@ -134,16 +135,32 @@ export default class SLOREstate extends React.Component {
   }
 
   renderNoOrganizationSelected() {
+    const { organizationOptions, selectedOrg } = this.state;
+
     return (
       <>
-        <StackItem>
-          <h4 className="empty-state-header">Choose an Organization</h4>
-        </StackItem>
-        <StackItem>
-          <p className="empty-state-description">
-            Select an organization from the dropdown above.
-          </p>
-        </StackItem>
+        <Stack
+          className="no-org-selected-container empty-state-container"
+          directionType={Stack.DIRECTION_TYPE.VERTICAL}
+          horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+          verticalType={Stack.VERTICAL_TYPE.CENTER}
+        >
+          <StackItem>
+            <h3 className="empty-state-header">Choose an organization</h3>
+            <p className="empty-state-description">
+              Select an organaization from the dropdown to get started.
+            </p>
+          </StackItem>
+          <StackItem className="org-selector">
+            <OrganizationSelector
+              orgs={organizationOptions}
+              onChange={this.sloSelectorCallback}
+              selectedOrg={selectedOrg}
+              showLabel={false}
+              title="Choose an organization"
+            />
+          </StackItem>
+        </Stack>
       </>
     );
   }
@@ -159,7 +176,7 @@ export default class SLOREstate extends React.Component {
     return (
       <>
         <Stack
-          className="toolbar-container"
+          className="summary-toolbar toolbar-container"
           fullWidth
           gapType={Stack.GAP_TYPE.NONE}
           horizontalType={Stack.HORIZONTAL_TYPE.FILL_EVENLY}
@@ -199,59 +216,38 @@ export default class SLOREstate extends React.Component {
           </StackItem>
         </Stack>
         <Grid
-          className="primary-grid"
+          className={`primary-grid ${
+            !this.state.selectedOrg ? 'empty-state-parent' : ''
+          }`}
           spacingType={[Grid.SPACING_TYPE.NONE, Grid.SPACING_TYPE.NONE]}
         >
-          <GridItem className="sidebar-container" columnSpan={3}>
-            <ul className="sidebar-list">
-              {entities.map((item, index) => {
-                return (
-                  <li key={index} className="sidebar-list-item">
-                    {item.name}
-                  </li>
-                );
-              })}
-            </ul>
-          </GridItem>
-          <GridItem className="primary-content-container" columnSpan={9}>
-            <main className="primary-content full-height">
-              <Stack
-                className="empty-state"
-                fullWidth
-                fullHeight
-                verticalType={Stack.VERTICAL_TYPE.CENTER}
-                horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
-                directionType={Stack.DIRECTION_TYPE.VERTICAL}
-                gapType={Stack.GAP_TYPE.NONE}
-              >
-                {/* No organization selected */}
-                {!this.state.selectedOrg && this.renderNoOrganizationSelected()}
+          <GridItem className="primary-content-container" columnSpan={12}>
+            {/* No organization selected */}
+            {!this.state.selectedOrg && this.renderNoOrganizationSelected()}
 
-                {/* Org selected but loading */}
-                {this.state.selectedOrg && this.state.allDocuments === null && (
-                  <Spinner />
-                )}
+            {/* Org selected but loading */}
+            {this.state.selectedOrg && this.state.allDocuments === null && (
+              <Spinner />
+            )}
 
-                {/* Org selected but no results */}
-                {this.state.selectedOrg &&
-                  this.state.allDocuments.length < 1 &&
-                  this.renderNoneDefined()}
+            {/* Org selected but no results */}
+            {this.state.selectedOrg &&
+              this.state.allDocuments.length < 1 &&
+              this.renderNoneDefined()}
 
-                <StackItem>
-                  {this.state.selectedOrg && (
-                    <PlatformStateContext.Consumer>
-                      {launcherUrlState => (
-                        <OrganizationSummary
-                          org={orgWithSlos}
-                          timeRange={launcherUrlState.timeRange}
-                        />
-                      )}
-                    </PlatformStateContext.Consumer>
+            <StackItem>
+              {this.state.selectedOrg && (
+                <PlatformStateContext.Consumer>
+                  {launcherUrlState => (
+                    <OrganizationSummary
+                      org={orgWithSlos}
+                      timeRange={launcherUrlState.timeRange}
+                    />
                   )}
-                  {!this.state.selectedOrg && <></>}
-                </StackItem>
-              </Stack>
-            </main>
+                </PlatformStateContext.Consumer>
+              )}
+              {!this.state.selectedOrg && <></>}
+            </StackItem>
           </GridItem>
         </Grid>
       </>

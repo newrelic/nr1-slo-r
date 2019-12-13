@@ -67,6 +67,13 @@ button[class*="Dropdown-trigger"],
   }
 }
 
+[class*='Dropdown-trigger-content'] {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
 #root [class*="TextField-input"] {
   &:disabled {
     border: none;
