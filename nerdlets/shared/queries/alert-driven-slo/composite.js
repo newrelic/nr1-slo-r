@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * This convenience class is a reimplementation of "alert-driven-slo" and is intended to calculate the opperands of the SLO calculation
  * so they can be meaningfully summarized on the composite SLO model.
@@ -10,7 +9,7 @@
 // import { NrqlQuery, NerdGraphQuery } from 'nr1';
 
 /** local */
-import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo';
+import AlertDrivenSLO from './single-document';
 
 /** 3rd party */
 
@@ -52,9 +51,9 @@ const _getAlertSLOData = async function(props) {
     timeRange: props.timeRange
   });
 
-  console.debug('COMPOSITE CURRENT ALERTS', __SLO_current);
-  console.debug('COMPOSITE 7D ALERTS', __SLO_7_day);
-  console.debug('COMPOSITE 30D ALERTS', __SLO_30_day);
+  // console.debug('COMPOSITE CURRENT ALERTS', __SLO_current);
+  // console.debug('COMPOSITE 7D ALERTS', __SLO_7_day);
+  // console.debug('COMPOSITE 30D ALERTS', __SLO_30_day);
 
   // complete the results for each timerange
   __SLO_RESULT._current.result = __SLO_current.data;
@@ -70,7 +69,7 @@ const _getAlertSLOData = async function(props) {
   return __SLO_RESULT;
 }; // _getAlertSLOData
 
-const ComponentAlertSLO = {
+const CompositeAlertSlo = {
   query: async props => {
     props.nerdlet_beginTS = props.timeRange.begin_time; // begin time for current calculation
     props.nerdlet_endTS = props.timeRange.end_time; // end time for current calculation
@@ -81,7 +80,7 @@ const ComponentAlertSLO = {
 
     const slo_results = await _getAlertSLOData(props);
 
-    console.debug('RE FRIGGED SLO RESULTS  ALERTS', slo_results);
+    // console.debug('RE FRIGGED SLO RESULTS  ALERTS', slo_results);
 
     return {
       slo_document: props.slo_document,
@@ -92,4 +91,4 @@ const ComponentAlertSLO = {
   }
 };
 
-export default ComponentAlertSLO; // ComponentAlertSLO
+export default CompositeAlertSlo;
