@@ -43,7 +43,8 @@ export default class SLOREstate extends React.Component {
       organizationOptions: [],
       allDocuments: [],
       orgDocuments: [],
-      selectedOrg: null
+      selectedOrg: null,
+      activeIndicator: 'errors'
     }; // state
 
     this.sloSelectorCallback = this._sloSelectorCallback.bind(this);
@@ -63,6 +64,10 @@ export default class SLOREstate extends React.Component {
     }
 
     if (this.state.selectedOrg !== nextState.selectedOrg) {
+      return true;
+    } // if
+
+    if (this.state.activeIndicator !== nextState.activeIndicator) {
       return true;
     } // if
 
@@ -195,22 +200,58 @@ export default class SLOREstate extends React.Component {
                   selectedOrg={selectedOrg}
                 />
               </StackItem>
-            </Stack>
-          </StackItem>
-          <StackItem className="toolbar-section2">
-            <Stack
-              fullWidth
-              fullHeight
-              verticalType={Stack.VERTICAL_TYPE.CENTER}
-              horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
-            >
+
               <StackItem>
-                <Button
-                  onClick={() => alert('You clicked me!')}
-                  type={Button.TYPE.PRIMARY}
-                >
-                  Primary button
-                </Button>
+                <hr />
+              </StackItem>
+
+              <StackItem className="slo-preview-toolbar-item">
+                <div className="segmented-control-container multiple-segments">
+                  <button
+                    type="button"
+                    className={
+                      this.state.activeIndicator === 'errors' ? 'active' : ''
+                    }
+                    onClick={() => this.setState({ activeIndicator: 'errors' })}
+                  >
+                    Errors
+                  </button>
+                  <button
+                    type="button"
+                    className={
+                      this.state.activeIndicator === 'availability'
+                        ? 'active'
+                        : ''
+                    }
+                    onClick={() =>
+                      this.setState({ activeIndicator: 'availability' })
+                    }
+                  >
+                    Availability
+                  </button>
+                  <button
+                    type="button"
+                    className={
+                      this.state.activeIndicator === 'capacity' ? 'active' : ''
+                    }
+                    onClick={() =>
+                      this.setState({ activeIndicator: 'capacity' })
+                    }
+                  >
+                    Capacity
+                  </button>
+                  <button
+                    type="button"
+                    className={
+                      this.state.activeIndicator === 'latency' ? 'active' : ''
+                    }
+                    onClick={() =>
+                      this.setState({ activeIndicator: 'latency' })
+                    }
+                  >
+                    Latency
+                  </button>
+                </div>
               </StackItem>
             </Stack>
           </StackItem>
