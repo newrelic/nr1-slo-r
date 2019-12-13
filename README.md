@@ -124,7 +124,6 @@ We encourage you to bring your experiences and questions to the [Explorers Hub](
 New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects, there's a related Community topic in the New Relic Explorers Hub. You can find this project's topic/threads here:
 
 https://discuss.newrelic.com/t/track-your-service-level-objectives-with-the-slo-r-nerdpack/90046
-*(Note: URL subject to change before GA)*
 
 ## Issues / Enhancement Requests
 
