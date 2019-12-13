@@ -1,17 +1,17 @@
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-template-nerdpack?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-template-nerdpack/badge.svg)](https://snyk.io/test/github/newrelic/nr1-template-nerdpack)
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-slo-r?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-slo-r/badge.svg)](https://snyk.io/test/github/newrelic/nr1-slo-r)
 
 ## Usage
 
-SLO/R is a New Relic One Application intended to calculate SLO attainment for a Service. It allows you to quickly define SLOs for Error, Availability, Capacity, and Latency conditions. 
+SLO/R is a New Relic One Application intended to calculate SLO attainment for a Service. It allows you to quickly define SLOs for Error, Availability, Capacity, and Latency conditions.
 
 By measuring SLO attainment accross your Service estate you will be able to determine which signals are most important for a given Service, or set of Services developed and supported by a Team/Organization. Using New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.
 
 We are keen to see SLO/R evolve and have many additional features and visualizations to include. For version 1.0.1 we wanted to ship the core SLO calculation capabilities. We expect to rapidly build upon this core through several releases. Please add an issue to the repo is there is a feature you would like to see.
 
-SLO/R provides two mechanisms for calcuating SLOs: Error Type (calculated by defects on transactions) and Availability, Capacity, and Latency Type (calculated by total duration of Alert violation). 
+SLO/R provides two mechanisms for calculating SLOs: Error Type (calculated by defects on transactions) and Availability, Capacity, and Latency Type (calculated by total duration of Alert violation).
 
-- For more details about the SLOs that will be calculated and their calculations please see [Error Driven SLOs](./docs/error_slos.md) and [Alert Driven SLOs](./docs/alert_slos.md).  
+- For more details about the SLOs that will be calculated and their calculations please see [Error Driven SLOs](./docs/error_slos.md) and [Alert Driven SLOs](./docs/alert_slos.md).
 
 ![Screenshot #1](screenshots/screenshot_05.png)
 
@@ -23,8 +23,8 @@ This project is distributed under the [Apache 2 license](LICENSE).
 
 Required:
 
-- [New Relic APM agent(s) installed](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/compatibility-requirements-new-relic-agents-products). 
-- SLO/R is intended to work specifically with Services reporting to New Relic via an APM Agent. The Service provides an Entity upon which to define SLOs. Error Budget SLOs are defined directly from APM Transaction events in Insights, the other SLO types are defined with Alerts (see "Configuring SLOR Alert Webhook" section below).  
+- [New Relic APM agent(s) installed](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/compatibility-requirements-new-relic-agents-products).
+- SLO/R is intended to work specifically with Services reporting to New Relic via an APM Agent. The Service provides an Entity upon which to define SLOs. Error Budget SLOs are defined directly from APM Transaction events in Insights, the other SLO types are defined with Alerts (see "Configuring SLOR Alert Webhook" section below).
 - A New Relic Alert webhook to forward Alert events to a SLOR_ALERTS Insights table. See "Configuring SLOR Alert Webhook" section for more details.
 
 
@@ -39,8 +39,8 @@ npm -v
 3. Next, to clone this repository and run the code locally against your New Relic data, execute the following command:
 
 ```bash
-nr1 nerdpack:clone -r https://github.com/newrelic/nr1-template-nerdpack.git
-cd nr1-template-nerdpack
+nr1 nerdpack:clone -r https://github.com/newrelic/nr1-slo-r.git
+cd nr1-slo-r
 nr1 nerdpack:serve
 ```
 
@@ -73,7 +73,7 @@ For more information on sending Alerts to insights see [Sending Alerts Data to I
 
 ## How to configure and use SLO/R
 
-SLO definitions are scoped and stored with Service entities. Open a Service entity by exploring your services in the Entity Explorer from the New Relic One Homepage. 
+SLO definitions are scoped and stored with Service entities. Open a Service entity by exploring your services in the Entity Explorer from the New Relic One Homepage.
 
 ![Screenshot #6](screenshots/screenshot_06.png)
 
@@ -123,7 +123,7 @@ We encourage you to bring your experiences and questions to the [Explorers Hub](
 
 New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects, there's a related Community topic in the New Relic Explorers Hub. You can find this project's topic/threads here:
 
-https://discuss.newrelic.com/t/nr1-template-nerdpack
+https://discuss.newrelic.com/t/track-your-service-level-objectives-with-the-slo-r-nerdpack/90046
 *(Note: URL subject to change before GA)*
 
 ## Issues / Enhancement Requests
