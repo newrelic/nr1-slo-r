@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Provides the component that displays the aggregation of SLOs by defined Org.
  *
@@ -21,8 +20,8 @@ import {
 } from 'nr1';
 
 /** local */
-import OrganizationSelector from './components/org-selector';
-import OrganizationSummary from './components/org-displayer';
+import OrganizationSelector from '../org-selector';
+import OrganizationSummary from '../org-displayer';
 
 /** 3rd party */
 import { fetchSloDocuments } from '../../../shared/services/slo-documents';
