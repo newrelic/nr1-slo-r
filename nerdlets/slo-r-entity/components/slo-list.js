@@ -169,12 +169,10 @@ export default class SloList extends React.Component {
             It looks like no SLOs have been defined for this entity. To get
             started, define an SLO using the button below and follow the
             instructions. For more information please see the{' '}
-            <a href="https://github.com/newrelic/nr1-csg-slo-r">
-              documentation
-            </a>
-            . We also have documentation for more specific information about{' '}
+            <a href="https://github.com/newrelic/nr1-slo-r">documentation</a>.
+            We also have documentation for more specific information about{' '}
             <a
-              href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/error_slos.md"
+              href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -182,7 +180,7 @@ export default class SloList extends React.Component {
             </a>{' '}
             or{' '}
             <a
-              href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/alert_slos.md"
+              href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md"
               target="_blank"
               rel="noopener noreferrer"
             >

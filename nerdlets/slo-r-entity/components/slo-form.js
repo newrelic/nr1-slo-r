@@ -379,8 +379,11 @@ export default class SloForm extends React.Component {
             in Insights, or click the "Add Alert" button below to enter the
             policy name of an Alert you would like to associate with this SLO.
             For more information about configuring alerts to be used with SLO/R
-            please see the "Configuring Alerts" section of the SLO/R readme
-            (https://github.com/newrelic/nr1-csg-slo-r).
+            please see the{' '}
+            <a href="https://github.com/newrelic/nr1-slo-r">
+              "Configuring Alerts" section of the SLO/R readme
+            </a>
+            .
           </small>
         </div>
       </div>
@@ -485,7 +488,7 @@ export default class SloForm extends React.Component {
           will be able to edit this information in the future. Looking for
           guidance on{' '}
           <a
-            href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/error_slos.md"
+            href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -493,7 +496,7 @@ export default class SloForm extends React.Component {
           </a>{' '}
           or{' '}
           <a
-            href="https://github.com/newrelic/nr1-csg-slo-r/blob/master/docs/alert_slos.md"
+            href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md"
             target="_blank"
             rel="noopener noreferrer"
           >
