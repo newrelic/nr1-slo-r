@@ -14,18 +14,11 @@ import PropTypes from 'prop-types';
 import { HeadingText, Spinner } from 'nr1';
 
 /** local */
-import ComponentAlertSLO from './component_alert_slo';
-import ComponentErrorBudgetSLO from './component_eb_slo';
+import CompositeAlertSlo from '../../../shared/queries/alert-driven-slo/composite';
+import CompositeErrorBudgetSlo from '../../../shared/queries/error-budget-slo/composite';
 
 /** 3rd party */
 import BootstrapTable from 'react-bootstrap-table-next';
-
-/*
-import filterFactory, {
-  selectFilter,
-  textFilter
-} from 'react-bootstrap-table2-filter';
-*/
 
 /**
  * OrgDisplayer
@@ -46,17 +39,11 @@ export default class OrgDisplayer extends React.Component {
   } // constructor
 
   async componentDidMount() {
-    // console.debug('Mounted...');
-    console.debug(this.props);
     await this._assembleOrganizationData();
   } // componentWillMount
 
   async componentDidUpdate(prevProps) {
-    //
-    // console.debug(prevProps);
-    console.debug(this.props);
     if (prevProps.org.orgName !== this.props.org.orgName) {
-      // console.debug(this.props.org);
       await this._assembleOrganizationData();
     }
 
@@ -83,16 +70,16 @@ export default class OrgDisplayer extends React.Component {
       return value.slo.indicator === 'latency';
     });
 
-    console.debug('error budget slos', __eb_slos);
-    console.debug('availability slos', __availability_slos);
-    console.debug('capacity slos', __capacity_slos);
-    console.debug('latency slos', __latency_slos);
+    // console.debug('error budget slos', __eb_slos);
+    // console.debug('availability slos', __availability_slos);
+    // console.debug('capacity slos', __capacity_slos);
+    // console.debug('latency slos', __latency_slos);
 
     // indicator = error
     const __error_data_promises = __eb_slos.map(_eb_slo => {
       const slo_document = _eb_slo.slo;
       const timeRange = this.props.timeRange;
-      const sloPromise = ComponentErrorBudgetSLO.query({
+      const sloPromise = CompositeErrorBudgetSlo.query({
         slo_document,
         timeRange
       });
@@ -105,7 +92,7 @@ export default class OrgDisplayer extends React.Component {
       _availability_slo => {
         const slo_document = _availability_slo.slo;
         const timeRange = this.props.timeRange;
-        const sloPromise = ComponentAlertSLO.query({
+        const sloPromise = CompositeAlertSlo.query({
           slo_document,
           timeRange
         });
@@ -118,7 +105,7 @@ export default class OrgDisplayer extends React.Component {
     const __capacity_data_promises = __capacity_slos.map(_capacity_slo => {
       const slo_document = _capacity_slo;
       const timeRange = this.props.timeRange;
-      const sloPromise = ComponentAlertSLO.query({
+      const sloPromise = CompositeAlertSlo.query({
         slo_document,
         timeRange
       });
@@ -130,7 +117,7 @@ export default class OrgDisplayer extends React.Component {
     const __latency_data_promises = __latency_slos.map(_latency_slo => {
       const slo_document = _latency_slo;
       const timeRange = this.props.timeRange;
-      const sloPromise = ComponentAlertSLO.query({
+      const sloPromise = CompositeAlertSlo.query({
         slo_document,
         timeRange
       });
@@ -146,7 +133,7 @@ export default class OrgDisplayer extends React.Component {
     const __org_capacity_slo_data = await Promise.all(__capacity_data_promises);
 
     // var __org_slo_data = this._getScopedOrgSLOData("7_day");
-    console.debug('dis is der org data ... ', __org_error_slo_data);
+    // console.debug('dis is der org data ... ', __org_error_slo_data);
 
     this.setState({ org_slo_data: __org_error_slo_data });
     this.transformAndSetTableData({ data: __org_error_slo_data });
@@ -274,12 +261,12 @@ export default class OrgDisplayer extends React.Component {
       return null;
     }
 
-    console.debug(org_slo_data);
+    // console.debug(org_slo_data);
     const attainment = this.calculateTotalAttainment({
       _slo_data: org_slo_data
     });
 
-    console.debug(attainment);
+    // console.debug(attainment);
 
     return (
       <div>
@@ -298,7 +285,7 @@ export default class OrgDisplayer extends React.Component {
           </thead>
           <tbody>
             {org_slo_data.map((_slo_data, index) => {
-              console.debug(_slo_data);
+              // console.debug(_slo_data);
               const data = this.transformData({ data: _slo_data });
 
               return (
