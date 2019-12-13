@@ -22,8 +22,15 @@ export default class OrgSelector extends React.Component {
   static propTypes = {
     orgs: PropTypes.array,
     onChange: PropTypes.func,
-    selectedOrg: PropTypes.string
+    selectedOrg: PropTypes.string,
+    showLabel: PropTypes.bool,
+    title: PropTypes.string
   }; // propTypes
+
+  static defaultProps = {
+    showLabel: true,
+    title: 'Select an SLO Organization to display'
+  };
 
   constructor(props) {
     super(props);
@@ -46,12 +53,15 @@ export default class OrgSelector extends React.Component {
   }
 
   render() {
-    const { orgs, selectedOrg } = this.props;
-    const title = selectedOrg || 'Select an SLO Organization to display';
+    const { orgs, showLabel, selectedOrg, title } = this.props;
 
     return (
       <div>
-        <Dropdown label="Organization" title={title} items={orgs}>
+        <Dropdown
+          label={showLabel ? 'Organization' : ''}
+          title={selectedOrg || title}
+          items={orgs}
+        >
           {({ item, index }) => (
             <DropdownItem key={index} onClick={() => this.props.onChange(item)}>
               {item}

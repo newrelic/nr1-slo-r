@@ -7,8 +7,8 @@
   height: 100%;
 }
 
-.no-slos-exist {
-  height: calc(100% - 86px);
+.empty-state-parent {
+  height: calc(100% - 90px);
 
   &>div {
     display: flex;
@@ -21,7 +21,7 @@
   display: none;
 }
 
-.no-slos-container {
+.empty-state-container {
   display: flex;
   max-width: 490px;
   margin: 0 auto;
@@ -43,7 +43,7 @@
   color: #2a3434;
 }
 
-.no-slos-exist p.empty-state-description {
+p.empty-state-description {
   text-align: center;
   margin-bottom: 10px;
   padding: 0;
@@ -122,6 +122,10 @@
   background: #edeeee;
   padding: 0 16px;
   margin-bottom: 16px;
+}
+
+.summary-toolbar {
+  margin-bottom: 0;
 }
 
 .toolbar-left-side {
@@ -680,4 +684,8 @@ td [class*='Tooltip-text'] {
 td .service-settings-dropdown {
   right: 26px;
   top: auto;
+}
+
+.empty-state-container div.org-selector {
+  margin-top: 16px;
 }

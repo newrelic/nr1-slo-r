@@ -341,7 +341,7 @@ export default class SLOREntityNedlet extends React.Component {
         {this.renderToolbar()}
         <Grid
           className={
-            !sloHasBeenDefined ? 'no-slos-exist' : 'slo-table-container'
+            sloHasBeenDefined ? 'empty-state-parent' : 'slo-table-container'
           }
         >
           <GridItem
