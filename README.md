@@ -80,10 +80,34 @@ SLO definitions are scoped and stored with Service entities. Open a Service enti
 Select the service you are interested in creating SLOs for. In our example we will be using the Origami Portal Service.
 ![Screenshot #7](screenshots/screenshot_07.png)
 
+Select the SLO/R New Relic One App from the left hand navigation in your Entity.
+![Screenshot #16](screenshots/screenshot_16.png)
+
+
+If you (or others) haven't configured an SLO the canvas will be empty. Just click on the Define an SLO button to begin configuring your first SLO.
+![Screenshot #1](screenshots/screenshot_01.png)
+
+The UI will open a side panel to facilitate configuration. Fill in the fields:
+- SLO Name: Give your SLO a name, this has to be unique for the service or will overwrite similarly named SLOs for this entity.
+- Description: Give a quick overview of what you're basing this SLO on.
+- Organization: This is grouping meta data. Typically organizations are responsible for multiple services and SLOs. This gives us an ability to roll up the SLO to an organizational attainment.
+- Target Attainment: The numeric value as a percentage, you wish as your SLO target (e.g. 99.995)
+- Indicator: There are 4 indicators for SLOs in SLO/R - Error, Availability, Capacity, and Latency. Error SLOs are calculated from Transaction defects. Availability, Latency, and Capacity SLOs are calculated by Alert violations.
+
+Example Error SLO
+![Screenshot #3](screenshots/screenshot_03.png)
+
+For Error SLOs you need to define the defects you wish to measure and the transaction names you want to associate with this SLO.
+
+Example Availability SLO
+![Screenshot #2](screenshots/screenshot_02.png)
+
+ALert driven SLOs depend on Alert events being captured by Insights in the SLOR_ALERTS table. Please see [SLO/R Alerts Config](./docs/slor_alerts_config.md) to ensure you're set up to capture Alert events.
+
+
+Once you've created a few SLOs you should see a view like the following:
+
 ![Screenshot #4](screenshots/screenshot_04.png)
-![Screenshot #5](screenshots/screenshot_05.png)
-![Screenshot #6](screenshots/screenshot_06.png)
-![Screenshot #7](screenshots/screenshot_07.png)
 
 ### How is SLO/R arriving at the SLO calculations
 
