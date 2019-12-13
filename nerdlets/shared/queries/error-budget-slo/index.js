@@ -40,14 +40,14 @@ const _getErrorFilter = function(_transactions, _defects) {
         } // else
 
         // evaluate if the defect is an httpResponseCode releated or apdexPerfZone
-        if (defect === 'apdex_frustrated') {
+        if (defect.value === 'apdex_frustrated') {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN}apdexPerfZone = 'F'`;
         } // if
         else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
-            _getAgentHTTPResponseAttributeName()} LIKE '${defect}'`;
+            _getAgentHTTPResponseAttributeName()} LIKE '${defect.value}'`;
         } // else
 
         __defectsIndex++;
@@ -123,6 +123,7 @@ const _getErrorBudgetSLOData = async function(props) {
     props.appName,
     props.language
   );
+
   const { data: __SLO } = await NrqlQuery.query({
     accountId: props.accountId,
     query: __NRQL
