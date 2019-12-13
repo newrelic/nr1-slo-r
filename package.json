@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "nr1-csg-slo-r",
-  "description": "Nerdpack nr1-csg-slo-r",
-  "version": "0.1.1",
+  "name": "nr1-slo-r",
+  "description": "Nerdpack nr1-slo-r",
+  "version": "1.0.0",
   "scripts": {
     "start": "nr1 nerdpack:serve",
     "test": "exit 0"
@@ -31,6 +31,8 @@
   "devDependencies": {
     "@newrelic/eslint-plugin-newrelic": "^0.3.0",
     "eslint": "^6.6.0",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "@semantic-release/changelog": "^3.0.5",
+    "@semantic-release/git": "^7.0.18"
   }
 }

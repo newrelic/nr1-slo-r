@@ -32,9 +32,8 @@ Insights insert tokens can be generated from the _Manage data_ option in your Ne
 
 > Set the "Channel name" as SLOR_ALERTS
 
-
-```https://insights-collector.newrelic.com/v1/accounts/{your account id}/events```
 > The "Base Url" should be the Insights collector events Url - be sure to specify your Account ID
+```https://insights-collector.newrelic.com/v1/accounts/{your account id}/events```
 
 
 ![Screenshot #21](../screenshots/screenshot_21.png)
@@ -85,6 +84,11 @@ Insights insert tokens can be generated from the _Manage data_ option in your Ne
 > You should have defined a notification channel that looks like the following
 
 ## 3. Create an Alert and add the SLOR_ALERT notification Webhook
+Now you have to add the SLOR_ALERTS notification channel to any Alerts you wish to use to make SLO calculations. 
 
+ ![Screenshot #25](../screenshots/screenshot_25.png)
+ > To set a notification channel just select the "Notification channel" tab in an Alert Policy and click "Add notification channels". Select the SLOR_ALERTS Webhook channel you created and associate it with the Alert. 
+
+ > Note: An Alert has to have fired to be visible to the SLO/R configurstion. 
 
 
