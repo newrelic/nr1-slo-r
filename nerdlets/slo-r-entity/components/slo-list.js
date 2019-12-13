@@ -12,7 +12,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /** nr1 */
-import { Button, Stack, StackItem, Tooltip } from 'nr1';
+import { Button, Stack, StackItem, Tooltip, Icon } from 'nr1';
 
 /** 3rd party */
 import { isEqual } from 'lodash';
@@ -26,6 +26,7 @@ import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
 import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
 import { SLO_INDICATORS } from '../../shared/constants';
 import searchIcon from '../../../assets/icon-search.svg';
+import SettingsMenu from './settings-menu';
 
 /**
  * SloList
@@ -49,6 +50,8 @@ export default class SloList extends React.Component {
     this.state = {
       tableData: []
     }; // state
+
+    this.formatterMenu = this.formatterMenu.bind(this);
   } // constructor
 
   componentDidMount() {
@@ -244,8 +247,45 @@ export default class SloList extends React.Component {
     return '';
   }
 
+  formatterMenu(cell, row, rowIndex, formatExtraData) {
+    return (
+      <SettingsMenu>
+        <li
+          className="service-settings-dropdown-item"
+          onClick={() => {
+            this.props.toggleViewModal({
+              document: row
+            });
+          }}
+        >
+          <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
+          View details
+        </li>
+        <li
+          className="service-settings-dropdown-item"
+          onClick={() => {
+            this.props.toggleUpdateModal({
+              document: row
+            });
+          }}
+        >
+          <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
+          Edit
+        </li>
+        <li
+          className="service-settings-dropdown-item destructive"
+          onClick={() => this.props.deleteCallback({ document: row })}
+        >
+          <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH} color="#BF0016" />
+          Delete
+        </li>
+      </SettingsMenu>
+    );
+  }
+
   renderBootStrapTableView() {
     const { tableData } = this.state;
+
     const { SearchBar } = Search;
     const indicatorOptions = SLO_INDICATORS.reduce(
       (previousValue, currentValue) => {
@@ -279,7 +319,7 @@ export default class SloList extends React.Component {
           indicatorOptions
         },
         sort: true,
-        headerStyle: (column, colIndex) => {
+        headerStyle: () => {
           return { width: '115px' };
         }
       },
@@ -292,7 +332,7 @@ export default class SloList extends React.Component {
           scope: 'current',
           positiveAttainmentHighlight: true
         },
-        headerStyle: (column, colIndex) => {
+        headerStyle: () => {
           return { width: '110px' };
         }
       },
@@ -304,7 +344,7 @@ export default class SloList extends React.Component {
         formatExtraData: {
           scope: '7_day'
         },
-        headerStyle: (column, colIndex) => {
+        headerStyle: () => {
           return { width: '115px' };
         }
       },
@@ -316,7 +356,7 @@ export default class SloList extends React.Component {
         formatExtraData: {
           scope: '30_day'
         },
-        headerStyle: (column, colIndex) => {
+        headerStyle: () => {
           return { width: '125px' };
         }
       },
@@ -324,7 +364,7 @@ export default class SloList extends React.Component {
         dataField: 'target',
         text: 'Target',
         sort: true,
-        headerStyle: (column, colIndex) => {
+        headerStyle: () => {
           return { width: '100px' };
         }
       },
@@ -332,8 +372,20 @@ export default class SloList extends React.Component {
         dataField: 'organization',
         text: 'Organization',
         sort: true,
-        headerStyle: (column, colIndex) => {
+        headerStyle: () => {
           return { width: '140px' };
+        }
+      },
+      {
+        dataField: 'language',
+        text: '',
+        sort: false,
+        formatter: this.formatterMenu,
+        headerStyle: () => {
+          return { width: '50px' };
+        },
+        formatExtraData: {
+          data: tableData
         }
       }
     ];
@@ -363,6 +415,8 @@ export default class SloList extends React.Component {
               <BootstrapTable
                 wrapperClasses="slo-table-container"
                 classes="slo-table"
+                toggleViewModal={this.props.toggleViewModal}
+                toggleUpdateModal={this.props.toggleUpdateModal}
                 {...props.baseProps}
               />
             </div>

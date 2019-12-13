@@ -487,6 +487,12 @@ div.segmented-control-container button {
   span {
     pointer-events: none;
   }
+
+  td & {
+    position: relative;
+    top: 0;
+    right: 0;
+  }
 }
 
 .service-settings-dropdown {
@@ -669,4 +675,9 @@ td [class*='Tooltip-text'] {
 
 .updated-timestamp {
   color: #8e9494;
+}
+
+.service-settings-dropdown {
+  right: 26px;
+  top: auto;
 }
