@@ -8,8 +8,10 @@
  */
 /** nr1 */
 // import { NrqlQuery, NerdGraphQuery } from 'nr1';
+
 /** local */
-import AlertDrivenSLO from '../../../../../shared/queries/alert-driven-slo';
+import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo';
+
 /** 3rd party */
 
 /** assembles and executes the query to report the error budget for the given SLO scope */
