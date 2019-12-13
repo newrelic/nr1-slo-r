@@ -54,7 +54,7 @@ const _getClosedAlertNRQL = function(_alerts, _begin, _end) {
 
 /** provides the SLO attainment for the given SLO document for the time scope provided */
 const _getAlertDrivenSLOData = async function(props) {
-  const { scope, timeRange } = props;
+  const { accountId, alerts, scope, timeRange } = props;
 
   const {
     begin_time: __beginTS,
@@ -65,12 +65,13 @@ const _getAlertDrivenSLOData = async function(props) {
     timeRange
   });
 
-  const __NRQL_OPEN = _getOpenedAlertNRQL(props.alerts, __beginTS, __endTS);
-  const __NRQL_CLOSED = _getClosedAlertNRQL(props.alerts, __beginTS, __endTS);
+  // console.debug(props);
+  const __NRQL_OPEN = _getOpenedAlertNRQL(alerts, __beginTS, __endTS);
+  const __NRQL_CLOSED = _getClosedAlertNRQL(alerts, __beginTS, __endTS);
 
   const __queryOpenAlerts = `{
             actor {
-              account(id: ${props.accountId}) {
+              account(id: ${accountId}) {
                 nrql(query: "${__NRQL_OPEN}") {
                   results
                 }
@@ -80,7 +81,7 @@ const _getAlertDrivenSLOData = async function(props) {
 
   const __queryClosedAlerts = `{
             actor {
-              account(id: ${props.accountId}) {
+              account(id: ${accountId}) {
                 nrql(query: "${__NRQL_CLOSED}") {
                   results
                 }

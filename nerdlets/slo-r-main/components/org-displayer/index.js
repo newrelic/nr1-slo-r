@@ -103,7 +103,7 @@ export default class OrgDisplayer extends React.Component {
 
     // indicator capacity
     const __capacity_data_promises = __capacity_slos.map(_capacity_slo => {
-      const slo_document = _capacity_slo;
+      const slo_document = _capacity_slo.slo;
       const timeRange = this.props.timeRange;
       const sloPromise = CompositeAlertSlo.query({
         slo_document,
@@ -115,7 +115,7 @@ export default class OrgDisplayer extends React.Component {
 
     // indicator latency
     const __latency_data_promises = __latency_slos.map(_latency_slo => {
-      const slo_document = _latency_slo;
+      const slo_document = _latency_slo.slo;
       const timeRange = this.props.timeRange;
       const sloPromise = CompositeAlertSlo.query({
         slo_document,

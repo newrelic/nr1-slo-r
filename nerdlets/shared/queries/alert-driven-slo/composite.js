@@ -15,56 +15,31 @@ import AlertDrivenSLO from './single-document';
 
 /** assembles and executes the query to report the error budget for the given SLO scope */
 const _getAlertSLOData = async function(props) {
-  const __SLO_RESULT = {
-    _current: {
+  const scopes = ['current', '7_day', '30_day'];
+
+  // Set defaults
+  const __SLO_RESULT = scopes.reduce((previousValue, scope) => {
+    previousValue[scope] = {
       numerator: '',
       denominator: '',
       result: ''
-    },
-    _7_day: {
-      numerator: '',
-      denominator: '',
-      result: ''
-    },
-    _30_day: {
-      numerator: '',
-      denominator: '',
-      result: ''
-    }
-  };
+    };
+    return previousValue;
+  }, {});
 
-  const __SLO_current = await AlertDrivenSLO.query({
-    scope: 'current',
-    document: props.slo_document,
-    timeRange: props.timeRange
-  });
-
-  const __SLO_7_day = await AlertDrivenSLO.query({
-    scope: '7_day',
-    document: props.slo_document,
-    timeRange: props.timeRange
-  });
-
-  const __SLO_30_day = await AlertDrivenSLO.query({
-    scope: '30_day',
-    document: props.slo_document,
-    timeRange: props.timeRange
-  });
-
-  // console.debug('COMPOSITE CURRENT ALERTS', __SLO_current);
-  // console.debug('COMPOSITE 7D ALERTS', __SLO_7_day);
-  // console.debug('COMPOSITE 30D ALERTS', __SLO_30_day);
-
-  // complete the results for each timerange
-  __SLO_RESULT._current.result = __SLO_current.data;
-  __SLO_RESULT._current.numerator = __SLO_current.numerator;
-  __SLO_RESULT._current.denominator = __SLO_current.denominator;
-  __SLO_RESULT._7_day.result = __SLO_7_day.data;
-  __SLO_RESULT._7_day.numerator = __SLO_7_day.numerator;
-  __SLO_RESULT._7_day.denominator = __SLO_7_day.denominator;
-  __SLO_RESULT._30_day.result = __SLO_30_day.data;
-  __SLO_RESULT._30_day.numerator = __SLO_30_day.numerator;
-  __SLO_RESULT._30_day.denominator = __SLO_30_day.denominator;
+  // Populate from single queries per scope
+  for (const scope of scopes) {
+    const response = await AlertDrivenSLO.query({
+      scope,
+      document: props.slo_document,
+      timeRange: props.timeRange
+    });
+    __SLO_RESULT[scope] = {
+      numerator: response.numerator,
+      denominator: response.denominator,
+      result: response.data
+    };
+  }
 
   return __SLO_RESULT;
 }; // _getAlertSLOData
@@ -84,9 +59,9 @@ const CompositeAlertSlo = {
 
     return {
       slo_document: props.slo_document,
-      result_current: slo_results._current,
-      result_7_day: slo_results._7_day,
-      result_30_day: slo_results._30_day
+      result_current: slo_results.current,
+      result_7_day: slo_results['7_day'],
+      result_30_day: slo_results['30_day']
     };
   }
 };

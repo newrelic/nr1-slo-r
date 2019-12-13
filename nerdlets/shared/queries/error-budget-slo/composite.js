@@ -287,8 +287,6 @@ const _getErrorBudgetSLOData = async function(props) {
 
 const CompositeErrorBudgetSlo = {
   query: async props => {
-    console.debug(props);
-
     props.nerdlet_beginTS = props.timeRange.begin_time; // begin time for current calculation
     props.nerdlet_endTS = props.timeRange.end_time; // end time for current calculation
     props.nerdlet_duration = props.timeRange.duration; // duration for time ending now calculations
