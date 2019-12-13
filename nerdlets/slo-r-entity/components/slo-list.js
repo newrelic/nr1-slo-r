@@ -460,7 +460,7 @@ export default class SloList extends React.Component {
     const bootstrapTableView = this.renderBootStrapTableView();
 
     // render the table or just the headings if we have no clo_documents defined.
-    if (hasDocuments) {
+    if (!hasDocuments) {
       return <>{gettingStarted}</>;
     } else {
       return (
