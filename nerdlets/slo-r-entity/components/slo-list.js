@@ -278,7 +278,10 @@ export default class SloList extends React.Component {
         formatExtraData: {
           indicatorOptions
         },
-        sort: true
+        sort: true,
+        headerStyle: (column, colIndex) => {
+          return { width: '115px' };
+        }
       },
       {
         dataField: 'current',
@@ -288,6 +291,9 @@ export default class SloList extends React.Component {
         formatExtraData: {
           scope: 'current',
           positiveAttainmentHighlight: true
+        },
+        headerStyle: (column, colIndex) => {
+          return { width: '110px' };
         }
       },
       {
@@ -297,6 +303,9 @@ export default class SloList extends React.Component {
         formatter: this.formatterAttainmentCheck,
         formatExtraData: {
           scope: '7_day'
+        },
+        headerStyle: (column, colIndex) => {
+          return { width: '115px' };
         }
       },
       {
@@ -306,17 +315,26 @@ export default class SloList extends React.Component {
         formatter: this.formatterAttainmentCheck,
         formatExtraData: {
           scope: '30_day'
+        },
+        headerStyle: (column, colIndex) => {
+          return { width: '125px' };
         }
       },
       {
         dataField: 'target',
         text: 'Target',
-        sort: true
+        sort: true,
+        headerStyle: (column, colIndex) => {
+          return { width: '100px' };
+        }
       },
       {
         dataField: 'organization',
         text: 'Organization',
-        sort: true
+        sort: true,
+        headerStyle: (column, colIndex) => {
+          return { width: '140px' };
+        }
       }
     ];
 
