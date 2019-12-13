@@ -102,14 +102,14 @@ For Error SLOs you need to define the defects you wish to measure and the transa
 Example Availability SLO
 ![Screenshot #2](screenshots/screenshot_02.png)
 
-ALert driven SLOs depend on Alert events being captured by Insights in the SLOR_ALERTS table. Please see [SLO/R Alerts Config](./docs/slor_alerts_config.md) to ensure you're set up to capture Alert events.
+Alert driven SLOs depend on Alert events being captured by Insights in the SLOR_ALERTS table. Please see [SLO/R Alerts Config](./docs/slor_alerts_config.md) to ensure you're set up to capture Alert events.
 
 
 Once you've created a few SLOs you should see a view like the following:
 
 ![Screenshot #4](screenshots/screenshot_04.png)
 
-### How is SLO/R arriving at the SLO calculations
+### How is SLO/R arriving at the SLO calculations?
 
 Please see details [Alert SLOs](./docs/alert_slos.md) and [Error SLOs](error_slos.md).
 
