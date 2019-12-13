@@ -7,9 +7,12 @@
 /** core */
 import React from 'react';
 import PropTypes from 'prop-types';
+
 /** nr1 */
-import { BlockText, Dropdown, DropdownItem } from 'nr1';
+import { Dropdown, DropdownItem } from 'nr1';
+
 /** local */
+
 /** 3rd party */
 
 /**
@@ -18,27 +21,40 @@ import { BlockText, Dropdown, DropdownItem } from 'nr1';
 export default class OrgSelector extends React.Component {
   static propTypes = {
     orgs: PropTypes.array,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    selectedOrg: PropTypes.string
   }; // propTypes
 
   constructor(props) {
     super(props);
 
-    this.state = {}; // state
+    this.state = {
+      // state
+    };
   } // constructor
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.orgs !== this.props.orgs) {
+      return true;
+    }
+
+    if (nextProps.selectedOrg !== this.props.selectedOrg) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
+    const { orgs, selectedOrg } = this.props;
+    const title = selectedOrg || 'Select an SLO Organization to display';
 
     return (
       <div>
-        <Dropdown
-          label="Organization"
-          title="Select an SLO Organization to display"
-          items={this.props.orgs}
-        >
+        <Dropdown label="Organization" title={title} items={orgs}>
           {({ item, index }) => (
             <DropdownItem key={index} onClick={() => this.props.onChange(item)}>
-              {item.orgName}
+              {item}
             </DropdownItem>
           )}
         </Dropdown>

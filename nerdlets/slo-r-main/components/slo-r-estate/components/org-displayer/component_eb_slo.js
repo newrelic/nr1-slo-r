@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable array-callback-return */
 /**
- * This convenience class is a reimplementation of "error-budget-slo" and is intended to calculate the opperands of the SLO calculation 
- * so they can be meaningfully summarized on the composite SLO model.  
+ * This convenience class is a reimplementation of "error-budget-slo" and is intended to calculate the opperands of the SLO calculation
+ * so they can be meaningfully summarized on the composite SLO model.
  *
  * @file Defines functions for the purpose of calculating an Error Budget SLO in aggregate.
  * @author Gil Rice
@@ -10,7 +11,6 @@
 import { NrqlQuery, NerdGraphQuery } from 'nr1';
 /** local */
 /** 3rd party */
-
 
 /** returns an nrql fragment string that describes the errors or defects to contemplate for the error budget slo */
 const _getErrorFilter = function(_transactions, _defects) {
@@ -88,7 +88,7 @@ const _getErrorBudgetNRQL = function(
     language
   )} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
 
-  console.debug("NRQL Looks like what", __NRQL);
+  console.debug('NRQL Looks like what', __NRQL);
   return __NRQL;
 }; // getErrorBudgerNRQL
 
@@ -103,107 +103,109 @@ const _getAgentHTTPResponseAttributeName = function(language) {
 }; // _getAgentHTTPResponseAttributeName
 
 const _getScopedTimeRange = function(_beginTS, _endTS, _duration, _scope) {
+  const __date = Date.now();
+  let __beginTS = _beginTS;
+  let __endTS = _endTS;
+  let __duration = _duration;
+  const __scope = _scope;
 
-    const __date = Date.now();
-    let __beginTS = _beginTS;
-    let __endTS = _endTS;
-    let __duration = _duration;
-    const __scope = _scope;
-  
-    // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
-    if (__endTS === undefined || __endTS === null) {
-      __endTS = __date;
+  // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
+  if (__endTS === undefined || __endTS === null) {
+    __endTS = __date;
+  } // if
+  else {
+    __endTS = _endTS;
+  } // else
+
+  // determine if this is a fixed or variable time scope
+  if (__scope === '7_day') {
+    __duration = null;
+    __beginTS = +__endTS - +'604800000';
+  } // if
+  else if (__scope === '30_day') {
+    __duration = null;
+    __beginTS = +__endTS - +'2592000000';
+  } // else if
+  else {
+    // assume current time
+    // eslint-disable-next-line no-lonely-if
+    if (__duration !== null) {
+      __beginTS = +__endTS - +__duration;
     } // if
     else {
-      __endTS = props.nerdlet_endTS;
+      __beginTS = _beginTS;
+      __endTS = _endTS;
     } // else
-  
-    // determine if this is a fixed or variable time scope
-    if (__scope === '7_day') {
-      __duration = null;
-      __beginTS = +__endTS - +'604800000';
-    } // if
-    else if (__scope === '30_day') {
-      __duration = null;
-      __beginTS = +__endTS - +'2592000000';
-    } // else if
-    else {
-      // assume current time
-      // eslint-disable-next-line no-lonely-if
-      if (__duration !== null) {
-        __beginTS = +__endTS - +__duration;
-      } // if
-      else {
-        __beginTS = props.nerdlet_beginTS;
-        __endTS = props.nerdlet_endTS;
-      } // else
-    } // else
+  } // else
 
-    return(
-        {
-            beginTS: __beginTS,
-            endTS: __endTS
-        }
-    );
-}//_getScopedTimeRange
+  return {
+    beginTS: __beginTS,
+    endTS: __endTS
+  };
+}; // _getScopedTimeRange
 
 /** assembles and executes the query to report the error budget for the given SLO scope */
 const _getErrorBudgetSLOData = async function(props) {
-//   const __date = Date.now();
-//   let __beginTS = props.nerdlet_beginTS;
-//   let __endTS = props.nerdlet_endTS;
-//   let __duration = props.nerdlet_duration;
-//   const _scope = props.scope;
+  const __date = Date.now();
+  // eslint-disable-next-line no-unused-vars
+  let __beginTS = props.nerdlet_beginTS;
+  let __endTS = props.nerdlet_endTS;
+  let __duration = props.nerdlet_duration;
+  const _scope = props.scope;
 
-//   // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
-//   if (__endTS === undefined || __endTS === null) {
-//     __endTS = __date;
-//   } // if
-//   else {
-//     __endTS = props.nerdlet_endTS;
-//   } // else
+  // need to ensure we have the latest current time if no time supplied - otherwise the ranges might go negative and that's not cool
+  if (__endTS === undefined || __endTS === null) {
+    __endTS = __date;
+  } // if
+  else {
+    __endTS = props.nerdlet_endTS;
+  } // else
 
-//   // determine if this is a fixed or variable time scope
-//   if (_scope === '7_day') {
-//     __duration = null;
-//     __beginTS = +__endTS - +'604800000';
-//   } // if
-//   else if (_scope === '30_day') {
-//     __duration = null;
-//     __beginTS = +__endTS - +'2592000000';
-//   } // else if
-//   else {
-//     // assume current time
-//     // eslint-disable-next-line no-lonely-if
-//     if (__duration !== null) {
-//       __beginTS = +__endTS - +__duration;
-//     } // if
-//     else {
-//       __beginTS = props.nerdlet_beginTS;
-//       __endTS = props.nerdlet_endTS;
-//     } // else
-//   } // else
+  // determine if this is a fixed or variable time scope
+  if (_scope === '7_day') {
+    __duration = null;
+    __beginTS = +__endTS - +'604800000';
+  } // if
+  else if (_scope === '30_day') {
+    __duration = null;
+    __beginTS = +__endTS - +'2592000000';
+  } // else if
+  else {
+    // assume current time
+    // eslint-disable-next-line no-lonely-if
+    if (__duration !== null) {
+      __beginTS = +__endTS - +__duration;
+    } // if
+    else {
+      __beginTS = props.nerdlet_beginTS;
+      __endTS = props.nerdlet_endTS;
+    } // else
+  } // else
 
-var __SLO_RESULT = {
-
+  const __SLO_RESULT = {
     _current: {
-        numerator: "",
-        denominator: "",
-        result: ""
+      numerator: '',
+      denominator: '',
+      result: ''
     },
     _7_day: {
-        numerator: "",
-        denominator: "",
-        result: ""
+      numerator: '',
+      denominator: '',
+      result: ''
     },
-    _30_day:{
-        numerator: "",
-        denominator: "",
-        result: ""
+    _30_day: {
+      numerator: '',
+      denominator: '',
+      result: ''
     }
   };
 
-  const __current_TSObj = _getScopedTimeRange(props.nerdlet_beginTS, props.nerdlet_endTS, props.nerdlet_duration, "current");
+  const __current_TSObj = _getScopedTimeRange(
+    props.nerdlet_beginTS,
+    props.nerdlet_endTS,
+    props.nerdlet_duration,
+    'current'
+  );
   const __NRQL_current = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
@@ -213,7 +215,12 @@ var __SLO_RESULT = {
     props.language
   );
 
-  const __7_day_TSObj = _getScopedTimeRange(props.nerdlet_beginTS, props.nerdlet_endTS, props.nerdlet_duration, "7_day");
+  const __7_day_TSObj = _getScopedTimeRange(
+    props.nerdlet_beginTS,
+    props.nerdlet_endTS,
+    props.nerdlet_duration,
+    '7_day'
+  );
   const __NRQL_7_day = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
@@ -223,7 +230,12 @@ var __SLO_RESULT = {
     props.language
   );
 
-  const __30_day_TSObj = _getScopedTimeRange(props.nerdlet_beginTS, props.nerdlet_endTS, props.nerdlet_duration, "30_day");
+  const __30_day_TSObj = _getScopedTimeRange(
+    props.nerdlet_beginTS,
+    props.nerdlet_endTS,
+    props.nerdlet_duration,
+    '30_day'
+  );
   const __NRQL_30_day = _getErrorBudgetNRQL(
     props.transactions,
     props.defects,
@@ -233,7 +245,7 @@ var __SLO_RESULT = {
     props.language
   );
 
-  var __GRAPHQL_current = `{
+  const __GRAPHQL_current = `{
     actor {
       account(id: ${props.accountId}) {
         nrql(query: "${__NRQL_current}") {
@@ -243,7 +255,7 @@ var __SLO_RESULT = {
     }
   }`;
 
-  var __GRAPHQL_7_day = `{
+  const __GRAPHQL_7_day = `{
     actor {
       account(id: ${props.accountId}) {
         nrql(query: "${__NRQL_7_day}") {
@@ -253,7 +265,7 @@ var __SLO_RESULT = {
     }
   }`;
 
-  var __GRAPHQL_30_day = `{
+  const __GRAPHQL_30_day = `{
     actor {
       account(id: ${props.accountId}) {
         nrql(query: "${__NRQL_30_day}") {
@@ -263,80 +275,99 @@ var __SLO_RESULT = {
     }
   }`;
 
-  var __SLO_current = await NerdGraphQuery.query({query: __GRAPHQL_current})
-  var __SLO_7_day = await NerdGraphQuery.query({query: __GRAPHQL_7_day})
-  var __SLO_30_day = await NerdGraphQuery.query({query: __GRAPHQL_30_day})
+  const __SLO_current = await NerdGraphQuery.query({
+    query: __GRAPHQL_current
+  });
+  const __SLO_7_day = await NerdGraphQuery.query({ query: __GRAPHQL_7_day });
+  const __SLO_30_day = await NerdGraphQuery.query({ query: __GRAPHQL_30_day });
 
+  console.debug('COMPOSITE CURRENT', __SLO_current);
+  console.debug('COMPOSITE 7D', __SLO_7_day);
+  console.debug('COMPOSITE 30D', __SLO_30_day);
 
-  console.debug("COMPOSITE CURRENT", __SLO_current);
-  console.debug("COMPOSITE 7D", __SLO_7_day);
-  console.debug("COMPOSITE 30D", __SLO_30_day);
-
-  //account for errant conditions
+  // account for errant conditions
   if (__SLO_current.data.actor.account.nrql.results[0].denominator === 0) {
-
     __SLO_RESULT._current.numerator = 0;
     __SLO_RESULT._current.denominator = 1;
-  } //if
+  } // if
   else {
+    __SLO_RESULT._current.numerator =
+      __SLO_current.data.actor.account.nrql.results[0].numerator;
+    __SLO_RESULT._current.denominator =
+      __SLO_current.data.actor.account.nrql.results[0].denominator;
+  } // else
 
-    __SLO_RESULT._current.numerator = __SLO_current.data.actor.account.nrql.results[0].numerator;
-    __SLO_RESULT._current.denominator = __SLO_current.data.actor.account.nrql.results[0].denominator;
-  } //else
-
-
-   //account for errant conditions - 7 day
-   if (__SLO_7_day.data.actor.account.nrql.results[0].denominator === 0) {
-
+  // account for errant conditions - 7 day
+  if (__SLO_7_day.data.actor.account.nrql.results[0].denominator === 0) {
     __SLO_RESULT._7_day.numerator = 0;
     __SLO_RESULT._7_day.denominator = 1;
-  } //if
+  } // if
   else {
+    __SLO_RESULT._7_day.numerator =
+      __SLO_7_day.data.actor.account.nrql.results[0].numerator;
+    __SLO_RESULT._7_day.denominator =
+      __SLO_7_day.data.actor.account.nrql.results[0].denominator;
+  } // else
 
-    __SLO_RESULT._7_day.numerator = __SLO_7_day.data.actor.account.nrql.results[0].numerator;
-    __SLO_RESULT._7_day.denominator = __SLO_7_day.data.actor.account.nrql.results[0].denominator;
-  } //else
-
-
-    //account for errant conditions - 30 day
-    if (__SLO_30_day.data.actor.account.nrql.results[0].denominator === 0) {
-
+  // account for errant conditions - 30 day
+  if (__SLO_30_day.data.actor.account.nrql.results[0].denominator === 0) {
     __SLO_RESULT._30_day.numerator = 0;
     __SLO_RESULT._30_day.denominator = 1;
-    } //if
-    else {
+  } // if
+  else {
+    __SLO_RESULT._30_day.numerator =
+      __SLO_30_day.data.actor.account.nrql.results[0].numerator;
+    __SLO_RESULT._30_day.denominator =
+      __SLO_30_day.data.actor.account.nrql.results[0].denominator;
+  } // else
 
-    __SLO_RESULT._30_day.numerator = __SLO_30_day.data.actor.account.nrql.results[0].numerator;
-    __SLO_RESULT._30_day.denominator = __SLO_30_day.data.actor.account.nrql.results[0].denominator;
-    } //else
+  // complete the results for each timerange
+  __SLO_RESULT._30_day.result =
+    Math.round(
+      (100 -
+        (__SLO_RESULT._30_day.numerator / __SLO_RESULT._30_day.denominator) *
+          100) *
+        1000
+    ) / 1000;
+  __SLO_RESULT._7_day.result =
+    Math.round(
+      (100 -
+        (__SLO_RESULT._7_day.numerator / __SLO_RESULT._7_day.denominator) *
+          100) *
+        1000
+    ) / 1000;
+  __SLO_RESULT._current.result =
+    Math.round(
+      (100 -
+        (__SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) *
+          100) *
+        1000
+    ) / 1000;
 
-    //complete the results for each timerange
-    __SLO_RESULT._30_day.result = Math.round((100 - (__SLO_RESULT._30_day.numerator / __SLO_RESULT._30_day.denominator) * 100) * 1000) / 1000;
-    __SLO_RESULT._7_day.result = Math.round((100 - (__SLO_RESULT._7_day.numerator / __SLO_RESULT._7_day.denominator) * 100) * 1000) / 1000;
-    __SLO_RESULT._current.result = Math.round((100 - (__SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) * 100) * 1000) / 1000;
-
-  return(__SLO_RESULT);
+  return __SLO_RESULT;
 }; // _getErrorBudgetSLOData
 
 const ComponentErrorBudgetSLO = {
   query: async props => {
-    props.nerdlet_beginTS = props.timeRange.begin_time; //begin time for current calculation
-    props.nerdlet_endTS = props.timeRange.end_time; //end time for current calculation
-    props.nerdlet_duration = props.timeRange.duration; //duration for time ending now calculations
-    //props.defects = props.slo_document.document.defects; //defects for the error calculation review why was this an empty []???
-    props.defects = ["apdex_frustrated", "50%"]; //for some reason defects have disappeared
-    props.transactions = props.slo_document.transactions; //list of candidate transactions for error burget
-    props.appName = props.slo_document.appName; //name of application for query
-    props.accountId = props.slo_document.accountId; //account is of applictaion for query
-    props.language = props.slo_document.language; //the language of the application for http response code attribute.
+    console.debug(props);
 
-    console.debug("BEGIN",props.nerdlet_beginTS );
-    console.debug("END",props.nerdlet_endTS);
-    console.debug("DURATION",props.nerdlet_duration);
+    props.nerdlet_beginTS = props.timeRange.begin_time; // begin time for current calculation
+    props.nerdlet_endTS = props.timeRange.end_time; // end time for current calculation
+    props.nerdlet_duration = props.timeRange.duration; // duration for time ending now calculations
+    props.defects = props.slo_document.defects; // defects for the error calculation review why was this an empty []???
+    // props.defects = ['apdex_frustrated', '50%']; // for some reason defects have disappeared
+    props.transactions = props.slo_document.transactions; // list of candidate transactions for error burget
+    props.appName = props.slo_document.appName; // name of application for query
+    props.accountId = props.slo_document.accountId; // account is of applictaion for query
+    props.language = props.slo_document.language; // the language of the application for http response code attribute.
+
+    console.debug('BEGIN', props.nerdlet_beginTS);
+    console.debug('END', props.nerdlet_endTS);
+    console.debug('DURATION', props.nerdlet_duration);
 
     const slo_results = await _getErrorBudgetSLOData(props);
 
-    console.debug("RE FRIGGED SLO RESULTS", slo_results);
+    console.debug('RE FRIGGED SLO RESULTS', slo_results);
     // return {
     //   slo_document: props.slo_document,
     //   scope: props.scope,
@@ -346,12 +377,11 @@ const ComponentErrorBudgetSLO = {
     // };
 
     return {
-        slo_document: props.slo_document,
-        result_current: slo_results._current,
-        result_7_day: slo_results._7_day,
-        result_30_day: slo_results._30_day
-      };
-
+      slo_document: props.slo_document,
+      result_current: slo_results._current,
+      result_7_day: slo_results._7_day,
+      result_30_day: slo_results._30_day
+    };
   }
 };
 
