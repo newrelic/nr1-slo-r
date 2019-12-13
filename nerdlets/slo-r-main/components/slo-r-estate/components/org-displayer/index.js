@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 /**
  * Provides the component that a rolled up SLO attainment for an Organization
  *
@@ -12,7 +14,6 @@ import PropTypes from 'prop-types';
 import { HeadingText, Spinner } from 'nr1';
 
 /** local */
-// import SLO_INDICATORS from '../../../../../shared/constants'; // TODO use with type statements
 import ComponentAlertSLO from './component_alert_slo';
 import ComponentErrorBudgetSLO from './component_eb_slo';
 
@@ -44,43 +45,44 @@ export default class OrgDisplayer extends React.Component {
     }; // state
   } // constructor
 
-  // async _getScopedOrgSLOData(_scope) {
-
-  //     return(__org_slo_data);
-  // } //_getScopedOrgSLOData
-
-  componentDidMount() {
-    this._assembleOrganizationData();
+  async componentDidMount() {
+    // console.debug('Mounted...');
+    console.debug(this.props);
+    await this._assembleOrganizationData();
   } // componentWillMount
 
-  componentDidUpdate() {
+  async componentDidUpdate(prevProps) {
     //
+    // console.debug(prevProps);
+    console.debug(this.props);
+    if (prevProps.org.orgName !== this.props.org.orgName) {
+      // console.debug(this.props.org);
+      await this._assembleOrganizationData();
+    }
+
+    if (prevProps.timeRange !== this.props.timeRange) {
+      await this._assembleOrganizationData();
+    }
   }
 
   async _assembleOrganizationData() {
-    
-    // var __org_data = [];
-    // const __data_promises = [];
-    // var __org_slo_data = [];
-
     // get error budget SLOs
     const __eb_slos = this.props.org.slos.filter(function(value) {
-      return value.indicator === 'error_budget';
+      return value.slo.indicator === 'error_budget';
     });
 
     const __availability_slos = this.props.org.slos.filter(function(value) {
-      return value.indicator === 'availability';
+      return value.slo.indicator === 'availability';
     });
 
     const __capacity_slos = this.props.org.slos.filter(function(value) {
-      return value.indicator === 'capacity';
+      return value.slo.indicator === 'capacity';
     });
 
     const __latency_slos = this.props.org.slos.filter(function(value) {
-      return value.indicator === 'latency';
+      return value.slo.indicator === 'latency';
     });
 
-    // eslint-disable-next-line no-console
     console.debug('error budget slos', __eb_slos);
     console.debug('availability slos', __availability_slos);
     console.debug('capacity slos', __capacity_slos);
@@ -88,7 +90,7 @@ export default class OrgDisplayer extends React.Component {
 
     // indicator = error
     const __error_data_promises = __eb_slos.map(_eb_slo => {
-      const slo_document = _eb_slo;
+      const slo_document = _eb_slo.slo;
       const timeRange = this.props.timeRange;
       const sloPromise = ComponentErrorBudgetSLO.query({
         slo_document,
@@ -99,16 +101,18 @@ export default class OrgDisplayer extends React.Component {
     });
 
     // indicator availability
-    const __availability_data_promises = __availability_slos.map(_availability_slo => {
-      const slo_document = _availability_slo;
-      const timeRange = this.props.timeRange;
-      const sloPromise = ComponentAlertSLO.query({
-        slo_document,
-        timeRange
-      });
+    const __availability_data_promises = __availability_slos.map(
+      _availability_slo => {
+        const slo_document = _availability_slo.slo;
+        const timeRange = this.props.timeRange;
+        const sloPromise = ComponentAlertSLO.query({
+          slo_document,
+          timeRange
+        });
 
-      return sloPromise;
-    });
+        return sloPromise;
+      }
+    );
 
     // indicator capacity
     const __capacity_data_promises = __capacity_slos.map(_capacity_slo => {
@@ -133,18 +137,15 @@ export default class OrgDisplayer extends React.Component {
 
       return sloPromise;
     });
-    
-    
+
     const __org_error_slo_data = await Promise.all(__error_data_promises);
-    const __org_availability_slo_data = await Promise.all(__availability_data_promises);
+    const __org_availability_slo_data = await Promise.all(
+      __availability_data_promises
+    );
     const __org_latency_slo_data = await Promise.all(__latency_data_promises);
     const __org_capacity_slo_data = await Promise.all(__capacity_data_promises);
 
-
-
-
     // var __org_slo_data = this._getScopedOrgSLOData("7_day");
-    // eslint-disable-next-line no-console
     console.debug('dis is der org data ... ', __org_error_slo_data);
 
     this.setState({ org_slo_data: __org_error_slo_data });
@@ -225,29 +226,12 @@ export default class OrgDisplayer extends React.Component {
 
   renderBootStrapTableView() {
     const { tableData } = this.state;
-    // const indicatorOptions = SLO_INDICATORS.reduce(
-    //   (previousValue, currentValue) => {
-    //     previousValue[currentValue.value] = currentValue.label;
-    //     return previousValue;
-    //   },
-    //   {}
-    // );
 
     const columns = [
       {
         dataField: 'name', // SLO
         text: 'Name'
-        // ,
-        // filter: textFilter()
       },
-      // {
-      //   dataField: 'indicator',
-      //   text: 'Indicator',
-      //   formatter: cell => indicatorOptions[cell],
-      //   filter: selectFilter({
-      //     options: indicatorOptions
-      //   })
-      // },
       {
         dataField: 'current',
         text: 'Current'
@@ -266,10 +250,6 @@ export default class OrgDisplayer extends React.Component {
       }
     ];
 
-    const rowEvents = {
-      onClick: (e, row, rowIndex) => this.updateSloDocument(e, row, rowIndex)
-    };
-
     return (
       <>
         <HeadingText spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}>
@@ -279,8 +259,6 @@ export default class OrgDisplayer extends React.Component {
           keyField="name"
           data={tableData}
           columns={columns}
-          // filter={filterFactory()}
-          rowEvents={rowEvents}
           striped={false}
           wrapperClasses="slo-table-container"
           classes="slo-table"
@@ -290,14 +268,18 @@ export default class OrgDisplayer extends React.Component {
   }
 
   renderOrganizationTable() {
-    if (!this.state.org_slo_data) {
+    const { org_slo_data } = this.state;
+
+    if (!org_slo_data || org_slo_data.length === 0) {
       return null;
     }
 
-    // console.debug(this.state.org_slo_data);
+    console.debug(org_slo_data);
     const attainment = this.calculateTotalAttainment({
-      _slo_data: this.state.org_slo_data
+      _slo_data: org_slo_data
     });
+
+    console.debug(attainment);
 
     return (
       <div>
@@ -315,7 +297,7 @@ export default class OrgDisplayer extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.org_slo_data.map((_slo_data, index) => {
+            {org_slo_data.map((_slo_data, index) => {
               console.debug(_slo_data);
               const data = this.transformData({ data: _slo_data });
 
@@ -344,7 +326,9 @@ export default class OrgDisplayer extends React.Component {
   }
 
   render() {
-    if (this.state.org_slo_data === null) {
+    const { org_slo_data } = this.state;
+
+    if (org_slo_data === null) {
       return (
         <div>
           <Spinner />

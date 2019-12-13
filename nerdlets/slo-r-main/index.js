@@ -1,19 +1,21 @@
 /**
  * Provides the inital react context for assembling the complete list of ORG SLOs.
  *
- * @file 
+ * @file
  * @author Gil Rice
  */
 /** core */
 import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
-import {   PlatformStateContext,
+import {
+  PlatformStateContext,
   NerdletStateContext,
-  EntitiesByDomainTypeQuery, Spinner } from 'nr1';
+  EntitiesByDomainTypeQuery,
+  Spinner
+} from 'nr1';
 /** local */
 import SLOREstate from './components/slo-r-estate';
-
 
 export default class SloRMain extends React.Component {
   static propTypes = {
@@ -38,21 +40,20 @@ export default class SloRMain extends React.Component {
               return 'Error!';
             }
             return (
-
               <PlatformStateContext.Consumer>
-              {launcherUrlState => (
-                <NerdletStateContext.Consumer>
-                  {nerdletUrlState => (
-                    <SLOREstate
-                    entities_data={data}
-                    entities_fetchmoar={fetchMore}
-                    launcherUrlState={launcherUrlState}
-                    nerdletUrlState={nerdletUrlState}
-                  />
-                  )}
-                </NerdletStateContext.Consumer>
-              )}
-            </PlatformStateContext.Consumer>
+                {launcherUrlState => (
+                  <NerdletStateContext.Consumer>
+                    {nerdletUrlState => (
+                      <SLOREstate
+                        entities={data.entities}
+                        fetchMore={fetchMore}
+                        launcherUrlState={launcherUrlState}
+                        nerdletUrlState={nerdletUrlState}
+                      />
+                    )}
+                  </NerdletStateContext.Consumer>
+                )}
+              </PlatformStateContext.Consumer>
             );
           }}
         </EntitiesByDomainTypeQuery>
@@ -60,34 +61,3 @@ export default class SloRMain extends React.Component {
     );
   } // render
 } // SloRMain
-/**
- *     {this.state.entities.map(_entity => 
-                        
-                        <p>_entity</p>
-                        )}
- 
- 
- 
- 
-         return(
-            <div>
-            <EntitiesByDomainTypeQuery entityDomain="APM" entityType="APPLICATION">
-    {({ loading, error, data, fetchMore }) => {
-        if (loading) {
-            return <Spinner />;
-        }
-
-        if (error) {
-            return 'Error!';
-        }
-
-        return (
-            <List items={data.entities} rowCount={data.count} onLoadMore={fetchMore}>
-                {({ item }) => <ListItem key={item.guid}>{item.name}</ListItem>}
-            </List>
-        );
-    }}
-</EntitiesByDomainTypeQuery>
-            </div>
-        );
-                               */
