@@ -3,7 +3,7 @@
 
 ## Usage
 
-SLO/R is a New Relic One Application intended to calculate SLO attainment for a Service. It allows you to quickly define SLOs for Error, Availability, Capacity, and Latency. 
+SLO/R is a New Relic One Application intended to calculate SLO attainment for a Service. It allows you to quickly define SLOs for Error, Availability, Capacity, and Latency conditions. 
 
 By measuring SLO attainment accross your Service estate you will be able to determine which signals are most important for a given Service, or set of Services developed and supported by a Team/Organization. Using New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.
 
@@ -13,7 +13,7 @@ SLO/R provides two mechanisms for calcuating SLOs: Error Type (calculated by def
 
 - For more details about the SLOs that will be calculated and their calculations please see [Error Driven SLOs](./docs/error_slos.md) and [Alert Driven SLOs](./docs/alert_slos.md).  
 
-![Screenshot #1](screenshots/screenshot_01.png)
+![Screenshot #1](screenshots/screenshot_05.png)
 
 ## Open Source License
 
@@ -24,18 +24,11 @@ This project is distributed under the [Apache 2 license](LICENSE).
 Required:
 
 - [New Relic APM agent(s) installed](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/compatibility-requirements-new-relic-agents-products). 
-
-- To calculate total duration Alert SLOs for  Availability, Capacity, and Latency 
-- SLO/R version 1.0.1 is intended to work specifically with Services reporting to New Relic via an APM Agent. The Service provides an Entity upon which to define SLOs. Error Budget SLOs are defined directly from APM Transaction events in Insights, the other SLO types are defined with Alerts (see "Configuring SLOR Alert Webhook" section below).  
-
-
-
+- SLO/R is intended to work specifically with Services reporting to New Relic via an APM Agent. The Service provides an Entity upon which to define SLOs. Error Budget SLOs are defined directly from APM Transaction events in Insights, the other SLO types are defined with Alerts (see "Configuring SLOR Alert Webhook" section below).  
 - A New Relic Alert webhook to forward Alert events to a SLOR_ALERTS Insights table. See "Configuring SLOR Alert Webhook" section for more details.
 
 
 ## Getting started
-
-> Include a step-by-step procedure on how to get your app installed and deployed. The clone and deploy steps are similar across all apps. If your app has additional steps required to get started, include them here or in their own section.
 
 1. First, ensure that you have [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [NPM](https://www.npmjs.com/get-npm) installed. If you're unsure whether you have one or both of them installed, run the following command(s) (If you have them installed these commands will return a version number, if not, the commands won't be recognized):
 ```bash
@@ -54,8 +47,6 @@ nr1 nerdpack:serve
 Visit [https://one.newrelic.com/?nerdpacks=local](https://one.newrelic.com/?nerdpacks=local), navigate to the Nerdpack, and :sparkles:
 
 ## Deploying this Nerdpack
-
-> Include the necessary steps to deploy your app. Generally, you shouldn't need to change any of these steps. 
 
 Open a command prompt in the nerdpack's directory and run the following commands.
 
@@ -82,14 +73,22 @@ For more information on sending Alerts to insights see [Sending Alerts Data to I
 
 ## How to configure and use SLO/R
 
-![Screenshot #2](screenshots/screenshot_02.png)
-![Screenshot #3](screenshots/screenshot_03.png)
+SLO definitions are scoped and stored with Service entities. Open a Service entity by exploring your services in the Entity Explorer from the New Relic One Homepage. 
+
+![Screenshot #6](screenshots/screenshot_06.png)
+
+Select the service you are interested in creating SLOs for. In our example we will be using the Origami Portal Service.
+![Screenshot #7](screenshots/screenshot_07.png)
+
 ![Screenshot #4](screenshots/screenshot_04.png)
 ![Screenshot #5](screenshots/screenshot_05.png)
 ![Screenshot #6](screenshots/screenshot_06.png)
 ![Screenshot #7](screenshots/screenshot_07.png)
 
 ### How is SLO/R arriving at the SLO calculations
+
+Please see details [Alert SLOs](./docs/alert_slos.md) and [Error SLOs](error_slos.md).
+
 # Support
 
 New Relic has open-sourced this project. This project is provided AS-IS WITHOUT WARRANTY OR DEDICATED SUPPORT. Issues and contributions should be reported to the project here on GitHub.
