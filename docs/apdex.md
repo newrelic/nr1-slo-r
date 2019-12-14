@@ -1,6 +1,6 @@
 # Apdex
  
-In much the same way I am enthusiastic about Transactions I also have a soft spot for Apdex. [New Relic Docs](http://apdex) do a great job describing Apdex as does the [Apdex Alliance](http://foo-bah.com), here is how I think about it and why I think it is awesome.
+In much the same way I am enthusiastic about Transactions I also have a soft spot for Apdex. [New Relic Docs](https://docs.newrelic.com/docs/apm/new-relic-apm/apdex/apdex-measure-user-satisfaction) do a great job describing Apdex as does the [Apdex Alliance](https://www.apdex.org/), here is how I think about it and why I think it is awesome.
  
 My plain explanation goes something like this. Think of your transaction's execution being classified into 3 buckets with the end user in mind:
 - Satisfied
