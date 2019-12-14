@@ -16,7 +16,7 @@ Anything above 2 seconds we group into the _frustrated_ tier. We also add any tr
 For a given period of time, say a minute we just add up those attainments and divide by the total possible to get your Apdex calculation.
  
 So, 10,000 transaction, 1,000 tolerated, and 100 frustrated gives you an Apdex attainment of:
-(10,000 - (1,000 * .5) - (100 * 1)) / 10,000 = 0.94
+(10,000 - (1,000 * .5) - (100 * 0)) / 10,000 = 0.94
  
 If you set your Apdex T value to something that is representative of your transaction duration and reliability expectations you should get back a pretty useful number that helps you to understand the conditional variations of application performance over time.
  
