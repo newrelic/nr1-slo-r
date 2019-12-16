@@ -5,6 +5,8 @@
 
 SLO/R is a [New Relic One open source app](https://docs.newrelic.com/docs/new-relic-one/use-new-relic-one/build-new-relic-one/new-relic-one-build-your-own-custom-new-relic-one-application) that calculates service-level objective (SLO) attainment and reports on it for a service. It lets you quickly define SLOs for error, availability, capacity, and latency conditions. You can use the application for reporting out your results. (SLO/R - "service-level objectives and reporting")
 
+By measuring SLO attainment across your service estate, you'll be able to determine what signals are most important for a given service, or set of services, developed and supported by a team/organization. Using New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.
+
 We are keen to see SLO/R evolve and grow to include additional features and visualizations. For version 1.0.1, we wanted to ship the core SLO calculation capabilities. We expect to rapidly build upon this core functionality through several releases. Please add an issue to the repo is there's a feature you'd like to see.
 
 SLO/R provides two mechanisms for calculating SLOs: **error type** (calculated by defects on transactions) and **availability**, **capacity**, and **latency type** (calculated by total duration of alert violation).
