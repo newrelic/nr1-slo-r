@@ -9,15 +9,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
 import {
-  Button,
   BlockText,
   Grid,
   GridItem,
   PlatformStateContext,
   Spinner,
   Stack,
-  StackItem,
-  Dropdown
+  StackItem
 } from 'nr1';
 
 /** local */
