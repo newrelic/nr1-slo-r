@@ -54,30 +54,6 @@ export default class SLOREstate extends React.Component {
     this.fetchDocuments();
   } // componentDidMount
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.allDocuments === null) {
-      return true;
-    } // if
-
-    if (this.state.allDocuments !== nextState.allDocuments) {
-      return true;
-    }
-
-    if (this.state.selectedOrg !== nextState.selectedOrg) {
-      return true;
-    } // if
-
-    if (this.state.activeIndicator !== nextState.activeIndicator) {
-      return true;
-    } // if
-
-    return false;
-  } // shouldComponentUpdate
-
-  // componentDidUpdate(prevProps) {
-  //   //
-  // }
-
   _sloSelectorCallback(_org) {
     const { allDocuments } = this.state;
 
