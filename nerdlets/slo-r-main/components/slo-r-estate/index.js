@@ -9,23 +9,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
 import {
-  Button,
   BlockText,
   Grid,
   GridItem,
   PlatformStateContext,
   Spinner,
   Stack,
-  StackItem,
-  Dropdown
+  StackItem
 } from 'nr1';
 
 /** local */
 import OrganizationSelector from '../org-selector';
 import OrganizationSummary from '../org-displayer';
+import { fetchSloDocuments } from '../../../shared/services/slo-documents';
+import { SLO_INDICATORS } from '../../../shared/constants';
 
 /** 3rd party */
-import { fetchSloDocuments } from '../../../shared/services/slo-documents';
 
 /**
  * SLOREstate
@@ -44,7 +43,7 @@ export default class SLOREstate extends React.Component {
       allDocuments: [],
       orgDocuments: [],
       selectedOrg: null,
-      activeIndicator: 'errors'
+      activeIndicator: 'error_budget'
     }; // state
 
     this.sloSelectorCallback = this._sloSelectorCallback.bind(this);
@@ -53,30 +52,6 @@ export default class SLOREstate extends React.Component {
   componentDidMount() {
     this.fetchDocuments();
   } // componentDidMount
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.allDocuments === null) {
-      return true;
-    } // if
-
-    if (this.state.allDocuments !== nextState.allDocuments) {
-      return true;
-    }
-
-    if (this.state.selectedOrg !== nextState.selectedOrg) {
-      return true;
-    } // if
-
-    if (this.state.activeIndicator !== nextState.activeIndicator) {
-      return true;
-    } // if
-
-    return false;
-  } // shouldComponentUpdate
-
-  // componentDidUpdate(prevProps) {
-  //   //
-  // }
 
   _sloSelectorCallback(_org) {
     const { allDocuments } = this.state;
@@ -171,8 +146,13 @@ export default class SLOREstate extends React.Component {
   }
 
   render() {
-    const { entities } = this.props;
-    const { organizationOptions, orgDocuments, selectedOrg } = this.state;
+    const {
+      activeIndicator,
+      organizationOptions,
+      orgDocuments,
+      selectedOrg
+    } = this.state;
+
     const orgWithSlos = {
       orgName: selectedOrg,
       slos: orgDocuments
@@ -203,50 +183,24 @@ export default class SLOREstate extends React.Component {
 
               <StackItem className="slo-preview-toolbar-item">
                 <div className="segmented-control-container multiple-segments">
-                  <button
-                    type="button"
-                    className={
-                      this.state.activeIndicator === 'errors' ? 'active' : ''
-                    }
-                    onClick={() => this.setState({ activeIndicator: 'errors' })}
-                  >
-                    Errors
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      this.state.activeIndicator === 'availability'
-                        ? 'active'
-                        : ''
-                    }
-                    onClick={() =>
-                      this.setState({ activeIndicator: 'availability' })
-                    }
-                  >
-                    Availability
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      this.state.activeIndicator === 'capacity' ? 'active' : ''
-                    }
-                    onClick={() =>
-                      this.setState({ activeIndicator: 'capacity' })
-                    }
-                  >
-                    Capacity
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      this.state.activeIndicator === 'latency' ? 'active' : ''
-                    }
-                    onClick={() =>
-                      this.setState({ activeIndicator: 'latency' })
-                    }
-                  >
-                    Latency
-                  </button>
+                  {SLO_INDICATORS.map((indicator, index) => {
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        className={
+                          this.state.activeIndicator === indicator.value
+                            ? 'active'
+                            : ''
+                        }
+                        onClick={() =>
+                          this.setState({ activeIndicator: indicator.value })
+                        }
+                      >
+                        {indicator.label}
+                      </button>
+                    );
+                  })}
                 </div>
               </StackItem>
             </Stack>
@@ -285,6 +239,7 @@ export default class SLOREstate extends React.Component {
                       <OrganizationSummary
                         org={orgWithSlos}
                         timeRange={launcherUrlState.timeRange}
+                        activeIndicator={activeIndicator}
                       />
                     </StackItem>
                   </Stack>

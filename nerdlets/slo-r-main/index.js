@@ -6,7 +6,7 @@
  */
 /** core */
 import React from 'react';
-import PropTypes from 'prop-types';
+
 /** nr1 */
 import {
   PlatformStateContext,
@@ -14,15 +14,14 @@ import {
   EntitiesByDomainTypeQuery,
   Spinner
 } from 'nr1';
+
 /** local */
 import SLOREstate from './components/slo-r-estate';
 
 export default class SloRMain extends React.Component {
   static propTypes = {
-    nerdlet_beginTS: PropTypes.string,
-    nerdlet_endTS: PropTypes.string,
-    nerdlet_duration: PropTypes.string
-  }; // propTypes
+    // propTypes
+  };
 
   constructor(props) {
     super(props);

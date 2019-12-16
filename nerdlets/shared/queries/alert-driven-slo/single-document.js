@@ -16,20 +16,16 @@ import { updateTimeRangeFromScope } from '../../helpers';
  */
 /** provides the where clause for the queries given the alerts array provided by the component properties */
 const _getAlertsWhereClause = function(_alerts) {
-  let _alertsClause = "policy_name IN ('";
+  if (_alerts.length === 0) {
+    // eslint-disable-next-line no-console
+    console.warn('No alerts defined for an alert-driven SLO');
+    return '';
+  }
 
-  for (let i = 0; i < _alerts.length; i++) {
-    if (i < 1) {
-      _alertsClause += `${_alerts[i].policy_name}'`;
-    } // if
-    else {
-      _alertsClause += `, '${_alerts[i].policy_name}'`;
-    } // else
-  } // for
+  const alertNames = _alerts.map(a => a.policy_name);
+  const alertsClause = `policy_name IN ('${alertNames.join("', '")}')`;
 
-  _alertsClause += ')';
-
-  return _alertsClause;
+  return alertsClause;
 }; // _getAlertsWhereClause
 
 /** returns the full nrql needed to collect the alert policy violations that caused an open alert to fire */
@@ -92,6 +88,7 @@ const _getAlertDrivenSLOData = async function(props) {
   const __resultOpenAlerts = await NerdGraphQuery.query({
     query: __queryOpenAlerts
   });
+
   const __resultClosedAlerts = await NerdGraphQuery.query({
     query: __queryClosedAlerts
   });

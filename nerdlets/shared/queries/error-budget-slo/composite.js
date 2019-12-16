@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable array-callback-return */
 /**
  * This convenience class is a reimplementation of "error-budget-slo" and is intended to calculate the opperands of the SLO calculation

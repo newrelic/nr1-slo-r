@@ -54,7 +54,6 @@ export const writeSloDocument = async function({ entityGuid, document }) {
     throw new Error('Error - no SLO name provided');
   }
 
-  // eslint-disable-next-line no-console
   // console.debug(JSON.stringify(__write_mutation, null, 2));
   const __write_result = await EntityStorageMutation.mutate(__write_mutation);
 
