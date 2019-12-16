@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/newrelic/nr1-slo-r/compare/v1.2.0...v1.2.1) (2019-12-16)
+
+
+### Bug Fixes
+
+* **ci:** add eslint scripts and remove two errant disables [skip ci] ([1a94e35](https://github.com/newrelic/nr1-slo-r/commit/1a94e3534da61f3b60c37e8f9a449b596b09fa16))
+
 # [1.2.0](https://github.com/newrelic/nr1-slo-r/compare/v1.1.1...v1.2.0) (2019-12-16)
 
 
