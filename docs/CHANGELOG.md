@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/newrelic/nr1-slo-r/compare/v1.1.0...v1.1.1) (2019-12-16)
+
+
+### Bug Fixes
+
+* readability of code and error if no alerts provided ([7d8d1b3](https://github.com/newrelic/nr1-slo-r/commit/7d8d1b39779b4902ea879fefd64e12e3d136d885))
+
 # [1.1.0](https://github.com/newrelic/nr1-slo-r/compare/v1.0.1...v1.1.0) (2019-12-13)
 
 
