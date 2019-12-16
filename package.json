@@ -5,7 +5,9 @@
   "version": "1.2.0",
   "scripts": {
     "start": "nr1 nerdpack:serve",
-    "test": "exit 0"
+    "test": "exit 0",
+    "eslint-check": "eslint nerdlets/",
+    "eslint-fix": "eslint nerdlets/ --fix"
   },
   "nr1": {
     "uuid": "4380103d-eb2f-4465-80df-98cd6dbe9597"
