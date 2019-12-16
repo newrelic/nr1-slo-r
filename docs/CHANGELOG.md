@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/newrelic/nr1-slo-r/compare/v1.1.1...v1.2.0) (2019-12-16)
+
+
+### Features
+
+* implement toggle buttons for indicators (Issue [#40](https://github.com/newrelic/nr1-slo-r/issues/40)) ([2adfde0](https://github.com/newrelic/nr1-slo-r/commit/2adfde0b3aca6d044ad7364752450b196e003990))
+
 ## [1.1.1](https://github.com/newrelic/nr1-slo-r/compare/v1.1.0...v1.1.1) (2019-12-16)
 
 
