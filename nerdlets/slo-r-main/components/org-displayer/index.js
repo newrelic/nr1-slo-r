@@ -212,34 +212,50 @@ export default class OrgDisplayer extends React.Component {
   }
 
   renderBootStrapTableView() {
-    const { tableData } = this.state;
+    const { tableData, org_slo_data } = this.state;
+    const attainment = this.calculateTotalAttainment({
+      _slo_data: org_slo_data
+    });
+
+    console.debug(attainment);
 
     const columns = [
       {
         dataField: 'name', // SLO
-        text: 'Name'
+        text: 'Name',
+        footer: 'Total attainment:',
+        headerStyle: () => {
+          return { width: '300px' };
+        }
       },
       {
         dataField: 'current',
-        text: 'Current'
+        text: 'Current',
+        footer: `${attainment.currentAttainment}`
       },
       {
         dataField: 'sevenDay',
-        text: 'Seven Day'
+        text: 'Seven Day',
+        footer: `${attainment.sevenDayAttainment}`
       },
       {
         dataField: 'thirtyDay',
-        text: 'Thirty Day'
+        text: 'Thirty Day',
+        footer: `${attainment.thirtyDayAttainment}`
       },
       {
         dataField: 'target',
-        text: 'Target'
+        text: 'Target',
+        footer: '--'
       }
     ];
 
     return (
       <>
-        <HeadingText spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}>
+        <HeadingText
+          className="summary-table-header"
+          spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}
+        >
           Service Level Objectives
         </HeadingText>
         <BootstrapTable
@@ -248,67 +264,10 @@ export default class OrgDisplayer extends React.Component {
           columns={columns}
           striped={false}
           wrapperClasses="slo-table-container"
-          classes="slo-table"
+          classes="slo-table slo-summary-table"
+          footerClasses="attainment-footer"
         />
       </>
-    );
-  }
-
-  renderOrganizationTable() {
-    const { org_slo_data } = this.state;
-
-    if (!org_slo_data || org_slo_data.length === 0) {
-      return null;
-    }
-
-    // console.debug(org_slo_data);
-    const attainment = this.calculateTotalAttainment({
-      _slo_data: org_slo_data
-    });
-
-    // console.debug(attainment);
-
-    return (
-      <div>
-        <p>ORGANIZATION: {this.props.org.orgName}</p>
-        <br />
-        <p>SLO Indicator: Error</p>
-        <table>
-          <thead>
-            <tr>
-              <th>SLO</th>
-              <th>current</th>
-              <th>7 day</th>
-              <th>30 day</th>
-              <th>target</th>
-            </tr>
-          </thead>
-          <tbody>
-            {org_slo_data.map((_slo_data, index) => {
-              // console.debug(_slo_data);
-              const data = this.transformData({ data: _slo_data });
-
-              return (
-                <tr key={index}>
-                  <td>{data.name}</td>
-                  <td>{data.current}</td>
-                  <td>{data.sevenDay}</td>
-                  <td>{data.thirtyDay}</td>
-                  <td>{data.target}</td>
-                </tr>
-              );
-            })}
-
-            <tr>
-              <td>Total Attainment</td>
-              <td>{attainment.currentAttainment}</td>
-              <td>{attainment.sevenDayAttainment}</td>
-              <td>{attainment.thirtyDayAttainment}</td>
-              <td>--</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     );
   }
 
@@ -323,11 +282,6 @@ export default class OrgDisplayer extends React.Component {
       );
     } // if
 
-    return (
-      <>
-        {this.renderOrganizationTable()}
-        {this.renderBootStrapTableView()}
-      </>
-    );
+    return <>{this.renderBootStrapTableView()}</>;
   } // render
 } // OrgDisplayer

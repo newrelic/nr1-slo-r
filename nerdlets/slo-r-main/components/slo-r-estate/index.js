@@ -201,10 +201,6 @@ export default class SLOREstate extends React.Component {
                 />
               </StackItem>
 
-              <StackItem>
-                <hr />
-              </StackItem>
-
               <StackItem className="slo-preview-toolbar-item">
                 <div className="segmented-control-container multiple-segments">
                   <button
@@ -276,19 +272,26 @@ export default class SLOREstate extends React.Component {
               this.state.allDocuments.length < 1 &&
               this.renderNoneDefined()}
 
-            <StackItem>
-              {this.state.selectedOrg && (
-                <PlatformStateContext.Consumer>
-                  {launcherUrlState => (
-                    <OrganizationSummary
-                      org={orgWithSlos}
-                      timeRange={launcherUrlState.timeRange}
-                    />
-                  )}
-                </PlatformStateContext.Consumer>
-              )}
-              {!this.state.selectedOrg && <></>}
-            </StackItem>
+            {this.state.selectedOrg && (
+              <PlatformStateContext.Consumer>
+                {launcherUrlState => (
+                  <Stack
+                    horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+                    verticalType={Stack.VERTICAL_TYPE.CENTER}
+                    fullWidth
+                    fullHeight
+                  >
+                    <StackItem className="sla-summary-table-stack-item">
+                      <OrganizationSummary
+                        org={orgWithSlos}
+                        timeRange={launcherUrlState.timeRange}
+                      />
+                    </StackItem>
+                  </Stack>
+                )}
+              </PlatformStateContext.Consumer>
+            )}
+            {!this.state.selectedOrg && <></>}
           </GridItem>
         </Grid>
       </>
