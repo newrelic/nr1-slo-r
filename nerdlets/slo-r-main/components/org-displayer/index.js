@@ -9,7 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /** nr1 */
-import { HeadingText, Spinner } from 'nr1';
+import { HeadingText, Spinner, Stack, StackItem } from 'nr1';
 
 /** local */
 import CompositeAlertSlo from '../../../shared/queries/alert-driven-slo/composite';
@@ -252,9 +252,29 @@ export default class OrgDisplayer extends React.Component {
   renderEmptyState() {
     return (
       <>
-        <h2 className="no-slos-for-indicator-header">
-          No Slo's found for this Indicator
-        </h2>
+        <Stack
+          className="no-slos-container empty-state-container"
+          directionType={Stack.DIRECTION_TYPE.VERTICAL}
+          horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+          verticalType={Stack.VERTICAL_TYPE.CENTER}
+        >
+          <StackItem>
+            <h3 className="empty-state-header">
+              No SLO's found for this SLO group
+            </h3>
+            <p className="empty-state-description">
+              There are no SLO's defined for this Services in this SLO group and
+              category. To define an SLO:
+            </p>
+            <ol>
+              <li>navigate to the Entity Explorer</li>
+              <li>choose a Service</li>
+              <li>select SLO/R from the sidebar menu</li>
+              <li>click Define an SLO</li>
+              <li>create an SLO under this SLO category and group</li>
+            </ol>
+          </StackItem>
+        </Stack>
       </>
     );
   }
