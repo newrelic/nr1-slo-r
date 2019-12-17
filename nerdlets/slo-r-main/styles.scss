@@ -175,6 +175,9 @@ code {
 .sla-summary-table-stack-item {
   height: 100%;
   margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .attainment-footer th {
