@@ -108,7 +108,7 @@ Once you've created a few SLOs you should see a view like the following:
 
 ### How is SLO/R arriving at the SLO calculations?
 
-For details, see [Alert SLOs](./docs/alert_slos.md) and [Error SLOs](error_slos.md).
+For details, see [Alert SLOs](./docs/alert_slos.md) and [Error SLOs](./docs/error_slos.md).
 
 # Support
 
