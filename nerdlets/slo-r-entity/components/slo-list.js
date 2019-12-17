@@ -365,8 +365,8 @@ export default class SloList extends React.Component {
         }
       },
       {
-        dataField: 'organization',
-        text: 'Organization',
+        dataField: 'slogroup',
+        text: 'SLO Group',
         sort: true,
         headerStyle: () => {
           return { width: '140px' };
@@ -438,7 +438,7 @@ export default class SloList extends React.Component {
             '7_day',
             '30_day',
             'target',
-            'organization',
+            'slogroup',
             'delete'
           ]
         },

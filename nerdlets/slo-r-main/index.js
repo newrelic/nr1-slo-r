@@ -1,5 +1,5 @@
 /**
- * Provides the inital react context for assembling the complete list of ORG SLOs.
+ * Provides the inital react context for assembling the complete list of SLO Groups.
  *
  * @file
  * @author Gil Rice

@@ -1,5 +1,5 @@
 /**
- * Provides the component that a rolled up SLO attainment for an Organization
+ * Provides the component that a rolled up SLO attainment for a SLO Group
  *
  * @file
  * @author Gil Rice
@@ -20,11 +20,11 @@ import { SLO_INDICATORS } from '../../../shared/constants';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 /**
- * OrgDisplayer
+ * SloSummary
  */
-export default class OrgDisplayer extends React.Component {
+export default class SloSummary extends React.Component {
   static propTypes = {
-    org: PropTypes.object,
+    tag: PropTypes.object,
     timeRange: PropTypes.object,
     activeIndicator: PropTypes.string
   }; // propTypes
@@ -42,21 +42,21 @@ export default class OrgDisplayer extends React.Component {
 
   async componentDidMount() {
     this.filterSlos();
-    await this._assembleOrganizationData();
+    await this._assembleData();
   } // componentDidMount
 
   async componentDidUpdate(prevProps) {
-    const orgChanged = prevProps.org.orgName !== this.props.org.orgName;
+    const tagChanged = prevProps.tag.tagName !== this.props.tag.tagName;
     const timeRangeChanged = prevProps.timeRange !== this.props.timeRange;
     const selectedIndicatorChanged =
       prevProps.activeIndicator !== this.props.activeIndicator;
 
-    if (orgChanged || timeRangeChanged || selectedIndicatorChanged) {
-      await this._assembleOrganizationData();
+    if (tagChanged || timeRangeChanged || selectedIndicatorChanged) {
+      await this._assembleData();
     }
   }
 
-  async _assembleOrganizationData() {
+  async _assembleData() {
     const { activeIndicator } = this.props;
     const slosFilteredByIndicator = this.filterSlos();
 
@@ -98,7 +98,7 @@ export default class OrgDisplayer extends React.Component {
       summarySloData,
       loadingData: false
     });
-  } // _assembleOrganizationData
+  } // _assembleData
 
   transformToTableData({ data }) {
     const { activeIndicator } = this.props;
@@ -127,8 +127,8 @@ export default class OrgDisplayer extends React.Component {
   }
 
   filterSlos() {
-    const { activeIndicator, org } = this.props;
-    const slosFilteredByIndicator = org.slos.filter(
+    const { activeIndicator, tag } = this.props;
+    const slosFilteredByIndicator = tag.slos.filter(
       item => item.slo.indicator === activeIndicator
     );
 
@@ -187,7 +187,7 @@ export default class OrgDisplayer extends React.Component {
   }
 
   renderBootStrapTableView() {
-    const { activeIndicator, org } = this.props;
+    const { activeIndicator, tag } = this.props;
     const { tableData, summarySloData } = this.state;
     const attainment = this.calculateTotalAttainment({
       _slo_data: summarySloData
@@ -195,7 +195,7 @@ export default class OrgDisplayer extends React.Component {
 
     const indicatorLabel = SLO_INDICATORS.find(i => i.value === activeIndicator)
       .label;
-    const tableHeader = `${org.orgName}'s ${indicatorLabel} SLO's`;
+    const tableHeader = `${tag.tagName}'s ${indicatorLabel} SLO's`;
 
     const columns = [
       {
@@ -296,5 +296,5 @@ export default class OrgDisplayer extends React.Component {
     }
 
     return <>{this.renderBootStrapTableView()}</>;
-  } // render
-} // OrgDisplayer
+  }
+}

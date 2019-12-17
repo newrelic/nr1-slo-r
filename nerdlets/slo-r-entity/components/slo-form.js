@@ -185,7 +185,7 @@ export default class SloForm extends React.Component {
     if (!isValid) {
       // eslint-disable-next-line no-alert
       alert(
-        'Problem with SLO definition! Please validate you have an SLO Name, Organization, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.'
+        'Problem with SLO definition! Please validate you have an SLO Name, Group, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.'
       );
       return;
     }
@@ -420,15 +420,15 @@ export default class SloForm extends React.Component {
         />
 
         <TextField
-          label="Organization"
+          label="SLO Group"
           className="define-slo-input"
           onChange={() =>
             this.inputHandler({
-              field: 'organization',
+              field: 'slogroup',
               value: event.target.value
             })
           }
-          value={this.getValue({ field: 'organization' })}
+          value={this.getValue({ field: 'slogroup' })}
         />
 
         <TextField

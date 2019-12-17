@@ -1,5 +1,5 @@
 /**
- * Provides the component that displays the aggregation of SLOs by defined Org.
+ * Provides the component that displays the aggregation of SLOs by defined Group.
  *
  * @file
  * @author Gil Rice
@@ -19,8 +19,8 @@ import {
 } from 'nr1';
 
 /** local */
-import OrganizationSelector from '../org-selector';
-import OrganizationSummary from '../org-displayer';
+import TagSelector from '../tag-selector';
+import SloSummary from '../slo-summary';
 import { fetchSloDocuments } from '../../../shared/services/slo-documents';
 import { SLO_INDICATORS } from '../../../shared/constants';
 
@@ -39,10 +39,10 @@ export default class SLOREstate extends React.Component {
     super(props);
 
     this.state = {
-      organizationOptions: [],
+      tagOptions: [],
       allDocuments: [],
-      orgDocuments: [],
-      selectedOrg: null,
+      tagDocuments: [],
+      selectedTag: null,
       activeIndicator: 'error_budget'
     }; // state
 
@@ -53,13 +53,13 @@ export default class SLOREstate extends React.Component {
     this.fetchDocuments();
   } // componentDidMount
 
-  _sloSelectorCallback(_org) {
+  _sloSelectorCallback(tag) {
     const { allDocuments } = this.state;
 
-    const orgDocuments = allDocuments.filter(slo => slo.orgName === _org);
-    // console.debug(orgDocuments);
+    const tagDocuments = allDocuments.filter(slo => slo.tagName === tag);
+    // console.debug(tagDocuments);
 
-    this.setState({ selectedOrg: _org, orgDocuments });
+    this.setState({ selectedTag: tag, tagDocuments });
   } // _sloSelectorCallback
 
   async fetchDocuments() {
@@ -82,22 +82,22 @@ export default class SLOREstate extends React.Component {
   }
 
   addSlo(slo) {
-    const { allDocuments, organizationOptions } = this.state;
-    const organization = slo.document.organization;
+    const { allDocuments, tagOptions } = this.state;
+    const slogroup = slo.document.slogroup;
 
     const newState = {
       allDocuments: [
         ...allDocuments,
         {
           id: slo.id,
-          orgName: slo.document.organization,
+          tagName: slo.document.slogroup,
           slo: slo.document
         }
       ]
     };
 
-    if (!organizationOptions.includes(organization)) {
-      newState.organizationOptions = [...organizationOptions, organization];
+    if (!tagOptions.includes(slogroup)) {
+      newState.tagOptions = [...tagOptions, slogroup];
     }
 
     this.setState(newState);
@@ -114,30 +114,30 @@ export default class SLOREstate extends React.Component {
     );
   }
 
-  renderNoOrganizationSelected() {
-    const { organizationOptions, selectedOrg } = this.state;
+  renderNoSelected() {
+    const { tagOptions, selectedTag } = this.state;
 
     return (
       <>
         <Stack
-          className="no-org-selected-container empty-state-container"
+          className="no-tag-selected-container empty-state-container"
           directionType={Stack.DIRECTION_TYPE.VERTICAL}
           horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
           verticalType={Stack.VERTICAL_TYPE.CENTER}
         >
           <StackItem>
-            <h3 className="empty-state-header">Choose an organization</h3>
+            <h3 className="empty-state-header">Choose a SLO Group</h3>
             <p className="empty-state-description">
-              Select an organaization from the dropdown to get started.
+              Select a SLO Group from the dropdown to get started.
             </p>
           </StackItem>
-          <StackItem className="org-selector">
-            <OrganizationSelector
-              orgs={organizationOptions}
+          <StackItem className="tag-selector">
+            <TagSelector
+              options={tagOptions}
               onChange={this.sloSelectorCallback}
-              selectedOrg={selectedOrg}
+              selectedTag={selectedTag}
               showLabel={false}
-              title="Choose an organization"
+              title="Choose a SLO Group"
             />
           </StackItem>
         </Stack>
@@ -148,14 +148,14 @@ export default class SLOREstate extends React.Component {
   render() {
     const {
       activeIndicator,
-      organizationOptions,
-      orgDocuments,
-      selectedOrg
+      tagOptions,
+      tagDocuments,
+      selectedTag
     } = this.state;
 
-    const orgWithSlos = {
-      orgName: selectedOrg,
-      slos: orgDocuments
+    const tagWithSlos = {
+      tagName: selectedTag,
+      slos: tagDocuments
     };
 
     return (
@@ -174,10 +174,10 @@ export default class SLOREstate extends React.Component {
               verticalType={Stack.VERTICAL_TYPE.FILL}
             >
               <StackItem className="toolbar-item has-separator">
-                <OrganizationSelector
-                  orgs={organizationOptions}
+                <TagSelector
+                  options={tagOptions}
                   onChange={this.sloSelectorCallback}
-                  selectedOrg={selectedOrg}
+                  selectedTag={selectedTag}
                 />
               </StackItem>
 
@@ -208,25 +208,25 @@ export default class SLOREstate extends React.Component {
         </Stack>
         <Grid
           className={`primary-grid ${
-            !this.state.selectedOrg ? 'empty-state-parent' : ''
+            !this.state.selectedTag ? 'empty-state-parent' : ''
           }`}
           spacingType={[Grid.SPACING_TYPE.NONE, Grid.SPACING_TYPE.NONE]}
         >
           <GridItem className="primary-content-container" columnSpan={12}>
-            {/* No organization selected */}
-            {!this.state.selectedOrg && this.renderNoOrganizationSelected()}
+            {/* No SLO Group selected */}
+            {!this.state.selectedTag && this.renderNoSelected()}
 
-            {/* Org selected but loading */}
-            {this.state.selectedOrg && this.state.allDocuments === null && (
+            {/* SLO Group selected but loading */}
+            {this.state.selectedTag && this.state.allDocuments === null && (
               <Spinner />
             )}
 
-            {/* Org selected but no results */}
-            {this.state.selectedOrg &&
+            {/* SLO Group selected but no results */}
+            {this.state.selectedTag &&
               this.state.allDocuments.length < 1 &&
               this.renderNoneDefined()}
 
-            {this.state.selectedOrg && (
+            {this.state.selectedTag && (
               <PlatformStateContext.Consumer>
                 {launcherUrlState => (
                   <Stack
@@ -236,8 +236,8 @@ export default class SLOREstate extends React.Component {
                     fullHeight
                   >
                     <StackItem className="sla-summary-table-stack-item">
-                      <OrganizationSummary
-                        org={orgWithSlos}
+                      <SloSummary
+                        tag={tagWithSlos}
                         timeRange={launcherUrlState.timeRange}
                         activeIndicator={activeIndicator}
                       />
@@ -246,7 +246,7 @@ export default class SLOREstate extends React.Component {
                 )}
               </PlatformStateContext.Consumer>
             )}
-            {!this.state.selectedOrg && <></>}
+            {!this.state.selectedTag && <></>}
           </GridItem>
         </Grid>
       </>

@@ -73,7 +73,7 @@ export const validateSlo = function(document) {
     return false;
   }
 
-  if (document.organization === '') {
+  if (document.slogroup === '') {
     return false;
   }
 
@@ -99,7 +99,7 @@ export const sloDocumentModel = {
     return {
       documentId: uuid(),
       name: '',
-      organization: '',
+      slogroup: '',
       target: '',
       alerts: [],
       indicator: '',
