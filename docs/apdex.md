@@ -1,6 +1,6 @@
 # Apdex
  
-In much the same way I am enthusiastic about Transactions I also have a soft spot for Apdex. [New Relic Docs](http://apdex) do a great job describing Apdex as does the [Apdex Alliance](http://foo-bah.com), here is how I think about it and why I think it is awesome.
+In much the same way I am enthusiastic about Transactions I also have a soft spot for Apdex. [New Relic Docs](https://docs.newrelic.com/docs/apm/new-relic-apm/apdex/apdex-measure-user-satisfaction) do a great job describing Apdex as does the [Apdex Alliance](https://www.apdex.org/), here is how I think about it and why I think it is awesome.
  
 My plain explanation goes something like this. Think of your transaction's execution being classified into 3 buckets with the end user in mind:
 - Satisfied
@@ -16,7 +16,7 @@ Anything above 2 seconds we group into the _frustrated_ tier. We also add any tr
 For a given period of time, say a minute we just add up those attainments and divide by the total possible to get your Apdex calculation.
  
 So, 10,000 transaction, 1,000 tolerated, and 100 frustrated gives you an Apdex attainment of:
-(10,000 - (1,000 * .5) - (100 * 1)) / 10,000 = 0.94
+(10,000 - (1,000 * .5) - (100 * 0)) / 10,000 = 0.94
  
 If you set your Apdex T value to something that is representative of your transaction duration and reliability expectations you should get back a pretty useful number that helps you to understand the conditional variations of application performance over time.
  

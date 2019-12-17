@@ -1,6 +1,3 @@
-/** eslint can't decipher that we're using the props via lodash's pick(this.props, someProps) method */
-/* eslint-disable react/no-unused-prop-types */
-
 /**
  * Provides a table and calculations for SLOs defined for a given entity.
  *
@@ -22,8 +19,8 @@ import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 /** local */
 import SLOGrid from './slo-grid';
-import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
-import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
+import ErrorBudgetSLO from '../../shared/queries/error-budget-slo/single-document';
+import AlertDrivenSLO from '../../shared/queries/alert-driven-slo/single-document';
 import { SLO_INDICATORS } from '../../shared/constants';
 import searchIcon from '../../../assets/icon-search.svg';
 import SettingsMenu from './settings-menu';
@@ -245,6 +242,7 @@ export default class SloList extends React.Component {
     return '';
   }
 
+  // eslint-disable-next-line no-unused-vars
   formatterMenu(cell, row, rowIndex, formatExtraData) {
     return (
       <SettingsMenu>
@@ -460,7 +458,7 @@ export default class SloList extends React.Component {
     const bootstrapTableView = this.renderBootStrapTableView();
 
     // render the table or just the headings if we have no clo_documents defined.
-    if (hasDocuments) {
+    if (!hasDocuments) {
       return <>{gettingStarted}</>;
     } else {
       return (

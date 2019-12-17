@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable array-callback-return */
 /**
  * This convenience class is a reimplementation of "error-budget-slo" and is intended to calculate the opperands of the SLO calculation
@@ -11,7 +10,7 @@
 import { NerdGraphQuery } from 'nr1';
 
 /** local */
-import { updateTimeRangeFromScope } from '../../../shared/helpers';
+import { updateTimeRangeFromScope } from '../../helpers';
 
 /** 3rd party */
 
@@ -285,27 +284,24 @@ const _getErrorBudgetSLOData = async function(props) {
   return __SLO_RESULT;
 }; // _getErrorBudgetSLOData
 
-const ComponentErrorBudgetSLO = {
+const CompositeErrorBudgetSlo = {
   query: async props => {
-    console.debug(props);
-
     props.nerdlet_beginTS = props.timeRange.begin_time; // begin time for current calculation
     props.nerdlet_endTS = props.timeRange.end_time; // end time for current calculation
     props.nerdlet_duration = props.timeRange.duration; // duration for time ending now calculations
     props.defects = props.slo_document.defects; // defects for the error calculation review why was this an empty []???
-    // props.defects = ['apdex_frustrated', '50%']; // for some reason defects have disappeared
     props.transactions = props.slo_document.transactions; // list of candidate transactions for error burget
     props.appName = props.slo_document.appName; // name of application for query
     props.accountId = props.slo_document.accountId; // account is of applictaion for query
     props.language = props.slo_document.language; // the language of the application for http response code attribute.
 
-    console.debug('BEGIN', props.nerdlet_beginTS);
-    console.debug('END', props.nerdlet_endTS);
-    console.debug('DURATION', props.nerdlet_duration);
+    // console.debug('BEGIN', props.nerdlet_beginTS);
+    // console.debug('END', props.nerdlet_endTS);
+    // console.debug('DURATION', props.nerdlet_duration);
 
     const slo_results = await _getErrorBudgetSLOData(props);
 
-    console.debug('RE FRIGGED SLO RESULTS', slo_results);
+    // console.debug('RE FRIGGED SLO RESULTS', slo_results);
     // return {
     //   slo_document: props.slo_document,
     //   scope: props.scope,
@@ -323,4 +319,4 @@ const ComponentErrorBudgetSLO = {
   }
 };
 
-export default ComponentErrorBudgetSLO; // ComponentErrorBudgetSLO
+export default CompositeErrorBudgetSlo;

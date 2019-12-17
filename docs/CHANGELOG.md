@@ -1,3 +1,45 @@
+## [1.2.2](https://github.com/newrelic/nr1-slo-r/compare/v1.2.1...v1.2.2) (2019-12-17)
+
+
+### Bug Fixes
+
+* adjust position of an empty state ([85d4e64](https://github.com/newrelic/nr1-slo-r/commit/85d4e6442658687766c809d0f4e595a0790f0e3f))
+
+## [1.2.1](https://github.com/newrelic/nr1-slo-r/compare/v1.2.0...v1.2.1) (2019-12-16)
+
+
+### Bug Fixes
+
+* **ci:** add eslint scripts and remove two errant disables [skip ci] ([1a94e35](https://github.com/newrelic/nr1-slo-r/commit/1a94e3534da61f3b60c37e8f9a449b596b09fa16))
+
+# [1.2.0](https://github.com/newrelic/nr1-slo-r/compare/v1.1.1...v1.2.0) (2019-12-16)
+
+
+### Features
+
+* implement toggle buttons for indicators (Issue [#40](https://github.com/newrelic/nr1-slo-r/issues/40)) ([2adfde0](https://github.com/newrelic/nr1-slo-r/commit/2adfde0b3aca6d044ad7364752450b196e003990))
+
+## [1.1.1](https://github.com/newrelic/nr1-slo-r/compare/v1.1.0...v1.1.1) (2019-12-16)
+
+
+### Bug Fixes
+
+* readability of code and error if no alerts provided ([7d8d1b3](https://github.com/newrelic/nr1-slo-r/commit/7d8d1b39779b4902ea879fefd64e12e3d136d885))
+
+# [1.1.0](https://github.com/newrelic/nr1-slo-r/compare/v1.0.1...v1.1.0) (2019-12-13)
+
+
+### Features
+
+* add toggle buttons for indicators in summary ([ff75c33](https://github.com/newrelic/nr1-slo-r/commit/ff75c336c6c8f761828b532a323f769ac3706c44))
+
+## [1.0.1](https://github.com/newrelic/nr1-slo-r/compare/v1.0.0...v1.0.1) (2019-12-13)
+
+
+### Bug Fixes
+
+* I made it so the empty state always appears ([484a674](https://github.com/newrelic/nr1-slo-r/commit/484a6742b3b0449ed5aa429768a64a77c1918954))
+
 # 1.0.0 (2019-12-13)
 
 

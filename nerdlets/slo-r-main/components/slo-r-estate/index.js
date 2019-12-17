@@ -9,23 +9,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 /** nr1 */
 import {
-  Button,
   BlockText,
   Grid,
   GridItem,
   PlatformStateContext,
   Spinner,
   Stack,
-  StackItem,
-  Dropdown
+  StackItem
 } from 'nr1';
 
 /** local */
 import OrganizationSelector from '../org-selector';
 import OrganizationSummary from '../org-displayer';
+import { fetchSloDocuments } from '../../../shared/services/slo-documents';
+import { SLO_INDICATORS } from '../../../shared/constants';
 
 /** 3rd party */
-import { fetchSloDocuments } from '../../../shared/services/slo-documents';
 
 /**
  * SLOREstate
@@ -43,7 +42,8 @@ export default class SLOREstate extends React.Component {
       organizationOptions: [],
       allDocuments: [],
       orgDocuments: [],
-      selectedOrg: null
+      selectedOrg: null,
+      activeIndicator: 'error_budget'
     }; // state
 
     this.sloSelectorCallback = this._sloSelectorCallback.bind(this);
@@ -52,26 +52,6 @@ export default class SLOREstate extends React.Component {
   componentDidMount() {
     this.fetchDocuments();
   } // componentDidMount
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.allDocuments === null) {
-      return true;
-    } // if
-
-    if (this.state.allDocuments !== nextState.allDocuments) {
-      return true;
-    }
-
-    if (this.state.selectedOrg !== nextState.selectedOrg) {
-      return true;
-    } // if
-
-    return false;
-  } // shouldComponentUpdate
-
-  // componentDidUpdate(prevProps) {
-  //   //
-  // }
 
   _sloSelectorCallback(_org) {
     const { allDocuments } = this.state;
@@ -166,8 +146,13 @@ export default class SLOREstate extends React.Component {
   }
 
   render() {
-    const { entities } = this.props;
-    const { organizationOptions, orgDocuments, selectedOrg } = this.state;
+    const {
+      activeIndicator,
+      organizationOptions,
+      orgDocuments,
+      selectedOrg
+    } = this.state;
+
     const orgWithSlos = {
       orgName: selectedOrg,
       slos: orgDocuments
@@ -195,22 +180,28 @@ export default class SLOREstate extends React.Component {
                   selectedOrg={selectedOrg}
                 />
               </StackItem>
-            </Stack>
-          </StackItem>
-          <StackItem className="toolbar-section2">
-            <Stack
-              fullWidth
-              fullHeight
-              verticalType={Stack.VERTICAL_TYPE.CENTER}
-              horizontalType={Stack.HORIZONTAL_TYPE.RIGHT}
-            >
-              <StackItem>
-                <Button
-                  onClick={() => alert('You clicked me!')}
-                  type={Button.TYPE.PRIMARY}
-                >
-                  Primary button
-                </Button>
+
+              <StackItem className="slo-preview-toolbar-item">
+                <div className="segmented-control-container multiple-segments">
+                  {SLO_INDICATORS.map((indicator, index) => {
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        className={
+                          this.state.activeIndicator === indicator.value
+                            ? 'active'
+                            : ''
+                        }
+                        onClick={() =>
+                          this.setState({ activeIndicator: indicator.value })
+                        }
+                      >
+                        {indicator.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </StackItem>
             </Stack>
           </StackItem>
@@ -235,19 +226,27 @@ export default class SLOREstate extends React.Component {
               this.state.allDocuments.length < 1 &&
               this.renderNoneDefined()}
 
-            <StackItem>
-              {this.state.selectedOrg && (
-                <PlatformStateContext.Consumer>
-                  {launcherUrlState => (
-                    <OrganizationSummary
-                      org={orgWithSlos}
-                      timeRange={launcherUrlState.timeRange}
-                    />
-                  )}
-                </PlatformStateContext.Consumer>
-              )}
-              {!this.state.selectedOrg && <></>}
-            </StackItem>
+            {this.state.selectedOrg && (
+              <PlatformStateContext.Consumer>
+                {launcherUrlState => (
+                  <Stack
+                    horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+                    verticalType={Stack.VERTICAL_TYPE.CENTER}
+                    fullWidth
+                    fullHeight
+                  >
+                    <StackItem className="sla-summary-table-stack-item">
+                      <OrganizationSummary
+                        org={orgWithSlos}
+                        timeRange={launcherUrlState.timeRange}
+                        activeIndicator={activeIndicator}
+                      />
+                    </StackItem>
+                  </Stack>
+                )}
+              </PlatformStateContext.Consumer>
+            )}
+            {!this.state.selectedOrg && <></>}
           </GridItem>
         </Grid>
       </>

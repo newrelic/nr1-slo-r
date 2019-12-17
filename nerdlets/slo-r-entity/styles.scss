@@ -32,6 +32,15 @@
     0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03),
     0px 4px 7px rgba(70, 107, 111, 0.05);
   border-radius: 5px;
+
+  ol {
+    font-size: 14px;
+    line-height: 20px;
+    color: #8e9494;
+    width: 322px;
+    margin: 0 auto;
+    padding-left: 20px;
+  }
 }
 
 .empty-state-header {

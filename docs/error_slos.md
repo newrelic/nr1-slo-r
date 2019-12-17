@@ -6,7 +6,7 @@ Error Driven SLOs are based on transactions. Transactions from New Relic APM age
  
 Forgive my excitement but I am a big fan of Transactions and the technology within the New Relic Agent to keep track of them. When I think about a transaction I think of something similar to a basket. For this foo transaction basket we add a bunch of name value pairs starting with its name. You can expect to find things like the service name, apdex tier, and http response code.
  
-So, in the case of Error Driven SLOs, we are looking at transaction names and a variety of defects --> HTTP response codes, and [Apdex Frustrated](./docs/apdex.md) tier. 
+So, in the case of Error Driven SLOs, we are looking at transaction names and a variety of defects --> HTTP response codes, and [Apdex Frustrated](./apdex.md) tier. 
  
 ## How Error Driven SLOs are calculated
  

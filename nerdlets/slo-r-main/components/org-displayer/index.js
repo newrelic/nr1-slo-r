@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /**
  * Provides the component that a rolled up SLO attainment for an Organization
  *
@@ -11,21 +9,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /** nr1 */
-import { HeadingText, Spinner } from 'nr1';
+import { HeadingText, Spinner, Stack, StackItem } from 'nr1';
 
 /** local */
-import ComponentAlertSLO from './component_alert_slo';
-import ComponentErrorBudgetSLO from './component_eb_slo';
+import CompositeAlertSlo from '../../../shared/queries/alert-driven-slo/composite';
+import CompositeErrorBudgetSlo from '../../../shared/queries/error-budget-slo/composite';
+import { SLO_INDICATORS } from '../../../shared/constants';
 
 /** 3rd party */
 import BootstrapTable from 'react-bootstrap-table-next';
-
-/*
-import filterFactory, {
-  selectFilter,
-  textFilter
-} from 'react-bootstrap-table2-filter';
-*/
 
 /**
  * OrgDisplayer
@@ -33,66 +25,64 @@ import filterFactory, {
 export default class OrgDisplayer extends React.Component {
   static propTypes = {
     org: PropTypes.object,
-    timeRange: PropTypes.object
+    timeRange: PropTypes.object,
+    activeIndicator: PropTypes.string
   }; // propTypes
 
   constructor(props) {
     super(props);
 
     this.state = {
-      org_slo_data: null,
-      tableData: []
+      summarySloData: [],
+      tableData: [],
+      loadingData: false,
+      slosFilteredByIndicator: []
     }; // state
   } // constructor
 
   async componentDidMount() {
-    // console.debug('Mounted...');
-    console.debug(this.props);
+    this.filterSlos();
     await this._assembleOrganizationData();
-  } // componentWillMount
+  } // componentDidMount
 
   async componentDidUpdate(prevProps) {
-    //
-    // console.debug(prevProps);
-    console.debug(this.props);
-    if (prevProps.org.orgName !== this.props.org.orgName) {
-      // console.debug(this.props.org);
-      await this._assembleOrganizationData();
-    }
+    const orgChanged = prevProps.org.orgName !== this.props.org.orgName;
+    const timeRangeChanged = prevProps.timeRange !== this.props.timeRange;
+    const selectedIndicatorChanged =
+      prevProps.activeIndicator !== this.props.activeIndicator;
 
-    if (prevProps.timeRange !== this.props.timeRange) {
+    if (orgChanged || timeRangeChanged || selectedIndicatorChanged) {
       await this._assembleOrganizationData();
     }
   }
 
   async _assembleOrganizationData() {
-    // get error budget SLOs
-    const __eb_slos = this.props.org.slos.filter(function(value) {
-      return value.slo.indicator === 'error_budget';
+    const { activeIndicator } = this.props;
+    const slosFilteredByIndicator = this.filterSlos();
+
+    this.setState({
+      loadingData: true,
+      tableData: [],
+      summarySloData: [],
+      slosFilteredByIndicator: []
     });
 
-    const __availability_slos = this.props.org.slos.filter(function(value) {
-      return value.slo.indicator === 'availability';
-    });
+    if (slosFilteredByIndicator.length === 0) {
+      this.setState({
+        loadingData: false
+      });
+      return;
+    }
 
-    const __capacity_slos = this.props.org.slos.filter(function(value) {
-      return value.slo.indicator === 'capacity';
-    });
+    const summaryFunction =
+      activeIndicator === 'error_budget'
+        ? CompositeErrorBudgetSlo
+        : CompositeAlertSlo;
 
-    const __latency_slos = this.props.org.slos.filter(function(value) {
-      return value.slo.indicator === 'latency';
-    });
-
-    console.debug('error budget slos', __eb_slos);
-    console.debug('availability slos', __availability_slos);
-    console.debug('capacity slos', __capacity_slos);
-    console.debug('latency slos', __latency_slos);
-
-    // indicator = error
-    const __error_data_promises = __eb_slos.map(_eb_slo => {
-      const slo_document = _eb_slo.slo;
+    const promises = slosFilteredByIndicator.map(sloObject => {
+      const slo_document = sloObject.slo;
       const timeRange = this.props.timeRange;
-      const sloPromise = ComponentErrorBudgetSLO.query({
+      const sloPromise = summaryFunction.query({
         slo_document,
         timeRange
       });
@@ -100,67 +90,30 @@ export default class OrgDisplayer extends React.Component {
       return sloPromise;
     });
 
-    // indicator availability
-    const __availability_data_promises = __availability_slos.map(
-      _availability_slo => {
-        const slo_document = _availability_slo.slo;
-        const timeRange = this.props.timeRange;
-        const sloPromise = ComponentAlertSLO.query({
-          slo_document,
-          timeRange
-        });
+    const summarySloData = await Promise.all(promises);
+    this.transformToTableData({ data: summarySloData });
 
-        return sloPromise;
-      }
-    );
-
-    // indicator capacity
-    const __capacity_data_promises = __capacity_slos.map(_capacity_slo => {
-      const slo_document = _capacity_slo;
-      const timeRange = this.props.timeRange;
-      const sloPromise = ComponentAlertSLO.query({
-        slo_document,
-        timeRange
-      });
-
-      return sloPromise;
+    this.setState({
+      slosFilteredByIndicator,
+      summarySloData,
+      loadingData: false
     });
-
-    // indicator latency
-    const __latency_data_promises = __latency_slos.map(_latency_slo => {
-      const slo_document = _latency_slo;
-      const timeRange = this.props.timeRange;
-      const sloPromise = ComponentAlertSLO.query({
-        slo_document,
-        timeRange
-      });
-
-      return sloPromise;
-    });
-
-    const __org_error_slo_data = await Promise.all(__error_data_promises);
-    const __org_availability_slo_data = await Promise.all(
-      __availability_data_promises
-    );
-    const __org_latency_slo_data = await Promise.all(__latency_data_promises);
-    const __org_capacity_slo_data = await Promise.all(__capacity_data_promises);
-
-    // var __org_slo_data = this._getScopedOrgSLOData("7_day");
-    console.debug('dis is der org data ... ', __org_error_slo_data);
-
-    this.setState({ org_slo_data: __org_error_slo_data });
-    this.transformAndSetTableData({ data: __org_error_slo_data });
   } // _assembleOrganizationData
 
-  transformAndSetTableData({ data }) {
-    const tableData = data.map(row => {
-      return this.transformData({ data: row });
+  transformToTableData({ data }) {
+    const { activeIndicator } = this.props;
+    const filteredByIndicator = data.filter(
+      d => d.slo_document.indicator === activeIndicator
+    );
+
+    const tableData = filteredByIndicator.map(row => {
+      return this.transformRow({ data: row });
     });
-    this.setState({ tableData, org_slo_data: data });
+    this.setState({ tableData, summarySloData: data });
   }
 
   /* Transform row data for bootstrap table */
-  transformData({ data }) {
+  transformRow({ data }) {
     const transformedData = {
       name: data.slo_document.name,
       target: data.slo_document.target,
@@ -171,6 +124,15 @@ export default class OrgDisplayer extends React.Component {
     };
 
     return transformedData;
+  }
+
+  filterSlos() {
+    const { activeIndicator, org } = this.props;
+    const slosFilteredByIndicator = org.slos.filter(
+      item => item.slo.indicator === activeIndicator
+    );
+
+    return slosFilteredByIndicator;
   }
 
   calculateTotalAttainment({ _slo_data }) {
@@ -225,35 +187,54 @@ export default class OrgDisplayer extends React.Component {
   }
 
   renderBootStrapTableView() {
-    const { tableData } = this.state;
+    const { activeIndicator, org } = this.props;
+    const { tableData, summarySloData } = this.state;
+    const attainment = this.calculateTotalAttainment({
+      _slo_data: summarySloData
+    });
+
+    const indicatorLabel = SLO_INDICATORS.find(i => i.value === activeIndicator)
+      .label;
+    const tableHeader = `${org.orgName}'s ${indicatorLabel} SLO's`;
 
     const columns = [
       {
         dataField: 'name', // SLO
-        text: 'Name'
+        text: 'Name',
+        footer: 'Total attainment:',
+        headerStyle: () => {
+          return { width: '300px' };
+        }
       },
       {
         dataField: 'current',
-        text: 'Current'
+        text: 'Current',
+        footer: `${attainment.currentAttainment}`
       },
       {
         dataField: 'sevenDay',
-        text: 'Seven Day'
+        text: 'Seven Day',
+        footer: `${attainment.sevenDayAttainment}`
       },
       {
         dataField: 'thirtyDay',
-        text: 'Thirty Day'
+        text: 'Thirty Day',
+        footer: `${attainment.thirtyDayAttainment}`
       },
       {
         dataField: 'target',
-        text: 'Target'
+        text: 'Target',
+        footer: '--'
       }
     ];
 
     return (
       <>
-        <HeadingText spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}>
-          Service Level Objectives
+        <HeadingText
+          className="summary-table-header"
+          spacingType={[HeadingText.SPACING_TYPE.EXTRA_LARGE]}
+        >
+          {tableHeader}
         </HeadingText>
         <BootstrapTable
           keyField="name"
@@ -261,86 +242,59 @@ export default class OrgDisplayer extends React.Component {
           columns={columns}
           striped={false}
           wrapperClasses="slo-table-container"
-          classes="slo-table"
+          classes="slo-table slo-summary-table"
+          footerClasses="attainment-footer"
         />
       </>
     );
   }
 
-  renderOrganizationTable() {
-    const { org_slo_data } = this.state;
-
-    if (!org_slo_data || org_slo_data.length === 0) {
-      return null;
-    }
-
-    console.debug(org_slo_data);
-    const attainment = this.calculateTotalAttainment({
-      _slo_data: org_slo_data
-    });
-
-    console.debug(attainment);
-
+  renderEmptyState() {
     return (
-      <div>
-        <p>ORGANIZATION: {this.props.org.orgName}</p>
-        <br />
-        <p>SLO Indicator: Error</p>
-        <table>
-          <thead>
-            <tr>
-              <th>SLO</th>
-              <th>current</th>
-              <th>7 day</th>
-              <th>30 day</th>
-              <th>target</th>
-            </tr>
-          </thead>
-          <tbody>
-            {org_slo_data.map((_slo_data, index) => {
-              console.debug(_slo_data);
-              const data = this.transformData({ data: _slo_data });
-
-              return (
-                <tr key={index}>
-                  <td>{data.name}</td>
-                  <td>{data.current}</td>
-                  <td>{data.sevenDay}</td>
-                  <td>{data.thirtyDay}</td>
-                  <td>{data.target}</td>
-                </tr>
-              );
-            })}
-
-            <tr>
-              <td>Total Attainment</td>
-              <td>{attainment.currentAttainment}</td>
-              <td>{attainment.sevenDayAttainment}</td>
-              <td>{attainment.thirtyDayAttainment}</td>
-              <td>--</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <>
+        <Stack
+          className="no-slos-container empty-state-container"
+          directionType={Stack.DIRECTION_TYPE.VERTICAL}
+          horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+          verticalType={Stack.VERTICAL_TYPE.CENTER}
+        >
+          <StackItem>
+            <h3 className="empty-state-header">
+              No SLO's found for this SLO group
+            </h3>
+            <p className="empty-state-description">
+              There are no SLO's defined for this Services in this SLO group and
+              category. To define an SLO:
+            </p>
+            <ol>
+              <li>navigate to the Entity Explorer</li>
+              <li>choose a Service</li>
+              <li>select SLO/R from the sidebar menu</li>
+              <li>click Define an SLO</li>
+              <li>create an SLO under this SLO category and group</li>
+            </ol>
+          </StackItem>
+        </Stack>
+      </>
     );
   }
 
   render() {
-    const { org_slo_data } = this.state;
+    const { loadingData, slosFilteredByIndicator } = this.state;
+    const noSlos = !slosFilteredByIndicator.length > 0;
 
-    if (org_slo_data === null) {
+    if (loadingData) {
       return (
         <div>
           <Spinner />
         </div>
       );
-    } // if
+    }
 
-    return (
-      <>
-        {this.renderOrganizationTable()}
-        {this.renderBootStrapTableView()}
-      </>
-    );
+    if (noSlos) {
+      return <>{this.renderEmptyState()}</>;
+    }
+
+    return <>{this.renderBootStrapTableView()}</>;
   } // render
 } // OrgDisplayer

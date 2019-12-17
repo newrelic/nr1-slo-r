@@ -16,20 +16,16 @@ import { updateTimeRangeFromScope } from '../../helpers';
  */
 /** provides the where clause for the queries given the alerts array provided by the component properties */
 const _getAlertsWhereClause = function(_alerts) {
-  let _alertsClause = "policy_name IN ('";
+  if (_alerts.length === 0) {
+    // eslint-disable-next-line no-console
+    console.warn('No alerts defined for an alert-driven SLO');
+    return '';
+  }
 
-  for (let i = 0; i < _alerts.length; i++) {
-    if (i < 1) {
-      _alertsClause += `${_alerts[i].policy_name}'`;
-    } // if
-    else {
-      _alertsClause += `, '${_alerts[i].policy_name}'`;
-    } // else
-  } // for
+  const alertNames = _alerts.map(a => a.policy_name);
+  const alertsClause = `policy_name IN ('${alertNames.join("', '")}')`;
 
-  _alertsClause += ')';
-
-  return _alertsClause;
+  return alertsClause;
 }; // _getAlertsWhereClause
 
 /** returns the full nrql needed to collect the alert policy violations that caused an open alert to fire */
@@ -54,7 +50,7 @@ const _getClosedAlertNRQL = function(_alerts, _begin, _end) {
 
 /** provides the SLO attainment for the given SLO document for the time scope provided */
 const _getAlertDrivenSLOData = async function(props) {
-  const { scope, timeRange } = props;
+  const { accountId, alerts, scope, timeRange } = props;
 
   const {
     begin_time: __beginTS,
@@ -65,12 +61,13 @@ const _getAlertDrivenSLOData = async function(props) {
     timeRange
   });
 
-  const __NRQL_OPEN = _getOpenedAlertNRQL(props.alerts, __beginTS, __endTS);
-  const __NRQL_CLOSED = _getClosedAlertNRQL(props.alerts, __beginTS, __endTS);
+  // console.debug(props);
+  const __NRQL_OPEN = _getOpenedAlertNRQL(alerts, __beginTS, __endTS);
+  const __NRQL_CLOSED = _getClosedAlertNRQL(alerts, __beginTS, __endTS);
 
   const __queryOpenAlerts = `{
             actor {
-              account(id: ${props.accountId}) {
+              account(id: ${accountId}) {
                 nrql(query: "${__NRQL_OPEN}") {
                   results
                 }
@@ -80,7 +77,7 @@ const _getAlertDrivenSLOData = async function(props) {
 
   const __queryClosedAlerts = `{
             actor {
-              account(id: ${props.accountId}) {
+              account(id: ${accountId}) {
                 nrql(query: "${__NRQL_CLOSED}") {
                   results
                 }
@@ -91,6 +88,7 @@ const _getAlertDrivenSLOData = async function(props) {
   const __resultOpenAlerts = await NerdGraphQuery.query({
     query: __queryOpenAlerts
   });
+
   const __resultClosedAlerts = await NerdGraphQuery.query({
     query: __queryClosedAlerts
   });

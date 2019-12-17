@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { BlockText, navigation, PlatformStateContext, HeadingText } from 'nr1';
+import { navigation, PlatformStateContext, HeadingText } from 'nr1';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { monoBlue } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import { fetchDocumentById } from '../../shared/services/slo-documents';
-import ErrorBudgetSLO from '../../shared/queries/error-budget-slo';
-import AlertDrivenSLO from '../../shared/queries/alert-driven-slo';
+import ErrorBudgetSLO from '../../shared/queries/error-budget-slo/single-document';
+import AlertDrivenSLO from '../../shared/queries/alert-driven-slo/single-document';
 
 function openChartBuilder(query) {
   const nerdlet = {
