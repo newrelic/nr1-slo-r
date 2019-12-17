@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/newrelic/nr1-slo-r/compare/v1.3.0...v1.4.0) (2019-12-17)
+
+
+### Features
+
+* **summary:** add ability to view associated entity from summary view (Issue [#40](https://github.com/newrelic/nr1-slo-r/issues/40)) ([02df682](https://github.com/newrelic/nr1-slo-r/commit/02df682ae3a79ffb2b6e9c883380748bd62c55db))
+
 # [1.3.0](https://github.com/newrelic/nr1-slo-r/compare/v1.2.2...v1.3.0) (2019-12-17)
 
 
