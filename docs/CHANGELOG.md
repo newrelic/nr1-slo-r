@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/newrelic/nr1-slo-r/compare/v1.4.0...v1.4.1) (2019-12-17)
+
+
+### Bug Fixes
+
+* empty state language. ([127cfd0](https://github.com/newrelic/nr1-slo-r/commit/127cfd06261f00349265c4db1a6d58ba8a0c2239))
+
 # [1.4.0](https://github.com/newrelic/nr1-slo-r/compare/v1.3.0...v1.4.0) (2019-12-17)
 
 
