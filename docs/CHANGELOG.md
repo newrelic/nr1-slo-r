@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/newrelic/nr1-slo-r/compare/v1.2.2...v1.3.0) (2019-12-17)
+
+
+### Features
+
+* add summary page launcher to view SLO attainment by Group ([16598ee](https://github.com/newrelic/nr1-slo-r/commit/16598eee65a9c68cc20ea79aae2296226f7c64df))
+
 ## [1.2.2](https://github.com/newrelic/nr1-slo-r/compare/v1.2.1...v1.2.2) (2019-12-17)
 
 
