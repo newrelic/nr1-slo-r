@@ -9,7 +9,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /** nr1 */
-import { HeadingText, Spinner, Stack, StackItem } from 'nr1';
+import {
+  Button,
+  HeadingText,
+  navigation,
+  Spinner,
+  Stack,
+  StackItem
+} from 'nr1';
 
 /** local */
 import CompositeAlertSlo from '../../../shared/queries/alert-driven-slo/composite';
@@ -115,6 +122,9 @@ export default class SloSummary extends React.Component {
   /* Transform row data for bootstrap table */
   transformRow({ data }) {
     const transformedData = {
+      documentId: data.slo_document.documentId,
+      entityGuid: data.slo_document.entityGuid,
+
       name: data.slo_document.name,
       target: data.slo_document.target,
 
@@ -197,9 +207,33 @@ export default class SloSummary extends React.Component {
       .label;
     const tableHeader = `${tag.tagName}'s ${indicatorLabel} SLO's`;
 
+    // eslint-disable-next-line no-unused-vars
+    const linkFormatter = function(cell, row, rowIndex, formatExtraData) {
+      const { entityGuid } = row;
+      return (
+        <Button
+          type={Button.TYPE.NORMAL}
+          iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__EXTERNAL_LINK}
+          onClick={() => {
+            navigation.openStackedEntity(entityGuid);
+          }}
+        />
+      );
+    };
+
     const columns = [
       {
-        dataField: 'name', // SLO
+        dataField: 'entityGuid',
+        text: 'Entity Guid',
+        hidden: true
+      },
+      {
+        dataField: 'documentId',
+        text: 'SLO Document Id',
+        hidden: true
+      },
+      {
+        dataField: 'name', // SLO Name not Entity Name
         text: 'Name',
         footer: 'Total attainment:',
         headerStyle: () => {
@@ -225,6 +259,12 @@ export default class SloSummary extends React.Component {
         dataField: 'target',
         text: 'Target',
         footer: '--'
+      },
+      {
+        dataField: '',
+        text: 'Entity',
+        footer: '--',
+        formatter: linkFormatter
       }
     ];
 
