@@ -1,5 +1,5 @@
 /**
- * Provides the component that displays the available SLO orgs to display.
+ * Provides the component that displays the available SLO options to display.
  *
  * @file
  * @author Gil Rice
@@ -16,20 +16,20 @@ import { Dropdown, DropdownItem } from 'nr1';
 /** 3rd party */
 
 /**
- * OrgSelector
+ * TagSelector
  */
-export default class OrgSelector extends React.Component {
+export default class OptionsSelector extends React.Component {
   static propTypes = {
-    orgs: PropTypes.array,
+    options: PropTypes.array,
     onChange: PropTypes.func,
-    selectedOrg: PropTypes.string,
+    selectedTag: PropTypes.string,
     showLabel: PropTypes.bool,
     title: PropTypes.string
   }; // propTypes
 
   static defaultProps = {
     showLabel: true,
-    title: 'Select an SLO Organization to display'
+    title: 'Select an SLO Group to display'
   };
 
   constructor(props) {
@@ -41,11 +41,11 @@ export default class OrgSelector extends React.Component {
   } // constructor
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.orgs !== this.props.orgs) {
+    if (nextProps.options !== this.props.options) {
       return true;
     }
 
-    if (nextProps.selectedOrg !== this.props.selectedOrg) {
+    if (nextProps.selectedTag !== this.props.selectedTag) {
       return true;
     }
 
@@ -53,14 +53,14 @@ export default class OrgSelector extends React.Component {
   }
 
   render() {
-    const { orgs, showLabel, selectedOrg, title } = this.props;
+    const { options, showLabel, selectedTag, title } = this.props;
 
     return (
       <div>
         <Dropdown
-          label={showLabel ? 'Organization' : ''}
-          title={selectedOrg || title}
-          items={orgs}
+          label={showLabel ? 'SLO Group' : ''}
+          title={selectedTag || title}
+          items={options}
         >
           {({ item, index }) => (
             <DropdownItem key={index} onClick={() => this.props.onChange(item)}>
@@ -71,4 +71,4 @@ export default class OrgSelector extends React.Component {
       </div>
     );
   }
-} // OrgSelector
+}
