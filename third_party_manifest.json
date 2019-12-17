@@ -1,0 +1,202 @@
+{
+  "lastUpdated": "Tue Dec 17 2019 12:34:30 GMT-0500 (Eastern Standard Time)",
+  "projectName": "nr1-slo-r",
+  "projectUrl": "https://github.com/newrelic/nr1-slo-r",
+  "includeDev": true,
+  "dependencies": {
+    "date-fns@2.8.1": {
+      "name": "date-fns",
+      "version": "2.8.1",
+      "range": "^2.8.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/date-fns/date-fns",
+      "versionedRepoUrl": "https://github.com/date-fns/date-fns/tree/v2.8.1",
+      "licenseFile": "node_modules/date-fns/LICENSE.md",
+      "licenseUrl": "https://github.com/date-fns/date-fns/blob/v2.8.1/LICENSE.md",
+      "licenseTextSource": "file"
+    },
+    "lodash@4.17.15": {
+      "name": "lodash",
+      "version": "4.17.15",
+      "range": "^4.17.15",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/lodash/lodash",
+      "versionedRepoUrl": "https://github.com/lodash/lodash/tree/v4.17.15",
+      "licenseFile": "node_modules/lodash/LICENSE",
+      "licenseUrl": "https://github.com/lodash/lodash/blob/v4.17.15/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "John-David Dalton",
+      "email": "john.david.dalton@gmail.com"
+    },
+    "prop-types@15.7.2": {
+      "name": "prop-types",
+      "version": "15.7.2",
+      "range": "^15.6.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/facebook/prop-types",
+      "versionedRepoUrl": "https://github.com/facebook/prop-types/tree/v15.7.2",
+      "licenseFile": "node_modules/prop-types/LICENSE",
+      "licenseUrl": "https://github.com/facebook/prop-types/blob/v15.7.2/LICENSE",
+      "licenseTextSource": "file"
+    },
+    "react-bootstrap-table-next@3.3.1": {
+      "name": "react-bootstrap-table-next",
+      "version": "3.3.1",
+      "range": "^3.3.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2",
+      "versionedRepoUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v3.3.1",
+      "licenseFile": "node_modules/react-bootstrap-table-next/README.md",
+      "licenseUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v3.3.1/README.md",
+      "licenseTextSource": "spdx",
+      "publisher": "AllenFang"
+    },
+    "react-bootstrap-table2-filter@1.3.0": {
+      "name": "react-bootstrap-table2-filter",
+      "version": "1.3.0",
+      "range": "^1.3.0",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2",
+      "versionedRepoUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v1.3.0",
+      "licenseFile": "node_modules/react-bootstrap-table2-filter/README.md",
+      "licenseUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v1.3.0/README.md",
+      "licenseTextSource": "spdx",
+      "publisher": "AllenFang"
+    },
+    "react-bootstrap-table2-toolkit@2.1.1": {
+      "name": "react-bootstrap-table2-toolkit",
+      "version": "2.1.1",
+      "range": "^2.1.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2",
+      "versionedRepoUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v2.1.1",
+      "licenseFile": "node_modules/react-bootstrap-table2-toolkit/README.md",
+      "licenseUrl": "https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v2.1.1/README.md",
+      "licenseTextSource": "spdx",
+      "publisher": "AllenFang"
+    },
+    "react-dom@16.11.0": {
+      "name": "react-dom",
+      "version": "16.11.0",
+      "range": "^16.0.0-beta.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/facebook/react",
+      "versionedRepoUrl": "https://github.com/facebook/react/tree/v16.11.0",
+      "licenseFile": "node_modules/react-dom/LICENSE",
+      "licenseUrl": "https://github.com/facebook/react/blob/v16.11.0/LICENSE",
+      "licenseTextSource": "file"
+    },
+    "react-syntax-highlighter@11.0.2": {
+      "name": "react-syntax-highlighter",
+      "version": "11.0.2",
+      "range": "^11.0.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/conorhastings/react-syntax-highlighter",
+      "versionedRepoUrl": "https://github.com/conorhastings/react-syntax-highlighter/tree/v11.0.2",
+      "licenseFile": "node_modules/react-syntax-highlighter/LICENSE",
+      "licenseUrl": "https://github.com/conorhastings/react-syntax-highlighter/blob/v11.0.2/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Conor Hastings"
+    },
+    "react-widgets@4.4.11": {
+      "name": "react-widgets",
+      "version": "4.4.11",
+      "range": "^4.4.11",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/jquense/react-widgets",
+      "versionedRepoUrl": "https://github.com/jquense/react-widgets/tree/v4.4.11",
+      "licenseFile": "node_modules/react-widgets/LICENSE.md",
+      "licenseUrl": "https://github.com/jquense/react-widgets/blob/v4.4.11/LICENSE.md",
+      "licenseTextSource": "file",
+      "publisher": "Jason",
+      "email": "monastic.panic@gmail.com"
+    },
+    "react@16.11.0": {
+      "name": "react",
+      "version": "16.11.0",
+      "range": "^16.6.3",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/facebook/react",
+      "versionedRepoUrl": "https://github.com/facebook/react/tree/v16.11.0",
+      "licenseFile": "node_modules/react/LICENSE",
+      "licenseUrl": "https://github.com/facebook/react/blob/v16.11.0/LICENSE",
+      "licenseTextSource": "file"
+    },
+    "uuid@3.3.3": {
+      "name": "uuid",
+      "version": "3.3.3",
+      "range": "^3.3.3",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/kelektiv/node-uuid",
+      "versionedRepoUrl": "https://github.com/kelektiv/node-uuid/tree/v3.3.3",
+      "licenseFile": "node_modules/uuid/LICENSE.md",
+      "licenseUrl": "https://github.com/kelektiv/node-uuid/blob/v3.3.3/LICENSE.md",
+      "licenseTextSource": "file"
+    }
+  },
+  "devDependencies": {
+    "@newrelic/eslint-plugin-newrelic@0.3.0": {
+      "name": "@newrelic/eslint-plugin-newrelic",
+      "version": "0.3.0",
+      "range": "^0.3.0",
+      "licenses": "Apache-2.0",
+      "repoUrl": "https://github.com/NewRelic/eslint-plugin-newrelic",
+      "versionedRepoUrl": "https://github.com/NewRelic/eslint-plugin-newrelic/tree/v0.3.0",
+      "licenseFile": "node_modules/@newrelic/eslint-plugin-newrelic/LICENSE",
+      "licenseUrl": "https://github.com/NewRelic/eslint-plugin-newrelic/blob/v0.3.0/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "New Relic"
+    },
+    "@semantic-release/changelog@3.0.6": {
+      "name": "@semantic-release/changelog",
+      "version": "3.0.6",
+      "range": "^3.0.5",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/semantic-release/changelog",
+      "versionedRepoUrl": "https://github.com/semantic-release/changelog/tree/v3.0.6",
+      "licenseFile": "node_modules/@semantic-release/changelog/LICENSE",
+      "licenseUrl": "https://github.com/semantic-release/changelog/blob/v3.0.6/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Pierre Vanduynslager",
+      "url": "https://github.com/pvdlg"
+    },
+    "@semantic-release/git@7.0.18": {
+      "name": "@semantic-release/git",
+      "version": "7.0.18",
+      "range": "^7.0.18",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/semantic-release/git",
+      "versionedRepoUrl": "https://github.com/semantic-release/git/tree/v7.0.18",
+      "licenseFile": "node_modules/@semantic-release/git/LICENSE",
+      "licenseUrl": "https://github.com/semantic-release/git/blob/v7.0.18/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Pierre Vanduynslager",
+      "url": "https://github.com/pvdlg"
+    },
+    "eslint@6.6.0": {
+      "name": "eslint",
+      "version": "6.6.0",
+      "range": "^6.6.0",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/eslint/eslint",
+      "versionedRepoUrl": "https://github.com/eslint/eslint/tree/v6.6.0",
+      "licenseFile": "node_modules/eslint/LICENSE",
+      "licenseUrl": "https://github.com/eslint/eslint/blob/v6.6.0/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Nicholas C. Zakas",
+      "email": "nicholas+npm@nczconsulting.com"
+    },
+    "prettier@1.19.1": {
+      "name": "prettier",
+      "version": "1.19.1",
+      "range": "^1.19.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/prettier/prettier",
+      "versionedRepoUrl": "https://github.com/prettier/prettier/tree/v1.19.1",
+      "licenseFile": "node_modules/prettier/LICENSE",
+      "licenseUrl": "https://github.com/prettier/prettier/blob/v1.19.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "James Long"
+    }
+  }
+}
