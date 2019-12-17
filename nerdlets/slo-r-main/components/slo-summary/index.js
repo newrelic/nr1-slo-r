@@ -303,14 +303,14 @@ export default class SloSummary extends React.Component {
               No SLO's found for this SLO group
             </h3>
             <p className="empty-state-description">
-              There are no SLO's defined for this Services in this SLO group and
+              There are no SLO's defined for Services in this SLO group and
               category. To define an SLO:
             </p>
             <ol>
               <li>navigate to the Entity Explorer</li>
-              <li>choose a Service</li>
+              <li>select a Service</li>
               <li>select SLO/R from the sidebar menu</li>
-              <li>click Define an SLO</li>
+              <li>click <strong>Define an SLO</strong></li>
               <li>create an SLO under this SLO category and group</li>
             </ol>
           </StackItem>
