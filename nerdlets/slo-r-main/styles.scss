@@ -193,3 +193,14 @@ code {
     background-color: #f7ffff;
   }
 }
+
+h2.no-slos-for-indicator-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #8e9494;
+  margin-top: -32px;
+}

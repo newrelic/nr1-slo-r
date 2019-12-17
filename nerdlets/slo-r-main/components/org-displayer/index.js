@@ -252,7 +252,9 @@ export default class OrgDisplayer extends React.Component {
   renderEmptyState() {
     return (
       <>
-        <h2> No Slo's found for this Indicator</h2>
+        <h2 className="no-slos-for-indicator-header">
+          No Slo's found for this Indicator
+        </h2>
       </>
     );
   }
