@@ -310,7 +310,9 @@ export default class SloSummary extends React.Component {
               <li>navigate to the Entity Explorer</li>
               <li>select a Service</li>
               <li>select SLO/R from the sidebar menu</li>
-              <li>click <strong>Define an SLO</strong></li>
+              <li>
+                click <strong>Define an SLO</strong>
+              </li>
               <li>create an SLO under this SLO category and group</li>
             </ol>
           </StackItem>
