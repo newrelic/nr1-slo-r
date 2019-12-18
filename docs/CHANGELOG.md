@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/newrelic/nr1-slo-r/compare/v1.4.2...v1.4.3) (2019-12-18)
+
+
+### Bug Fixes
+
+* slo error calculation bug ([d4340bc](https://github.com/newrelic/nr1-slo-r/commit/d4340bc0f05a52d74579aaa7df11790bf530c1f9))
+
 ## [1.4.2](https://github.com/newrelic/nr1-slo-r/compare/v1.4.1...v1.4.2) (2019-12-18)
 
 
