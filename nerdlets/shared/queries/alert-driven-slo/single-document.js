@@ -131,9 +131,8 @@ const _getAlertDrivenSLOData = async function(props) {
 
   // eslint-disable-next-line array-callback-return
   __deduplicatedAlertWindows.map(_window => {
-    __accumulatedMillisecondsInAlertState =
-      __accumulatedMillisecondsInAlertState +
-      (+_window.closedTimeStamp - +_window.openedTimeStamp);
+    __accumulatedMillisecondsInAlertState +=
+      +_window.closedTimeStamp - +_window.openedTimeStamp;
   });
 
   // calculate the percentage of time of this window that the effective alerts were fired

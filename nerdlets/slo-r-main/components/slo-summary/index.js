@@ -154,46 +154,38 @@ export default class SloSummary extends React.Component {
     let __total_30_day_denominator = 0;
 
     _slo_data.forEach(data => {
-      __total_current_numerator =
-        __total_current_numerator + data.result_current.numerator;
-      __total_current_denominator =
-        __total_current_denominator + data.result_current.denominator;
+      __total_current_numerator += data.result_current.numerator;
+      __total_current_denominator += data.result_current.denominator;
 
-      __total_7_day_numerator =
-        __total_7_day_numerator + data.result_7_day.numerator;
-      __total_7_day_denominator =
-        __total_7_day_denominator + data.result_7_day.denominator;
+      __total_7_day_numerator += data.result_7_day.numerator;
+      __total_7_day_denominator += data.result_7_day.denominator;
 
-      __total_30_day_numerator =
-        __total_30_day_numerator + data.result_30_day.numerator;
-      __total_30_day_denominator =
-        __total_30_day_denominator + data.result_30_day.denominator;
+      __total_30_day_numerator += data.result_30_day.numerator;
+      __total_30_day_denominator += data.result_30_day.denominator;
     });
 
     const currentAttainment =
       Math.round(
-        (100 -
-          (__total_current_numerator / __total_current_denominator) * 100) *
-          1000
+        (100 - __total_current_numerator / __total_current_denominator) * 1000
       ) / 1000;
 
     const sevenDayAttainment =
       Math.round(
-        (100 - (__total_7_day_numerator / __total_7_day_denominator) * 100) *
-          1000
+        (100 - __total_7_day_numerator / __total_7_day_denominator) * 1000
       ) / 1000;
 
     const thirtyDayAttainment =
       Math.round(
-        (100 - (__total_30_day_numerator / __total_30_day_denominator) * 100) *
-          1000
+        (100 - __total_30_day_numerator / __total_30_day_denominator) * 1000
       ) / 1000;
 
-    return {
+    const results = {
       currentAttainment,
       sevenDayAttainment,
       thirtyDayAttainment
     };
+
+    return results;
   }
 
   renderBootStrapTableView() {
