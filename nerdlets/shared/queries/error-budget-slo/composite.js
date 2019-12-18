@@ -262,22 +262,18 @@ const _getErrorBudgetSLOData = async function(props) {
   __SLO_RESULT._30_day.result =
     Math.round(
       (100 -
-        (__SLO_RESULT._30_day.numerator / __SLO_RESULT._30_day.denominator) *
-          100) *
+        __SLO_RESULT._30_day.numerator / __SLO_RESULT._30_day.denominator) *
         1000
     ) / 1000;
   __SLO_RESULT._7_day.result =
     Math.round(
-      (100 -
-        (__SLO_RESULT._7_day.numerator / __SLO_RESULT._7_day.denominator) *
-          100) *
+      (100 - __SLO_RESULT._7_day.numerator / __SLO_RESULT._7_day.denominator) *
         1000
     ) / 1000;
   __SLO_RESULT._current.result =
     Math.round(
       (100 -
-        (__SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) *
-          100) *
+        __SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) *
         1000
     ) / 1000;
 
