@@ -146,43 +146,30 @@ export default class SloSummary extends React.Component {
   }
 
   calculateTotalAttainment({ _slo_data }) {
-    let __total_current_numerator = 0;
-    let __total_current_denominator = 0;
-    let __total_7_day_numerator = 0;
-    let __total_7_day_denominator = 0;
-    let __total_30_day_numerator = 0;
-    let __total_30_day_denominator = 0;
+    const numberOfSlos = _slo_data.length;
+    const aggregateAttainment = {
+      totalCurrent: 0,
+      totalSevenDay: 0,
+      totalThirtyDay: 0
+    };
 
-    _slo_data.forEach(data => {
-      __total_current_numerator += data.result_current.numerator;
-      __total_current_denominator += data.result_current.denominator;
+    _slo_data.reduce((previousValue, currentValue) => {
+      previousValue.totalCurrent += currentValue.result_current.result;
+      previousValue.totalSevenDay += currentValue.result_7_day.result;
+      previousValue.totalThirtyDay += currentValue.result_30_day.result;
 
-      __total_7_day_numerator += data.result_7_day.numerator;
-      __total_7_day_denominator += data.result_7_day.denominator;
+      return previousValue;
+    }, aggregateAttainment);
 
-      __total_30_day_numerator += data.result_30_day.numerator;
-      __total_30_day_denominator += data.result_30_day.denominator;
-    });
-
-    const currentAttainment =
-      Math.round(
-        (100 - __total_current_numerator / __total_current_denominator) * 1000
-      ) / 1000;
-
-    const sevenDayAttainment =
-      Math.round(
-        (100 - __total_7_day_numerator / __total_7_day_denominator) * 1000
-      ) / 1000;
-
-    const thirtyDayAttainment =
-      Math.round(
-        (100 - __total_30_day_numerator / __total_30_day_denominator) * 1000
-      ) / 1000;
+    const { totalCurrent, totalSevenDay, totalThirtyDay } = aggregateAttainment;
 
     const results = {
-      currentAttainment,
-      sevenDayAttainment,
-      thirtyDayAttainment
+      currentAttainment:
+        Math.round((totalCurrent / numberOfSlos) * 1000) / 1000,
+      sevenDayAttainment:
+        Math.round((totalSevenDay / numberOfSlos) * 1000) / 1000,
+      thirtyDayAttainment:
+        Math.round((totalThirtyDay / numberOfSlos) * 1000) / 1000
     };
 
     return results;
