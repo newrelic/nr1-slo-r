@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/newrelic/nr1-slo-r/compare/v1.4.1...v1.4.2) (2019-12-18)
+
+
+### Bug Fixes
+
+* slo total attainment calculation ([f3bf43a](https://github.com/newrelic/nr1-slo-r/commit/f3bf43a0155099227e52be89fa0a74595523139d))
+
 ## [1.4.1](https://github.com/newrelic/nr1-slo-r/compare/v1.4.0...v1.4.1) (2019-12-17)
 
 
