@@ -20,9 +20,7 @@ export default class Nr1CsgSloR extends React.Component {
     return (
       <NerdletStateContext.Consumer>
         {nerdletUrlState => (
-          <SLOREntityNerdlet
-            nerdletUrlState={nerdletUrlState}
-          />
+          <SLOREntityNerdlet nerdletUrlState={nerdletUrlState} />
         )}
       </NerdletStateContext.Consumer>
     );

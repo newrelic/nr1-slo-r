@@ -8,10 +8,7 @@
 import React from 'react';
 
 /** nr1 */
-import {
-  EntitiesByDomainTypeQuery,
-  Spinner
-} from 'nr1';
+import { EntitiesByDomainTypeQuery, Spinner } from 'nr1';
 
 import { NerdGraphError } from '@newrelic/nr1-community';
 
@@ -36,13 +33,10 @@ export default class SloRMain extends React.Component {
               return <Spinner />;
             }
             if (error) {
-              return <NerdGraphError error={error} />
+              return <NerdGraphError error={error} />;
             }
             return (
-                <SLOREstate
-                  entities={data.entities}
-                  fetchMore={fetchMore}
-                />
+              <SLOREstate entities={data.entities} fetchMore={fetchMore} />
             );
           }}
         </EntitiesByDomainTypeQuery>
