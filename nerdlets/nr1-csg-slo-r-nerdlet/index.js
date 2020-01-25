@@ -7,7 +7,7 @@
 /** core */
 import React from 'react';
 /** nr1 */
-import { NerdletStateContext, PlatformStateContext } from 'nr1';
+import { NerdletStateContext } from 'nr1';
 /** local */
 import SLOREntityNerdlet from '../slo-r-entity';
 /** 3rd party */

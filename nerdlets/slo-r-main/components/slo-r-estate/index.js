@@ -228,7 +228,7 @@ export default class SLOREstate extends React.Component {
 
             {this.state.selectedTag && (
               <PlatformStateContext.Consumer>
-                {launcherUrlState => (
+                {platformUrlState => (
                   <Stack
                     horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
                     verticalType={Stack.VERTICAL_TYPE.CENTER}
@@ -238,7 +238,7 @@ export default class SLOREstate extends React.Component {
                     <StackItem className="sla-summary-table-stack-item">
                       <SloSummary
                         tag={tagWithSlos}
-                        timeRange={launcherUrlState.timeRange}
+                        timeRange={platformUrlState.timeRange}
                         activeIndicator={activeIndicator}
                       />
                     </StackItem>

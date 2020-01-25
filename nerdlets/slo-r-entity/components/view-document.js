@@ -198,7 +198,7 @@ export default class ViewDocument extends React.Component {
 
           <div className="view-nrql-content">
             <PlatformStateContext.Consumer>
-              {launcherUrlState => this.renderNrql(launcherUrlState.timeRange)}
+              {platformUrlState => this.renderNrql(platformUrlState.timeRange)}
             </PlatformStateContext.Consumer>
           </div>
         </div>

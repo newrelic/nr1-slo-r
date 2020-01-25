@@ -9,11 +9,11 @@ import React from 'react';
 
 /** nr1 */
 import {
-  PlatformStateContext,
-  NerdletStateContext,
   EntitiesByDomainTypeQuery,
   Spinner
 } from 'nr1';
+
+import { NerdGraphError } from '@newrelic/nr1-community';
 
 /** local */
 import SLOREstate from './components/slo-r-estate';
@@ -36,23 +36,13 @@ export default class SloRMain extends React.Component {
               return <Spinner />;
             }
             if (error) {
-              return 'Error!';
+              return <NerdGraphError error={error} />
             }
             return (
-              <PlatformStateContext.Consumer>
-                {launcherUrlState => (
-                  <NerdletStateContext.Consumer>
-                    {nerdletUrlState => (
-                      <SLOREstate
-                        entities={data.entities}
-                        fetchMore={fetchMore}
-                        launcherUrlState={launcherUrlState}
-                        nerdletUrlState={nerdletUrlState}
-                      />
-                    )}
-                  </NerdletStateContext.Consumer>
-                )}
-              </PlatformStateContext.Consumer>
+                <SLOREstate
+                  entities={data.entities}
+                  fetchMore={fetchMore}
+                />
             );
           }}
         </EntitiesByDomainTypeQuery>

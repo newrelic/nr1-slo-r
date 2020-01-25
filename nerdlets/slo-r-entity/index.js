@@ -349,7 +349,7 @@ export default class SLOREntityNedlet extends React.Component {
             columnStart={!sloHasBeenDefined ? 5 : null}
           >
             <PlatformStateContext.Consumer>
-              {launcherUrlState => {
+              {platformUrlState => {
                 if (this.state.slo_documents === null) {
                   return null;
                 }
@@ -358,7 +358,7 @@ export default class SLOREntityNedlet extends React.Component {
                   <SloList
                     entityGuid={this.state.entity}
                     slo_documents={this.state.slo_documents}
-                    timeRange={launcherUrlState.timeRange}
+                    timeRange={platformUrlState.timeRange}
                     toggleCreateModal={this.toggleCreateModal}
                     toggleUpdateModal={this.toggleUpdateModal}
                     toggleViewModal={this.toggleViewModal}
@@ -377,13 +377,13 @@ export default class SLOREntityNedlet extends React.Component {
           onClose={() => this.setState({ isActiveCreateModal: false })}
         >
           <PlatformStateContext.Consumer>
-            {launcherUrlState => {
+            {platformUrlState => {
               return (
                 <SloForm
                   entityGuid={this.state.entityGuid}
                   upsertDocumentCallback={this.upsertDocumentCallback}
                   modalToggleCallback={this.toggleCreateModal}
-                  timeRange={launcherUrlState.timeRange}
+                  timeRange={platformUrlState.timeRange}
                 />
               );
             }}
