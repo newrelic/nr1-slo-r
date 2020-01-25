@@ -18,18 +18,13 @@ import SLOREntityNerdlet from '../slo-r-entity';
 export default class Nr1CsgSloR extends React.Component {
   render() {
     return (
-      <PlatformStateContext.Consumer>
-        {launcherUrlState => (
-          <NerdletStateContext.Consumer>
-            {nerdletUrlState => (
-              <SLOREntityNerdlet
-                launcherUrlState={launcherUrlState}
-                nerdletUrlState={nerdletUrlState}
-              />
-            )}
-          </NerdletStateContext.Consumer>
+      <NerdletStateContext.Consumer>
+        {nerdletUrlState => (
+          <SLOREntityNerdlet
+            nerdletUrlState={nerdletUrlState}
+          />
         )}
-      </PlatformStateContext.Consumer>
+      </NerdletStateContext.Consumer>
     );
   } // render
 } // Nr1CsgSloR
