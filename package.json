@@ -13,9 +13,10 @@
     "uuid": "60bbe788-b329-4b65-82a2-4b93885918ec"
   },
   "dependencies": {
-    "@newrelic/nr1-community": "0.0.1-alpha.7",
+    "@newrelic/nr1-community": "^1.0.1",
     "date-fns": "^2.8.1",
-    "lodash": "^4.17.15",
+    "lodash.get": "^4.4.2",
+    "lodash.isequal": "^4.5.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-bootstrap-table-next": "^3.3.1",

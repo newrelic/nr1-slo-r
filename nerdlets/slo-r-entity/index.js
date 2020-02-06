@@ -97,7 +97,7 @@ export default class SLOREntityNedlet extends React.Component {
     const currentEntityGuid = this.props.nerdletUrlState.entityGuid;
 
     if (prevEntityGuid !== currentEntityGuid) {
-      this.load();
+      this.load(currentEntityGuid);
     }
   }
 
@@ -107,8 +107,12 @@ export default class SLOREntityNedlet extends React.Component {
 
   static contextType = NerdletStateContext;
 
-  async load() {
-    this.setState({ refreshing: true });
+  async load(entityGuid) {
+    if (entityGuid) {
+      this.setState({ refreshing: true, entityGuid });
+    } else {
+      this.setState({ refreshing: true });
+    }
     this.getSloDocuments();
 
     // if (this.state.refreshing) {
