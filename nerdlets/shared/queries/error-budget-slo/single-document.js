@@ -47,7 +47,9 @@ const _getErrorFilter = function(_transactions, _defects, language) {
         else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
-            _getAgentHTTPResponseAttributeName(language)} LIKE '${defect.value}'`;
+            _getAgentHTTPResponseAttributeName(language)} LIKE '${
+            defect.value
+          }'`;
         } // else
 
         __defectsIndex++;
