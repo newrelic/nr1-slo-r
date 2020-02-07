@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/newrelic/nr1-slo-r/compare/v1.4.3...v1.4.4) (2020-02-07)
+
+
+### Bug Fixes
+
+* http attribute for dotnet/python agents ([#65](https://github.com/newrelic/nr1-slo-r/issues/65)) ([53325df](https://github.com/newrelic/nr1-slo-r/commit/53325dfd6e17d9ab87e483038745241f64b01c4b)), closes [#55](https://github.com/newrelic/nr1-slo-r/issues/55)
+
 ## [1.4.3](https://github.com/newrelic/nr1-slo-r/compare/v1.4.2...v1.4.3) (2019-12-18)
 
 
