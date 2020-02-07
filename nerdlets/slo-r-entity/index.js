@@ -97,7 +97,7 @@ export default class SLOREntityNedlet extends React.Component {
     const currentEntityGuid = this.props.nerdletUrlState.entityGuid;
 
     if (prevEntityGuid !== currentEntityGuid) {
-      this.load();
+      this.load(currentEntityGuid);
     }
   }
 
@@ -107,8 +107,12 @@ export default class SLOREntityNedlet extends React.Component {
 
   static contextType = NerdletStateContext;
 
-  async load() {
-    this.setState({ refreshing: true });
+  async load(entityGuid) {
+    if (entityGuid) {
+      this.setState({ refreshing: true, entityGuid });
+    } else {
+      this.setState({ refreshing: true });
+    }
     this.getSloDocuments();
 
     // if (this.state.refreshing) {
@@ -349,7 +353,7 @@ export default class SLOREntityNedlet extends React.Component {
             columnStart={!sloHasBeenDefined ? 5 : null}
           >
             <PlatformStateContext.Consumer>
-              {launcherUrlState => {
+              {platformUrlState => {
                 if (this.state.slo_documents === null) {
                   return null;
                 }
@@ -358,7 +362,7 @@ export default class SLOREntityNedlet extends React.Component {
                   <SloList
                     entityGuid={this.state.entity}
                     slo_documents={this.state.slo_documents}
-                    timeRange={launcherUrlState.timeRange}
+                    timeRange={platformUrlState.timeRange}
                     toggleCreateModal={this.toggleCreateModal}
                     toggleUpdateModal={this.toggleUpdateModal}
                     toggleViewModal={this.toggleViewModal}
@@ -377,13 +381,13 @@ export default class SLOREntityNedlet extends React.Component {
           onClose={() => this.setState({ isActiveCreateModal: false })}
         >
           <PlatformStateContext.Consumer>
-            {launcherUrlState => {
+            {platformUrlState => {
               return (
                 <SloForm
                   entityGuid={this.state.entityGuid}
                   upsertDocumentCallback={this.upsertDocumentCallback}
                   modalToggleCallback={this.toggleCreateModal}
-                  timeRange={launcherUrlState.timeRange}
+                  timeRange={platformUrlState.timeRange}
                 />
               );
             }}

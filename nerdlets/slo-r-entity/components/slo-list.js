@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { Button, Stack, StackItem, Tooltip, Icon } from 'nr1';
 
 /** 3rd party */
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';

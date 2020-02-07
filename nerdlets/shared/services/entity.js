@@ -1,5 +1,5 @@
 import { NerdGraphQuery } from 'nr1';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 export const fetchEntity = async function({ entityGuid }) {
   let __result;
