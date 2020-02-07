@@ -18,7 +18,7 @@ import { updateTimeRangeFromScope } from '../../helpers';
  */
 
 /** returns an nrql fragment string that describes the errors or defects to contemplate for the error budget slo */
-const _getErrorFilter = function(_transactions, _defects) {
+const _getErrorFilter = function(_transactions, _defects, language) {
   let __ERROR_FILTER = '';
 
   _transactions.map(transaction => {
@@ -47,7 +47,9 @@ const _getErrorFilter = function(_transactions, _defects) {
         else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
-            _getAgentHTTPResponseAttributeName()} LIKE '${defect.value}'`;
+            _getAgentHTTPResponseAttributeName(language)} LIKE '${
+            defect.value
+          }'`;
         } // else
 
         __defectsIndex++;
@@ -86,7 +88,8 @@ const _getErrorBudgetNRQL = function(
 ) {
   const __NRQL = `SELECT 100 - ((${_getErrorFilter(
     _transactions,
-    _defects
+    _defects,
+    language
   )}) / (${_getTotalFilter(
     _transactions
   )})) AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${_getAgentHTTPResponseAttributeName(
