@@ -1,3 +1,20 @@
+## [1.4.5](https://github.com/newrelic/nr1-slo-r/compare/v1.4.4...v1.4.5) (2020-02-07)
+
+
+### Bug Fixes
+
+* add @newrelic/nr1-community library. ([75f7d7e](https://github.com/newrelic/nr1-slo-r/commit/75f7d7ed90c70808bcf4ac0a90c13d33246d8684))
+* bundle size improvements with lodash. Fixing an issue with entity content switch w/in the Entity Explorer. ([5381b2b](https://github.com/newrelic/nr1-slo-r/commit/5381b2bdad13de04ebdaae169acf219fec8f67c4))
+* eslint errors. ([7b761a7](https://github.com/newrelic/nr1-slo-r/commit/7b761a72199c4f0bb36196f5298e0f01bcde9608))
+* remove the PlatformStateContext from the outer Nerdlet. ([b59ff20](https://github.com/newrelic/nr1-slo-r/commit/b59ff20f182fe77a2d51d753eb6f0d0b58b366b2))
+
+## [1.4.4](https://github.com/newrelic/nr1-slo-r/compare/v1.4.3...v1.4.4) (2020-02-07)
+
+
+### Bug Fixes
+
+* http attribute for dotnet/python agents ([#65](https://github.com/newrelic/nr1-slo-r/issues/65)) ([53325df](https://github.com/newrelic/nr1-slo-r/commit/53325dfd6e17d9ab87e483038745241f64b01c4b)), closes [#55](https://github.com/newrelic/nr1-slo-r/issues/55)
+
 ## [1.4.3](https://github.com/newrelic/nr1-slo-r/compare/v1.4.2...v1.4.3) (2019-12-18)
 
 

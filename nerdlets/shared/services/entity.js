@@ -25,7 +25,12 @@ export const fetchEntity = async function({ entityGuid }) {
                 }
             }}`;
     // console.debug(__query);
-    __result = await NerdGraphQuery.query({ query: __query });
+    // fetchPolicyType is a workaround for (what we believe to be) platform issue
+    // https://newrelic.atlassian.net/browse/NR1UI-2038 for more context
+    __result = await NerdGraphQuery.query({
+      query: __query,
+      fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE
+    });
   }
 
   // console.debug('Entity Result: ', __result);
