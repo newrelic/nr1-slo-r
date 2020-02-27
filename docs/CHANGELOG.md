@@ -1,3 +1,10 @@
+## [1.4.6](https://github.com/newrelic/nr1-slo-r/compare/v1.4.5...v1.4.6) (2020-02-27)
+
+
+### Bug Fixes
+
+* cosmetic elements that disappoint the linter ([c508a46](https://github.com/newrelic/nr1-slo-r/commit/c508a46bf189c215ca1af0b83a6f60bea856cb04))
+
 ## [1.4.5](https://github.com/newrelic/nr1-slo-r/compare/v1.4.4...v1.4.5) (2020-02-07)
 
 
