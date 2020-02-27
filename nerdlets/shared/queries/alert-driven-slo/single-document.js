@@ -16,18 +16,19 @@ import { updateTimeRangeFromScope } from '../../helpers';
  */
 /** provides the where clause for the queries given the alerts array provided by the component properties */
 const _getAlertsWhereClause = function(_alerts) {
-
-  //validate the _alert array being passed
+  // validate the _alert array being passed
   try {
-
     if (_alerts[0].policy_name === null || _alerts[0].policy_name === undefined) {
       throw "Invalid Alert";
-    } //if
-  }//try
+    } // if
+  } // try
   catch{
-    console.warn('No alerts defined for an alert-driven SLO. Returning all alerts for comparison. This may be a result of an old version of SLO/R, please delete the SLO and try to recreate.', _alerts);
+    console.warn(
+      'No alerts defined for an alert-driven SLO. Returning all alerts for comparison. This may be a result of an old version of SLO/R, please delete the SLO and try to recreate.', 
+      _alerts
+    );
     return 'timestamp > 0';
-  } //catch
+  } // catch
 
   const alertNames = _alerts.map(a => a.policy_name);
   const alertsClause = `policy_name IN ('${alertNames.join("', '")}')`;
@@ -149,7 +150,7 @@ const _getAlertDrivenSLOData = async function(props) {
       100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS)
   };
 
-  // set thw SLO result as 100 - the percentage of time in violation
+  // set the SLO result as 100 - the percentage of time in violation
   return __SLO_RESULT_OBJ;
 }; // _getAlertDrivenSLOData
 
