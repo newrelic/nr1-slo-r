@@ -89,7 +89,17 @@ export const validateSlo = function(document) {
     if (document.alerts.length === 0) {
       return false;
     }
-  }
+    //add validation to ensure we have the alerts object array
+    try {
+
+      if (document.alerts[0].policy_name === null || document.alerts[0].policy_name === undefined) {
+        return false;
+      }
+    }//try
+    catch {
+      return false;
+    } //catch
+  } //if (alert driven SLOs)
 
   return true;
 };

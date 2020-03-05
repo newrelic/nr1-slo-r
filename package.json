@@ -2,7 +2,7 @@
   "private": true,
   "name": "nr1-slo-r",
   "description": "Nerdpack nr1-slo-r",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "scripts": {
     "start": "nr1 nerdpack:serve",
     "test": "exit 0",
