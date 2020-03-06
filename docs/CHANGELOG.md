@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/newrelic/nr1-slo-r/compare/v1.4.6...v1.5.0) (2020-03-06)
+
+
+### Features
+
+* add catalog icon ([c989b1e](https://github.com/newrelic/nr1-slo-r/commit/c989b1e1b45e2146015c58e145000f1f68aec263))
+
 ## [1.4.6](https://github.com/newrelic/nr1-slo-r/compare/v1.4.5...v1.4.6) (2020-02-27)
 
 
