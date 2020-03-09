@@ -32,7 +32,6 @@ import { SLO_INDICATORS } from '../../../shared/constants';
 export default class SLOREstate extends React.Component {
   static propTypes = {
     entities: PropTypes.array
-    // fetchMore: PropTypes.object
   }; // propTypes
 
   constructor(props) {
@@ -109,6 +108,8 @@ export default class SLOREstate extends React.Component {
         <BlockText>
           Unable to find any SLOs defined. Use the Entity Explorer to find a
           Service and define an SLO.
+
+          Barf Braf Brarf
         </BlockText>
       </StackItem>
     );

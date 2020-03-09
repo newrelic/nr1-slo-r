@@ -1,4 +1,4 @@
-import { EntityStorageMutation, EntityStorageQuery } from 'nr1';
+import { EntityStorageMutation, EntityStorageQuery, NerdGraphMutation } from 'nr1';
 import { ENTITY_COLLECTION_NAME } from '../constants';
 
 const uuid = require('uuid/v4');
@@ -56,6 +56,25 @@ export const writeSloDocument = async function({ entityGuid, document }) {
 
   // console.debug(JSON.stringify(__write_mutation, null, 2));
   const __write_result = await EntityStorageMutation.mutate(__write_mutation);
+
+  /* 
+    for the purposes of limiting the search of entities to just those having an SLO definition 
+    we are adding an slor tag to entities with an SLO document written
+  */
+  const __mutation = `mutation {
+    taggingAddTagsToEntity(guid: "${entityGuid}", tags: {key: "slor", values: "true"}) {
+      errors {
+        message
+        type
+      }
+    }
+  }`;
+
+  const __result = await NerdGraphMutation.mutate({ mutation: __mutation });
+
+  if (!__result) {
+    console.error("Problem adding slor tag to entity: " + entityGuid);
+  } // if
 
   if (!__write_result) {
     throw new Error('Error writing SLO Document to Entity Storage');
@@ -115,7 +134,7 @@ export const sloDocumentModel = {
       indicator: '',
       defects: [],
       transactions: [],
-      slo_r_version: '1.0.1',
+      slo_r_version: '1.0.2',
       description: ''
     };
   }
