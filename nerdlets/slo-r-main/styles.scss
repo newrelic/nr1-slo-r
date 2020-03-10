@@ -208,3 +208,16 @@ h2.no-slos-for-indicator-header {
   color: #8e9494;
   margin-top: -32px;
 }
+
+.header-right-side {
+  width: 600px;
+  margin-left:auto; margin-right:20px;
+  text-align: left;
+  vertical-align: middle;
+
+  [class*="wnd-Spacing"] {
+    font-size: 12px;
+    vertical-align: bottom;
+    margin-top: 1em;
+  }
+}

@@ -72,7 +72,8 @@ export default class SloRMain extends React.Component {
     var __query;
     var __results;
 
-    /* loop until all the cursors have been exhaoused - 2400 records max */
+    /* loop until all the cursors have been exhaused - 2400 records max 
+       in general this shouldn't be an issue as we are scoping our slo lookup to those entities with the slor=true tag */
     while(__gotCursor) {
 
       __query = `{
@@ -91,20 +92,6 @@ export default class SloRMain extends React.Component {
         }
       }`;
 
-      /**
-       * {
-  actor {
-    entitySearch(queryBuilder: {tags: {key: "slor", value: "true"}, domain: APM, type: APPLICATION}) {
-      results {
-        entities {
-          guid
-          name
-        }
-      }
-    }
-  }
-}
-       */
       __results = await NerdGraphQuery.query({ query: __query, fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE });
 
       if (__results.data.actor.entitySearch.results !== null || __results.data.actor.entitySearch.results !== undefined) {
@@ -129,7 +116,7 @@ export default class SloRMain extends React.Component {
 
     return(__compositeResults);
 
-  } //_getCursorEntities
+  } // _getCursorEntities
 
   async componentWillMount() {
 

@@ -10,8 +10,11 @@ import PropTypes from 'prop-types';
 /** nr1 */
 import {
   BlockText,
+  Button,
   Grid,
   GridItem,
+  HeadingText,
+  NerdGraphQuery,
   PlatformStateContext,
   Spinner,
   Stack,
@@ -108,8 +111,6 @@ export default class SLOREstate extends React.Component {
         <BlockText>
           Unable to find any SLOs defined. Use the Entity Explorer to find a
           Service and define an SLO.
-
-          Barf Braf Brarf
         </BlockText>
       </StackItem>
     );
@@ -145,6 +146,7 @@ export default class SLOREstate extends React.Component {
       </>
     );
   }
+
 
   render() {
     const {
@@ -204,6 +206,14 @@ export default class SLOREstate extends React.Component {
                   })}
                 </div>
               </StackItem>
+              <div className="header-right-side has-separator">
+              <StackItem>
+                <BlockText>
+                **Note: If you're not seeing an SLO Group in the drop-down box you need to ensure the slor=true tag hasn't been added to the entiies where you have defined SLOs.  
+                To add this tag simply open the SLO you have defined and re-save it through the entity explorer. Applies to SLO/R 1.5.1 and greater.
+                </BlockText>
+              </StackItem>
+              </div>
             </Stack>
           </StackItem>
         </Stack>
