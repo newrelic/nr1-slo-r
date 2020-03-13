@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/newrelic/nr1-slo-r/compare/v1.5.0...v1.5.1) (2020-03-10)
+
+
+### Bug Fixes
+
+* update package-lock.json version ([c2391dc](https://github.com/newrelic/nr1-slo-r/commit/c2391dc92a804af59b08e4c13e51ddd2fd8467eb))
+
 # [1.5.0](https://github.com/newrelic/nr1-slo-r/compare/v1.4.6...v1.5.0) (2020-03-06)
 
 

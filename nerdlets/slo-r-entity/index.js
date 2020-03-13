@@ -198,7 +198,7 @@ export default class SLOREntityNedlet extends React.Component {
       collection: 'nr1-csg-slo-r',
       entityGuid: document.entityGuid,
 
-      // TO DO - Remove document.name and document.slo_name after we've reached an initial release
+      // TODO - Remove document.name and document.slo_name after we've reached an initial release
       documentId: document.documentId || document.name || document.slo_name
     };
 
@@ -210,6 +210,8 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.removeDocumentFromList({ document });
+
+    // TODO: Check to see the entity in question has any other SLO documents in the collection and remove the tag slor=true if there are none. 
   }
 
   upsertDocumentInList({ mutationResult }) {
