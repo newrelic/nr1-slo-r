@@ -1,9 +1,3 @@
-[![New Relic One Catalog Project header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/New_Relic_One_Catalog_Project.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#nr1-catalog)
-
-# SLO/R
-
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-slo-r?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-slo-r/badge.svg)](https://snyk.io/test/github/newrelic/nr1-slo-r)
-
 ## Usage
 
 SLO/R lets you quickly define SLOs for **error**, **availability**, **capacity**, and **latency** conditions.
@@ -81,16 +75,11 @@ For more information on sending alert data to New Relic, see [Sending Alerts dat
 
 SLO definitions are scoped and stored with service entities. Open a service entity by exploring your services in the [Entity explorer](https://docs.newrelic.com/docs/new-relic-one/use-new-relic-one/ui-data/new-relic-one-entity-explorer-view-performance-across-apps-services-hosts) from the [New Relic One homepage](https://one.newrelic.com).
 
-![Screenshot #6](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-06.png)
-
 Select the service you are interested in creating SLOs for. In our example we will be using the Origami Portal Service.
-![Screenshot #7](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-07.png)
 
 Select the SLO/R New Relic One app from the left-hand navigation in your entity.
-![Screenshot #16](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-16.png)
 
 If you (or others) haven't configured an SLO the canvas will be empty. Just click on the **Define an SLO** button to begin configuring your first SLO.
-![Screenshot #1](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-01.png)
 
 The UI will open a side-panel to facilitate configuration. Fill in the fields:
 
@@ -101,18 +90,14 @@ The UI will open a side-panel to facilitate configuration. Fill in the fields:
 - Indicator: There are four indicators for SLOs in SLO/R - **Error**, **Availability**, **Capacity**, and **Latency**. Error SLOs are calculated from _Transaction_ event defects. Availability, latency, and capacity SLOs are calculated by alert violations.
 
 Example error SLO
-![Screenshot #3](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-03.png)
 
 For **Error** SLOs you need to define the defects you wish to measure and the transaction names you want to associate with this SLO.
 
 Example Availability SLO
-![Screenshot #2](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-02.png)
 
 Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
 
 Once you've created a few SLOs you should see a view like the following:
-
-![Screenshot #4](https://github.com/newrelic/nr1-slo-r/blob/master/catalog/screenshots/nr1-slo-r-04.png)
 
 ### How is SLO/R arriving at the SLO calculations?
 

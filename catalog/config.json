@@ -1,5 +1,5 @@
 {
-  "tagline": "Define, calculate and report on service-level objective (SLO) attainment.",
+  "tagline": "Track service-level objectives",
   "repository": "https://github.com/newrelic/nr1-slo-r.git",
   "details": "SLO/R lets you quickly define SLOs for error, availability, capacity, and latency conditions.\n\nYou can use the application for reporting out your results.\n\nBy measuring SLO attainment across your service estate, you’ll be able to determine what signals are most important.\n\nUsing New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.\n\nSLO/R provides two mechanisms for calculating SLOs: error type (calculated by defects on transactions) and availability, capacity, and latency type (calculated by total duration of alert violation).",
   "support": {
