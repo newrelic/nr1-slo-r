@@ -1,4 +1,8 @@
-import { EntityStorageMutation, EntityStorageQuery, NerdGraphMutation } from 'nr1';
+import {
+  EntityStorageMutation,
+  EntityStorageQuery,
+  NerdGraphMutation
+} from 'nr1';
 import { ENTITY_COLLECTION_NAME } from '../constants';
 
 const uuid = require('uuid/v4');
@@ -57,8 +61,8 @@ export const writeSloDocument = async function({ entityGuid, document }) {
   // console.debug(JSON.stringify(__write_mutation, null, 2));
   const __write_result = await EntityStorageMutation.mutate(__write_mutation);
 
-  /* 
-    for the purposes of limiting the search of entities to just those having an SLO definition 
+  /*
+    for the purposes of limiting the search of entities to just those having an SLO definition
     we are adding an slor tag to entities with an SLO document written
   */
   const __mutation = `mutation {
@@ -73,7 +77,9 @@ export const writeSloDocument = async function({ entityGuid, document }) {
   const __result = await NerdGraphMutation.mutate({ mutation: __mutation });
 
   if (!__result) {
-    console.error("Problem adding slor tag to entity: " + entityGuid);
+    /* eslint-disable no-console */
+    console.error(`Problem adding slor tag to entity: ${entityGuid}`);
+    /* eslint-enable */
   } // if
 
   if (!__write_result) {
@@ -108,17 +114,19 @@ export const validateSlo = function(document) {
     if (document.alerts.length === 0) {
       return false;
     }
-    //add validation to ensure we have the alerts object array
+    // add validation to ensure we have the alerts object array
     try {
-
-      if (document.alerts[0].policy_name === null || document.alerts[0].policy_name === undefined) {
+      if (
+        document.alerts[0].policy_name === null ||
+        document.alerts[0].policy_name === undefined
+      ) {
         return false;
       }
-    }//try
-    catch {
+    } catch {
+      // try
       return false;
-    } //catch
-  } //if (alert driven SLOs)
+    } // catch
+  } // if (alert driven SLOs)
 
   return true;
 };

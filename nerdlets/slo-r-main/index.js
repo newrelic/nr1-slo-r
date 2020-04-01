@@ -23,11 +23,19 @@ export default class SloRMain extends React.Component {
 
     this.state = {
       entities: null
-    }
+    };
   } // constructor
 
-  async _getEntities() {
+  /* eslint-disable react/no-deprecated */
+  // See tracking issue https://github.com/newrelic/nr1-slo-r/issues/83
+  async componentWillMount() {
+    if (this.state.entities === null) {
+      await this._getEntities();
+    } // if
+  } // componentWillMount
+  /* eslint-enable */
 
+  async _getEntities() {
     const __query = `{
       actor {
         entitySearch(queryBuilder: {tags: {key: "slor", value: "true"}, domain: APM, type: APPLICATION}) {
@@ -44,15 +52,19 @@ export default class SloRMain extends React.Component {
       }
     }`;
 
-    const __result = await NerdGraphQuery.query({ query: __query, fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE });
-   
-    //TODO Need NULL checks to verify the query retured with reasonable data
-    var __entities = __result.data.actor.entitySearch.results.entities;
-    var __moarEntities = [];
+    const __result = await NerdGraphQuery.query({
+      query: __query,
+      fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE
+    });
+
+    // TODO Need NULL checks to verify the query retured with reasonable data
+    let __entities = __result.data.actor.entitySearch.results.entities;
+    let __moarEntities = [];
 
     if (__result.data.actor.entitySearch.results.nextCursor !== null) {
-
-      __moarEntities = await this._getCursorEntities(__result.data.actor.entitySearch.results.nextCursor);
+      __moarEntities = await this._getCursorEntities(
+        __result.data.actor.entitySearch.results.nextCursor
+      );
     } // if
 
     __entities = __entities.concat(__moarEntities);
@@ -61,21 +73,19 @@ export default class SloRMain extends React.Component {
       entities: __entities
     });
 
-    return(__entities);
+    return __entities;
   } // _getEntities
 
   async _getCursorEntities(_cursorId) {
+    let __gotCursor = true;
+    let __compositeResults = [];
+    let __cursorId = _cursorId;
+    let __query;
+    let __results;
 
-    var __gotCursor = true;
-    var __compositeResults = [];
-    var __cursorId = _cursorId;
-    var __query;
-    var __results;
-
-    /* loop until all the cursors have been exhaused - 2400 records max 
+    /* loop until all the cursors have been exhaused - 2400 records max
        in general this shouldn't be an issue as we are scoping our slo lookup to those entities with the slor=true tag */
-    while(__gotCursor) {
-
+    while (__gotCursor) {
       __query = `{
         actor {
           entitySearch(queryBuilder: {tags: {key: "slor", value: "true"}, domain: APM, type: APPLICATION}) {
@@ -92,52 +102,47 @@ export default class SloRMain extends React.Component {
         }
       }`;
 
-      __results = await NerdGraphQuery.query({ query: __query, fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE });
+      __results = await NerdGraphQuery.query({
+        query: __query,
+        fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE
+      });
 
-      if (__results.data.actor.entitySearch.results !== null || __results.data.actor.entitySearch.results !== undefined) {
-
+      if (
+        __results.data.actor.entitySearch.results !== null ||
+        __results.data.actor.entitySearch.results !== undefined
+      ) {
         if (__results.data.actor.entitySearch.results.nextCursor !== null) {
-
-          __compositeResults = __compositeResults.concat(__results.data.actor.entitySearch.results.entities);
+          __compositeResults = __compositeResults.concat(
+            __results.data.actor.entitySearch.results.entities
+          );
           __cursorId = __results.data.actor.entitySearch.results.nextCursor;
         } // if
-        else { 
-
+        else {
           __gotCursor = false;
         } // else
       } // if
       else {
-
         __gotCursor = false;
       } // else
-
-
     } // while
 
-    return(__compositeResults);
-
+    return __compositeResults;
   } // _getCursorEntities
 
-  async componentWillMount() {
-
-    if (this.state.entities === null) { 
-
-      await this._getEntities();
-    } // if
-    
-  } // componentWillMount
-
   render() {
-
     if (this.state.entities === null) {
-      return(<div>
-        <Spinner />
-      </div>);
+      return (
+        <div>
+          <Spinner />
+        </div>
+      );
     } // if
     else {
-      return(<div>
-        <SLOREstate entities={ this.state.entities } />
-      </div>);
+      return (
+        <div>
+          <SLOREstate entities={this.state.entities} />
+        </div>
+      );
     } // else
   } // render
 } // SloRMain
