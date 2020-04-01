@@ -1,3 +1,12 @@
+## [1.5.2](https://github.com/newrelic/nr1-slo-r/compare/v1.5.1...v1.5.2) (2020-04-01)
+
+
+### Bug Fixes
+
+* bump version ([b9d79ee](https://github.com/newrelic/nr1-slo-r/commit/b9d79ee8dbd8269f163380e15e8b0354a3d411cc))
+* eslint error resolutions. ([8b698ef](https://github.com/newrelic/nr1-slo-r/commit/8b698ef4b09e1a3b39a4e5b72a94657a07e5a0b9))
+* **perf:** update nr1-community dependency to resolve security issue ([cdb054e](https://github.com/newrelic/nr1-slo-r/commit/cdb054e71e977a55121f301d5414068a2c8f0a03))
+
 ## [1.5.1](https://github.com/newrelic/nr1-slo-r/compare/v1.5.0...v1.5.1) (2020-03-10)
 
 
