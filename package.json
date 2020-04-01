@@ -9,9 +9,6 @@
     "eslint-check": "eslint nerdlets/",
     "eslint-fix": "eslint nerdlets/ --fix"
   },
-  "nr1": {
-    "uuid": "60bbe788-b329-4b65-82a2-4b93885918ec"
-  },
   "dependencies": {
     "@newrelic/nr1-community": "^1.0.1",
     "date-fns": "^2.8.1",
