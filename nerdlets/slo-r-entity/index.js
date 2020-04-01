@@ -211,7 +211,7 @@ export default class SLOREntityNedlet extends React.Component {
 
     this.removeDocumentFromList({ document });
 
-    // TODO: Check to see the entity in question has any other SLO documents in the collection and remove the tag slor=true if there are none. 
+    // TODO: Check to see the entity in question has any other SLO documents in the collection and remove the tag slor=true if there are none.
   }
 
   upsertDocumentInList({ mutationResult }) {

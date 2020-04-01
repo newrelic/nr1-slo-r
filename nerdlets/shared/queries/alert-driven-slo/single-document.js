@@ -18,15 +18,20 @@ import { updateTimeRangeFromScope } from '../../helpers';
 const _getAlertsWhereClause = function(_alerts) {
   // validate the _alert array being passed
   try {
-    if (_alerts[0].policy_name === null || _alerts[0].policy_name === undefined) {
-      throw "Invalid Alert";
+    if (
+      _alerts[0].policy_name === null ||
+      _alerts[0].policy_name === undefined
+    ) {
+      throw new Error('Invalid Alert');
     } // if
-  } // try
-  catch{
+  } catch {
+    // try
+    /* eslint-disable no-console */
     console.warn(
-      'No alerts defined for an alert-driven SLO. Returning all alerts for comparison. This may be a result of an old version of SLO/R, please delete the SLO and try to recreate.', 
+      'No alerts defined for an alert-driven SLO. Returning all alerts for comparison. This may be a result of an old version of SLO/R, please delete the SLO and try to recreate.',
       _alerts
     );
+    /* eslint-enable */
     return 'timestamp > 0';
   } // catch
 
