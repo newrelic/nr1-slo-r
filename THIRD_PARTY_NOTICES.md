@@ -42,7 +42,7 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 
 ### @newrelic/nr1-community
 
-This product includes source derived from [@newrelic/nr1-community](https://github.com/newrelic/nr1-community) ([v1.0.1](https://github.com/newrelic/nr1-community/tree/v1.0.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/nr1-community/blob/v1.0.1/LICENSE):
+This product includes source derived from [@newrelic/nr1-community](https://github.com/newrelic/nr1-community) ([v1.1.1](https://github.com/newrelic/nr1-community/tree/v1.1.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/nr1-community/blob/v1.1.1/LICENSE):
 
 ```
                                  Apache License
@@ -251,7 +251,7 @@ This product includes source derived from [@newrelic/nr1-community](https://gith
 
 ### date-fns
 
-This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.8.1](https://github.com/date-fns/date-fns/tree/v2.8.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.8.1/LICENSE.md):
+This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.11.1](https://github.com/date-fns/date-fns/tree/v2.11.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.11.1/LICENSE.md):
 
 ```
 # License
@@ -263,7 +263,7 @@ Read more about MIT at [TLDRLegal](https://tldrlegal.com/license/mit-license).
 
 ### date-fns
 
-This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.9.0](https://github.com/date-fns/date-fns/tree/v2.9.0)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.9.0/LICENSE.md):
+This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.8.1](https://github.com/date-fns/date-fns/tree/v2.8.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.8.1/LICENSE.md):
 
 ```
 # License
