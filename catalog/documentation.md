@@ -1,9 +1,3 @@
-[![New Relic One Catalog Project header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/New_Relic_One_Catalog_Project.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#nr1-catalog)
-
-# SLO/R
-
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-slo-r?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-slo-r/badge.svg)](https://snyk.io/test/github/newrelic/nr1-slo-r)
-
 ## Usage
 
 SLO/R lets you quickly define SLOs for **error**, **availability**, **capacity**, and **latency** conditions.
@@ -17,11 +11,11 @@ Using New Relic as a consistent basis to define and measure your SLOs offers bet
 SLO/R provides two mechanisms for calculating SLOs: **error type** (calculated by defects on transactions) and **availability**, **capacity**, and **latency type** (calculated by total duration of alert violation).
 
 > We are keen to see SLO/R evolve and grow to include additional features and visualizations. For version 1.0.1, we wanted to ship the core SLO calculation capabilities. We expect to rapidly build upon this core functionality through several releases. Please add an issue to the repo is there's a feature you'd like to see.
-> For more details about the SLOs and their calculations, please see [error driven SLOs](./docs/error_slos.md) and [alert driven SLOs](./docs/alert_slos.md).
+> For more details about the SLOs and their calculations, please see [error driven SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md) and [alert driven SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md).
 
 ## Open source license
 
-This project is distributed under the [Apache 2 license](LICENSE).
+This project is distributed under the [Apache 2 license](https://github.com/newrelic/nr1-slo-r/blob/master/LICENSE).
 
 ## Dependencies
 
@@ -30,7 +24,7 @@ Requires [`New Relic APM`](https://newrelic.com/products/application-monitoring)
 SLO/R is intended to work specifically with services reporting to New Relic via an APM Agent. The service provides an entity upon which to define SLOs.
 
 - `Error-based SLO’s` work with [APM Transaction data](https://docs.newrelic.com/docs/insights/insights-data-sources/default-data/apm-default-events-insights).
-- `Alert-based SLO’s` require a custom webhook configured to write `SLOR_ALERTS` events to NRDB. See [Configuring SLO/R Alert Webhook](#configuring-slor-alert-webhook) for specific instructions.
+- `Alert-based SLO’s` require a custom webhook configured to write `SLOR_ALERTS` events to NRDB. See [Configuring SLO/R Alert Webhook](https://github.com/newrelic/nr1-slo-r#configuring-slor-alert-webhook) for specific instructions.
 
 ## Getting started
 
@@ -73,7 +67,7 @@ Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerd
 
 The availability, capacity, and latency SLO types within SLO/R are calculated using the total duration of alert violations. In order to record those alert violations we need to enable an Insights directed Webhook to capture the `open` and `close` events.
 
-The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](./docs/slor_alerts_config.md) to enable the alert event forwarding.
+The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to enable the alert event forwarding.
 
 For more information on sending alert data to New Relic, see [Sending Alerts data to New Relic](https://blog.newrelic.com/product-news/sending-alerts-data-to-insights/).
 
@@ -81,16 +75,11 @@ For more information on sending alert data to New Relic, see [Sending Alerts dat
 
 SLO definitions are scoped and stored with service entities. Open a service entity by exploring your services in the [Entity explorer](https://docs.newrelic.com/docs/new-relic-one/use-new-relic-one/ui-data/new-relic-one-entity-explorer-view-performance-across-apps-services-hosts) from the [New Relic One homepage](https://one.newrelic.com).
 
-![Screenshot #6](catalog/screenshots/nr1-slo-r-06.png)
-
 Select the service you are interested in creating SLOs for. In our example we will be using the Origami Portal Service.
-![Screenshot #7](catalog/screenshots/nr1-slo-r-07.png)
 
 Select the SLO/R New Relic One app from the left-hand navigation in your entity.
-![Screenshot #16](catalog/screenshots/nr1-slo-r-16.png)
 
 If you (or others) haven't configured an SLO the canvas will be empty. Just click on the **Define an SLO** button to begin configuring your first SLO.
-![Screenshot #1](catalog/screenshots/nr1-slo-r-01.png)
 
 The UI will open a side-panel to facilitate configuration. Fill in the fields:
 
@@ -101,22 +90,18 @@ The UI will open a side-panel to facilitate configuration. Fill in the fields:
 - Indicator: There are four indicators for SLOs in SLO/R - **Error**, **Availability**, **Capacity**, and **Latency**. Error SLOs are calculated from _Transaction_ event defects. Availability, latency, and capacity SLOs are calculated by alert violations.
 
 Example error SLO
-![Screenshot #3](catalog/screenshots/nr1-slo-r-03.png)
 
 For **Error** SLOs you need to define the defects you wish to measure and the transaction names you want to associate with this SLO.
 
 Example Availability SLO
-![Screenshot #2](catalog/screenshots/nr1-slo-r-02.png)
 
-Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](./docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
+Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
 
 Once you've created a few SLOs you should see a view like the following:
 
-![Screenshot #4](catalog/screenshots/nr1-slo-r-04.png)
-
 ### How is SLO/R arriving at the SLO calculations?
 
-For details, see [Alert SLOs](./docs/alert_slos.md) and [Error SLOs](./docs/error_slos.md).
+For details, see [Alert SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md) and [Error SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md).
 
 ## Community Support
 
@@ -128,10 +113,10 @@ Please do not report issues with SLO/R to New Relic Global Technical Support. In
 
 ## Issues and enhancement requests
 
-Issues and enhancement requests can be submitted in the [Issues tab of this repository](../../issues). Please search for and review the existing open issues before submitting a new issue.
+Issues and enhancement requests can be submitted in the [Issues tab of this repository](https://github.com/newrelic/nr1-slo-r/issues). Please search for and review the existing open issues before submitting a new issue.
 
 ## Contributing
 
-Contributions are welcome (and if you submit an enhancement request, expect to be invited to contribute it yourself :grin:). Please review our [contributors guide](CONTRIBUTING.md).
+Contributions are welcome (and if you submit an enhancement request, expect to be invited to contribute it yourself :grin:). Please review our [contributors guide](https://github.com/newrelic/nr1-slo-r/blob/master/CONTRIBUTING.md).
 
 Keep in mind that when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. If you'd like to execute our corporate CLA, or if you have any questions, please drop us an email at opensource+nr1-slo-r@newrelic.com.

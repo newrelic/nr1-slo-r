@@ -1,6 +1,6 @@
 {
   "schemaType": "NERDPACK",
-  "id": "4380103d-eb2f-4465-80df-98cd6dbe9597",
-  "displayName": "nr1-slo-r",
-  "description": "Nerdpack nr1-slo-r"
+  "id": "60bbe788-b329-4b65-82a2-4b93885918ec",
+  "displayName": "SLO/R",
+  "description": "Define, calculate and report on service-level objective (SLO) attainment."
 }

@@ -10,8 +10,11 @@ import PropTypes from 'prop-types';
 /** nr1 */
 import {
   BlockText,
+  Button,
   Grid,
   GridItem,
+  HeadingText,
+  NerdGraphQuery,
   PlatformStateContext,
   Spinner,
   Stack,
@@ -32,7 +35,6 @@ import { SLO_INDICATORS } from '../../../shared/constants';
 export default class SLOREstate extends React.Component {
   static propTypes = {
     entities: PropTypes.array
-    // fetchMore: PropTypes.object
   }; // propTypes
 
   constructor(props) {
@@ -145,6 +147,7 @@ export default class SLOREstate extends React.Component {
     );
   }
 
+
   render() {
     const {
       activeIndicator,
@@ -203,6 +206,14 @@ export default class SLOREstate extends React.Component {
                   })}
                 </div>
               </StackItem>
+              <div className="header-right-side has-separator">
+              <StackItem>
+                <BlockText>
+                **Note: If you're not seeing an SLO Group in the drop-down box you need to ensure the slor=true tag hasn't been added to the entities where you have defined SLOs.  
+                To add this tag simply open the SLO you have defined and re-save it through the entity explorer. Applies to SLO/R 1.5.1 and greater.
+                </BlockText>
+              </StackItem>
+              </div>
             </Stack>
           </StackItem>
         </Stack>
