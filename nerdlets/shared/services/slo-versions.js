@@ -12,6 +12,10 @@ export const validateSLODocVersion = async function(_documents) {
 
                 __versionedDocuments.push(v102Update(_document));
             } // if
+            else if (_document.document.slo_r_version === '1.0.1') {
+                
+                __versionedDocuments.push(v102Update(_document));
+            } // else if
             else { 
 
                 __versionedDocuments.push(_document);
@@ -58,7 +62,7 @@ export const validateSLODocVersion = async function(_documents) {
     } // try
     catch (_err) { 
 
-        console.error("Problem updating slo_document from v1.0.2 - old version maintained", _err);
+        console.error("Problem updating slo_document from v1.0.1/2 to " + currentVersion + ", old version maintained", _err);
     } // catch   
 
     return(__updated_document);
