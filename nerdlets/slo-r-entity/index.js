@@ -152,6 +152,7 @@ export default class SLOREntityNedlet extends React.Component {
     const { entityGuid } = this.state;
 
     const slo_documents = await fetchSloDocuments({ entityGuid });
+
     this.setState({ slo_documents, refreshing: false, lastUpdated: getNow() });
   }
 

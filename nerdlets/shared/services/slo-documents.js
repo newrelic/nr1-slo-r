@@ -4,6 +4,7 @@ import {
   NerdGraphMutation
 } from 'nr1';
 import { ENTITY_COLLECTION_NAME } from '../constants';
+import { validateSLODocVersion } from './slo-versions';
 
 const uuid = require('uuid/v4');
 
@@ -17,7 +18,10 @@ export const fetchSloDocuments = async function({ entityGuid }) {
   const result = await EntityStorageQuery.query(_query);
   const documents = result.data || [];
 
-  return documents;
+  //raggimuffen
+  const __versionValidatedDocuments = await validateSLODocVersion(documents);
+
+  return __versionValidatedDocuments;
 };
 
 // TO DO - Return null, undefined, false?
@@ -36,7 +40,10 @@ export const fetchDocumentById = async function({ entityGuid, documentId }) {
   const result = await EntityStorageQuery.query(query);
   const documents = result.data || null;
 
-  return documents;
+  //raggimuffen
+  const __versionValidatedDocuments = await validateSLODocVersion(documents);
+
+  return __versionValidatedDocuments;
 };
 
 export const writeSloDocument = async function({ entityGuid, document }) {
@@ -106,8 +113,18 @@ export const validateSlo = function(document) {
   if (document.indicator === 'error_budget') {
     if (document.transactions.length === 0 || document.defects.length === 0) {
       return false;
-    }
-  }
+    } // if
+    else { 
+      // review the document for problematic transaction characters 
+      var __updated_transactions = [];
+      document.transactions.map(_transaction => {
+
+        __updated_transactions.push(_transaction.replace(/\\/g,"%"));
+      });
+
+      document.transactions = __updated_transactions;
+    } // else
+  } // if
 
   // Alert Driven SLO
   if (document.indicator !== 'error_budget') {
@@ -142,7 +159,7 @@ export const sloDocumentModel = {
       indicator: '',
       defects: [],
       transactions: [],
-      slo_r_version: '1.0.2',
+      slo_r_version: '1.0.5',
       description: ''
     };
   }

@@ -19,7 +19,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
   let __ERROR_FILTER = '';
 
   _transactions.map(transaction => {
-    __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name = '${transaction}' `;
+    __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}' `;
 
     if (_defects.length > 0) {
       __ERROR_FILTER += `AND (`;
@@ -65,7 +65,7 @@ const _getTotalFilter = function(_transactions) {
   let __TOTAL_FILTER = '';
 
   _transactions.map(transaction => {
-    __TOTAL_FILTER = `${__TOTAL_FILTER}FILTER(count(*), WHERE name = '${transaction}') + `;
+    __TOTAL_FILTER = `${__TOTAL_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}') + `;
   });
   __TOTAL_FILTER = `${__TOTAL_FILTER}0`; // completes the expression on the array element
 
