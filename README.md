@@ -2,7 +2,7 @@
 
 # SLO/R
 
-![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-slo-r?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-slo-r/badge.svg)](https://snyk.io/test/github/newrelic/nr1-slo-r)
+![CI](https://github.com/newrelic/nr1-slo-r/workflows/CI/badge.svg) ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/newrelic/nr1-slo-r?include_prereleases&sort=semver) [![Snyk](https://snyk.io/test/github/newrelic/nr1-slo-r/badge.svg)](https://snyk.io/test/github/newrelic/nr1-slo-r)
 
 ## Usage
 
