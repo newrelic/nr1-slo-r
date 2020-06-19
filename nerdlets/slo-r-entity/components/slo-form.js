@@ -380,7 +380,11 @@ export default class SloForm extends React.Component {
             policy name of an Alert you would like to associate with this SLO.
             For more information about configuring alerts to be used with SLO/R
             please see the{' '}
-            <a href="https://github.com/newrelic/nr1-slo-r">
+            <a
+              href="https://github.com/newrelic/nr1-slo-r"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               "Configuring Alerts" section of the SLO/R readme
             </a>
             .
