@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/newrelic/nr1-slo-r/compare/v1.5.2...v1.5.3) (2020-06-19)
+
+
+### Bug Fixes
+
+* add blank target for external urls when using anchors ([3221720](https://github.com/newrelic/nr1-slo-r/commit/322172033162eda4a99e97d80adeaf8c0474f088))
+
 ## [1.5.2](https://github.com/newrelic/nr1-slo-r/compare/v1.5.1...v1.5.2) (2020-04-01)
 
 
