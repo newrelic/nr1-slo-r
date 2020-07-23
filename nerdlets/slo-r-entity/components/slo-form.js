@@ -26,13 +26,16 @@ import { SLO_INDICATORS, SLO_DEFECTS } from '../../shared/constants';
 
 import { timeRangeToNrql } from '../../shared/helpers';
 
+import OrLine from './or-line';
+
 export default class SloForm extends React.Component {
   static propTypes = {
     entityGuid: PropTypes.string,
     documentId: PropTypes.string,
     upsertDocumentCallback: PropTypes.func,
     modalToggleCallback: PropTypes.func,
-    timeRange: PropTypes.object
+    timeRange: PropTypes.object,
+    groupList: PropTypes.array
   };
 
   static defaultProps = {
@@ -53,7 +56,9 @@ export default class SloForm extends React.Component {
 
       // Form options populated from nrql
       alertOptions: [],
-      transactionOptions: []
+      transactionOptions: [],
+
+      selectedGroup: null
     };
 
     if (!props.documentId) {
@@ -423,8 +428,31 @@ export default class SloForm extends React.Component {
           multiline
         />
 
+        <Dropdown
+          title={this.state.selectedGroup}
+          className="define-slo-input"
+          label="Select existing SLO group"
+        >
+          {this.props.groupList?.map((group, index) => (
+            <DropdownItem
+              key={index}
+              onClick={() => {
+                this.setState({ selectedGroup: group });
+                this.inputHandler({
+                  field: 'group',
+                  value: group
+                });
+              }}
+            >
+              {group}
+            </DropdownItem>
+          ))}
+        </Dropdown>
+
+        <OrLine />
+
         <TextField
-          label="SLO Group"
+          label="Create new SLO Group"
           className="define-slo-input"
           onChange={() =>
             this.inputHandler({

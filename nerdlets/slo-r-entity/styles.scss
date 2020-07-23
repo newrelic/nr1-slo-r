@@ -698,3 +698,28 @@ td .service-settings-dropdown {
 .empty-state-container div.tag-selector {
   margin-top: 16px;
 }
+
+.or-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+  color: #8e9494;
+  font-style: italic;
+
+  &:before {
+    content: '';
+    height: 1px;
+    width: 100%;
+    margin-right: 10px;
+    background: #b9bdbd;
+  }
+
+  &:after {
+    content: '';
+    height: 1px;
+    width: 100%;
+    margin-left: 10px;
+    background: #b9bdbd;
+  }
+}
