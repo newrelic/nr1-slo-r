@@ -454,24 +454,24 @@ export default class SloForm extends React.Component {
         <TextField
           label="Create new SLO Group"
           className="define-slo-input"
-          onChange={() =>
+          onChange={event => {
             this.inputHandler({
               field: 'slogroup',
               value: event.target.value
-            })
-          }
+            });
+          }}
           value={this.getValue({ field: 'slogroup' })}
         />
 
         <TextField
           label="Target Attainment"
           className="define-slo-input"
-          onChange={() =>
+          onChange={event => {
             this.inputHandler({
               field: 'target',
               value: event.target.value
-            })
-          }
+            });
+          }}
           value={this.getValue({ field: 'target' })}
         />
 
