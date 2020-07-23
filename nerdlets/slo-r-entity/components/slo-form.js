@@ -106,8 +106,10 @@ export default class SloForm extends React.Component {
   async getDocumentById({ entityGuid, documentId }) {
     if (entityGuid && documentId) {
       const response = await fetchDocumentById({ entityGuid, documentId });
+      console.log('SloForm -> getDocumentById -> response', response);
 
       this.setState({
+        selectedGroup: response.slogroup,
         document: response,
         isNew: false
       });
@@ -429,17 +431,28 @@ export default class SloForm extends React.Component {
         />
 
         <Dropdown
-          title={this.state.selectedGroup}
+          title={
+            this.props.groupList?.length === 0
+              ? 'no groups available'
+              : this.state.selectedGroup
+          }
           className="define-slo-input"
           label="Select existing SLO group"
+          disabled={this.props.groupList?.length === 0}
         >
+          <DropdownItem
+            onClick={() => {
+              this.setState({ selectedGroup: null });
+              this.inputHandler({ field: 'slogroup', value: undefined });
+            }}
+          />
           {this.props.groupList?.map((group, index) => (
             <DropdownItem
               key={index}
               onClick={() => {
                 this.setState({ selectedGroup: group });
                 this.inputHandler({
-                  field: 'group',
+                  field: 'slogroup',
                   value: group
                 });
               }}
@@ -453,6 +466,7 @@ export default class SloForm extends React.Component {
 
         <TextField
           label="Create new SLO Group"
+          disabled={this.state.selectedGroup}
           className="define-slo-input"
           onChange={() =>
             this.inputHandler({
@@ -460,7 +474,9 @@ export default class SloForm extends React.Component {
               value: event.target.value
             })
           }
-          value={this.getValue({ field: 'slogroup' })}
+          value={
+            this.state.selectedGroup ? '' : this.getValue({ field: 'slogroup' })
+          }
         />
 
         <TextField

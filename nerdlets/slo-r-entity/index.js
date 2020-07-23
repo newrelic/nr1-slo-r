@@ -163,8 +163,6 @@ export default class SLOREntityNedlet extends React.Component {
       }
     });
 
-    console.log('SLOREntityNedlet -> getSloDocuments -> groupList', groupList);
-
     this.setState({
       slo_documents,
       refreshing: false,
@@ -208,6 +206,7 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.upsertDocumentInList({ mutationResult: document });
+    await this.getSloDocuments();
   }
 
   async deleteDocumentCallback({ document }) {
@@ -425,6 +424,7 @@ export default class SLOREntityNedlet extends React.Component {
             documentId={this.state.editDocumentId}
             upsertDocumentCallback={this.upsertDocumentCallback}
             modalToggleCallback={this.toggleUpdateModal}
+            groupList={this.state.groupList}
           />
         </Modal>
 
