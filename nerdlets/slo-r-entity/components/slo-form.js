@@ -26,13 +26,16 @@ import { SLO_INDICATORS, SLO_DEFECTS } from '../../shared/constants';
 
 import { timeRangeToNrql } from '../../shared/helpers';
 
+import OrLine from './or-line';
+
 export default class SloForm extends React.Component {
   static propTypes = {
     entityGuid: PropTypes.string,
     documentId: PropTypes.string,
     upsertDocumentCallback: PropTypes.func,
     modalToggleCallback: PropTypes.func,
-    timeRange: PropTypes.object
+    timeRange: PropTypes.object,
+    groupList: PropTypes.array
   };
 
   static defaultProps = {
@@ -53,7 +56,9 @@ export default class SloForm extends React.Component {
 
       // Form options populated from nrql
       alertOptions: [],
-      transactionOptions: []
+      transactionOptions: [],
+
+      selectedGroup: null
     };
 
     if (!props.documentId) {
@@ -101,8 +106,10 @@ export default class SloForm extends React.Component {
   async getDocumentById({ entityGuid, documentId }) {
     if (entityGuid && documentId) {
       const response = await fetchDocumentById({ entityGuid, documentId });
+      console.log('SloForm -> getDocumentById -> response', response);
 
       this.setState({
+        selectedGroup: response.slogroup,
         document: response,
         isNew: false
       });
@@ -423,27 +430,64 @@ export default class SloForm extends React.Component {
           multiline
         />
 
-        <TextField
-          label="SLO Group"
+        <Dropdown
+          title={
+            this.props.groupList?.length === 0
+              ? 'no groups available'
+              : this.state.selectedGroup
+          }
           className="define-slo-input"
-          onChange={() =>
+          label="Select existing SLO group"
+          disabled={this.props.groupList?.length === 0}
+        >
+          <DropdownItem
+            onClick={() => {
+              this.setState({ selectedGroup: null });
+              this.inputHandler({ field: 'slogroup', value: undefined });
+            }}
+          />
+          {this.props.groupList?.map((group, index) => (
+            <DropdownItem
+              key={index}
+              onClick={() => {
+                this.setState({ selectedGroup: group });
+                this.inputHandler({
+                  field: 'slogroup',
+                  value: group
+                });
+              }}
+            >
+              {group}
+            </DropdownItem>
+          ))}
+        </Dropdown>
+
+        <OrLine />
+
+        <TextField
+          label="Create new SLO Group"
+          disabled={this.state.selectedGroup}
+          className="define-slo-input"
+          onChange={event => {
             this.inputHandler({
               field: 'slogroup',
               value: event.target.value
-            })
+            });
+          }}
+          value={
+            this.state.selectedGroup ? '' : this.getValue({ field: 'slogroup' })
           }
-          value={this.getValue({ field: 'slogroup' })}
         />
 
         <TextField
           label="Target Attainment"
           className="define-slo-input"
-          onChange={() =>
+          onChange={event => {
             this.inputHandler({
               field: 'target',
               value: event.target.value
-            })
-          }
+            });
+          }}
           value={this.getValue({ field: 'target' })}
         />
 

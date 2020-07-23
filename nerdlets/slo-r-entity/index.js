@@ -69,7 +69,9 @@ export default class SLOREntityNedlet extends React.Component {
       // Refresh
       refreshInterval: 60000, // in milliseconds
       refreshing: false,
-      lastUpdated: 0
+      lastUpdated: 0,
+
+      groupList: []
     }; // state
 
     this.openConfig = this._openConfig.bind(
@@ -84,8 +86,8 @@ export default class SLOREntityNedlet extends React.Component {
     this.toggleViewModal = this.toggleViewModal.bind(this);
   } // constructor
 
-  componentDidMount() {
-    this.load();
+  async componentDidMount() {
+    await this.load();
     this.startTimer();
   }
 
@@ -153,7 +155,20 @@ export default class SLOREntityNedlet extends React.Component {
 
     const slo_documents = await fetchSloDocuments({ entityGuid });
 
-    this.setState({ slo_documents, refreshing: false, lastUpdated: getNow() });
+    const groupList = [];
+
+    slo_documents.forEach(({ document: { slogroup } }) => {
+      if (!groupList.includes(slogroup)) {
+        groupList.push(slogroup);
+      }
+    });
+
+    this.setState({
+      slo_documents,
+      refreshing: false,
+      lastUpdated: getNow(),
+      groupList
+    });
   }
 
   toggleCreateModal() {
@@ -191,6 +206,7 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.upsertDocumentInList({ mutationResult: document });
+    await this.getSloDocuments();
   }
 
   async deleteDocumentCallback({ document }) {
@@ -391,6 +407,7 @@ export default class SLOREntityNedlet extends React.Component {
                   upsertDocumentCallback={this.upsertDocumentCallback}
                   modalToggleCallback={this.toggleCreateModal}
                   timeRange={platformUrlState.timeRange}
+                  groupList={this.state.groupList}
                 />
               );
             }}
@@ -407,6 +424,7 @@ export default class SLOREntityNedlet extends React.Component {
             documentId={this.state.editDocumentId}
             upsertDocumentCallback={this.upsertDocumentCallback}
             modalToggleCallback={this.toggleUpdateModal}
+            groupList={this.state.groupList}
           />
         </Modal>
 
