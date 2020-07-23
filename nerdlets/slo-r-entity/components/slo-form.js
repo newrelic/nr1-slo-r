@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 
 import {
   Button,
@@ -106,7 +106,6 @@ export default class SloForm extends React.Component {
   async getDocumentById({ entityGuid, documentId }) {
     if (entityGuid && documentId) {
       const response = await fetchDocumentById({ entityGuid, documentId });
-      console.log('SloForm -> getDocumentById -> response', response);
 
       this.setState({
         selectedGroup: response.slogroup,
@@ -445,7 +444,9 @@ export default class SloForm extends React.Component {
               this.setState({ selectedGroup: null });
               this.inputHandler({ field: 'slogroup', value: undefined });
             }}
-          />
+          >
+            ''
+          </DropdownItem>
           {this.props.groupList?.map((group, index) => (
             <DropdownItem
               key={index}
