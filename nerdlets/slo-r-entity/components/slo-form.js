@@ -444,9 +444,7 @@ export default class SloForm extends React.Component {
               this.setState({ selectedGroup: null });
               this.inputHandler({ field: 'slogroup', value: undefined });
             }}
-          >
-            ''
-          </DropdownItem>
+          />
           {this.props.groupList?.map((group, index) => (
             <DropdownItem
               key={index}
