@@ -43,8 +43,6 @@ export default class Day extends Component {
       const foundIndex = cachedDays.findIndex(item =>
         isSameDay(item.date, date)
       );
-      console.log('Day -> calculateValue -> foundIndex', foundIndex);
-      console.log('Day -> calculateValue -> cachedDays', cachedDays);
 
       if (foundIndex >= 0) {
         const { value } = cachedDays[foundIndex];

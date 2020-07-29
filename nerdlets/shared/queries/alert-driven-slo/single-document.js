@@ -74,7 +74,6 @@ const _getAlertDrivenSLOData = async function(props) {
 
   const __NRQL_OPEN = _getOpenedAlertNRQL(alerts, __beginTS, __endTS);
   const __NRQL_CLOSED = _getClosedAlertNRQL(alerts, __beginTS, __endTS);
-  console.log('_getClosedAlertNRQL -> __NRQL_CLOSED', __NRQL_CLOSED);
 
   const __queryOpenAlerts = `{
             actor {
