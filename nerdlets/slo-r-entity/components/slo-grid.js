@@ -23,6 +23,22 @@ export default class SLOGrid extends Component {
     const { data } = this.props;
 
     const SLOGridItems = data.map((document, index) => {
+      const tags =
+        document.tags &&
+        document.tags.map(tag => (
+          <span
+            key={tag}
+            style={{
+              display: 'inline-block',
+              fontSize: '12px',
+              background: 'rgb(241, 251, 252)',
+              padding: '0 8px',
+              margin: '2px 0'
+            }}
+          >
+            {tag}
+          </span>
+        ));
       return (
         <GridItem className="slo-grid-item" key={index} columnSpan={3}>
           <header className="slo-grid-item-header">
@@ -89,10 +105,12 @@ export default class SLOGrid extends Component {
             <span className="slo-grid-item-section-label">Current</span>
           </div>
           <div className="slo-grid-item-section section-tag">
-            <span className="slo-grid-item-section-value">
-              {document.slogroup}
+            <div className="slo-grid-item-section-value">
+              {document.slogroup || tags}
+            </div>
+            <span className="slo-grid-item-section-label">
+              {document.slogroup ? 'SLO Group' : 'Tag'}
             </span>
-            <span className="slo-grid-item-section-label">SLO Group</span>
           </div>
           <div
             className={`slo-grid-item-section section-7day ${

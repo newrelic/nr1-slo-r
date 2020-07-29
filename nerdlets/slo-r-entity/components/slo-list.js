@@ -372,7 +372,41 @@ export default class SloList extends React.Component {
       },
       {
         dataField: 'slogroup',
+        formatter: cell => {
+          if (cell) {
+            return cell;
+          }
+          return '-';
+        },
         text: 'SLO Group',
+        sort: true,
+        headerStyle: () => {
+          return { width: '140px' };
+        }
+      },
+      {
+        dataField: 'tags',
+        formatter: cell => {
+          if (cell) {
+            const tag = cell.map(tag => (
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '12px',
+                  background: 'rgb(241, 251, 252)',
+                  padding: '0 8px',
+                  margin: '2px 0'
+                }}
+                key={tag}
+              >
+                {tag}
+              </span>
+            ));
+            return tag;
+          }
+          return '-';
+        },
+        text: 'Tag',
         sort: true,
         headerStyle: () => {
           return { width: '140px' };
@@ -445,6 +479,7 @@ export default class SloList extends React.Component {
             '30_day',
             'target',
             'slogroup',
+            'tags',
             'delete'
           ]
         },
