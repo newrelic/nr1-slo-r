@@ -152,7 +152,7 @@ const _getAlertDrivenSLOData = async function(props) {
     accumulatedMilliseconds: __accumulatedMillisecondsInAlertState,
     totalTimeMilliseconds: __endTS - __beginTS,
     slo_result:
-      100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS)
+      (1 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS)) * 100
   };
 
   // set the SLO result as 100 - the percentage of time in violation
