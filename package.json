@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@newrelic/nr1-community": "^1.1.1",
-    "date-fns": "^2.8.1",
+    "classnames": "^2.2.6",
+    "date-fns": "^2.15.0",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
     "prop-types": "^15.6.2",
