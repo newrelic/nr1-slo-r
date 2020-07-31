@@ -34,7 +34,10 @@ export const updateTimeRangeFromScope = ({ scope, timeRange }) => {
   } // else
 
   // determine if this is a fixed or variable time scope
-  if (scope === '7_day') {
+  if (scope === '1_day') {
+    __duration = null;
+    __beginTS = +__endTS - +'86400000';
+  } else if (scope === '7_day') {
     __duration = null;
     __beginTS = +__endTS - +'604800000';
   } // if

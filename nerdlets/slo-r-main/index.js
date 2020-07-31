@@ -8,7 +8,7 @@
 import React from 'react';
 
 /** nr1 */
-import { NerdGraphQuery, Spinner } from 'nr1';
+import { NerdGraphQuery, Spinner, navigation } from 'nr1';
 
 /** local */
 import SLOREstate from './components/slo-r-estate';
@@ -28,6 +28,15 @@ export default class SloRMain extends React.Component {
 
   async componentDidMount() {
     await this._getEntities();
+
+    const options = {
+      id: 'slo-r-calendar',
+      urlState: {
+        entityGuid
+      }
+    };
+
+    navigation.openStackedNerdlet(options);
   }
 
   async _getEntities() {
