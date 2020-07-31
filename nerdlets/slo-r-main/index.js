@@ -8,7 +8,7 @@ export default class SLOR extends Component {
     return (
       <Stack
         verticalType={Stack.VERTICAL_TYPE.FILL}
-        className="container"
+        className="nerdlet-container"
         fullWidth
         fullHeight
       >

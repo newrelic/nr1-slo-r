@@ -1,17 +1,21 @@
-.container {
+.nerdlet-container {
   background-color: #F7F8F8;
 }
 
-.slos-list {
+.slos-container {
   background: white;
   border-right: 1px solid #F7F8F8;
   min-width: 240px;
   height: 100%;
 }
 
-.slos-list__header {
+.slos-container__header {
   padding: 12px 16px;
   color: #727979;
+}
+
+.slos-container__list {
+  list-style: none;
 }
 
 .slo {

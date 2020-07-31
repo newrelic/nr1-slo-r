@@ -69,7 +69,7 @@ export default class Overview extends Component {
 
     return (
       <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
-        <StackItem className="slos-list">
+        <StackItem className="slos-container">
           {isProcessing ? (
             <Spinner />
           ) : (

@@ -148,6 +148,31 @@ export default class SummaryTable extends Component {
       _slo_data: summaryData
     });
 
+    const calendarFormatter = (_, row) => {
+      const { documentId } = row;
+      const { slos } = this.props;
+
+      const slo =
+        slos[slos.findIndex(slo => slo.document.documentId === documentId)];
+
+      const options = {
+        id: 'slo-r-calendar',
+        urlState: {
+          slo_document: slo.document
+        }
+      };
+
+      return (
+        <Button
+          type={Button.TYPE.NORMAL}
+          iconType={Button.ICON_TYPE.DATE_AND_TIME__DATE_AND_TIME__DATE}
+          onClick={() => {
+            navigation.openStackedNerdlet(options);
+          }}
+        />
+      );
+    };
+
     const linkFormatter = (_, row) => {
       const { entityGuid } = row;
       return (
@@ -205,6 +230,12 @@ export default class SummaryTable extends Component {
         text: 'Entity',
         footer: '--',
         formatter: linkFormatter
+      },
+      {
+        dataField: '',
+        text: 'Calendar',
+        footer: '--',
+        formatter: calendarFormatter
       }
     ];
 

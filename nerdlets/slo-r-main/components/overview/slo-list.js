@@ -5,8 +5,8 @@ import { sloIndicatorLabelLookup } from '../../../shared/helpers';
 const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
   return (
     <>
-      <div className="slos-list__header">SLOs</div>
-      <ul>
+      <div className="slos-container__header">SLOs</div>
+      <ul className="slos-container__list">
         {slos.map(({ id, document }) => {
           const isSelected = selectedSlosIds.includes(id);
           return (
