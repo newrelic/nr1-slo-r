@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownItem } from 'nr1';
 import { Multiselect } from 'react-widgets';
 
 const TagsDropdown = ({
@@ -9,8 +8,6 @@ const TagsDropdown = ({
   handleTagChange,
   disabled
 }) => {
-  // const selectedTag = selectedTags?.map(tag => `${tag.key}: ${tag.values}`);
-
   const convertedEntityTags = entityTags.map(
     ({ key, values }) => `${key}=${values}`
   );
