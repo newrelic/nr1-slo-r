@@ -393,13 +393,12 @@ export default class SloList extends React.Component {
                 style={{
                   display: 'block',
                   fontSize: '12px',
-                  background: 'rgb(241, 251, 252)',
                   padding: '0 8px',
                   margin: '2px 0'
                 }}
-                key={tag}
+                key={tag.key}
               >
-                {tag}
+                {tag.values[0]}
               </span>
             ));
             return tag;
