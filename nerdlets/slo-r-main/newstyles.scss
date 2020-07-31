@@ -1,0 +1,53 @@
+.container {
+  background-color: #F7F8F8;
+}
+
+.slos-list {
+  background: white;
+  border-right: 1px solid #F7F8F8;
+  min-width: 240px;
+  height: 100%;
+}
+
+.slos-list__header {
+  padding: 12px 16px;
+  color: #727979;
+}
+
+.slo {
+  padding: 12px 20px;
+  color: black;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #F7F8F8;
+  }
+}
+
+.slo__indicator {
+  padding: 2px 5px;
+  background-color: #EDEEEE;
+  margin-left: 10px;
+  border-radius: 2px;
+  color: #464E4E;
+}
+
+.slo--active {
+  background-color: #F1FBFC;
+  color: #00484E;
+}
+
+.main-content-container {
+  padding: 25px;
+}
+
+.table-container {
+  margin-bottom: 50px;
+}
+
+.table-container__header {
+  display: inline-block;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
+
