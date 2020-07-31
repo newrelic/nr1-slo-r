@@ -106,7 +106,6 @@ export default class SloForm extends React.Component {
   async getDocumentById({ entityGuid, documentId }) {
     if (entityGuid && documentId) {
       const response = await fetchDocumentById({ entityGuid, documentId });
-      console.log('SloForm -> getDocumentById -> response', response);
 
       this.setState({
         selectedGroup: response.slogroup,

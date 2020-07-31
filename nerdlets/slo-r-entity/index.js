@@ -87,21 +87,22 @@ export default class SLOREntityNedlet extends React.Component {
   } // constructor
 
   async componentDidMount() {
-    await this.load();
+    const { entityGuid } = this.state;
+    await this.load(entityGuid);
     this.startTimer();
   }
 
   /*
    * Reload if we changed entityGuid or triggered a refresh
    */
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = async prevProps => {
     const prevEntityGuid = prevProps.nerdletUrlState.entityGuid;
     const currentEntityGuid = this.props.nerdletUrlState.entityGuid;
 
     if (prevEntityGuid !== currentEntityGuid) {
-      this.load(currentEntityGuid);
+      await this.load(currentEntityGuid);
     }
-  }
+  };
 
   componentWillUnmount() {
     this.stopTimer();
@@ -109,24 +110,22 @@ export default class SLOREntityNedlet extends React.Component {
 
   static contextType = NerdletStateContext;
 
-  async load(entityGuid) {
+  load = async entityGuid => {
     if (entityGuid) {
       this.setState({ refreshing: true, entityGuid });
     } else {
       this.setState({ refreshing: true });
     }
-    this.getSloDocuments();
 
-    // if (this.state.refreshing) {
-    //   this.setState({ refreshing: false });
-    // }
-  }
+    await this.getSloDocuments(entityGuid);
+  };
 
   startTimer() {
     const { refreshInterval } = this.state;
 
     this.refresh = setInterval(async () => {
-      this.load();
+      const { entityGuid } = this.state;
+      await this.load(entityGuid);
     }, refreshInterval);
   }
 
@@ -150,9 +149,7 @@ export default class SLOREntityNedlet extends React.Component {
   }
 
   /** gets all the SLO documents defined for this entity */
-  async getSloDocuments() {
-    const { entityGuid } = this.state;
-
+  getSloDocuments = async entityGuid => {
     const slo_documents = await fetchSloDocuments({ entityGuid });
 
     const groupList = [];
@@ -169,7 +166,7 @@ export default class SLOREntityNedlet extends React.Component {
       lastUpdated: getNow(),
       groupList
     });
-  }
+  };
 
   toggleCreateModal() {
     this.setState(prevState => ({
@@ -206,7 +203,7 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.upsertDocumentInList({ mutationResult: document });
-    await this.getSloDocuments();
+    await this.getSloDocuments(this.state.entityGuid);
   }
 
   async deleteDocumentCallback({ document }) {
@@ -349,7 +346,9 @@ export default class SLOREntityNedlet extends React.Component {
   render() {
     // ensure we have state for our slo documents to render the reporting table and configuration options
 
-    if (this.state.slo_documents === null) {
+    const { slo_documents, refreshing } = this.state;
+
+    if (slo_documents === null || refreshing === true) {
       return (
         <div>
           <Spinner className="centered" size="small" />

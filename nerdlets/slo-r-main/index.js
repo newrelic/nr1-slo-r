@@ -26,14 +26,9 @@ export default class SloRMain extends React.Component {
     };
   } // constructor
 
-  /* eslint-disable react/no-deprecated */
-  // See tracking issue https://github.com/newrelic/nr1-slo-r/issues/83
-  async componentWillMount() {
-    if (this.state.entities === null) {
-      await this._getEntities();
-    } // if
-  } // componentWillMount
-  /* eslint-enable */
+  async componentDidMount() {
+    await this._getEntities();
+  }
 
   async _getEntities() {
     const __query = `{
