@@ -319,7 +319,7 @@ export default class SLOREntityNedlet extends React.Component {
 
             <StackItem className="updated-timestamp">
               Last updated at: {format(lastUpdated, 'hh:mm:ss')}
-              {refreshing && <Spinner />}
+              {refreshing && <Spinner inline />}
             </StackItem>
           </Stack>
         </StackItem>
@@ -348,7 +348,7 @@ export default class SLOREntityNedlet extends React.Component {
 
     const { slo_documents, refreshing } = this.state;
 
-    if (slo_documents === null || refreshing === true) {
+    if (slo_documents === null && refreshing === true) {
       return (
         <div>
           <Spinner className="centered" size="small" />
@@ -356,7 +356,7 @@ export default class SLOREntityNedlet extends React.Component {
       );
     }
 
-    const sloHasBeenDefined = this.state.slo_documents.length > 0;
+    const sloHasBeenDefined = this.state.slo_documents?.length > 0;
 
     return (
       <div>
@@ -372,7 +372,7 @@ export default class SLOREntityNedlet extends React.Component {
           >
             <PlatformStateContext.Consumer>
               {platformUrlState => {
-                if (this.state.slo_documents === null) {
+                if (slo_documents === null) {
                   return null;
                 }
 
