@@ -8,15 +8,12 @@ const TagsDropdown = ({
   handleTagChange,
   disabled
 }) => {
-  const convertedEntityTags = entityTags.map(
-    ({ key, values }) => `${key}=${values}`
-  );
-
   return (
     <>
       <h4 className="dropdown-label">Tags</h4>
       <Multiselect
-        data={convertedEntityTags}
+        data={entityTags}
+        textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
         value={selectedTags}
         onChange={value => {
           handleTagChange(value)();

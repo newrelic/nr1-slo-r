@@ -27,7 +27,7 @@ export default class SLOGrid extends Component {
         document.tags &&
         document.tags.map(tag => (
           <span
-            key={tag}
+            key={tag.key}
             style={{
               display: 'inline-block',
               fontSize: '12px',
@@ -36,9 +36,10 @@ export default class SLOGrid extends Component {
               margin: '2px 0'
             }}
           >
-            {tag}
+            {tag.values[0]}
           </span>
         ));
+
       return (
         <GridItem className="slo-grid-item" key={index} columnSpan={3}>
           <header className="slo-grid-item-header">

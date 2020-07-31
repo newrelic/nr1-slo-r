@@ -48,30 +48,36 @@ const SloGridTags = ({
     const tags =
       document.tags &&
       document.tags.map(tag => (
-        <span key={tag} className="tag">
-          {tag}
+        <span key={tag.key} className="tag">
+          {tag.values[0]}
         </span>
       ));
 
+    let tooltip;
+
+    if (document.description) {
+      tooltip = (
+        <Tooltip
+          className="document-description-button"
+          text={document.description}
+        >
+          <Button
+            sizeType={Button.SIZE_TYPE.SMALL}
+            type={Button.TYPE.PLAIN_NEUTRAL}
+            iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
+          />
+        </Tooltip>
+      );
+    }
+
     return (
       <GridItem className="slo-grid-item-tag" key={index} columnSpan={3}>
+        {tooltip}
         <header className="slo-grid-item-tag__header">
           <h4 className="name">{document.name}</h4>
           <p className="indicator">
             {sloIndicatorLabelLookup({ value: document.indicator })}
           </p>
-          {/* {document.description !== undefined && (
-            <Tooltip
-              className="document-description-button"
-              text={document.description}
-            >
-              <Button
-                sizeType={Button.SIZE_TYPE.SMALL}
-                type={Button.TYPE.PLAIN_NEUTRAL}
-                iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
-              />
-            </Tooltip>
-          )} */}
 
           {/* <SettingsMenu>
             <li
