@@ -24,7 +24,6 @@ import AlertDrivenSLO from '../../shared/queries/alert-driven-slo/single-documen
 import { SLO_INDICATORS } from '../../shared/constants';
 import searchIcon from '../../../assets/icon-search.svg';
 import SettingsMenu from './settings-menu';
-import SloGridTags from './slo-grid-tags/slo-grid-tags';
 
 /**
  * SloList
@@ -210,15 +209,12 @@ export default class SloList extends React.Component {
     const { tableData } = this.state;
 
     return (
-      <>
-        <SloGridTags data={tableData} />
-        <SLOGrid
-          data={tableData}
-          toggleViewModal={this.props.toggleViewModal}
-          toggleUpdateModal={this.props.toggleUpdateModal}
-          deleteCallback={this.props.deleteCallback}
-        />
-      </>
+      <SLOGrid
+        data={tableData}
+        toggleViewModal={this.props.toggleViewModal}
+        toggleUpdateModal={this.props.toggleUpdateModal}
+        deleteCallback={this.props.deleteCallback}
+      />
     );
   }
 

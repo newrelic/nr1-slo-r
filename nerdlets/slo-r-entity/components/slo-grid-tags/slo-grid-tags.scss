@@ -18,7 +18,7 @@
 .slo-grid-item-tag {  
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 85px 59px 59px 30px;
+  grid-template-rows: 125px 59px 59px 30px;
   grid-template-areas: 
     "header header"
     "current sevendays"
@@ -133,11 +133,28 @@
     @extend .indicator;
     margin: 0 5px;
     white-space: nowrap;
+    &__value {
+      display: block;
+    }
+
+    &__extended {
+      display: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+      .tag__value {
+        display: none;
+      }
+      .tag__extended {
+        display: block;
+      }
+    }
   }
 
   .wrapper {
     @extend .center-flex;
-    margin: 0 15px;
+    margin: 0 6px;
     padding: 5px 0;
     border-radius: 3px;
 

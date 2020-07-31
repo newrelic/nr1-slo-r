@@ -6,6 +6,7 @@ import { Grid, GridItem, Icon, Button, Tooltip } from 'nr1';
 import { sloIndicatorLabelLookup } from '../../shared/helpers';
 
 import SettingsMenu from './settings-menu';
+import SloGridTags from './slo-grid-tags/slo-grid-tags';
 
 export default class SLOGrid extends Component {
   static propTypes = {
@@ -23,22 +24,18 @@ export default class SLOGrid extends Component {
     const { data } = this.props;
 
     const SLOGridItems = data.map((document, index) => {
-      const tags =
-        document.tags &&
-        document.tags.map(tag => (
-          <span
-            key={tag.key}
-            style={{
-              display: 'inline-block',
-              fontSize: '12px',
-              background: 'rgb(241, 251, 252)',
-              padding: '0 8px',
-              margin: '2px 0'
-            }}
-          >
-            {tag.values[0]}
-          </span>
-        ));
+      if (document.tags) {
+        return (
+          <SloGridTags
+            key={index}
+            document={document}
+            index={index}
+            toggleViewModal={this.props.toggleViewModal}
+            toggleUpdateModal={this.props.toggleUpdateModal}
+            deleteCallback={this.props.deleteCallback}
+          />
+        );
+      }
 
       return (
         <GridItem className="slo-grid-item" key={index} columnSpan={3}>
@@ -107,7 +104,7 @@ export default class SLOGrid extends Component {
           </div>
           <div className="slo-grid-item-section section-tag">
             <div className="slo-grid-item-section-value">
-              {document.slogroup || tags}
+              {document.slogroup}
             </div>
             <span className="slo-grid-item-section-label">
               {document.slogroup ? 'SLO Group' : 'Tag'}

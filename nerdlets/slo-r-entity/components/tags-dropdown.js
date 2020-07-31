@@ -14,6 +14,7 @@ const TagsDropdown = ({
       <Multiselect
         data={entityTags}
         textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
+        valueField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
         value={selectedTags}
         onChange={value => {
           handleTagChange(value)();
