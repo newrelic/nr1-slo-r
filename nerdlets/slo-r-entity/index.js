@@ -155,7 +155,7 @@ export default class SLOREntityNedlet extends React.Component {
     const groupList = [];
 
     slo_documents.forEach(({ document: { slogroup } }) => {
-      if (!groupList.includes(slogroup)) {
+      if (slogroup && !groupList.includes(slogroup)) {
         groupList.push(slogroup);
       }
     });

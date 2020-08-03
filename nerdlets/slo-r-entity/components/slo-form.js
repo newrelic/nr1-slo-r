@@ -23,10 +23,12 @@ import {
 // entities
 import { fetchEntity } from '../../shared/services/entity';
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../shared/constants';
+import { tags } from '../../shared/queries/tags';
 
 import { timeRangeToNrql } from '../../shared/helpers';
 
 import OrLine from './or-line';
+import TagsDropdown from './tags-dropdown';
 
 export default class SloForm extends React.Component {
   static propTypes = {
@@ -58,7 +60,9 @@ export default class SloForm extends React.Component {
       alertOptions: [],
       transactionOptions: [],
 
-      selectedGroup: null
+      selectedGroup: null,
+      entityTags: [],
+      selectedTags: []
     };
 
     if (!props.documentId) {
@@ -75,6 +79,14 @@ export default class SloForm extends React.Component {
     if (this.props.documentId) {
       await this.getDocumentById({ entityGuid, documentId });
     }
+
+    const result = await NerdGraphQuery.query({
+      query: tags(entityGuid)
+    });
+
+    this.setState({
+      entityTags: result.data.actor.entity.tags
+    });
 
     // TO DO - change to something that executes all 3 at once
     // Either promise.all or callbacks
@@ -110,7 +122,8 @@ export default class SloForm extends React.Component {
       this.setState({
         selectedGroup: response.slogroup,
         document: response,
-        isNew: false
+        isNew: false,
+        selectedTags: response.tags
       });
     }
   }
@@ -185,8 +198,10 @@ export default class SloForm extends React.Component {
     // prevent default used to stop form submission to iframe
     e.preventDefault();
 
-    const { entityDetails, document } = this.state;
-    const isValid = validateSlo(document);
+    const { entityDetails, document, selectedGroup } = this.state;
+    const currentDocument = { ...document };
+
+    const isValid = validateSlo(currentDocument);
 
     if (!isValid) {
       // eslint-disable-next-line no-alert
@@ -196,9 +211,13 @@ export default class SloForm extends React.Component {
       return;
     }
 
+    if (!selectedGroup || '') {
+      delete currentDocument.slogroup;
+    }
+
     // Merge in entityDetails
     const newDocument = {
-      ...document,
+      ...currentDocument,
       entityGuid: entityDetails.entityGuid,
       accountId: entityDetails.accountId,
       accountName: entityDetails.accountName,
@@ -428,7 +447,17 @@ export default class SloForm extends React.Component {
           value={this.getValue({ field: 'description' })}
           multiline
         />
-
+        <TagsDropdown
+          entityTags={this.state.entityTags}
+          selectedTags={this.state.selectedTags}
+          handleClickReset={this.handleClickReset}
+          handleTagChange={this.handleTagChange}
+          disabled={
+            this.state.entityTags.length === 0 ||
+            this.state.selectedGroup ||
+            this.state.document.slogroup
+          }
+        />
         <Dropdown
           title={
             this.props.groupList?.length === 0
@@ -437,14 +466,18 @@ export default class SloForm extends React.Component {
           }
           className="define-slo-input"
           label="Select existing SLO group"
-          disabled={this.props.groupList?.length === 0}
+          disabled={
+            this.props.groupList?.length === 0 ||
+            this.state.selectedTags?.length > 0
+          }
         >
           <DropdownItem
             onClick={() => {
               this.setState({ selectedGroup: null });
-              this.inputHandler({ field: 'slogroup', value: undefined });
+              this.inputHandler({ field: 'slogroup', value: null });
             }}
           />
+
           {this.props.groupList?.map((group, index) => (
             <DropdownItem
               key={index}
@@ -465,7 +498,9 @@ export default class SloForm extends React.Component {
 
         <TextField
           label="Create new SLO Group"
-          disabled={this.state.selectedGroup}
+          disabled={
+            this.state.selectedGroup || this.state.selectedTags?.length > 0
+          }
           className="define-slo-input"
           onChange={event => {
             this.inputHandler({
@@ -519,6 +554,27 @@ export default class SloForm extends React.Component {
       </>
     );
   }
+
+  handleClickReset = () => {
+    this.setState({
+      selectedTags: []
+    });
+    this.inputHandler({
+      field: 'tags',
+      value: []
+    });
+  };
+
+  handleTagChange = tag => event => {
+    this.inputHandler({
+      field: 'tags',
+      value: tag
+    });
+
+    this.setState({
+      selectedTags: [...tag]
+    });
+  };
 
   render() {
     const { documentId } = this.props;

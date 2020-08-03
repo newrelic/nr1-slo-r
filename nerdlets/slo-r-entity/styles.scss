@@ -2,6 +2,7 @@
 @import '~react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 @import "./nrds.scss";
 @import "./multi-select.scss";
+@import "./components/slo-grid-tags/slo-grid-tags.scss";
 
 #root>div {
   height: 100%;
@@ -237,14 +238,13 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
 .slo-grid-container {
   grid-gap: 16px;
   position: relative;
-  grid-auto-rows: 232px;
   align-items: stretch;
 }
 
 .slo-grid-item {
   display: grid;
   grid-template-columns: repeat(6, 16.66666667%);
-  grid-template-rows: 114px 59px 59px;
+  grid-template-rows: 127px 59px 86px;
   grid-template-areas:
     "header header header header header header"
     "   a      a      a      b      b      b  "
@@ -265,7 +265,6 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 114px;
   text-align: center;
   border-bottom: 1px solid #EDEEEE;
   grid-area: header;
