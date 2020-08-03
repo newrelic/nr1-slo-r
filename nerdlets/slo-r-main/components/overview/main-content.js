@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Spinner, PlatformStateContext, StackItem } from 'nr1';
+import { Spinner, StackItem } from 'nr1';
 import TableSummary from './table-summary';
 
 export default class MainContent extends Component {
@@ -49,27 +49,25 @@ export default class MainContent extends Component {
 
   render() {
     const { isProcessing, aggregatedData } = this.state;
+    const { timeRange } = this.props;
 
     return (
       <StackItem>
         {isProcessing && <Spinner />}
-        <PlatformStateContext.Consumer>
-          {platformUrlState =>
-            aggregatedData.map(data => (
-              <TableSummary
-                key={data.indicator}
-                indicator={data.indicator}
-                slos={data.slos}
-                timeRange={platformUrlState.timeRange}
-              />
-            ))
-          }
-        </PlatformStateContext.Consumer>
+        {aggregatedData.map(data => (
+          <TableSummary
+            key={data.indicator}
+            indicator={data.indicator}
+            slos={data.slos}
+            timeRange={timeRange}
+          />
+        ))}
       </StackItem>
     );
   }
 }
 
 MainContent.propTypes = {
-  slos: PropTypes.array.isRequired
+  slos: PropTypes.array.isRequired,
+  timeRange: PropTypes.object
 };

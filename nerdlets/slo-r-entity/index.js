@@ -155,7 +155,7 @@ export default class SLOREntityNedlet extends React.Component {
     const groupList = [];
 
     slo_documents.forEach(({ document: { slogroup } }) => {
-      if (!groupList.includes(slogroup)) {
+      if (slogroup && !groupList.includes(slogroup)) {
         groupList.push(slogroup);
       }
     });
@@ -272,7 +272,7 @@ export default class SLOREntityNedlet extends React.Component {
 
     return (
       <Stack
-        className="toolbar-container"
+        className="entity-toolbar-container"
         fullWidth
         horizontalType={Stack.HORIZONTAL_TYPE.FILL}
         verticalType={Stack.VERTICAL_TYPE.CENTER}

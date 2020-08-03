@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Spinner, Stack, StackItem } from 'nr1';
-
-import { getEntities } from './queries';
-import { fetchSloDocuments } from '../../../shared/services/slo-documents';
+import PropTypes from 'prop-types';
+import { StackItem } from 'nr1';
 
 import EmptyState from './empty-state';
 import SloList from './slo-list';
@@ -12,38 +10,10 @@ export default class Overview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      entities: [],
-      slos: [],
       selectedSlosIds: [],
       isProcessing: true
     };
   }
-
-  componentDidMount = async () => {
-    try {
-      const entities = await getEntities();
-      let slos = [];
-
-      for (let index = 0; index < entities.length; index++) {
-        const entity = entities[index];
-
-        const { guid: entityGuid } = entity;
-        const result = await fetchSloDocuments({ entityGuid });
-        slos.push(...result);
-      }
-
-      slos = slos.sort((a, b) =>
-        a.document.indicator > b.document.indicator ? 1 : -1
-      );
-
-      this.setState({
-        entities,
-        slos
-      });
-    } finally {
-      this.setState({ isProcessing: false });
-    }
-  };
 
   handleSloClick = (id, isSelected) => {
     this.setState(prevState => {
@@ -65,24 +35,22 @@ export default class Overview extends Component {
   };
 
   render() {
-    const { isProcessing, slos, selectedSlosIds } = this.state;
+    const { isProcessing, selectedSlosIds } = this.state;
+    const { slos, timeRange } = this.props;
 
     return (
       <>
         <StackItem className="slos-container">
-          {isProcessing ? (
-            <Spinner />
-          ) : (
-            <SloList
-              slos={slos}
-              selectedSlosIds={selectedSlosIds}
-              handleSloClick={this.handleSloClick}
-            />
-          )}
+          <SloList
+            slos={slos}
+            selectedSlosIds={selectedSlosIds}
+            handleSloClick={this.handleSloClick}
+          />
         </StackItem>
         <StackItem grow className="main-content-container">
           {!isProcessing && slos.length === 0 && <EmptyState />}
           <MainContent
+            timeRange={timeRange}
             slos={slos.filter(slo => selectedSlosIds.includes(slo.id))}
           />
         </StackItem>
@@ -90,3 +58,8 @@ export default class Overview extends Component {
     );
   }
 }
+
+Overview.propTypes = {
+  slos: PropTypes.array.isRequired,
+  timeRange: PropTypes.object
+};

@@ -3,6 +3,19 @@
   overflow: hidden;
 }
 
+.toolbar {
+  background: #edeeee;
+  box-sizing: border-box;
+
+  &__item {
+    padding: 20px;
+
+    &--separator {
+      border-right: 1px dotted #d5d7d7;
+    }
+  }
+}
+
 .slos-container {
   background: white;
   border-right: 1px solid #F7F8F8;
@@ -89,3 +102,6 @@
   margin-right: 20px;
 }
 
+.grid-container {
+  grid-gap: 16px;
+}
