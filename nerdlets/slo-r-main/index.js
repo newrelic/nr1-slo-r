@@ -1,23 +1,54 @@
 import React, { Component } from 'react';
-import { Stack, StackItem, Button } from 'nr1';
+import { Stack, StackItem, Button, Spinner } from 'nr1';
 
+import { fetchSloDocuments } from '../shared/services/slo-documents';
+import { getEntities } from './queries';
 import { Overview } from './components';
 
 const PAGES = {
   SLO_LIST: 'slo-list',
-  COMBINE_SLOs: <Overview />
+  COMBINE_SLOs: Overview
 };
 
 export default class SLOR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePage: PAGES.COMBINE_SLOs
+      ActivePage: PAGES.COMBINE_SLOs,
+      entities: [],
+      slos: [],
+      isProcessing: true
     };
   }
 
+  componentDidMount = async () => {
+    try {
+      const entities = await getEntities();
+      let slos = [];
+
+      for (let index = 0; index < entities.length; index++) {
+        const entity = entities[index];
+
+        const { guid: entityGuid } = entity;
+        const result = await fetchSloDocuments({ entityGuid });
+        slos.push(...result);
+      }
+
+      slos = slos.sort((a, b) =>
+        a.document.indicator > b.document.indicator ? 1 : -1
+      );
+
+      this.setState({
+        entities,
+        slos
+      });
+    } finally {
+      this.setState({ isProcessing: false });
+    }
+  };
+
   render() {
-    const { activePage } = this.state;
+    const { ActivePage, slos, isProcessing } = this.state;
 
     return (
       <Stack
@@ -32,7 +63,7 @@ export default class SLOR extends Component {
             <Button
               type={Button.TYPE.NORMAL}
               onClick={() => {
-                this.setState({ activePage: PAGES.SLO_LIST });
+                this.setState({ ActivePage: PAGES.SLO_LIST });
               }}
               iconType={Button.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
             >
@@ -43,7 +74,7 @@ export default class SLOR extends Component {
             <Button
               type={Button.TYPE.NORMAL}
               onClick={() => {
-                this.setState({ activePage: PAGES.COMBINE_SLOs });
+                this.setState({ ActivePage: PAGES.COMBINE_SLOs });
               }}
               iconType={Button.ICON_TYPE.INTERFACE__VIEW__LAYER_LIST}
             >
@@ -53,12 +84,6 @@ export default class SLOR extends Component {
           <StackItem className="toolbar__item">
             <Button
               type={Button.TYPE.PRIMARY}
-              // onClick={() =>
-              //   navigation.router({
-              //     to: 'createMap',
-              //     state: { selectedMap: null, activeStep: 1 }
-              //   })
-              // }
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
             >
               Create new SLO
@@ -66,7 +91,7 @@ export default class SLOR extends Component {
           </StackItem>
         </Stack>
         <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
-          {activePage}
+          {isProcessing ? <Spinner /> : <ActivePage slos={slos} />}
         </Stack>
       </Stack>
     );
