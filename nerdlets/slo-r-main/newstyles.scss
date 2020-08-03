@@ -6,7 +6,8 @@
 .slos-container {
   background: white;
   border-right: 1px solid #F7F8F8;
-  min-width: 240px;
+  min-width: 350px;
+  max-width: 350px;
   height: 100%;
 }
 
@@ -19,6 +20,14 @@
   list-style: none;
 }
 
+.slo__indicator {
+  padding: 2px 5px;
+  background-color: #EDEEEE;
+  margin-left: 10px;
+  border-radius: 2px;
+  color: #464E4E;
+}
+
 .slo {
   padding: 12px 20px;
   color: black;
@@ -27,15 +36,24 @@
     cursor: pointer;
     background-color: #F7F8F8;
   }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 22px 0 0 22px;
+  }
+
+  &__tag {
+    @extend .slo__indicator;
+    display: block;
+    margin-left: 0;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    color: #223030;
+    background-color: #F1FBFC;
+  }
 }
 
-.slo__indicator {
-  padding: 2px 5px;
-  background-color: #EDEEEE;
-  margin-left: 10px;
-  border-radius: 2px;
-  color: #464E4E;
-}
 
 .slo--active {
   background-color: #F1FBFC;
