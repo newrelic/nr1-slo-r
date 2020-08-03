@@ -6,8 +6,8 @@
 .slos-container {
   background: white;
   border-right: 1px solid #F7F8F8;
-  min-width: 350px;
-  max-width: 350px;
+  min-width: 360px;
+  max-width: 360px;
   height: 100%;
 }
 
@@ -51,6 +51,19 @@
     margin-right: 10px;
     color: #223030;
     background-color: #F1FBFC;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+  }
+
+  &__name {
+    margin-left: 10px;
+  }
+
+  &__input {
+    cursor: pointer;
   }
 }
 

@@ -13,9 +13,12 @@ const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
 
           let tags;
           if (document.tags) {
-            tags = document.tags.map(tag => {
+            tags = document.tags.map((tag, index) => {
               return (
-                <Tooltip key={tag.key} text={`${tag.key}=${tag.values[0]}`}>
+                <Tooltip
+                  key={tag.key + index}
+                  text={`${tag.key}=${tag.values[0]}`}
+                >
                   <span className="slo__tag" key={tag.key}>
                     {tag.values[0]}
                   </span>
@@ -25,17 +28,20 @@ const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
           }
 
           return (
-            <li
-              onClick={() => handleSloClick(id, isSelected)}
-              className={`slo ${isSelected && 'slo--active'}`}
-              key={id}
-            >
-              {document.name}
-              <span className="slo__indicator">
-                {sloIndicatorLabelLookup({
-                  value: document.indicator
-                })}
-              </span>
+            <li className="slo" key={id}>
+              <div className="slo__title">
+                <input
+                  className="slo__input"
+                  type="checkbox"
+                  onChange={() => handleSloClick(id, isSelected)}
+                />
+                <span className="slo__name">{document.name}</span>
+                <span className="slo__indicator">
+                  {sloIndicatorLabelLookup({
+                    value: document.indicator
+                  })}
+                </span>
+              </div>
               {tags ? <div className="slo__tags">{tags}</div> : null}
             </li>
           );
