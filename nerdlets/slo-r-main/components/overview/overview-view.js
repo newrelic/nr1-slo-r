@@ -36,7 +36,7 @@ export default class Overview extends Component {
 
   render() {
     const { isProcessing, selectedSlosIds } = this.state;
-    const { slos } = this.props;
+    const { slos, timeRange } = this.props;
 
     return (
       <>
@@ -50,6 +50,7 @@ export default class Overview extends Component {
         <StackItem grow className="main-content-container">
           {!isProcessing && slos.length === 0 && <EmptyState />}
           <MainContent
+            timeRange={timeRange}
             slos={slos.filter(slo => selectedSlosIds.includes(slo.id))}
           />
         </StackItem>
@@ -59,5 +60,6 @@ export default class Overview extends Component {
 }
 
 Overview.propTypes = {
-  slos: PropTypes.array.isRequired
+  slos: PropTypes.array.isRequired,
+  timeRange: PropTypes.object
 };

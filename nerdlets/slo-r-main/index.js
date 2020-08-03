@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Stack, StackItem, Button, Spinner } from 'nr1';
+import { Stack, StackItem, Button, Spinner, PlatformStateContext } from 'nr1';
 
 import { fetchSloDocuments } from '../shared/services/slo-documents';
 import { getEntities } from './queries';
-import { Overview } from './components';
+import { Overview, SloList } from './components';
 
 const PAGES = {
-  SLO_LIST: 'slo-list',
+  SLO_LIST: SloList,
   COMBINE_SLOs: Overview
 };
 
@@ -14,7 +14,7 @@ export default class SLOR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ActivePage: PAGES.COMBINE_SLOs,
+      ActivePage: PAGES.SLO_LIST,
       entities: [],
       slos: [],
       isProcessing: true
@@ -91,7 +91,18 @@ export default class SLOR extends Component {
           </StackItem>
         </Stack>
         <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
-          {isProcessing ? <Spinner /> : <ActivePage slos={slos} />}
+          <PlatformStateContext.Consumer>
+            {platformUrlState =>
+              isProcessing ? (
+                <Spinner />
+              ) : (
+                <ActivePage
+                  timeRange={platformUrlState.timeRange}
+                  slos={slos}
+                />
+              )
+            }
+          </PlatformStateContext.Consumer>
         </Stack>
       </Stack>
     );
