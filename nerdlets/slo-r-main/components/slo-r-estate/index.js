@@ -160,7 +160,7 @@ export default class SLOREstate extends React.Component {
     return (
       <>
         <Stack
-          className="summary-toolbar toolbar-container"
+          className="summary-toolbar entity-toolbar-container"
           fullWidth
           gapType={Stack.GAP_TYPE.NONE}
           horizontalType={Stack.HORIZONTAL_TYPE.FILL_EVENLY}
