@@ -68,7 +68,7 @@ export default class Overview extends Component {
     const { isProcessing, slos, selectedSlosIds } = this.state;
 
     return (
-      <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
+      <>
         <StackItem className="slos-container">
           {isProcessing ? (
             <Spinner />
@@ -80,13 +80,13 @@ export default class Overview extends Component {
             />
           )}
         </StackItem>
-        <StackItem className="main-content-container">
+        <StackItem grow className="main-content-container">
           {!isProcessing && slos.length === 0 && <EmptyState />}
           <MainContent
             slos={slos.filter(slo => selectedSlosIds.includes(slo.id))}
           />
         </StackItem>
-      </Stack>
+      </>
     );
   }
 }

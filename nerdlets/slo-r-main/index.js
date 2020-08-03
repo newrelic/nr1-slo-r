@@ -7,22 +7,16 @@ export default class SLOR extends Component {
   render() {
     return (
       <Stack
+        directionType={Stack.DIRECTION_TYPE.VERTICAL}
         verticalType={Stack.VERTICAL_TYPE.FILL}
         className="nerdlet-container"
         fullWidth
         fullHeight
       >
-        <StackItem grow>
+        <StackItem>Toolbar</StackItem>
+        <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
           <Overview />
-          {/* <Tabs>
-            <TabsItem value="tab-1" label="View/Combine SLOs">
-              <Overview />
-            </TabsItem>
-            <TabsItem value="tab-2" label="Create new SLO">
-              Create new SLO
-            </TabsItem>
-          </Tabs> */}
-        </StackItem>
+        </Stack>
       </Stack>
     );
   }

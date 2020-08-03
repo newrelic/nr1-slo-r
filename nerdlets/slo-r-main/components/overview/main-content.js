@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Spinner, PlatformStateContext } from 'nr1';
+import { Spinner, PlatformStateContext, StackItem } from 'nr1';
 import TableSummary from './table-summary';
 
 export default class MainContent extends Component {
@@ -51,7 +51,7 @@ export default class MainContent extends Component {
     const { isProcessing, aggregatedData } = this.state;
 
     return (
-      <>
+      <StackItem>
         {isProcessing && <Spinner />}
         <PlatformStateContext.Consumer>
           {platformUrlState =>
@@ -65,12 +65,11 @@ export default class MainContent extends Component {
             ))
           }
         </PlatformStateContext.Consumer>
-      </>
+      </StackItem>
     );
   }
 }
 
 MainContent.propTypes = {
-  slos: PropTypes.array.isRequired,
-  timeRange: PropTypes.object
+  slos: PropTypes.array.isRequired
 };

@@ -1,5 +1,6 @@
 .nerdlet-container {
   background-color: #F7F8F8;
+  overflow: hidden;
 }
 
 .slos-container {
@@ -43,6 +44,8 @@
 
 .main-content-container {
   padding: 25px;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .table-container {
