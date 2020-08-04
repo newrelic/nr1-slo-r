@@ -115,3 +115,9 @@
 .grid-container {
   grid-gap: 16px;
 }
+
+.slo-list {
+  &__table-container {
+    margin: 20px;
+  }
+}

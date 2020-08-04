@@ -99,34 +99,36 @@ export default class SLOR extends Component {
             </Button>
           </StackItem>
           <StackItem className="toolbar__item">
-            <div className="segmented-control-container">
-              <button
-                type="button"
-                className={`grid-view-button ${
-                  !isTableViewActive ? 'active' : ''
-                }`}
-                onClick={() => this.setState({ isTableViewActive: false })}
-              >
-                <Icon
-                  type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
-                  color={isTableViewActive ? '#007e8a' : '#ffffff'}
-                />
-                Grid
-              </button>
-              <button
-                type="button"
-                className={`table-view-button ${
-                  isTableViewActive ? 'active' : ''
-                }`}
-                onClick={() => this.setState({ isTableViewActive: true })}
-              >
-                <Icon
-                  type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
-                  color={isTableViewActive ? '#ffffff' : '#007e8a'}
-                />
-                Table
-              </button>
-            </div>
+            {ActivePage === PAGES.SLO_LIST && (
+              <div className="segmented-control-container">
+                <button
+                  type="button"
+                  className={`grid-view-button ${
+                    !isTableViewActive ? 'active' : ''
+                  }`}
+                  onClick={() => this.setState({ isTableViewActive: false })}
+                >
+                  <Icon
+                    type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
+                    color={isTableViewActive ? '#007e8a' : '#ffffff'}
+                  />
+                  Grid
+                </button>
+                <button
+                  type="button"
+                  className={`table-view-button ${
+                    isTableViewActive ? 'active' : ''
+                  }`}
+                  onClick={() => this.setState({ isTableViewActive: true })}
+                >
+                  <Icon
+                    type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
+                    color={isTableViewActive ? '#ffffff' : '#007e8a'}
+                  />
+                  Table
+                </button>
+              </div>
+            )}
           </StackItem>
           <StackItem
             grow

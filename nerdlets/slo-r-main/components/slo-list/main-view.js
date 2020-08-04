@@ -7,6 +7,7 @@ import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-docu
 
 import SloTileWrapper from './slo-tile-wrapper';
 import ViewDocument from './view-document';
+import TableView from './table-view';
 
 export default class MainView extends Component {
   constructor(props) {
@@ -122,7 +123,10 @@ export default class MainView extends Component {
     return (
       <>
         {isTableViewActive ? (
-          <div>Table view</div>
+          <TableView
+            tableData={tableData}
+            toggleViewModal={this.toggleViewModal}
+          />
         ) : (
           <Grid
             className="grid-container"
