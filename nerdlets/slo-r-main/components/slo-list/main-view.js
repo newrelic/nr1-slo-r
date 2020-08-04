@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from 'nr1';
 
-import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
-import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
-import SloGridTags from './slo-grid-tags/slo-grid-tags';
 import SloTileWrapper from './slo-tile-wrapper';
 
 export default class MainView extends Component {
@@ -25,5 +22,6 @@ export default class MainView extends Component {
 }
 
 MainView.propTypes = {
-  slos: PropTypes.array.isRequired
+  slos: PropTypes.array.isRequired,
+  timeRange: PropTypes.object.isRequired
 };
