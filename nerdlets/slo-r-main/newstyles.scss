@@ -8,10 +8,20 @@
   box-sizing: border-box;
 
   &__item {
+    display: flex;
     padding: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    align-items: center;
 
     &--separator {
       border-right: 1px dotted #d5d7d7;
+      margin-left: 0 !important;
+    }
+
+    &--align-right {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }
@@ -104,4 +114,10 @@
 
 .grid-container {
   grid-gap: 16px;
+}
+
+.slo-list {
+  &__table-container {
+    margin: 20px;
+  }
 }

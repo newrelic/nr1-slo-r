@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from 'nr1';
+import { Grid, Modal, Spinner } from 'nr1';
 
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
-import SloGridTags from './slo-grid-tags/slo-grid-tags';
+
+import SloTileWrapper from './slo-tile-wrapper';
+import ViewDocument from './view-document';
+import TableView from './table-view';
 
 export default class MainView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isActiveViewModal: false,
       isProcessing: true,
       tableData: []
     };
@@ -17,33 +21,41 @@ export default class MainView extends Component {
 
   componentDidMount = async () => {
     const { timeRange, slos } = this.props;
-    const response = await this.loadData(timeRange, slos);
+
+    try {
+      const promises = slos.map(slo => this.loadData(timeRange, slo));
+      await Promise.all(promises);
+    } finally {
+      this.setState({ isProcessing: false });
+    }
   };
 
-  async loadData(timeRange, documents) {
+  async loadData(timeRange, slo) {
     const scopes = ['current', '7_day', '30_day'];
 
-    if (documents) {
-      documents.forEach(documentObject => {
-        const { document } = documentObject;
+    const { document } = slo;
 
-        scopes.forEach(scope => {
-          if (document.indicator === 'error_budget') {
-            ErrorBudgetSLO.query({
-              scope,
-              document,
-              timeRange
-            }).then(result => this.handleScopeResult(result));
-          } else {
-            AlertDrivenSLO.query({
-              scope,
-              document,
-              timeRange
-            }).then(result => this.handleScopeResult(result));
-          }
+    const promises = scopes.map(scope => {
+      if (document.indicator === 'error_budget') {
+        return ErrorBudgetSLO.query({
+          scope,
+          document,
+          timeRange
         });
-      });
-    }
+      } else {
+        return AlertDrivenSLO.query({
+          scope,
+          document,
+          timeRange
+        });
+      }
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach(result => {
+      this.handleScopeResult(result);
+    });
   }
 
   handleScopeResult(result) {
@@ -90,23 +102,62 @@ export default class MainView extends Component {
     }));
   }
 
+  toggleViewModal = (options = { document: {} }) => {
+    const { document } = options;
+
+    this.setState(prevState => ({
+      entityGuid: document.entityGuid,
+      viewDocumentId: document.documentId,
+      isActiveViewModal: !prevState.isActiveViewModal
+    }));
+  };
+
   render() {
-    const { isProcessing, tableData } = this.state;
-    const { slos } = this.props;
+    const { isTableViewActive } = this.props;
+    const { tableData, isProcessing } = this.state;
+
+    if (isProcessing) {
+      return <Spinner />;
+    }
 
     return (
-      <Grid
-        className="grid-container"
-        spacingType={[Grid.SPACING_TYPE.EXTRA_LARGE]}
-      >
-        {tableData.map((document, index) => (
-          <SloGridTags key={index} document={document} />
-        ))}
-      </Grid>
+      <>
+        {isTableViewActive ? (
+          <TableView
+            tableData={tableData}
+            toggleViewModal={this.toggleViewModal}
+          />
+        ) : (
+          <Grid
+            className="grid-container"
+            spacingType={[Grid.SPACING_TYPE.EXTRA_LARGE]}
+          >
+            {tableData.map((slo, index) => (
+              <SloTileWrapper
+                toggleViewModal={this.toggleViewModal}
+                key={index}
+                slo={slo}
+              />
+            ))}
+          </Grid>
+        )}
+
+        <Modal
+          hidden={!this.state.isActiveViewModal}
+          onClose={() => this.setState({ isActiveViewModal: false })}
+        >
+          <ViewDocument
+            entityGuid={this.state.entityGuid}
+            documentId={this.state.viewDocumentId}
+          />
+        </Modal>
+      </>
     );
   }
 }
 
 MainView.propTypes = {
-  slos: PropTypes.array.isRequired
+  slos: PropTypes.array.isRequired,
+  timeRange: PropTypes.object.isRequired,
+  isTableViewActive: PropTypes.bool
 };
