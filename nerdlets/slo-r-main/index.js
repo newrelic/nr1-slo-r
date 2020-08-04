@@ -61,7 +61,11 @@ export default class SLOR extends Component {
         <Stack fullWidth className="toolbar">
           <StackItem className="toolbar__item toolbar__item--separator">
             <Button
-              type={Button.TYPE.NORMAL}
+              type={
+                ActivePage === PAGES.COMBINE_SLOs
+                  ? Button.TYPE.PLAIN
+                  : Button.TYPE.NORMAL
+              }
               onClick={() => {
                 this.setState({ ActivePage: PAGES.COMBINE_SLOs });
               }}
@@ -72,7 +76,11 @@ export default class SLOR extends Component {
           </StackItem>
           <StackItem className="toolbar__item toolbar__item--separator">
             <Button
-              type={Button.TYPE.NORMAL}
+              type={
+                ActivePage === PAGES.SLO_LIST
+                  ? Button.TYPE.PLAIN
+                  : Button.TYPE.NORMAL
+              }
               onClick={() => {
                 this.setState({ ActivePage: PAGES.SLO_LIST });
               }}
