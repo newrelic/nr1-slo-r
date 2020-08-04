@@ -22,15 +22,15 @@
   min-width: 360px;
   max-width: 360px;
   height: 100%;
-}
 
-.slos-container__header {
-  padding: 12px 16px;
-  color: #727979;
+  &__multiselect {
+    padding: 15px 15px 5px 15px;
+  }
 }
 
 .slos-container__list {
   list-style: none;
+  margin-top: 25px;
 }
 
 .slo__indicator {

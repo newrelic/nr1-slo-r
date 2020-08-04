@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StackItem } from 'nr1';
+import { Multiselect } from 'react-widgets';
 
 import EmptyState from './empty-state';
 import SloList from './slo-list';
@@ -11,7 +12,9 @@ export default class Overview extends Component {
     super(props);
     this.state = {
       selectedSlosIds: [],
-      isProcessing: true
+      isProcessing: true,
+      selectedTags: [],
+      filteredSlos: []
     };
   }
 
@@ -34,15 +37,73 @@ export default class Overview extends Component {
     });
   };
 
+  handleSelectTag = selectedTag => {
+    const { slos } = this.props;
+    const { selectedTags } = this.state;
+
+    let currentState = selectedTags;
+    currentState = [...selectedTag];
+
+    this.setState({
+      selectedTags: currentState
+    });
+
+    if (currentState.length > 0) {
+      console.log('tag was selected');
+      const slosWithTags = [];
+
+      slos.forEach(slo => {
+        if (slo.document.tags) {
+          slosWithTags.push(slo);
+        }
+      });
+
+      this.setState({
+        filteredSlos: [...slosWithTags]
+      });
+    } else {
+      this.setState({
+        filteredSlos: []
+      });
+    }
+  };
+
   render() {
     const { isProcessing, selectedSlosIds } = this.state;
     const { slos, timeRange } = this.props;
 
+    const allSlosTags = [];
+
+    slos &&
+      slos.forEach(slo => {
+        slo.document.tags &&
+          slo.document.tags.forEach(tag => {
+            allSlosTags.push(tag);
+          });
+      });
+
+    const uniqueTags = Array.from(new Set(allSlosTags.map(JSON.stringify))).map(
+      JSON.parse
+    );
+
     return (
       <>
         <StackItem className="slos-container">
+          <Multiselect
+            data={uniqueTags}
+            value={this.state.selectedTags}
+            textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
+            valueField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
+            onChange={value => this.handleSelectTag(value)}
+            placeholder="Filter SLO by Tags"
+            containerClassName="slos-container__multiselect"
+          />
           <SloList
-            slos={slos}
+            slos={
+              this.state.selectedTags.length === 0
+                ? slos
+                : this.state.filteredSlos
+            }
             selectedSlosIds={selectedSlosIds}
             handleSloClick={this.handleSloClick}
           />
@@ -58,7 +119,6 @@ export default class Overview extends Component {
     );
   }
 }
-
 Overview.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object
