@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Modal } from 'nr1';
+import { Grid, Modal, Spinner } from 'nr1';
+
+import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
+import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
 
 import SloTileWrapper from './slo-tile-wrapper';
 import ViewDocument from './view-document';
@@ -9,8 +12,93 @@ export default class MainView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActiveViewModal: false
+      isActiveViewModal: false,
+      isProcessing: true,
+      tableData: []
     };
+  }
+
+  componentDidMount = async () => {
+    const { timeRange, slos } = this.props;
+
+    try {
+      const promises = slos.map(slo => this.loadData(timeRange, slo));
+      await Promise.all(promises);
+    } finally {
+      this.setState({ isProcessing: false });
+    }
+  };
+
+  async loadData(timeRange, slo) {
+    const scopes = ['current', '7_day', '30_day'];
+
+    const { document } = slo;
+
+    const promises = scopes.map(scope => {
+      if (document.indicator === 'error_budget') {
+        return ErrorBudgetSLO.query({
+          scope,
+          document,
+          timeRange
+        });
+      } else {
+        return AlertDrivenSLO.query({
+          scope,
+          document,
+          timeRange
+        });
+      }
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach(result => {
+      this.handleScopeResult(result);
+    });
+  }
+
+  handleScopeResult(result) {
+    const { tableData } = this.state;
+    const { document } = result;
+
+    const index = tableData.findIndex(value => {
+      return value.documentId === document.documentId;
+    });
+
+    if (index < 0) {
+      this.addScopeResult(result);
+    }
+
+    if (index >= 0) {
+      this.updateScopeResult({ result, index });
+    }
+  }
+
+  addScopeResult(result) {
+    const { document, scope, data } = result;
+    const formattedDocument = {
+      ...document
+    };
+    formattedDocument[scope] = data;
+
+    this.setState(prevState => ({
+      tableData: [...prevState.tableData, formattedDocument]
+    }));
+  }
+
+  updateScopeResult({ result, index }) {
+    const { tableData } = this.state;
+    const { scope, data } = result;
+    const updatedDocument = { ...tableData[index] };
+    updatedDocument[scope] = data;
+
+    this.setState(prevState => ({
+      tableData: [
+        ...prevState.tableData.slice(0, index),
+        updatedDocument,
+        ...prevState.tableData.slice(index + 1)
+      ]
+    }));
   }
 
   toggleViewModal = (options = { document: {} }) => {
@@ -24,7 +112,12 @@ export default class MainView extends Component {
   };
 
   render() {
-    const { slos, timeRange, isTableViewActive } = this.props;
+    const { isTableViewActive } = this.props;
+    const { tableData, isProcessing } = this.state;
+
+    if (isProcessing) {
+      return <Spinner />;
+    }
 
     return (
       <>
@@ -35,11 +128,10 @@ export default class MainView extends Component {
             className="grid-container"
             spacingType={[Grid.SPACING_TYPE.EXTRA_LARGE]}
           >
-            {slos.map((slo, index) => (
+            {tableData.map((slo, index) => (
               <SloTileWrapper
                 toggleViewModal={this.toggleViewModal}
                 key={index}
-                timeRange={timeRange}
                 slo={slo}
               />
             ))}
