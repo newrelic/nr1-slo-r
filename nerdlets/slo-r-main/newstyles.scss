@@ -8,7 +8,11 @@
   box-sizing: border-box;
 
   &__item {
+    display: flex;
     padding: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    align-items: center;
 
     &--separator {
       border-right: 1px dotted #d5d7d7;

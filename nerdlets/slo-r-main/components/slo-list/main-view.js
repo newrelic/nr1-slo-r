@@ -15,7 +15,6 @@ export default class MainView extends Component {
 
   toggleViewModal = (options = { document: {} }) => {
     const { document } = options;
-    console.log('MainView -> toggleViewModal -> document', document);
 
     this.setState(prevState => ({
       entityGuid: document.entityGuid,
@@ -25,23 +24,28 @@ export default class MainView extends Component {
   };
 
   render() {
-    const { slos, timeRange } = this.props;
+    const { slos, timeRange, isTableViewActive } = this.props;
 
     return (
       <>
-        <Grid
-          className="grid-container"
-          spacingType={[Grid.SPACING_TYPE.EXTRA_LARGE]}
-        >
-          {slos.map((slo, index) => (
-            <SloTileWrapper
-              toggleViewModal={this.toggleViewModal}
-              key={index}
-              timeRange={timeRange}
-              slo={slo}
-            />
-          ))}
-        </Grid>
+        {isTableViewActive ? (
+          <div>Table view</div>
+        ) : (
+          <Grid
+            className="grid-container"
+            spacingType={[Grid.SPACING_TYPE.EXTRA_LARGE]}
+          >
+            {slos.map((slo, index) => (
+              <SloTileWrapper
+                toggleViewModal={this.toggleViewModal}
+                key={index}
+                timeRange={timeRange}
+                slo={slo}
+              />
+            ))}
+          </Grid>
+        )}
+
         <Modal
           hidden={!this.state.isActiveViewModal}
           onClose={() => this.setState({ isActiveViewModal: false })}
@@ -58,5 +62,6 @@ export default class MainView extends Component {
 
 MainView.propTypes = {
   slos: PropTypes.array.isRequired,
-  timeRange: PropTypes.object.isRequired
+  timeRange: PropTypes.object.isRequired,
+  isTableViewActive: PropTypes.bool
 };
