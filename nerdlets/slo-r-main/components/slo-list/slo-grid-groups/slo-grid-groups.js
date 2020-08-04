@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { Grid, GridItem, Icon, Button, Tooltip } from 'nr1';
+import { GridItem, Icon, Button, Tooltip } from 'nr1';
 import SettingsMenu from '../settings-menu';
 import { sloIndicatorLabelLookup } from '../../../../shared/helpers';
 
@@ -17,7 +16,6 @@ const SloGridTags = ({
       <header className="slo-grid-item-header">
         <h4 className="slo-grid-item-header-title">{document.name}</h4>
         <span className="slo-grid-item-header-type">
-          {console.log('document.indicator', document.indicator)}
           {sloIndicatorLabelLookup({ value: document.indicator })}
         </span>
         {document.description !== undefined && (
@@ -37,7 +35,7 @@ const SloGridTags = ({
           <li
             className="service-settings-dropdown-item"
             onClick={() => {
-              this.props.toggleViewModal({
+              toggleViewModal({
                 document
               });
             }}
@@ -48,7 +46,7 @@ const SloGridTags = ({
           <li
             className="service-settings-dropdown-item"
             onClick={() => {
-              this.props.toggleUpdateModal({
+              toggleUpdateModal({
                 document
               });
             }}
@@ -58,7 +56,7 @@ const SloGridTags = ({
           </li>
           <li
             className="service-settings-dropdown-item destructive"
-            onClick={() => this.props.deleteCallback({ document })}
+            onClick={() => deleteCallback({ document })}
           >
             <Icon
               type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH}

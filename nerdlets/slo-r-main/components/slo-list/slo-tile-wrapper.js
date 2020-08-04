@@ -99,6 +99,7 @@ export default class SloTileWrapper extends Component {
   }
 
   render() {
+    const { toggleViewModal } = this.props;
     const { tableData, isProcessing } = this.state;
     const data = tableData[0];
 
@@ -111,14 +112,15 @@ export default class SloTileWrapper extends Component {
     }
 
     return data && data.tags ? (
-      <SloGridTags document={data} />
+      <SloGridTags toggleViewModal={toggleViewModal} document={data} />
     ) : (
-      <SloGridGroups document={data} />
+      <SloGridGroups toggleViewModal={toggleViewModal} document={data} />
     );
   }
 }
 
 SloTileWrapper.propTypes = {
   slo: PropTypes.object.isRequired,
-  timeRange: PropTypes.object.isRequired
+  timeRange: PropTypes.object.isRequired,
+  toggleViewModal: PropTypes.func.isRequired
 };
