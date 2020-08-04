@@ -63,17 +63,6 @@ export default class SLOR extends Component {
             <Button
               type={Button.TYPE.NORMAL}
               onClick={() => {
-                this.setState({ ActivePage: PAGES.SLO_LIST });
-              }}
-              iconType={Button.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
-            >
-              View SLOs
-            </Button>
-          </StackItem>
-          <StackItem className="toolbar__item" grow>
-            <Button
-              type={Button.TYPE.NORMAL}
-              onClick={() => {
                 this.setState({ ActivePage: PAGES.COMBINE_SLOs });
               }}
               iconType={Button.ICON_TYPE.INTERFACE__VIEW__LAYER_LIST}
@@ -81,7 +70,18 @@ export default class SLOR extends Component {
               Combine SLOs
             </Button>
           </StackItem>
-          <StackItem className="toolbar__item">
+          <StackItem className="toolbar__item toolbar__item--separator">
+            <Button
+              type={Button.TYPE.NORMAL}
+              onClick={() => {
+                this.setState({ ActivePage: PAGES.SLO_LIST });
+              }}
+              iconType={Button.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
+            >
+              View SLOs
+            </Button>
+          </StackItem>
+          <StackItem grow className="toolbar__item toolbar__item--align-right">
             <Button
               type={Button.TYPE.PRIMARY}
               iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
