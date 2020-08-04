@@ -241,7 +241,7 @@ export default class SummaryTable extends Component {
 
     return (
       <BootstrapTable
-        keyField="name"
+        keyField="documentId"
         data={tableData}
         columns={columns}
         striped={false}

@@ -5,6 +5,7 @@ import { Spinner, GridItem } from 'nr1';
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
 import SloGridTags from './slo-grid-tags/slo-grid-tags';
+import SloGridGroups from './slo-grid-groups/slo-grid-groups';
 
 export default class SloTileWrapper extends Component {
   constructor(props) {
@@ -99,13 +100,20 @@ export default class SloTileWrapper extends Component {
 
   render() {
     const { tableData, isProcessing } = this.state;
+    const data = tableData[0];
 
-    return isProcessing ? (
-      <GridItem columnSpan={3} className="slo-grid-item-tag">
-        <Spinner style={{ top: '50%', left: '50%' }} />
-      </GridItem>
+    if (isProcessing) {
+      return (
+        <GridItem columnSpan={3} className="slo-grid-item-tag">
+          <Spinner style={{ top: '50%', left: '50%' }} />
+        </GridItem>
+      );
+    }
+
+    return data && data.tags ? (
+      <SloGridTags document={data} />
     ) : (
-      <SloGridTags document={tableData[0]} />
+      <SloGridGroups document={data} />
     );
   }
 }
