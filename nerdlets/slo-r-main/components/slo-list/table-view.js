@@ -242,7 +242,7 @@ export default class TableView extends Component {
 }
 
 TableView.propTypes = {
-  tableData: PropTypes.func.isRequired,
+  tableData: PropTypes.array.isRequired,
   toggleViewModal: PropTypes.func.isRequired,
   toggleUpdateModal: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired
