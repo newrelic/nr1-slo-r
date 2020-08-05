@@ -29,16 +29,14 @@ export default class MainView extends Component {
   }
 
   componentDidMount = async () => {
-    await this.clearAndFetch();
+    await this.fetchDetails();
   };
 
   componentDidUpdate = async prevProps => {
-    // TODO: needs to be extended to refresh status with interval
-    if (prevProps.slos.length !== this.props.slos.length) {
-      console.log('refreshing');
-      clearInterval(this.intervalId);
+    const { slos } = this.props;
+
+    if (!this.areSlosEqual(slos, prevProps.slos)) {
       this.clearAndFetch();
-      this.intervalId = setInterval(() => this.fetchDetails(), 60000);
     }
   };
 
@@ -46,7 +44,25 @@ export default class MainView extends Component {
     clearInterval(this.intervalId);
   }
 
+  areSlosEqual = (newSlos, prevSlos) => {
+    if (newSlos.length !== prevSlos.length) {
+      return false;
+    }
+
+    for (let index = 0; index < newSlos.length; index++) {
+      const newSlo = newSlos[index];
+      const foundIndex = prevSlos.findIndex(slo => slo.id === newSlo.id);
+
+      if (foundIndex < 0) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   clearAndFetch = () => {
+    clearInterval(this.intervalId);
     this.setState(
       {
         isProcessing: true,

@@ -36,7 +36,7 @@ export default class SLOR extends Component {
 
     this.intervalId = setInterval(() => {
       this.fetchData();
-    }, 15000);
+    }, 60000);
   };
 
   componentWillUnmount() {
