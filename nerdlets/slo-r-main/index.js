@@ -154,7 +154,12 @@ export default class SLOR extends Component {
             </Button>
           </StackItem>
         </Stack>
-        <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
+        <Stack
+          className="slos"
+          fullHeight
+          fullWidth
+          gapType={Stack.GAP_TYPE.NONE}
+        >
           <PlatformStateContext.Consumer>
             {platformUrlState =>
               isProcessing ? (
