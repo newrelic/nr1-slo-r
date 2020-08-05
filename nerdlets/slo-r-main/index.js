@@ -56,6 +56,14 @@ export default class SLOR extends Component {
     }
   };
 
+  removeFromList = slo => {
+    this.setState(prevState => ({
+      slos: prevState.slos.filter(prevSlo => {
+        return prevSlo.document.documentId !== slo.documentId;
+      })
+    }));
+  };
+
   render() {
     const { ActivePage, slos, isProcessing, isTableViewActive } = this.state;
 
@@ -156,6 +164,7 @@ export default class SLOR extends Component {
                   timeRange={platformUrlState.timeRange}
                   slos={slos}
                   isTableViewActive={isTableViewActive}
+                  removeFromList={this.removeFromList}
                 />
               )
             }

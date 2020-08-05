@@ -102,7 +102,7 @@ const SloGridTags = ({
           <li
             className="service-settings-dropdown-item destructive"
             onClick={() => {
-              deleteCallback({ document });
+              deleteCallback(document);
             }}
           >
             <Icon
