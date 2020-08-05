@@ -22,8 +22,7 @@ export default class TableView extends Component {
     return '';
   };
 
-  // eslint-disable-next-line no-unused-vars
-  formatterMenu = (cell, row, rowIndex, formatExtraData) => {
+  formatterMenu = (_, row) => {
     const { toggleViewModal, toggleUpdateModal, deleteCallback } = this.props;
     return (
       <SettingsMenu>
@@ -51,7 +50,7 @@ export default class TableView extends Component {
         </li>
         <li
           className="service-settings-dropdown-item destructive"
-          onClick={() => deleteCallback({ document: row })}
+          onClick={() => deleteCallback(row)}
         >
           <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__TRASH} color="#BF0016" />
           Delete
@@ -60,7 +59,7 @@ export default class TableView extends Component {
     );
   };
 
-  formatterAttainmentCheck = (cell, row, rowIndex, formatExtraData) => {
+  formatterAttainmentCheck = (cell, row, _, formatExtraData) => {
     const { scope, positiveAttainmentHighlight = false } = formatExtraData;
     const compareTo = row[scope];
     const target = row.target;
@@ -245,5 +244,6 @@ export default class TableView extends Component {
 TableView.propTypes = {
   tableData: PropTypes.func.isRequired,
   toggleViewModal: PropTypes.func.isRequired,
-  toggleUpdateModal: PropTypes.func.isRequired
+  toggleUpdateModal: PropTypes.func.isRequired,
+  deleteCallback: PropTypes.func.isRequired
 };

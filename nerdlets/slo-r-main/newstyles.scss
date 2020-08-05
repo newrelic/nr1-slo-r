@@ -117,7 +117,12 @@
 }
 
 .slo-list {
+  padding: 20px;
   &__table-container {
     margin: 20px;
   }
+}
+
+[class*=InnerModal-content] {
+  display: table-cell;
 }

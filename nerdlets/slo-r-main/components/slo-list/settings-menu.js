@@ -8,26 +8,20 @@ export default class SettingsMenu extends React.Component {
     children: PropTypes.node
   };
 
-  static defaultProps = {
-    //
-  };
-
   constructor(props) {
     super(props);
 
     this.state = {
       settingsPopoverActive: false
     };
-
-    this.handleSettingsPopover = this.handleSettingsPopover.bind(this);
   }
 
-  handleSettingsPopover(e) {
+  handleSettingsPopover = e => {
     this.setState(prevState => ({
       settingsPopoverActive: !prevState.settingsPopoverActive
     }));
     e.stopPropagation();
-  }
+  };
 
   render() {
     return (

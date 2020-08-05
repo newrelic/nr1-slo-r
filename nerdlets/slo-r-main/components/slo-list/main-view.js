@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Modal, Spinner } from 'nr1';
+import {
+  Button,
+  HeadingText,
+  EntityStorageMutation,
+  Grid,
+  Modal,
+  Spinner
+} from 'nr1';
 
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
@@ -15,11 +22,25 @@ export default class MainView extends Component {
     this.state = {
       isActiveViewModal: false,
       isProcessing: true,
-      tableData: []
+      isDeleteSloModalActive: false,
+      tableData: [],
+      sloToBeDeleted: undefined
     };
   }
 
   componentDidMount = async () => {
+    await this.fetchDetails();
+  };
+
+  componentDidUpdate = async prevProps => {
+    // TODO: needs to be extended to refresh status with interval
+    if (prevProps.slos.length !== this.props.slos.length) {
+      await this.fetchDetails();
+    }
+  };
+
+  fetchDetails = async () => {
+    this.setState({ isProcessing: true, tableData: [] });
     const { timeRange, slos } = this.props;
 
     try {
@@ -112,9 +133,53 @@ export default class MainView extends Component {
     }));
   };
 
+  deleteSlo = async () => {
+    this.setState({ isProcessing: true });
+    const { sloToBeDeleted: document } = this.state;
+
+    const mutation = {
+      actionType: EntityStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
+      collection: 'nr1-csg-slo-r',
+      entityGuid: document.entityGuid,
+      documentId: document.documentId
+    };
+
+    const result = await EntityStorageMutation.mutate(mutation);
+
+    if (!result) {
+      throw new Error('Error deleting SLO document from Entity Storage');
+    }
+
+    this.removeDocumentFromList(document);
+    // TODO: Check to see the entity in question has any other SLO documents in the collection and remove the tag slor=true if there are none.
+  };
+
+  deleteDocumentCallback = document => {
+    this.setState({
+      sloToBeDeleted: document,
+      isDeleteSloModalActive: true
+    });
+  };
+
+  removeDocumentFromList = document => {
+    const { removeFromList } = this.props;
+    removeFromList(document);
+
+    this.setState({
+      isDeleteSloModalActive: false
+    });
+  };
+
   render() {
     const { isTableViewActive } = this.props;
-    const { tableData, isProcessing } = this.state;
+    const {
+      isActiveViewModal,
+      tableData,
+      isProcessing,
+      isDeleteSloModalActive,
+      entityGuid,
+      viewDocumentId
+    } = this.state;
 
     if (isProcessing) {
       return <Spinner />;
@@ -122,34 +187,57 @@ export default class MainView extends Component {
 
     return (
       <>
-        {isTableViewActive ? (
-          <TableView
-            tableData={tableData}
-            toggleViewModal={this.toggleViewModal}
-          />
-        ) : (
-          <Grid
-            className="grid-container"
-            spacingType={[Grid.SPACING_TYPE.EXTRA_LARGE]}
-          >
-            {tableData.map((slo, index) => (
-              <SloTileWrapper
-                toggleViewModal={this.toggleViewModal}
-                key={index}
-                slo={slo}
-              />
-            ))}
-          </Grid>
-        )}
+        <div className="slo-list">
+          {isTableViewActive ? (
+            <TableView
+              tableData={tableData}
+              toggleViewModal={this.toggleViewModal}
+              deleteCallback={this.deleteDocumentCallback}
+            />
+          ) : (
+            <Grid className="grid-container">
+              {tableData.map((slo, index) => (
+                <SloTileWrapper
+                  toggleViewModal={this.toggleViewModal}
+                  deleteCallback={this.deleteDocumentCallback}
+                  key={index}
+                  slo={slo}
+                />
+              ))}
+            </Grid>
+          )}
+        </div>
 
         <Modal
-          hidden={!this.state.isActiveViewModal}
+          hidden={!isActiveViewModal}
           onClose={() => this.setState({ isActiveViewModal: false })}
         >
-          <ViewDocument
-            entityGuid={this.state.entityGuid}
-            documentId={this.state.viewDocumentId}
-          />
+          <ViewDocument entityGuid={entityGuid} documentId={viewDocumentId} />
+        </Modal>
+        <Modal
+          hidden={!isDeleteSloModalActive}
+          onClose={() => this.setState({ isDeleteSloModalActive: false })}
+        >
+          <HeadingText type={HeadingText.TYPE.HEADING_2}>
+            Are you sure you want to delete this SLO?
+          </HeadingText>
+          <p>
+            This cannot be undone. Please confirm whether or not you want to
+            delete this SLO.
+          </p>
+          <Button
+            type={Button.TYPE.PRIMARY}
+            onClick={() => this.setState({ isDeleteSloModalActive: false })}
+          >
+            Cancel
+          </Button>
+          <Button
+            type={Button.TYPE.DESTRUCTIVE}
+            onClick={this.deleteSlo}
+            iconType={Button.ICON_TYPE.INTERFACE__OPERATIONS__TRASH}
+          >
+            Delete
+          </Button>
         </Modal>
       </>
     );
@@ -159,5 +247,6 @@ export default class MainView extends Component {
 MainView.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object.isRequired,
-  isTableViewActive: PropTypes.bool
+  isTableViewActive: PropTypes.bool,
+  removeFromList: PropTypes.func.isRequired
 };
