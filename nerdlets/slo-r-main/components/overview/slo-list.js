@@ -34,6 +34,7 @@ const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
                   className="slo__input"
                   type="checkbox"
                   onChange={() => handleSloClick(id, isSelected)}
+                  checked={isSelected}
                 />
                 <span className="slo__name">{document.name}</span>
                 <span className="slo__indicator">

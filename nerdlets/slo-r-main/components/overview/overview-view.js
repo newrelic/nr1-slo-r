@@ -41,25 +41,38 @@ export default class Overview extends Component {
     const { slos } = this.props;
     const { selectedTags } = this.state;
 
-    let currentState = selectedTags;
-    currentState = [...selectedTag];
+    let currentSelectedTags = selectedTags;
+    currentSelectedTags = [...selectedTag];
 
     this.setState({
-      selectedTags: currentState
+      selectedTags: currentSelectedTags
     });
 
-    if (currentState.length > 0) {
-      console.log('tag was selected');
-      const slosWithTags = [];
+    if (currentSelectedTags.length > 0) {
+      const filteredByTag = [];
+      let sloTags = [];
+      let selectedTags = [];
+
+      selectedTags = currentSelectedTags.map(
+        ({ key, values }) => `${key}:${values[0]}`
+      );
 
       slos.forEach(slo => {
-        if (slo.document.tags) {
-          slosWithTags.push(slo);
+        const { tags } = slo.document;
+
+        if (tags) {
+          sloTags = tags.map(({ key, values }) => `${key}:${values[0]}`);
+
+          if (
+            selectedTags.every(selectedTag => sloTags.includes(selectedTag))
+          ) {
+            filteredByTag.push(slo);
+          }
         }
       });
 
       this.setState({
-        filteredSlos: [...slosWithTags]
+        filteredSlos: [...filteredByTag]
       });
     } else {
       this.setState({
@@ -69,15 +82,22 @@ export default class Overview extends Component {
   };
 
   render() {
-    const { isProcessing, selectedSlosIds } = this.state;
+    const {
+      isProcessing,
+      selectedSlosIds,
+      selectedTags,
+      filteredSlos
+    } = this.state;
     const { slos, timeRange } = this.props;
 
     const allSlosTags = [];
 
     slos &&
       slos.forEach(slo => {
-        slo.document.tags &&
-          slo.document.tags.forEach(tag => {
+        const { tags } = slo.document;
+
+        tags &&
+          tags.forEach(tag => {
             allSlosTags.push(tag);
           });
       });
@@ -91,7 +111,7 @@ export default class Overview extends Component {
         <StackItem className="slos-container">
           <Multiselect
             data={uniqueTags}
-            value={this.state.selectedTags}
+            value={selectedTags}
             textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
             valueField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
             onChange={value => this.handleSelectTag(value)}
@@ -99,11 +119,7 @@ export default class Overview extends Component {
             containerClassName="slos-container__multiselect"
           />
           <SloList
-            slos={
-              this.state.selectedTags.length === 0
-                ? slos
-                : this.state.filteredSlos
-            }
+            slos={selectedTags.length === 0 ? slos : filteredSlos}
             selectedSlosIds={selectedSlosIds}
             handleSloClick={this.handleSloClick}
           />
