@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Grid, GridItem, Icon, Button, Tooltip } from 'nr1';
+import { GridItem, Icon, Button, Tooltip } from 'nr1';
 import SettingsMenu from '../settings-menu';
 import { sloIndicatorLabelLookup } from '../../../../shared/helpers';
 
