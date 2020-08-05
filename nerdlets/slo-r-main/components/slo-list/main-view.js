@@ -29,18 +29,37 @@ export default class MainView extends Component {
   }
 
   componentDidMount = async () => {
-    await this.fetchDetails();
+    await this.clearAndFetch();
   };
 
   componentDidUpdate = async prevProps => {
     // TODO: needs to be extended to refresh status with interval
     if (prevProps.slos.length !== this.props.slos.length) {
-      await this.fetchDetails();
+      console.log('refreshing');
+      clearInterval(this.intervalId);
+      this.clearAndFetch();
+      this.intervalId = setInterval(() => this.fetchDetails(), 60000);
     }
   };
 
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  clearAndFetch = () => {
+    this.setState(
+      {
+        isProcessing: true,
+        tableData: []
+      },
+      () => {
+        this.fetchDetails();
+        this.intervalId = setInterval(() => this.fetchDetails(), 60000);
+      }
+    );
+  };
+
   fetchDetails = async () => {
-    this.setState({ isProcessing: true, tableData: [] });
     const { timeRange, slos } = this.props;
 
     try {

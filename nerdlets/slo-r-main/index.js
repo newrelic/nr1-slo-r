@@ -26,34 +26,57 @@ export default class SLOR extends Component {
       entities: [],
       slos: [],
       isProcessing: true,
-      isTableViewActive: false
+      isTableViewActive: false,
+      lastUpdateDate: new Date()
     };
   }
 
   componentDidMount = async () => {
-    try {
-      const entities = await getEntities();
-      let slos = [];
+    await this.fetchData();
 
-      for (let index = 0; index < entities.length; index++) {
-        const entity = entities[index];
+    this.intervalId = setInterval(() => {
+      this.fetchData();
+    }, 15000);
+  };
 
-        const { guid: entityGuid } = entity;
-        const result = await fetchSloDocuments({ entityGuid });
-        slos.push(...result);
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  fetchData = async () => {
+    const entities = await getEntities();
+    this.setState(
+      {
+        entities
+      },
+      () => {
+        this.fetchSlos();
       }
+    );
+  };
 
-      slos = slos.sort((a, b) =>
-        a.document.indicator > b.document.indicator ? 1 : -1
-      );
+  fetchSlos = async () => {
+    this.setState({ isProcessing: true });
+    const { entities } = this.state;
+    let slos = [];
 
-      this.setState({
-        entities,
-        slos
-      });
-    } finally {
-      this.setState({ isProcessing: false });
-    }
+    const promises = entities.map(({ guid: entityGuid }) => {
+      return fetchSloDocuments({ entityGuid });
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach(result => slos.push(...result));
+
+    slos = slos.sort((a, b) =>
+      a.document.indicator > b.document.indicator ? 1 : -1
+    );
+
+    this.setState({
+      slos,
+      lastUpdateDate: new Date(),
+      isProcessing: false
+    });
   };
 
   removeFromList = slo => {
@@ -65,7 +88,13 @@ export default class SLOR extends Component {
   };
 
   render() {
-    const { ActivePage, slos, isProcessing, isTableViewActive } = this.state;
+    const {
+      ActivePage,
+      slos,
+      isProcessing,
+      isTableViewActive,
+      lastUpdateDate
+    } = this.state;
 
     return (
       <Stack
@@ -143,7 +172,7 @@ export default class SLOR extends Component {
             className="toolbar__item toolbar__item--separator toolbar__item--align-right"
           >
             {isProcessing && <Spinner inline />}
-            Last updated at: {format(new Date(), 'hh:mm:ss')}
+            Last updated at: {format(lastUpdateDate, 'hh:mm:ss')}
           </StackItem>
           <StackItem className="toolbar__item toolbar__item--align-right">
             <Button
@@ -156,18 +185,14 @@ export default class SLOR extends Component {
         </Stack>
         <Stack fullHeight fullWidth gapType={Stack.GAP_TYPE.NONE}>
           <PlatformStateContext.Consumer>
-            {platformUrlState =>
-              isProcessing ? (
-                <Spinner />
-              ) : (
-                <ActivePage
-                  timeRange={platformUrlState.timeRange}
-                  slos={slos}
-                  isTableViewActive={isTableViewActive}
-                  removeFromList={this.removeFromList}
-                />
-              )
-            }
+            {platformUrlState => (
+              <ActivePage
+                timeRange={platformUrlState.timeRange}
+                slos={slos}
+                isTableViewActive={isTableViewActive}
+                removeFromList={this.removeFromList}
+              />
+            )}
           </PlatformStateContext.Consumer>
         </Stack>
       </Stack>
