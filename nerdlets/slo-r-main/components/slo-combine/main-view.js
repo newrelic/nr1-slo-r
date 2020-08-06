@@ -5,9 +5,9 @@ import { Multiselect } from 'react-widgets';
 
 import EmptyState from './empty-state';
 import SloList from './slo-list';
-import MainContent from './main-content';
+import MainContent from './main-container';
 
-export default class Overview extends Component {
+export default class MainView extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -135,7 +135,8 @@ export default class Overview extends Component {
     );
   }
 }
-Overview.propTypes = {
+
+MainView.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object
 };

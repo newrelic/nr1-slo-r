@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Spinner, StackItem } from 'nr1';
 import TableSummary from './table-summary';
 
-export default class MainContent extends Component {
+export default class MainContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,7 +67,7 @@ export default class MainContent extends Component {
   }
 }
 
-MainContent.propTypes = {
+MainContainer.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object
 };

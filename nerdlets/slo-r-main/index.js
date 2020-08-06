@@ -11,11 +11,11 @@ import { format } from 'date-fns';
 
 import { fetchSloDocuments } from '../shared/services/slo-documents';
 import { getEntities } from './queries';
-import { Overview, SloList } from './components';
+import { SloCombine, SloList } from './components';
 
 const PAGES = {
   SLO_LIST: SloList,
-  COMBINE_SLOs: Overview
+  COMBINE_SLOs: SloCombine
 };
 
 export default class SLOR extends Component {
@@ -177,9 +177,9 @@ export default class SLOR extends Component {
           <StackItem className="toolbar__item toolbar__item--align-right">
             <Button
               type={Button.TYPE.PRIMARY}
-              iconType={Button.ICON_TYPE.INTERFACE__SIGN__PLUS}
+              iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
             >
-              Create new SLO
+              Define an SLO
             </Button>
           </StackItem>
         </Stack>

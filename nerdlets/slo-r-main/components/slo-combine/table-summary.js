@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import PropTypes from 'prop-types';
 
-import { StackItem, HeadingText, navigation, Button, Spinner } from 'nr1';
+import { HeadingText, navigation, Button, Spinner } from 'nr1';
 
 import CompositeAlertSlo from '../../../shared/queries/alert-driven-slo/composite';
 import CompositeErrorBudgetSlo from '../../../shared/queries/error-budget-slo/composite';
