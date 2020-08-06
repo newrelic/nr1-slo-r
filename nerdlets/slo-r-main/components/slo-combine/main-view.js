@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StackItem } from 'nr1';
+import { StackItem, Button } from 'nr1';
 import { Multiselect } from 'react-widgets';
+import isEqual from 'lodash.isequal';
 
 import EmptyState from './empty-state';
 import SloList from './slo-list';
@@ -12,13 +13,14 @@ export default class MainView extends Component {
     super(props);
     this.state = {
       selectedSlosIds: [],
+      aggregatedIds: [],
       isProcessing: true,
       selectedTags: [],
       filteredSlos: []
     };
   }
 
-  handleSloClick = (id, isSelected) => {
+  handleSelectSlo = (id, isSelected) => {
     this.setState(prevState => {
       let newSelectedSlosIds = [];
 
@@ -86,7 +88,8 @@ export default class MainView extends Component {
       isProcessing,
       selectedSlosIds,
       selectedTags,
-      filteredSlos
+      filteredSlos,
+      aggregatedIds
     } = this.state;
     const { slos, timeRange } = this.props;
 
@@ -121,14 +124,41 @@ export default class MainView extends Component {
           <SloList
             slos={selectedTags.length === 0 ? slos : filteredSlos}
             selectedSlosIds={selectedSlosIds}
-            handleSloClick={this.handleSloClick}
+            handleSelectSlo={this.handleSelectSlo}
           />
+          {!isEqual(selectedSlosIds, aggregatedIds) && (
+            <div className="slos-container__buttons">
+              <Button
+                type={Button.TYPE.NORMAL}
+                className="button"
+                onClick={() =>
+                  this.setState({
+                    selectedSlosIds: aggregatedIds
+                  })
+                }
+              >
+                Cancel
+              </Button>
+              <Button
+                type={Button.TYPE.PRIMARY}
+                className="button"
+                loading={false}
+                onClick={() =>
+                  this.setState({
+                    aggregatedIds: selectedSlosIds
+                  })
+                }
+              >
+                Save
+              </Button>
+            </div>
+          )}
         </StackItem>
         <StackItem grow className="main-content-container">
           {!isProcessing && slos.length === 0 && <EmptyState />}
           <MainContent
             timeRange={timeRange}
-            slos={slos.filter(slo => selectedSlosIds.includes(slo.id))}
+            slos={slos.filter(slo => aggregatedIds.includes(slo.id))}
           />
         </StackItem>
       </>

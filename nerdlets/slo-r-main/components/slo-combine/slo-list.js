@@ -4,7 +4,7 @@ import { Tooltip } from 'nr1';
 
 import { sloIndicatorLabelLookup } from '../../../shared/helpers';
 
-const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
+const SloList = ({ slos, selectedSlosIds, handleSelectSlo }) => {
   return (
     <>
       <ul className="slos-container__list">
@@ -33,7 +33,7 @@ const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
                 <input
                   className="slo__input"
                   type="checkbox"
-                  onChange={() => handleSloClick(id, isSelected)}
+                  onChange={() => handleSelectSlo(id, isSelected)}
                   checked={isSelected}
                 />
                 <span className="slo__name">{document.name}</span>
@@ -55,7 +55,7 @@ const SloList = ({ slos, selectedSlosIds, handleSloClick }) => {
 SloList.propTypes = {
   slos: PropTypes.array.isRequired,
   selectedSlosIds: PropTypes.array.isRequired,
-  handleSloClick: PropTypes.func.isRequired
+  handleSelectSlo: PropTypes.func.isRequired
 };
 
 export default SloList;

@@ -43,6 +43,18 @@
   &__multiselect {
     padding: 15px 15px 5px 15px;
   }
+
+  &__buttons {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    padding: 10px 20px;
+    background: rgba(255,255,255, .2);
+    
+    .button {
+      margin-right: 8px;
+    }
+  }
 }
 
 .slos-container__list {
