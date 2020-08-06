@@ -8,6 +8,7 @@ import {
   Modal,
   Spinner
 } from 'nr1';
+import isEqual from 'lodash.isequal';
 
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
@@ -49,16 +50,7 @@ export default class MainView extends Component {
       return false;
     }
 
-    for (let index = 0; index < newSlos.length; index++) {
-      const newSlo = newSlos[index];
-      const foundIndex = prevSlos.findIndex(slo => slo.id === newSlo.id);
-
-      if (foundIndex < 0) {
-        return false;
-      }
-    }
-
-    return true;
+    return isEqual(newSlos, prevSlos);
   };
 
   clearAndFetch = () => {
@@ -68,8 +60,8 @@ export default class MainView extends Component {
         isProcessing: true,
         tableData: []
       },
-      () => {
-        this.fetchDetails();
+      async () => {
+        await this.fetchDetails();
         this.intervalId = setInterval(() => this.fetchDetails(), 60000);
       }
     );
@@ -80,7 +72,11 @@ export default class MainView extends Component {
 
     try {
       const promises = slos.map(slo => this.loadData(timeRange, slo));
-      await Promise.all(promises);
+      const loadDataResults = await Promise.all(promises);
+
+      loadDataResults.forEach(data => {
+        data.forEach(item => this.handleScopeResult(item));
+      });
     } finally {
       this.setState({ isProcessing: false });
     }
@@ -108,13 +104,10 @@ export default class MainView extends Component {
     });
 
     const results = await Promise.all(promises);
-
-    results.forEach(result => {
-      this.handleScopeResult(result);
-    });
+    return results;
   }
 
-  handleScopeResult(result) {
+  handleScopeResult = result => {
     const { tableData } = this.state;
     const { document } = result;
 
@@ -129,9 +122,9 @@ export default class MainView extends Component {
     if (index >= 0) {
       this.updateScopeResult({ result, index });
     }
-  }
+  };
 
-  addScopeResult(result) {
+  addScopeResult = result => {
     const { document, scope, data } = result;
     const formattedDocument = {
       ...document
@@ -141,9 +134,9 @@ export default class MainView extends Component {
     this.setState(prevState => ({
       tableData: [...prevState.tableData, formattedDocument]
     }));
-  }
+  };
 
-  updateScopeResult({ result, index }) {
+  updateScopeResult = ({ result, index }) => {
     const { tableData } = this.state;
     const { scope, data } = result;
     const updatedDocument = { ...tableData[index] };
@@ -156,7 +149,7 @@ export default class MainView extends Component {
         ...prevState.tableData.slice(index + 1)
       ]
     }));
-  }
+  };
 
   toggleViewModal = (options = { document: {} }) => {
     const { document } = options;
