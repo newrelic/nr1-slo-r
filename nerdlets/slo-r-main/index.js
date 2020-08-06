@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 
 import { fetchSloDocuments } from '../shared/services/slo-documents';
 import { getEntities } from './queries';
-import { SloCombine, SloList } from './components';
+import { SloCombine, SloList, DefineSLOForm } from './components';
 
 const PAGES = {
   SLO_LIST: SloList,
@@ -27,6 +27,7 @@ export default class SLOR extends Component {
       slos: [],
       isProcessing: true,
       isTableViewActive: false,
+      isCreateModalActive: false,
       lastUpdateDate: new Date()
     };
   }
@@ -93,7 +94,8 @@ export default class SLOR extends Component {
       slos,
       isProcessing,
       isTableViewActive,
-      lastUpdateDate
+      lastUpdateDate,
+      isCreateModalActive
     } = this.state;
 
     return (
@@ -178,6 +180,7 @@ export default class SLOR extends Component {
             <Button
               type={Button.TYPE.PRIMARY}
               iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
+              onClick={() => this.setState({ isCreateModalActive: true })}
             >
               Define an SLO
             </Button>
@@ -200,6 +203,10 @@ export default class SLOR extends Component {
             )}
           </PlatformStateContext.Consumer>
         </Stack>
+        <DefineSLOForm
+          onClose={() => this.setState({ isCreateModalActive: false })}
+          isOpen={isCreateModalActive}
+        />
       </Stack>
     );
   }
