@@ -39,6 +39,8 @@ export default class MainView extends Component {
   };
 
   handleSelectSlo = (id, isSelected) => {
+    console.log('handleSelectSlo -> id', id);
+    console.log('handleSelectSlo -> isSelected', isSelected);
     this.setState(prevState => {
       let newSelectedSlosIds = [];
 
@@ -179,7 +181,7 @@ export default class MainView extends Component {
             selectedSlosIds={selectedSlosIds}
             handleSelectSlo={this.handleSelectSlo}
           />
-          {!isEqual(selectedSlosIds, aggregatedIds) && (
+          {!isEqual(selectedSlosIds.sort(), aggregatedIds.sort()) && (
             <div className="slos-container__buttons">
               <Button
                 type={Button.TYPE.NORMAL}
