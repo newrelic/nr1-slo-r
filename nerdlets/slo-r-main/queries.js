@@ -1,5 +1,23 @@
 import { NerdGraphQuery } from 'nr1';
 
+export const getTags = async guid => {
+  const tagsQuery = `{
+    actor {
+      entity(guid: "${guid}") {
+        tags {
+          key
+          values
+        }
+      }
+    }
+  }
+  `;
+
+  return NerdGraphQuery.query({
+    query: tagsQuery
+  });
+};
+
 export const getEntities = async () => {
   const query = `{
     actor {

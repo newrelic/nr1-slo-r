@@ -127,7 +127,7 @@ export default class MainView extends Component {
       aggregatedIds
     } = this.state;
 
-    const { slos, timeRange, handleDefineNewSLO } = this.props;
+    const { slos, timeRange, handleDefineNewSLO, tags } = this.props;
 
     const NO_SLO_DESCRIPTION = (
       <div>
@@ -191,27 +191,27 @@ export default class MainView extends Component {
       );
     }
 
-    const allSlosTags = [];
+    // const allSlosTags = [];
 
-    slos &&
-      slos.forEach(slo => {
-        const { tags } = slo.document;
+    // slos &&
+    //   slos.forEach(slo => {
+    //     const { tags } = slo.document;
 
-        tags &&
-          tags.forEach(tag => {
-            allSlosTags.push(tag);
-          });
-      });
+    //     tags &&
+    //       tags.forEach(tag => {
+    //         allSlosTags.push(tag);
+    //       });
+    //   });
 
-    const UNIQUE_TAGS = Array.from(
-      new Set(allSlosTags.map(JSON.stringify))
-    ).map(JSON.parse);
+    // const UNIQUE_TAGS = Array.from(
+    //   new Set(allSlosTags.map(JSON.stringify))
+    // ).map(JSON.parse);
 
     return (
       <>
         <StackItem className="slos-container">
           <Multiselect
-            data={UNIQUE_TAGS}
+            data={tags}
             value={selectedTags}
             textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
             valueField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
@@ -263,5 +263,6 @@ export default class MainView extends Component {
 MainView.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object,
-  handleDefineNewSLO: PropTypes.func
+  handleDefineNewSLO: PropTypes.func,
+  tags: PropTypes.array.isRequired
 };

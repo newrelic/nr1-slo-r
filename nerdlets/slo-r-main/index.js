@@ -8,9 +8,12 @@ import {
   PlatformStateContext
 } from 'nr1';
 import { format } from 'date-fns';
+import get from 'lodash.get';
+import uniqWith from 'lodash.uniqwith';
+import isEqual from 'lodash.isequal';
 
 import { fetchSloDocuments } from '../shared/services/slo-documents';
-import { getEntities } from './queries';
+import { getTags, getEntities } from './queries';
 import { SloCombine, SloList, DefineSLOForm } from './components';
 
 const PAGES = {
@@ -22,8 +25,9 @@ export default class SLOR extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ActivePage: PAGES.SLO_LIST,
+      ActivePage: PAGES.COMBINE_SLOs,
       entities: [],
+      tags: [],
       slos: [],
       isProcessing: true,
       isTableViewActive: false,
@@ -50,10 +54,34 @@ export default class SLOR extends Component {
       {
         entities
       },
-      () => {
-        this.fetchSlos();
+      async () => {
+        await this.fetchTags();
+        await this.fetchSlos();
       }
     );
+  };
+
+  fetchTags = async () => {
+    this.setState({ isProcessing: true });
+
+    const { entities } = this.state;
+    const promises = entities.map(({ guid }) => getTags(guid));
+    const results = await Promise.all(promises);
+
+    const allTags = [];
+
+    results.forEach(result => {
+      const tags = get(result, 'data.actor.entity.tags');
+      allTags.push(...tags);
+    });
+
+    let uniqTags = uniqWith(allTags, isEqual);
+
+    uniqTags = uniqTags.sort((a, b) =>
+      a.key.toLowerCase() > b.key.toLowerCase() ? 1 : -1
+    );
+
+    this.setState({ isProcessing: false, tags: uniqTags });
   };
 
   fetchSlos = async () => {
@@ -96,6 +124,7 @@ export default class SLOR extends Component {
     const {
       ActivePage,
       slos,
+      tags,
       isProcessing,
       isTableViewActive,
       lastUpdateDate,
@@ -201,6 +230,7 @@ export default class SLOR extends Component {
               <ActivePage
                 timeRange={platformUrlState.timeRange}
                 slos={slos}
+                tags={tags}
                 isTableViewActive={isTableViewActive}
                 removeFromList={this.removeFromList}
                 handleDefineNewSLO={this.handleDefineNewSLO}
@@ -209,6 +239,7 @@ export default class SLOR extends Component {
           </PlatformStateContext.Consumer>
         </Stack>
         <DefineSLOForm
+          tags={tags}
           onClose={() => this.setState({ isCreateModalActive: false })}
           isOpen={isCreateModalActive}
         />

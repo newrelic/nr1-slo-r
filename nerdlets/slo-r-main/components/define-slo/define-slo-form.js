@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { Modal, HeadingText, Button, TextField } from 'nr1';
 import { Formik } from 'formik';
 import { Multiselect } from 'react-widgets';
+import * as Yup from 'yup';
 
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../../shared/constants';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
 
 export default class DefineSLOForm extends Component {
-  renderAlerts(indicator, alertOptions) {
-    if (!indicator || indicator === 'error_budget') {
+  renderAlerts(values, alertOptions, setFieldValue) {
+    if (!values.indicator || values.indicator === 'error_budget') {
       return null;
     }
 
@@ -24,10 +25,7 @@ export default class DefineSLOForm extends Component {
             value={document.alerts}
             allowCreate
             onCreate={value => {
-              this.inputHandler({
-                field: 'alerts',
-                value
-              });
+              setFieldValue('alerts', value);
 
               this.setState(prevState => ({
                 alertOptions: [...prevState.alertOptions, value]
@@ -36,13 +34,8 @@ export default class DefineSLOForm extends Component {
             textField="policy_name"
             className="transactions-dropdown react-select-dropdown"
             placeholder="Select one or more Alerts"
-            onChange={value =>
-              this.inputHandler({
-                field: 'alerts',
-                value
-              })
-            }
-            // defaultValue={this.getValue({ field: 'alerts' })}
+            onChange={value => setFieldValue('alerts', value)}
+            defaultValue={values.alerts}
           />
 
           <small className="input-description">
@@ -65,8 +58,8 @@ export default class DefineSLOForm extends Component {
     );
   }
 
-  renderErrorBudget(indicator, transactionOptions, values) {
-    if (indicator !== 'error_budget') {
+  renderErrorBudget(values, transactionOptions, setFieldValue) {
+    if (values.indicator !== 'error_budget') {
       return null;
     }
 
@@ -81,13 +74,8 @@ export default class DefineSLOForm extends Component {
               data={SLO_DEFECTS}
               className="defects-dropdown react-select-dropdown"
               placeholder="Select one or more defects"
-              onChange={value =>
-                this.inputHandler({
-                  field: 'defects',
-                  value
-                })
-              }
-              // defaultValue={this.getValue({ field: 'defects' })}
+              onChange={value => setFieldValue('defects', value)}
+              defaultValue={values.defects}
             />
 
             <small className="input-description">
@@ -104,13 +92,8 @@ export default class DefineSLOForm extends Component {
               data={transactionOptions}
               className="transactions-dropdown react-select-dropdown"
               placeholder="Select one or more transactions"
-              onChange={value =>
-                this.inputHandler({
-                  field: 'transactions',
-                  value
-                })
-              }
-              // defaultValue={this.getValue({ field: 'transactions' })}
+              onChange={value => setFieldValue('transactions', value)}
+              defaultValue={values.transactions}
             />
 
             <small className="input-description">
@@ -123,8 +106,19 @@ export default class DefineSLOForm extends Component {
     );
   }
 
+  VALIDATION_SCHEMA = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    description: '',
+    tags: [],
+    target: '',
+    indicator: '',
+    transactions: [],
+    defects: [],
+    alerts: []
+  });
+
   render() {
-    const { isNew, isOpen, onClose } = this.props;
+    const { isNew, isOpen, onClose, tags } = this.props;
     return (
       <Modal hidden={!isOpen} onClose={onClose}>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
@@ -152,13 +146,25 @@ export default class DefineSLOForm extends Component {
           ?
         </p>
         <Formik
-          onSubmit={(values, { setSubmitting }) => {
+          initialValues={{
+            name: '',
+            description: '',
+            tags: [],
+            target: '',
+            indicator: '',
+            transactions: [],
+            defects: [],
+            alerts: []
+          }}
+          validationSchema={this.VALIDATION_SCHEMA}
+          onSubmit={(values, { setSubmitting, resetForm }) => {
             console.log('DefineSLOForm -> render -> values', values);
+            resetForm();
           }}
         >
-          {({ values, setFieldValue, handleSubmit }) => (
+          {({ values, errors, setFieldValue, handleSubmit, resetForm }) => (
             <form onSubmit={handleSubmit}>
-              {console.log('DefineSLOForm -> values', values)}
+              {console.log('DefineSLOForm -> errors', errors)}
               <TextField
                 label="SLO name"
                 className="define-slo-input"
@@ -173,10 +179,10 @@ export default class DefineSLOForm extends Component {
                 value={values.description}
               />
               <TagsDropdown
-                entityTags={[{ key: 'tag1', values: ['value1'] }]} // TODO: put tags here
-                selectedTags={[]}
+                tags={tags}
+                selectedTags={values.tags}
                 // handleClickReset={this.handleClickReset}
-                // handleTagChange={this.handleTagChange}
+                handleTagChange={tag => setFieldValue('tags', tag)}
               />
               <TextField
                 label="Target Attainment"
@@ -190,9 +196,15 @@ export default class DefineSLOForm extends Component {
                 onChange={value => setFieldValue('indicator', value)}
                 items={SLO_INDICATORS}
               />
-              {this.renderErrorBudget(values.indicator, [])}
-              {this.renderAlerts(values.indicator, [])}
-              <Button type={Button.TYPE.Secondary} onClick={onClose}>
+              {this.renderErrorBudget(values, [], setFieldValue)}
+              {this.renderAlerts(values, [], setFieldValue)}
+              <Button
+                type={Button.TYPE.Secondary}
+                onClick={() => {
+                  resetForm();
+                  onClose();
+                }}
+              >
                 Cancel
               </Button>
               <Button type={Button.TYPE.PRIMARY} onClick={handleSubmit}>
@@ -207,6 +219,7 @@ export default class DefineSLOForm extends Component {
 }
 
 DefineSLOForm.propTypes = {
+  tags: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   isNew: PropTypes.bool
