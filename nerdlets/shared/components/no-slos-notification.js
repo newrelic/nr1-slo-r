@@ -1,10 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EmptyState } from '@newrelic/nr1-community';
 import { Button } from 'nr1';
 
+const descriptionStyle = {
+  display: 'blick'
+};
+
+const descriptionButtonStyle = {
+  display: 'block',
+  margin: '10px 0'
+};
+
 const NoSlosNotification = ({ handleClick }) => {
-  const NO_SLO_DESCRIPTION = (
-    <div>
+  const noSloDescription = () => (
+    <span style={descriptionStyle}>
       It looks like no SLOs have been defined for this entity. To get started,
       define an SLO using the button below and follow the instructions. For more
       information please see the{' '}
@@ -31,7 +41,7 @@ const NoSlosNotification = ({ handleClick }) => {
       >
         alert driven SLOs
       </a>
-      <div style={{ margin: '10px 0' }}>
+      <span style={descriptionButtonStyle}>
         <Button
           type={Button.TYPE.PRIMARY}
           iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
@@ -39,17 +49,21 @@ const NoSlosNotification = ({ handleClick }) => {
         >
           Define an SLO
         </Button>
-      </div>
-    </div>
+      </span>
+    </span>
   );
 
   return (
     <EmptyState
       buttonText=""
       heading="Get started"
-      description={NO_SLO_DESCRIPTION}
+      description={noSloDescription()}
     />
   );
+};
+
+NoSlosNotification.propTypes = {
+  handleClick: PropTypes.func
 };
 
 export default NoSlosNotification;

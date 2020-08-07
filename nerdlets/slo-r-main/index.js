@@ -142,6 +142,11 @@ export default class SLOR extends Component {
         <Stack fullWidth className="toolbar">
           <StackItem className="toolbar__item toolbar__item--separator">
             <Button
+              style={{
+                background: `${
+                  ActivePage === PAGES.COMBINE_SLOs ? '#E0E2E2' : ''
+                }`
+              }}
               type={
                 ActivePage === PAGES.COMBINE_SLOs
                   ? Button.TYPE.PLAIN
@@ -157,6 +162,9 @@ export default class SLOR extends Component {
           </StackItem>
           <StackItem className="toolbar__item toolbar__item--separator">
             <Button
+              style={{
+                background: `${ActivePage === PAGES.SLO_LIST ? '#E0E2E2' : ''}`
+              }}
               type={
                 ActivePage === PAGES.SLO_LIST
                   ? Button.TYPE.PLAIN
