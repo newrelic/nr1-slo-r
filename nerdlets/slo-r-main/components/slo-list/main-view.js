@@ -12,6 +12,7 @@ import isEqual from 'lodash.isequal';
 
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
+import { NoSlosNotification } from '../../../shared/components';
 
 import SloTileWrapper from './slo-tile-wrapper';
 import ViewDocument from './view-document';
@@ -199,7 +200,7 @@ export default class MainView extends Component {
   };
 
   render() {
-    const { isTableViewActive } = this.props;
+    const { isTableViewActive, slos, handleDefineNewSLO } = this.props;
     const {
       isActiveViewModal,
       tableData,
@@ -211,6 +212,10 @@ export default class MainView extends Component {
 
     if (isProcessing) {
       return <Spinner />;
+    }
+
+    if (slos.length === 0 && !isProcessing) {
+      return <NoSlosNotification handleClick={handleDefineNewSLO} />;
     }
 
     return (
@@ -276,5 +281,6 @@ MainView.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object.isRequired,
   isTableViewActive: PropTypes.bool,
-  removeFromList: PropTypes.func.isRequired
+  removeFromList: PropTypes.func.isRequired,
+  handleDefineNewSLO: PropTypes.func
 };

@@ -7,6 +7,7 @@ import isEqual from 'lodash.isequal';
 
 import SloList from './slo-list';
 import MainContent from './main-container';
+import { NoSlosNotification } from '../../../shared/components';
 
 const SLO_COLLECTION_KEY = 'slo_collection_v1';
 const SLO_DOCUMENT_ID = 'slo_document';
@@ -129,50 +130,10 @@ export default class MainView extends Component {
 
     const { slos, timeRange, handleDefineNewSLO } = this.props;
 
-    const NO_SLO_DESCRIPTION = (
-      <div>
-        It looks like no SLOs have been defined for this entity. To get started,
-        define an SLO using the button below and follow the instructions. For
-        more information please see the{' '}
-        <a
-          href="https://github.com/newrelic/nr1-slo-r"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          documentation
-        </a>
-        . We also have documentation for more specific information about{' '}
-        <a
-          href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          error driven SLOs
-        </a>{' '}
-        or{' '}
-        <a
-          href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          alert driven SLOs
-        </a>
-        <div style={{ margin: '10px 0' }}>
-          <Button
-            type={Button.TYPE.PRIMARY}
-            iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
-            onClick={handleDefineNewSLO}
-          >
-            Define an SLO
-          </Button>
-        </div>
-      </div>
-    );
-
-    let emptyState = null;
+    let noSlosSelected = null;
 
     if (aggregatedIds.length === 0 && !isProcessing) {
-      emptyState = (
+      noSlosSelected = (
         <EmptyState
           buttonText=""
           heading="No Slos selected"
@@ -182,13 +143,7 @@ export default class MainView extends Component {
     }
 
     if (slos.length === 0 && !isProcessing) {
-      emptyState = (
-        <EmptyState
-          buttonText=""
-          heading="Get started"
-          description={NO_SLO_DESCRIPTION}
-        />
-      );
+      return <NoSlosNotification handleClick={handleDefineNewSLO} />;
     }
 
     const allSlosTags = [];
@@ -249,7 +204,7 @@ export default class MainView extends Component {
           )}
         </StackItem>
         <StackItem grow className="main-content-container">
-          {emptyState}
+          {noSlosSelected}
           <MainContent
             timeRange={timeRange}
             slos={slos.filter(slo => aggregatedIds.includes(slo.id))}
