@@ -80,6 +80,10 @@ export default class SLOR extends Component {
     });
   };
 
+  handleDefineNewSLO = () => {
+    this.setState({ isCreateModalActive: true });
+  };
+
   removeFromList = slo => {
     this.setState(prevState => ({
       slos: prevState.slos.filter(prevSlo => {
@@ -180,7 +184,7 @@ export default class SLOR extends Component {
             <Button
               type={Button.TYPE.PRIMARY}
               iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
-              onClick={() => this.setState({ isCreateModalActive: true })}
+              onClick={this.handleDefineNewSLO}
             >
               Define an SLO
             </Button>
@@ -199,6 +203,7 @@ export default class SLOR extends Component {
                 slos={slos}
                 isTableViewActive={isTableViewActive}
                 removeFromList={this.removeFromList}
+                handleDefineNewSLO={this.handleDefineNewSLO}
               />
             )}
           </PlatformStateContext.Consumer>

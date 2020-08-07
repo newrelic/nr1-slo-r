@@ -11,37 +11,6 @@ import MainContent from './main-container';
 const SLO_COLLECTION_KEY = 'slo_collection_v1';
 const SLO_DOCUMENT_ID = 'slo_document';
 
-const NO_SLO_DESCRIPTION = (
-  <div>
-    It looks like no SLOs have been defined for this entity. To get started,
-    define an SLO using the button below and follow the instructions. For more
-    information please see the{' '}
-    <a
-      href="https://github.com/newrelic/nr1-slo-r"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      documentation
-    </a>
-    . We also have documentation for more specific information about{' '}
-    <a
-      href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      error driven SLOs
-    </a>{' '}
-    or{' '}
-    <a
-      href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      alert driven SLOs
-    </a>
-  </div>
-);
-
 export default class MainView extends Component {
   constructor(props) {
     super(props);
@@ -62,6 +31,7 @@ export default class MainView extends Component {
     });
 
     this.setState({
+      isProcessing: false,
       aggregatedIds: data.selectedIds,
       selectedSlosIds: data.selectedIds
     });
@@ -156,7 +126,70 @@ export default class MainView extends Component {
       filteredSlos,
       aggregatedIds
     } = this.state;
-    const { slos, timeRange } = this.props;
+
+    const { slos, timeRange, handleDefineNewSLO } = this.props;
+
+    const NO_SLO_DESCRIPTION = (
+      <div>
+        It looks like no SLOs have been defined for this entity. To get started,
+        define an SLO using the button below and follow the instructions. For
+        more information please see the{' '}
+        <a
+          href="https://github.com/newrelic/nr1-slo-r"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          documentation
+        </a>
+        . We also have documentation for more specific information about{' '}
+        <a
+          href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          error driven SLOs
+        </a>{' '}
+        or{' '}
+        <a
+          href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          alert driven SLOs
+        </a>
+        <div style={{ margin: '10px 0' }}>
+          <Button
+            type={Button.TYPE.PRIMARY}
+            iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
+            onClick={handleDefineNewSLO}
+          >
+            Define an SLO
+          </Button>
+        </div>
+      </div>
+    );
+
+    let emptyState = null;
+
+    if (aggregatedIds.length === 0 && !isProcessing) {
+      emptyState = (
+        <EmptyState
+          buttonText=""
+          heading="No Slos selected"
+          description="Combine SLOs by selecting them from left sidebar."
+        />
+      );
+    }
+
+    if (slos.length === 0 && !isProcessing) {
+      emptyState = (
+        <EmptyState
+          buttonText=""
+          heading="Get started"
+          description={NO_SLO_DESCRIPTION}
+        />
+      );
+    }
 
     const allSlosTags = [];
 
@@ -170,15 +203,15 @@ export default class MainView extends Component {
           });
       });
 
-    const uniqueTags = Array.from(new Set(allSlosTags.map(JSON.stringify))).map(
-      JSON.parse
-    );
+    const UNIQUE_TAGS = Array.from(
+      new Set(allSlosTags.map(JSON.stringify))
+    ).map(JSON.parse);
 
     return (
       <>
         <StackItem className="slos-container">
           <Multiselect
-            data={uniqueTags}
+            data={UNIQUE_TAGS}
             value={selectedTags}
             textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
             valueField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}
@@ -216,22 +249,11 @@ export default class MainView extends Component {
           )}
         </StackItem>
         <StackItem grow className="main-content-container">
-          <EmptyState
-            buttonText=""
-            heading="No Slos selected"
-            description="Combine SLOs by selecting them from left sidebar."
-          />
-          <div>
-            <EmptyState
-              buttonText=""
-              heading="Get started"
-              description={NO_SLO_DESCRIPTION}
-            />
-          </div>
-          {/* <MainContent
+          {emptyState}
+          <MainContent
             timeRange={timeRange}
             slos={slos.filter(slo => aggregatedIds.includes(slo.id))}
-          /> */}
+          />
         </StackItem>
       </>
     );
@@ -240,5 +262,6 @@ export default class MainView extends Component {
 
 MainView.propTypes = {
   slos: PropTypes.array.isRequired,
-  timeRange: PropTypes.object
+  timeRange: PropTypes.object,
+  handleDefineNewSLO: PropTypes.func
 };
