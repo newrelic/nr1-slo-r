@@ -26,21 +26,60 @@ export default class MainView extends Component {
   }
 
   componentDidMount = async () => {
-    const { data } = await UserStorageQuery.query({
-      collection: SLO_COLLECTION_KEY,
-      documentId: SLO_DOCUMENT_ID
-    });
+    try {
+      const { data } = await UserStorageQuery.query({
+        collection: SLO_COLLECTION_KEY,
+        documentId: SLO_DOCUMENT_ID
+      });
 
-    this.setState({
-      isProcessing: false,
-      aggregatedIds: data.selectedIds,
-      selectedSlosIds: data.selectedIds
-    });
+      this.setState({
+        aggregatedIds: data.selectedIds,
+        selectedSlosIds: data.selectedIds
+      });
+    } finally {
+      this.setState({
+        isProcessing: false
+      });
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (!this.areSlosEqual(prevProps.slos, this.props.slos)) {
+      const { selectedSlosIds } = this.state;
+      this.clearSelectionForNonExisting(selectedSlosIds);
+    }
+  };
+
+  areSlosEqual = (newSlos, prevSlos) => {
+    if (newSlos.length !== prevSlos.length) {
+      return false;
+    }
+
+    return isEqual(newSlos, prevSlos);
+  };
+
+  clearSelectionForNonExisting = selectedIds => {
+    const { slos } = this.props;
+
+    if (slos) {
+      const filteredIds = [];
+      selectedIds.forEach(id => {
+        const index = slos.findIndex(slo => slo.id === id);
+
+        if (index >= 0) {
+          filteredIds.push(id);
+        }
+      });
+
+      this.setState({
+        aggregatedIds: filteredIds,
+        selectedSlosIds: filteredIds
+      });
+    }
+    return selectedIds;
   };
 
   handleSelectSlo = (id, isSelected) => {
-    console.log('handleSelectSlo -> id', id);
-    console.log('handleSelectSlo -> isSelected', isSelected);
     this.setState(prevState => {
       let newSelectedSlosIds = [];
 
@@ -130,7 +169,7 @@ export default class MainView extends Component {
       aggregatedIds
     } = this.state;
 
-    const { slos, timeRange, handleDefineNewSLO, tags } = this.props;
+    const { slos, timeRange, tags } = this.props;
 
     let noSlosSelected = null;
 
@@ -138,31 +177,11 @@ export default class MainView extends Component {
       noSlosSelected = (
         <EmptyState
           buttonText=""
-          heading="No Slos selected"
+          heading="No SLOs selected"
           description="Combine SLOs by selecting them from left sidebar."
         />
       );
     }
-
-    if (slos.length === 0 && !isProcessing) {
-      return <NoSlosNotification handleClick={handleDefineNewSLO} />;
-    }
-
-    // const allSlosTags = [];
-
-    // slos &&
-    //   slos.forEach(slo => {
-    //     const { tags } = slo.document;
-
-    //     tags &&
-    //       tags.forEach(tag => {
-    //         allSlosTags.push(tag);
-    //       });
-    //   });
-
-    // const UNIQUE_TAGS = Array.from(
-    //   new Set(allSlosTags.map(JSON.stringify))
-    // ).map(JSON.parse);
 
     return (
       <>
@@ -220,6 +239,5 @@ export default class MainView extends Component {
 MainView.propTypes = {
   slos: PropTypes.array.isRequired,
   timeRange: PropTypes.object,
-  handleDefineNewSLO: PropTypes.func,
   tags: PropTypes.array.isRequired
 };

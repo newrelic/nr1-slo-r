@@ -69,6 +69,7 @@ export default class MainView extends Component {
   };
 
   fetchDetails = async () => {
+    this.setState({ isProcessing: true });
     const { timeRange, slos } = this.props;
 
     try {
@@ -200,7 +201,8 @@ export default class MainView extends Component {
   };
 
   render() {
-    const { isTableViewActive, slos, handleDefineNewSLO } = this.props;
+    const { isTableViewActive, handleEditSLO } = this.props;
+
     const {
       isActiveViewModal,
       tableData,
@@ -214,10 +216,6 @@ export default class MainView extends Component {
       return <Spinner />;
     }
 
-    if (slos.length === 0 && !isProcessing) {
-      return <NoSlosNotification handleClick={handleDefineNewSLO} />;
-    }
-
     return (
       <>
         <div className="slo-list">
@@ -225,12 +223,14 @@ export default class MainView extends Component {
             <TableView
               tableData={tableData}
               toggleViewModal={this.toggleViewModal}
+              toggleUpdateModal={handleEditSLO}
               deleteCallback={this.deleteDocumentCallback}
             />
           ) : (
             <Grid className="grid-container">
               {tableData.map((slo, index) => (
                 <SloTileWrapper
+                  toggleUpdateModal={handleEditSLO}
                   toggleViewModal={this.toggleViewModal}
                   deleteCallback={this.deleteDocumentCallback}
                   key={index}
@@ -282,5 +282,5 @@ MainView.propTypes = {
   timeRange: PropTypes.object.isRequired,
   isTableViewActive: PropTypes.bool,
   removeFromList: PropTypes.func.isRequired,
-  handleDefineNewSLO: PropTypes.func
+  handleEditSLO: PropTypes.func.isRequired
 };

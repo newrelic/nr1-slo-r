@@ -6,18 +6,25 @@ import SloGridGroups from './slo-grid-groups/slo-grid-groups';
 
 export default class SloTileWrapper extends Component {
   render() {
-    const { toggleViewModal, deleteCallback, slo } = this.props;
+    const {
+      toggleViewModal,
+      toggleUpdateModal,
+      deleteCallback,
+      slo
+    } = this.props;
 
     return slo && slo.tags ? (
       <SloGridTags
         deleteCallback={deleteCallback}
         toggleViewModal={toggleViewModal}
+        toggleUpdateModal={toggleUpdateModal}
         document={slo}
       />
     ) : (
       <SloGridGroups
         deleteCallback={deleteCallback}
         toggleViewModal={toggleViewModal}
+        toggleUpdateModal={toggleUpdateModal}
         document={slo}
       />
     );
@@ -27,5 +34,6 @@ export default class SloTileWrapper extends Component {
 SloTileWrapper.propTypes = {
   slo: PropTypes.object.isRequired,
   toggleViewModal: PropTypes.func.isRequired,
+  toggleUpdateModal: PropTypes.func.isRequired,
   deleteCallback: PropTypes.func.isRequired
 };

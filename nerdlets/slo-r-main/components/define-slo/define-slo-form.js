@@ -30,19 +30,39 @@ export default class DefineSLOForm extends Component {
     };
   }
 
+  componentDidUpdate = async prevProps => {
+    if (this.props.slo && this.props.slo !== prevProps.slo) {
+      await this.refreshLists();
+    }
+  };
+
+  refreshLists = async () => {
+    this.setState({ isProcessing: true });
+
+    const {
+      slo: { entityGuid, indicator }
+    } = this.props;
+
+    await this.getEntityInformation(entityGuid);
+    const tags = await this.fetchEntityTags(entityGuid);
+
+    if (indicator === 'error_budget') {
+      await this.fetchEntityTransactions();
+    } else {
+      await this.fetchAlerts();
+    }
+
+    this.setState({ tags });
+    this.setState({ isProcessing: false });
+  };
+
   writeNewSloDocument = async document => {
     const { entityDetails } = this.state;
 
-    const { mutation, result } = await writeSloDocument({
+    await writeSloDocument({
       entityGuid: entityDetails.entityGuid,
       document
     });
-
-    // this.props.upsertDocumentCallback({ document: mutation, response: result });
-
-    // if (result) {
-    //   this.setState({ document: sloDocumentModel.create() });
-    // }
   };
 
   fetchEntityTransactions = async () => {
@@ -85,10 +105,7 @@ export default class DefineSLOForm extends Component {
 
     const timeRangeNrql = timeRangeToNrql(timeRange);
 
-    if (
-      entityDetails
-      //  && document.alerts.length < 1
-    ) {
+    if (entityDetails) {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
@@ -154,7 +171,7 @@ export default class DefineSLOForm extends Component {
     );
   }
 
-  renderErrorBudget(values, transactionOptions, setFieldValue, errors) {
+  renderErrorBudget(values, setFieldValue, errors) {
     if (values.indicator !== 'error_budget') {
       return null;
     }
@@ -209,7 +226,7 @@ export default class DefineSLOForm extends Component {
   }
 
   render() {
-    const { isEdit, isOpen, onClose, onSave, entities } = this.props;
+    const { slo, isEdit, isOpen, onClose, onSave, entities } = this.props;
     const { tags, isProcessing } = this.state;
 
     return (
@@ -240,22 +257,24 @@ export default class DefineSLOForm extends Component {
           ?
         </p>
         <Formik
-          initialValues={{
-            name: '',
-            description: '',
-            tags: [],
-            target: '',
-            indicator: '',
-            transactions: [],
-            defects: [],
-            alerts: []
-          }}
+          initialValues={
+            slo || {
+              name: '',
+              description: '',
+              tags: [],
+              target: '',
+              indicator: '',
+              transactions: [],
+              defects: [],
+              alerts: []
+            }
+          }
           enableReinitialize
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={Yup.object().shape({
             name: Yup.string().required('Name is required'),
-            entity: Yup.string().required('Entity is required'),
+            entityGuid: Yup.string().required('Entity is required'),
             tags: Yup.array().min(1, 'At least one tag must be selected'),
             target: Yup.number()
               .typeError('Target must be positive number')
@@ -285,10 +304,8 @@ export default class DefineSLOForm extends Component {
           onSubmit={async (values, { resetForm }) => {
             this.setState({ isProcessing: true });
             const { entityDetails } = this.state;
-            // const currentDocument = { ...document };
 
             const newDocument = {
-              // ...currentDocument,
               ...values,
               entityGuid: entityDetails.entityGuid,
               accountId: entityDetails.accountId,
@@ -310,15 +327,15 @@ export default class DefineSLOForm extends Component {
               <div>
                 <Dropdown
                   label="Entity"
-                  value={values.entity}
-                  disabled={values.entity}
+                  value={values.entityGuid}
+                  disabled={values.entityGuid}
                   onChange={async value => {
                     this.setState({ isProcessing: true });
                     await this.getEntityInformation(value);
                     const tags = await this.fetchEntityTags(value);
 
                     this.setState({ tags });
-                    setFieldValue('entity', value);
+                    setFieldValue('entityGuid', value);
                     setFieldValue('tags', []);
                     this.setState({ isProcessing: false });
                   }}
@@ -327,9 +344,11 @@ export default class DefineSLOForm extends Component {
                     value: guid
                   }))}
                 />
-                <span className="text-field__validation">{errors.entity}</span>
+                <span className="text-field__validation">
+                  {errors.entityGuid}
+                </span>
               </div>
-              {values.entity && (
+              {values.entityGuid && (
                 <>
                   <TextField
                     label="SLO name"
@@ -345,7 +364,6 @@ export default class DefineSLOForm extends Component {
                   <div>
                     <TagsDropdown
                       tags={tags}
-                      disabled={!values.entity}
                       selectedTags={values.tags}
                       handleTagChange={tag => setFieldValue('tags', tag)}
                     />
@@ -362,7 +380,6 @@ export default class DefineSLOForm extends Component {
                   <div>
                     <Dropdown
                       label="Indicator"
-                      disabled={!values.entity}
                       value={values.indicator}
                       onChange={async value => {
                         this.setState({ isProcessing: true });
@@ -380,7 +397,7 @@ export default class DefineSLOForm extends Component {
                       {errors.indicator}
                     </span>
                   </div>
-                  {this.renderErrorBudget(values, [], setFieldValue, errors)}
+                  {this.renderErrorBudget(values, setFieldValue, errors)}
                   {this.renderAlerts(values, setFieldValue, errors)}
                 </>
               )}
@@ -394,7 +411,11 @@ export default class DefineSLOForm extends Component {
               >
                 Cancel
               </Button>
-              <Button type={Button.TYPE.PRIMARY} onClick={handleSubmit}>
+              <Button
+                loading={isProcessing}
+                type={Button.TYPE.PRIMARY}
+                onClick={handleSubmit}
+              >
                 {isEdit ? 'Update service' : 'Add new service'}
               </Button>
             </form>
@@ -406,6 +427,7 @@ export default class DefineSLOForm extends Component {
 }
 
 DefineSLOForm.propTypes = {
+  slo: PropTypes.object,
   entities: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,

@@ -12,6 +12,7 @@ import get from 'lodash.get';
 import uniqWith from 'lodash.uniqwith';
 import isEqual from 'lodash.isequal';
 
+import { NoSlosNotification } from '../shared/components';
 import { fetchSloDocuments } from '../shared/services/slo-documents';
 import { getTags, getEntities } from './queries';
 import { SloCombine, SloList, DefineSLOForm } from './components';
@@ -29,10 +30,12 @@ export default class SLOR extends Component {
       entities: [],
       tags: [],
       slos: [],
-      isProcessing: true,
+      isLoaded: false,
+      isRefreshing: true,
       isTableViewActive: false,
       isCreateModalActive: false,
-      lastUpdateDate: new Date()
+      lastUpdateDate: new Date(),
+      sloToBeEdited: undefined
     };
   }
 
@@ -49,22 +52,15 @@ export default class SLOR extends Component {
   }
 
   fetchData = async () => {
+    this.setState({ isRefreshing: true });
     const entities = await getEntities();
-    this.setState(
-      {
-        entities
-      },
-      async () => {
-        await this.fetchTags();
-        await this.fetchSlos();
-      }
-    );
+    await this.fetchTags(entities);
+    await this.fetchSlos(entities);
+
+    this.setState({ entities, isRefreshing: false });
   };
 
-  fetchTags = async () => {
-    this.setState({ isProcessing: true });
-
-    const { entities } = this.state;
+  fetchTags = async entities => {
     const promises = entities.map(({ guid }) => getTags(guid));
     const results = await Promise.all(promises);
 
@@ -81,12 +77,10 @@ export default class SLOR extends Component {
       a.key.toLowerCase() > b.key.toLowerCase() ? 1 : -1
     );
 
-    this.setState({ isProcessing: false, tags: uniqTags });
+    this.setState({ tags: uniqTags });
   };
 
-  fetchSlos = async () => {
-    this.setState({ isProcessing: true });
-    const { entities } = this.state;
+  fetchSlos = async entities => {
     let slos = [];
 
     const promises = entities.map(({ guid: entityGuid }) => {
@@ -104,8 +98,12 @@ export default class SLOR extends Component {
     this.setState({
       slos,
       lastUpdateDate: new Date(),
-      isProcessing: false
+      isLoaded: true
     });
+  };
+
+  handleEditSLO = slo => {
+    this.setState({ sloToBeEdited: slo.document, isCreateModalActive: true });
   };
 
   handleDefineNewSLO = () => {
@@ -126,11 +124,19 @@ export default class SLOR extends Component {
       slos,
       entities,
       tags,
-      isProcessing,
+      isLoaded,
+      isRefreshing,
       isTableViewActive,
       lastUpdateDate,
-      isCreateModalActive
+      isCreateModalActive,
+      sloToBeEdited
     } = this.state;
+
+    let emptyState = null;
+
+    if (isLoaded && slos.length === 0) {
+      emptyState = <NoSlosNotification handleClick={this.handleDefineNewSLO} />;
+    }
 
     return (
       <Stack
@@ -215,7 +221,7 @@ export default class SLOR extends Component {
             grow
             className="toolbar__item toolbar__item--separator toolbar__item--align-right"
           >
-            {isProcessing && <Spinner inline />}
+            {isRefreshing && <Spinner inline />}
             Last updated at: {format(lastUpdateDate, 'hh:mm:ss')}
           </StackItem>
           <StackItem className="toolbar__item toolbar__item--align-right">
@@ -237,19 +243,29 @@ export default class SLOR extends Component {
           <PlatformStateContext.Consumer>
             {platformUrlState => (
               <>
-                <ActivePage
-                  timeRange={platformUrlState.timeRange}
-                  slos={slos}
-                  tags={tags}
-                  isTableViewActive={isTableViewActive}
-                  removeFromList={this.removeFromList}
-                  handleDefineNewSLO={this.handleDefineNewSLO}
-                />
+                {emptyState || (
+                  <ActivePage
+                    timeRange={platformUrlState.timeRange}
+                    slos={slos}
+                    tags={tags}
+                    isTableViewActive={isTableViewActive}
+                    removeFromList={this.removeFromList}
+                    handleEditSLO={this.handleEditSLO}
+                    handleDefineNewSLO={this.handleDefineNewSLO}
+                  />
+                )}
                 <DefineSLOForm
+                  slo={sloToBeEdited}
+                  isEdit={sloToBeEdited}
                   timeRange={platformUrlState.timeRange}
                   entities={entities}
-                  onSave={() => this.fetchSlos()}
-                  onClose={() => this.setState({ isCreateModalActive: false })}
+                  onSave={() => this.fetchSlos(entities)}
+                  onClose={() =>
+                    this.setState({
+                      sloToBeEdited: undefined,
+                      isCreateModalActive: false
+                    })
+                  }
                   isOpen={isCreateModalActive}
                 />
               </>
