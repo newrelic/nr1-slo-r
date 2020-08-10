@@ -3,14 +3,31 @@ import PropTypes from 'prop-types';
 import { Modal, HeadingText, Button } from 'nr1';
 import { Formik } from 'formik';
 import { Multiselect } from 'react-widgets';
+import get from 'lodash.get';
 import * as Yup from 'yup';
 
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../../shared/constants';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
 import TextField from './text-field-wrapper';
+import { getTags } from '../../queries';
 
 export default class DefineSLOForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tags: []
+    };
+  }
+
+  fetchEntityTags = async entityGuid => {
+    const response = await getTags(entityGuid);
+
+    const tags = get(response, 'data.actor.entity.tags');
+
+    return tags;
+  };
+
   renderAlerts(values, alertOptions, setFieldValue, errors) {
     if (!values.indicator || values.indicator === 'error_budget') {
       return null;
@@ -113,7 +130,10 @@ export default class DefineSLOForm extends Component {
   }
 
   render() {
-    const { isNew, isOpen, onClose, tags } = this.props;
+    const { isNew, isOpen, onClose, entities } = this.props;
+    const { tags } = this.state;
+    console.log('DefineSLOForm -> render -> tags', tags);
+    console.log('DefineSLOForm -> render -> entities', entities);
     return (
       <Modal hidden={!isOpen} onClose={onClose}>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
@@ -156,6 +176,7 @@ export default class DefineSLOForm extends Component {
           validateOnBlur={false}
           validationSchema={Yup.object().shape({
             name: Yup.string().required('Name is required'),
+            entity: Yup.string().required('Entity is required'),
             tags: Yup.array().min(1, 'At least one tag must be selected'),
             target: Yup.number()
               .typeError('Target must be positive number')
@@ -198,10 +219,26 @@ export default class DefineSLOForm extends Component {
               />
               <TextField
                 label="Description"
-                placeholder="Provide a description"
                 onChange={e => setFieldValue('description', e.target.value)}
                 value={values.description}
               />
+              <div>
+                <Dropdown
+                  label="Entity"
+                  value={values.entity}
+                  onChange={async value => {
+                    const tags = await this.fetchEntityTags(value);
+                    this.setState({ tags });
+                    setFieldValue('entity', value);
+                    setFieldValue('tags', []);
+                  }}
+                  items={entities.map(({ guid, name }) => ({
+                    label: name,
+                    value: guid
+                  }))}
+                />
+                <span className="text-field__validation">{errors.entity}</span>
+              </div>
               <div>
                 <TagsDropdown
                   tags={tags}
@@ -251,6 +288,7 @@ export default class DefineSLOForm extends Component {
 
 DefineSLOForm.propTypes = {
   tags: PropTypes.array.isRequired,
+  entities: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   isNew: PropTypes.bool

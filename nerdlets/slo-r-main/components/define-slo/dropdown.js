@@ -23,7 +23,7 @@ export default class Dropdown extends Component {
     return (
       <NR1Dropdown
         label={label}
-        title={this.dropdownTitleLookup(value, items) || 'Choose an Indicator'}
+        title={this.dropdownTitleLookup(value, items)}
         className="define-slo-input"
       >
         {items?.map(({ label, value }, index) => (

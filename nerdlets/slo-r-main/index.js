@@ -124,15 +124,13 @@ export default class SLOR extends Component {
     const {
       ActivePage,
       slos,
-
+      entities,
       tags,
       isProcessing,
       isTableViewActive,
       lastUpdateDate,
       isCreateModalActive
     } = this.state;
-
-    console.log('render -> slos', slos);
 
     return (
       <Stack
@@ -250,6 +248,7 @@ export default class SLOR extends Component {
           </PlatformStateContext.Consumer>
         </Stack>
         <DefineSLOForm
+          entities={entities}
           tags={tags}
           onClose={() => this.setState({ isCreateModalActive: false })}
           isOpen={isCreateModalActive}
