@@ -236,23 +236,26 @@ export default class SLOR extends Component {
         >
           <PlatformStateContext.Consumer>
             {platformUrlState => (
-              <ActivePage
-                timeRange={platformUrlState.timeRange}
-                slos={slos}
-                tags={tags}
-                isTableViewActive={isTableViewActive}
-                removeFromList={this.removeFromList}
-                handleDefineNewSLO={this.handleDefineNewSLO}
-              />
+              <>
+                <ActivePage
+                  timeRange={platformUrlState.timeRange}
+                  slos={slos}
+                  tags={tags}
+                  isTableViewActive={isTableViewActive}
+                  removeFromList={this.removeFromList}
+                  handleDefineNewSLO={this.handleDefineNewSLO}
+                />
+                <DefineSLOForm
+                  timeRange={platformUrlState.timeRange}
+                  entities={entities}
+                  // tags={tags}
+                  onClose={() => this.setState({ isCreateModalActive: false })}
+                  isOpen={isCreateModalActive}
+                />
+              </>
             )}
           </PlatformStateContext.Consumer>
         </Stack>
-        <DefineSLOForm
-          entities={entities}
-          tags={tags}
-          onClose={() => this.setState({ isCreateModalActive: false })}
-          isOpen={isCreateModalActive}
-        />
       </Stack>
     );
   }

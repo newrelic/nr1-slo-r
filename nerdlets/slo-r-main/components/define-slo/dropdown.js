@@ -18,11 +18,12 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    const { value, items, label } = this.props;
+    const { value, items, label, disabled } = this.props;
 
     return (
       <NR1Dropdown
         label={label}
+        disabled={disabled}
         title={this.dropdownTitleLookup(value, items)}
         className="define-slo-input"
       >

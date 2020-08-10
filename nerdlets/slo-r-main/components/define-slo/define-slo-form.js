@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, HeadingText, Button } from 'nr1';
+import { Spinner, Modal, HeadingText, Button, NerdGraphQuery } from 'nr1';
 import { Formik } from 'formik';
 import { Multiselect } from 'react-widgets';
 import get from 'lodash.get';
 import * as Yup from 'yup';
 
+import { fetchEntity } from '../../../shared/services/entity';
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../../shared/constants';
+import { timeRangeToNrql } from '../../../shared/helpers';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
 import TextField from './text-field-wrapper';
@@ -16,38 +18,95 @@ export default class DefineSLOForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tags: []
+      tags: [],
+      entityDetails: undefined,
+      transactions: [],
+      alerts: [],
+      isProcessing: false
     };
   }
 
-  fetchEntityTags = async entityGuid => {
-    const response = await getTags(entityGuid);
+  fetchEntityTransactions = async () => {
+    const { entityDetails } = this.state;
+    const { timeRange } = this.props;
 
-    const tags = get(response, 'data.actor.entity.tags');
+    const timeRangeNrql = timeRangeToNrql(timeRange);
 
-    return tags;
+    if (entityDetails) {
+      const __query = `{
+            actor {
+              account(id: ${entityDetails.accountId}) {
+                nrql(query: "SELECT count(*) FROM Transaction WHERE appName='${entityDetails.appName}' ${timeRangeNrql} FACET name LIMIT 100") {
+                  results
+                }
+              }
+            }
+          }`;
+
+      const __result = await NerdGraphQuery.query({ query: __query });
+      const transactions = __result.data.actor.account.nrql.results;
+      console.log('DefineSLOForm -> transactions', transactions);
+
+      this.setState({ transactions });
+    }
   };
 
-  renderAlerts(values, alertOptions, setFieldValue, errors) {
+  getEntityInformation = async entityGuid => {
+    const entityDetails = await fetchEntity({ entityGuid });
+    this.setState({ entityDetails });
+  };
+
+  fetchEntityTags = async entityGuid => {
+    const response = await getTags(entityGuid);
+    return get(response, 'data.actor.entity.tags');
+  };
+
+  fetchAlerts = async () => {
+    const { entityDetails } = this.state;
+    const { timeRange } = this.props;
+
+    const timeRangeNrql = timeRangeToNrql(timeRange);
+
+    if (
+      entityDetails
+      //  && document.alerts.length < 1
+    ) {
+      const __query = `{
+            actor {
+              account(id: ${entityDetails.accountId}) {
+                nrql(query: "SELECT count(*) FROM SLOR_ALERTS ${timeRangeNrql} FACET policy_name") {
+                  results
+                }
+              }
+            }
+          }`;
+
+      const __result = await NerdGraphQuery.query({ query: __query });
+
+      this.setState({
+        alerts: __result.data.actor.account.nrql.results
+      });
+    }
+  };
+
+  renderAlerts(values, setFieldValue, errors) {
     if (!values.indicator || values.indicator === 'error_budget') {
       return null;
     }
+
+    const { alerts } = this.state;
 
     return (
       <div className="error-budget-dependancy">
         <div className="alerts-dropdown-container">
           <h4 className="dropdown-label">Alerts</h4>
           <Multiselect
-            data={alertOptions}
+            data={alerts}
             valueField="policy_name"
-            value={document.alerts}
+            value={values.alerts}
             allowCreate
             onCreate={value => {
               setFieldValue('alerts', value);
-
-              this.setState(prevState => ({
-                alertOptions: [...prevState.alertOptions, value]
-              }));
             }}
             textField="policy_name"
             className="transactions-dropdown react-select-dropdown"
@@ -82,6 +141,8 @@ export default class DefineSLOForm extends Component {
       return null;
     }
 
+    const { transactions } = this.state;
+
     return (
       <div>
         <div className="error-budget-dependancy">
@@ -109,7 +170,7 @@ export default class DefineSLOForm extends Component {
           <div className="transactions-dropdown-container">
             <h4 className="dropdown-label">Transactions</h4>
             <Multiselect
-              data={transactionOptions}
+              data={transactions.map(({ name }) => name)}
               className="transactions-dropdown react-select-dropdown"
               placeholder="Select one or more transactions"
               onChange={value => setFieldValue('transactions', value)}
@@ -131,13 +192,13 @@ export default class DefineSLOForm extends Component {
 
   render() {
     const { isNew, isOpen, onClose, entities } = this.props;
-    const { tags } = this.state;
-    console.log('DefineSLOForm -> render -> tags', tags);
-    console.log('DefineSLOForm -> render -> entities', entities);
+    const { tags, isProcessing } = this.state;
+
     return (
       <Modal hidden={!isOpen} onClose={onClose}>
         <HeadingText type={HeadingText.TYPE.HEADING_2}>
           Define an SLO
+          {isProcessing && <Spinner inline />}
         </HeadingText>
         <p>
           Please provide the information needed to create this SLO below. You
@@ -209,28 +270,20 @@ export default class DefineSLOForm extends Component {
         >
           {({ values, errors, setFieldValue, handleSubmit, resetForm }) => (
             <form onSubmit={handleSubmit}>
-              {console.log('DefineSLOForm -> render -> values', values)}
-              {console.log('DefineSLOForm -> errors', errors)}
-              <TextField
-                label="SLO name"
-                onChange={e => setFieldValue('name', e.target.value)}
-                value={values.name}
-                validationText={errors.name}
-              />
-              <TextField
-                label="Description"
-                onChange={e => setFieldValue('description', e.target.value)}
-                value={values.description}
-              />
               <div>
                 <Dropdown
                   label="Entity"
                   value={values.entity}
+                  disabled={values.entity}
                   onChange={async value => {
+                    this.setState({ isProcessing: true });
+                    await this.getEntityInformation(value);
                     const tags = await this.fetchEntityTags(value);
+
                     this.setState({ tags });
                     setFieldValue('entity', value);
                     setFieldValue('tags', []);
+                    this.setState({ isProcessing: false });
                   }}
                   items={entities.map(({ guid, name }) => ({
                     label: name,
@@ -239,33 +292,62 @@ export default class DefineSLOForm extends Component {
                 />
                 <span className="text-field__validation">{errors.entity}</span>
               </div>
-              <div>
-                <TagsDropdown
-                  tags={tags}
-                  selectedTags={values.tags}
-                  handleTagChange={tag => setFieldValue('tags', tag)}
-                />
-                <span className="text-field__validation">{errors.tags}</span>
-              </div>
-              <TextField
-                label="Target Attainment"
-                onChange={e => setFieldValue('target', e.target.value)}
-                value={values.target}
-                validationText={errors.target}
-              />
-              <div>
-                <Dropdown
-                  label="Indicator"
-                  value={values.indicator}
-                  onChange={value => setFieldValue('indicator', value)}
-                  items={SLO_INDICATORS}
-                />
-                <span className="text-field__validation">
-                  {errors.indicator}
-                </span>
-              </div>
-              {this.renderErrorBudget(values, [], setFieldValue, errors)}
-              {this.renderAlerts(values, [], setFieldValue, errors)}
+              {values.entity && (
+                <>
+                  <TextField
+                    label="SLO name"
+                    onChange={e => setFieldValue('name', e.target.value)}
+                    value={values.name}
+                    validationText={errors.name}
+                  />
+                  <TextField
+                    label="Description"
+                    onChange={e => setFieldValue('description', e.target.value)}
+                    value={values.description}
+                  />
+                  <div>
+                    <TagsDropdown
+                      tags={tags}
+                      disabled={!values.entity}
+                      selectedTags={values.tags}
+                      handleTagChange={tag => setFieldValue('tags', tag)}
+                    />
+                    <span className="text-field__validation">
+                      {errors.tags}
+                    </span>
+                  </div>
+                  <TextField
+                    label="Target Attainment"
+                    onChange={e => setFieldValue('target', e.target.value)}
+                    value={values.target}
+                    validationText={errors.target}
+                  />
+                  <div>
+                    <Dropdown
+                      label="Indicator"
+                      disabled={!values.entity}
+                      value={values.indicator}
+                      onChange={async value => {
+                        this.setState({ isProcessing: true });
+                        if (value === 'error_budget') {
+                          await this.fetchEntityTransactions();
+                        } else {
+                          await this.fetchAlerts();
+                        }
+                        setFieldValue('indicator', value);
+                        this.setState({ isProcessing: false });
+                      }}
+                      items={SLO_INDICATORS}
+                    />
+                    <span className="text-field__validation">
+                      {errors.indicator}
+                    </span>
+                  </div>
+                  {this.renderErrorBudget(values, [], setFieldValue, errors)}
+                  {this.renderAlerts(values, setFieldValue, errors)}
+                </>
+              )}
+
               <Button
                 type={Button.TYPE.Secondary}
                 onClick={() => {
@@ -287,9 +369,9 @@ export default class DefineSLOForm extends Component {
 }
 
 DefineSLOForm.propTypes = {
-  tags: PropTypes.array.isRequired,
   entities: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  isNew: PropTypes.bool
+  isNew: PropTypes.bool,
+  timeRange: PropTypes.object.isRequired
 };
