@@ -26,7 +26,7 @@
     "react-syntax-highlighter": "^11.0.2",
     "react-widgets": "^4.4.11",
     "uuid": "^3.3.3",
-    "yup": "^0.29.3"
+    "yup": "0.27.0"
   },
   "browserslist": [
     "last 2 versions",

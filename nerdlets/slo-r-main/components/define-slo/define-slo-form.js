@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, HeadingText, Button, TextField } from 'nr1';
+import { Modal, HeadingText, Button } from 'nr1';
 import { Formik } from 'formik';
 import { Multiselect } from 'react-widgets';
 import * as Yup from 'yup';
@@ -8,9 +8,10 @@ import * as Yup from 'yup';
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../../shared/constants';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
+import TextField from './text-field-wrapper';
 
 export default class DefineSLOForm extends Component {
-  renderAlerts(values, alertOptions, setFieldValue) {
+  renderAlerts(values, alertOptions, setFieldValue, errors) {
     if (!values.indicator || values.indicator === 'error_budget') {
       return null;
     }
@@ -37,6 +38,7 @@ export default class DefineSLOForm extends Component {
             onChange={value => setFieldValue('alerts', value)}
             defaultValue={values.alerts}
           />
+          <span className="multiselect__validation">{errors.alerts}</span>
 
           <small className="input-description">
             Select one or more Alerts that appear in the SLOR_ALERTS event table
@@ -58,7 +60,7 @@ export default class DefineSLOForm extends Component {
     );
   }
 
-  renderErrorBudget(values, transactionOptions, setFieldValue) {
+  renderErrorBudget(values, transactionOptions, setFieldValue, errors) {
     if (values.indicator !== 'error_budget') {
       return null;
     }
@@ -78,6 +80,7 @@ export default class DefineSLOForm extends Component {
               defaultValue={values.defects}
             />
 
+            <span className="multiselect__validation">{errors.defects}</span>
             <small className="input-description">
               Defects that occur on the selected transactions will be counted
               against error budget attainment.
@@ -95,6 +98,9 @@ export default class DefineSLOForm extends Component {
               onChange={value => setFieldValue('transactions', value)}
               defaultValue={values.transactions}
             />
+            <span className="multiselect__validation">
+              {errors.transactions}
+            </span>
 
             <small className="input-description">
               Select one or more transactions evaluate for defects for this
@@ -105,17 +111,6 @@ export default class DefineSLOForm extends Component {
       </div>
     );
   }
-
-  VALIDATION_SCHEMA = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    description: '',
-    tags: [],
-    target: '',
-    indicator: '',
-    transactions: [],
-    defects: [],
-    alerts: []
-  });
 
   render() {
     const { isNew, isOpen, onClose, tags } = this.props;
@@ -156,48 +151,84 @@ export default class DefineSLOForm extends Component {
             defects: [],
             alerts: []
           }}
-          validationSchema={this.VALIDATION_SCHEMA}
+          enableReinitialize
+          validateOnChange={false}
+          validateOnBlur={false}
+          validationSchema={Yup.object().shape({
+            name: Yup.string().required('Name is required'),
+            tags: Yup.array().min(1, 'At least one tag must be selected'),
+            target: Yup.number()
+              .typeError('Target must be positive number')
+              .positive('Target must be positive number')
+              .max(100, "Target must be positive number and can't exceed 100")
+              .required('Target is required'),
+            indicator: Yup.string().required('Indicator is required'),
+            alerts: Yup.array().when('indicator', {
+              is: 'error_budget',
+              otherwise: Yup.array().min(
+                1,
+                'At least one alert must be selected'
+              )
+            }),
+            transactions: Yup.array().when('indicator', {
+              is: 'error_budget',
+              then: Yup.array().min(
+                1,
+                'At least one transaction must be selected'
+              )
+            }),
+            defects: Yup.array().when('indicator', {
+              is: 'error_budget',
+              then: Yup.array().min(1, 'At least one defect must be selected')
+            })
+          })}
           onSubmit={(values, { setSubmitting, resetForm }) => {
-            console.log('DefineSLOForm -> render -> values', values);
-            resetForm();
+            // resetForm();
           }}
         >
           {({ values, errors, setFieldValue, handleSubmit, resetForm }) => (
             <form onSubmit={handleSubmit}>
+              {console.log('DefineSLOForm -> render -> values', values)}
               {console.log('DefineSLOForm -> errors', errors)}
               <TextField
                 label="SLO name"
-                className="define-slo-input"
                 onChange={e => setFieldValue('name', e.target.value)}
                 value={values.name}
+                validationText={errors.name}
               />
               <TextField
                 label="Description"
-                className="define-slo-input"
                 placeholder="Provide a description"
                 onChange={e => setFieldValue('description', e.target.value)}
                 value={values.description}
               />
-              <TagsDropdown
-                tags={tags}
-                selectedTags={values.tags}
-                // handleClickReset={this.handleClickReset}
-                handleTagChange={tag => setFieldValue('tags', tag)}
-              />
+              <div>
+                <TagsDropdown
+                  tags={tags}
+                  selectedTags={values.tags}
+                  handleTagChange={tag => setFieldValue('tags', tag)}
+                />
+                <span className="text-field__validation">{errors.tags}</span>
+              </div>
               <TextField
                 label="Target Attainment"
-                className="define-slo-input"
                 onChange={e => setFieldValue('target', e.target.value)}
                 value={values.target}
+                validationText={errors.target}
               />
-              <Dropdown
-                label="Indicator"
-                value={values.indicator}
-                onChange={value => setFieldValue('indicator', value)}
-                items={SLO_INDICATORS}
-              />
-              {this.renderErrorBudget(values, [], setFieldValue)}
-              {this.renderAlerts(values, [], setFieldValue)}
+              <div>
+                <Dropdown
+                  label="Indicator"
+                  value={values.indicator}
+                  onChange={value => setFieldValue('indicator', value)}
+                  items={SLO_INDICATORS}
+                />
+                <span className="text-field__validation">
+                  {errors.indicator}
+                </span>
+              </div>
+              {this.renderErrorBudget(values, [], setFieldValue, errors)}
+              {this.renderAlerts(values, [], setFieldValue, errors)}
               <Button
                 type={Button.TYPE.Secondary}
                 onClick={() => {

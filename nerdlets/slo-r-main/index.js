@@ -124,12 +124,15 @@ export default class SLOR extends Component {
     const {
       ActivePage,
       slos,
+
       tags,
       isProcessing,
       isTableViewActive,
       lastUpdateDate,
       isCreateModalActive
     } = this.state;
+
+    console.log('render -> slos', slos);
 
     return (
       <Stack
