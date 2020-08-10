@@ -8,6 +8,10 @@ import * as Yup from 'yup';
 
 import { fetchEntity } from '../../../shared/services/entity';
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../../shared/constants';
+import {
+  sloDocumentModel,
+  writeSloDocument
+} from '../../../shared/services/slo-documents';
 import { timeRangeToNrql } from '../../../shared/helpers';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
@@ -25,6 +29,22 @@ export default class DefineSLOForm extends Component {
       isProcessing: false
     };
   }
+
+  writeNewSloDocument = async document => {
+    const { entityDetails } = this.state;
+
+    const { mutation, result } = await writeSloDocument({
+      entityGuid: entityDetails.entityGuid,
+      document
+    });
+
+    console.log('DefineSLOForm -> writeNewSloDocument -> result', result);
+    // this.props.upsertDocumentCallback({ document: mutation, response: result });
+
+    // if (result) {
+    //   this.setState({ document: sloDocumentModel.create() });
+    // }
+  };
 
   fetchEntityTransactions = async () => {
     const { entityDetails } = this.state;
@@ -45,7 +65,6 @@ export default class DefineSLOForm extends Component {
 
       const __result = await NerdGraphQuery.query({ query: __query });
       const transactions = __result.data.actor.account.nrql.results;
-      console.log('DefineSLOForm -> transactions', transactions);
 
       this.setState({ transactions });
     }
@@ -191,7 +210,7 @@ export default class DefineSLOForm extends Component {
   }
 
   render() {
-    const { isNew, isOpen, onClose, entities } = this.props;
+    const { isEdit, isOpen, onClose, entities } = this.props;
     const { tags, isProcessing } = this.state;
 
     return (
@@ -264,8 +283,25 @@ export default class DefineSLOForm extends Component {
               then: Yup.array().min(1, 'At least one defect must be selected')
             })
           })}
-          onSubmit={(values, { setSubmitting, resetForm }) => {
-            // resetForm();
+          onSubmit={async (values, { resetForm }) => {
+            this.setState({ isProcessing: true });
+            const { entityDetails } = this.state;
+            // const currentDocument = { ...document };
+
+            const newDocument = {
+              // ...currentDocument,
+              ...values,
+              entityGuid: entityDetails.entityGuid,
+              accountId: entityDetails.accountId,
+              accountName: entityDetails.accountName,
+              language: entityDetails.language,
+              appName: entityDetails.appName
+            };
+
+            await this.writeNewSloDocument(newDocument);
+            this.setState({ isProcessing: false });
+            resetForm();
+            onClose();
           }}
         >
           {({ values, errors, setFieldValue, handleSubmit, resetForm }) => (
@@ -358,7 +394,7 @@ export default class DefineSLOForm extends Component {
                 Cancel
               </Button>
               <Button type={Button.TYPE.PRIMARY} onClick={handleSubmit}>
-                {isNew ? 'Add new service' : 'Update service'}
+                {isEdit ? 'Update service' : 'Add new service'}
               </Button>
             </form>
           )}
@@ -372,6 +408,6 @@ DefineSLOForm.propTypes = {
   entities: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  isNew: PropTypes.bool,
+  isEdit: PropTypes.bool,
   timeRange: PropTypes.object.isRequired
 };
