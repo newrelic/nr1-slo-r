@@ -248,7 +248,7 @@ export default class SLOR extends Component {
                 <DefineSLOForm
                   timeRange={platformUrlState.timeRange}
                   entities={entities}
-                  // tags={tags}
+                  onSave={() => this.fetchSlos()}
                   onClose={() => this.setState({ isCreateModalActive: false })}
                   isOpen={isCreateModalActive}
                 />

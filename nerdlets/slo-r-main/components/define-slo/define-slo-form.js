@@ -38,7 +38,6 @@ export default class DefineSLOForm extends Component {
       document
     });
 
-    console.log('DefineSLOForm -> writeNewSloDocument -> result', result);
     // this.props.upsertDocumentCallback({ document: mutation, response: result });
 
     // if (result) {
@@ -210,7 +209,7 @@ export default class DefineSLOForm extends Component {
   }
 
   render() {
-    const { isEdit, isOpen, onClose, entities } = this.props;
+    const { isEdit, isOpen, onClose, onSave, entities } = this.props;
     const { tags, isProcessing } = this.state;
 
     return (
@@ -300,6 +299,8 @@ export default class DefineSLOForm extends Component {
 
             await this.writeNewSloDocument(newDocument);
             this.setState({ isProcessing: false });
+
+            onSave();
             resetForm();
             onClose();
           }}
@@ -408,6 +409,7 @@ DefineSLOForm.propTypes = {
   entities: PropTypes.array.isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
   isEdit: PropTypes.bool,
   timeRange: PropTypes.object.isRequired
 };
