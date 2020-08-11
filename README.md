@@ -79,6 +79,8 @@ For more information on sending alert data to New Relic, see [Sending Alerts dat
 
 ## How to configure and use SLO/R
 
+### Configuration in Entity Explorer
+
 SLO definitions are scoped and stored with service entities. Open a service entity by exploring your services in the [Entity explorer](https://docs.newrelic.com/docs/new-relic-one/use-new-relic-one/ui-data/new-relic-one-entity-explorer-view-performance-across-apps-services-hosts) from the [New Relic One homepage](https://one.newrelic.com).
 
 ![Screenshot #6](catalog/screenshots/nr1-slo-r-06.png)
@@ -113,6 +115,22 @@ Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table
 Once you've created a few SLOs you should see a view like the following:
 
 ![Screenshot #4](catalog/screenshots/nr1-slo-r-04.png)
+
+### Configuration in Launcher app
+
+Other way of configuring SLO is through Launcher app. Difference between creating SLOs from Entity Explorer and from Launcher is that entity must be selected first.
+
+![Screenshot #27](catalog/screenshots/nr1-slo-r-27.png)
+
+### Using app from Launcher
+
+It is possible to combine multiple SLOs into tables and user selection is stored in NRDB.
+
+![Screenshot #26](catalog/screenshots/nr1-slo-r-26.png)
+
+SLOs can be filtered by tags attached to them:
+
+![Screenshot #28](catalog/screenshots/nr1-slo-r-28.png)
 
 ### How is SLO/R arriving at the SLO calculations?
 
