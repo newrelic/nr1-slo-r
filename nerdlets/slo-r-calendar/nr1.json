@@ -1,0 +1,6 @@
+{
+  "schemaType": "NERDLET",
+  "id": "slo-r-calendar",
+  "displayName": "SLO/R Calendar",
+  "description": "Calendar view for SLOs per day."
+}

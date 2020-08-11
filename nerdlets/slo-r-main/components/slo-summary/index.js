@@ -89,6 +89,7 @@ export default class SloSummary extends React.Component {
     const promises = slosFilteredByIndicator.map(sloObject => {
       const slo_document = sloObject.slo;
       const timeRange = this.props.timeRange;
+
       const sloPromise = summaryFunction.query({
         slo_document,
         timeRange
@@ -200,6 +201,35 @@ export default class SloSummary extends React.Component {
       );
     };
 
+    const calendarFormatter = (cell, row) => {
+      const { documentId } = row;
+      const { slosFilteredByIndicator } = this.state;
+
+      const document =
+        slosFilteredByIndicator[
+          slosFilteredByIndicator.findIndex(
+            element => element.slo.documentId === documentId
+          )
+        ];
+
+      const options = {
+        id: 'slo-r-calendar',
+        urlState: {
+          slo_document: document.slo
+        }
+      };
+
+      return (
+        <Button
+          type={Button.TYPE.NORMAL}
+          iconType={Button.ICON_TYPE.DATE_AND_TIME__DATE_AND_TIME__DATE}
+          onClick={() => {
+            navigation.openStackedNerdlet(options);
+          }}
+        />
+      );
+    };
+
     const columns = [
       {
         dataField: 'entityGuid',
@@ -244,6 +274,12 @@ export default class SloSummary extends React.Component {
         text: 'Entity',
         footer: '--',
         formatter: linkFormatter
+      },
+      {
+        dataField: '',
+        text: 'Calendar',
+        footer: '--',
+        formatter: calendarFormatter
       }
     ];
 

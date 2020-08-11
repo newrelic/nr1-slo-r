@@ -69,7 +69,9 @@ export default class SLOREntityNedlet extends React.Component {
       // Refresh
       refreshInterval: 60000, // in milliseconds
       refreshing: false,
-      lastUpdated: 0
+      lastUpdated: 0,
+
+      groupList: []
     }; // state
 
     this.openConfig = this._openConfig.bind(
@@ -84,22 +86,23 @@ export default class SLOREntityNedlet extends React.Component {
     this.toggleViewModal = this.toggleViewModal.bind(this);
   } // constructor
 
-  componentDidMount() {
-    this.load();
+  async componentDidMount() {
+    const { entityGuid } = this.state;
+    await this.load(entityGuid);
     this.startTimer();
   }
 
   /*
    * Reload if we changed entityGuid or triggered a refresh
    */
-  componentDidUpdate(prevProps) {
+  componentDidUpdate = async prevProps => {
     const prevEntityGuid = prevProps.nerdletUrlState.entityGuid;
     const currentEntityGuid = this.props.nerdletUrlState.entityGuid;
 
     if (prevEntityGuid !== currentEntityGuid) {
-      this.load(currentEntityGuid);
+      await this.load(currentEntityGuid);
     }
-  }
+  };
 
   componentWillUnmount() {
     this.stopTimer();
@@ -107,24 +110,22 @@ export default class SLOREntityNedlet extends React.Component {
 
   static contextType = NerdletStateContext;
 
-  async load(entityGuid) {
+  load = async entityGuid => {
     if (entityGuid) {
       this.setState({ refreshing: true, entityGuid });
     } else {
       this.setState({ refreshing: true });
     }
-    this.getSloDocuments();
 
-    // if (this.state.refreshing) {
-    //   this.setState({ refreshing: false });
-    // }
-  }
+    await this.getSloDocuments(entityGuid);
+  };
 
   startTimer() {
     const { refreshInterval } = this.state;
 
     this.refresh = setInterval(async () => {
-      this.load();
+      const { entityGuid } = this.state;
+      await this.load(entityGuid);
     }, refreshInterval);
   }
 
@@ -148,13 +149,24 @@ export default class SLOREntityNedlet extends React.Component {
   }
 
   /** gets all the SLO documents defined for this entity */
-  async getSloDocuments() {
-    const { entityGuid } = this.state;
-
+  getSloDocuments = async entityGuid => {
     const slo_documents = await fetchSloDocuments({ entityGuid });
 
-    this.setState({ slo_documents, refreshing: false, lastUpdated: getNow() });
-  }
+    const groupList = [];
+
+    slo_documents.forEach(({ document: { slogroup } }) => {
+      if (slogroup && !groupList.includes(slogroup)) {
+        groupList.push(slogroup);
+      }
+    });
+
+    this.setState({
+      slo_documents,
+      refreshing: false,
+      lastUpdated: getNow(),
+      groupList
+    });
+  };
 
   toggleCreateModal() {
     this.setState(prevState => ({
@@ -191,6 +203,7 @@ export default class SLOREntityNedlet extends React.Component {
     }
 
     this.upsertDocumentInList({ mutationResult: document });
+    await this.getSloDocuments(this.state.entityGuid);
   }
 
   async deleteDocumentCallback({ document }) {
@@ -259,7 +272,7 @@ export default class SLOREntityNedlet extends React.Component {
 
     return (
       <Stack
-        className="toolbar-container"
+        className="entity-toolbar-container"
         fullWidth
         horizontalType={Stack.HORIZONTAL_TYPE.FILL}
         verticalType={Stack.VERTICAL_TYPE.CENTER}
@@ -306,7 +319,7 @@ export default class SLOREntityNedlet extends React.Component {
 
             <StackItem className="updated-timestamp">
               Last updated at: {format(lastUpdated, 'hh:mm:ss')}
-              {refreshing && <Spinner />}
+              {refreshing && <Spinner inline />}
             </StackItem>
           </Stack>
         </StackItem>
@@ -333,7 +346,9 @@ export default class SLOREntityNedlet extends React.Component {
   render() {
     // ensure we have state for our slo documents to render the reporting table and configuration options
 
-    if (this.state.slo_documents === null) {
+    const { slo_documents, refreshing } = this.state;
+
+    if (slo_documents === null && refreshing === true) {
       return (
         <div>
           <Spinner className="centered" size="small" />
@@ -341,7 +356,7 @@ export default class SLOREntityNedlet extends React.Component {
       );
     }
 
-    const sloHasBeenDefined = this.state.slo_documents.length > 0;
+    const sloHasBeenDefined = this.state.slo_documents?.length > 0;
 
     return (
       <div>
@@ -357,7 +372,7 @@ export default class SLOREntityNedlet extends React.Component {
           >
             <PlatformStateContext.Consumer>
               {platformUrlState => {
-                if (this.state.slo_documents === null) {
+                if (slo_documents === null) {
                   return null;
                 }
 
@@ -391,6 +406,7 @@ export default class SLOREntityNedlet extends React.Component {
                   upsertDocumentCallback={this.upsertDocumentCallback}
                   modalToggleCallback={this.toggleCreateModal}
                   timeRange={platformUrlState.timeRange}
+                  groupList={this.state.groupList}
                 />
               );
             }}
@@ -407,6 +423,7 @@ export default class SLOREntityNedlet extends React.Component {
             documentId={this.state.editDocumentId}
             upsertDocumentCallback={this.upsertDocumentCallback}
             modalToggleCallback={this.toggleUpdateModal}
+            groupList={this.state.groupList}
           />
         </Modal>
 

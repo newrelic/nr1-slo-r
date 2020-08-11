@@ -260,26 +260,26 @@ const _getErrorBudgetSLOData = async function(props) {
   } // else
 
   // complete the results for each timerange
-  __SLO_RESULT._30_day.result =
-    Math.round(
-      (100 -
-        __SLO_RESULT._30_day.numerator / __SLO_RESULT._30_day.denominator) *
-        1000
-    ) / 1000;
-  __SLO_RESULT._7_day.result =
-    Math.round(
-      (100 - __SLO_RESULT._7_day.numerator / __SLO_RESULT._7_day.denominator) *
-        1000
-    ) / 1000;
-  __SLO_RESULT._current.result =
-    Math.round(
-      (100 -
-        __SLO_RESULT._current.numerator / __SLO_RESULT._current.denominator) *
-        1000
-    ) / 1000;
+  __SLO_RESULT._30_day.result = calculatePercentage(
+    __SLO_RESULT._30_day.numerator,
+    __SLO_RESULT._30_day.denominator
+  );
+
+  __SLO_RESULT._7_day.result = calculatePercentage(
+    __SLO_RESULT._7_day.numerator,
+    __SLO_RESULT._7_day.denominator
+  );
+
+  __SLO_RESULT._current.result = calculatePercentage(
+    __SLO_RESULT._current.numerator,
+    __SLO_RESULT._current.denominator
+  );
 
   return __SLO_RESULT;
 }; // _getErrorBudgetSLOData
+
+const calculatePercentage = (numerator, denominator) =>
+  Math.round((1 - numerator / denominator) * 100 * 1000) / 1000;
 
 const CompositeErrorBudgetSlo = {
   query: async props => {

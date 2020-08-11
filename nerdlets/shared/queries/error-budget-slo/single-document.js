@@ -86,13 +86,13 @@ const _getErrorBudgetNRQL = function(
   _appName,
   language
 ) {
-  const __NRQL = `SELECT 100 - ((${_getErrorFilter(
+  const __NRQL = `SELECT (1 - ((${_getErrorFilter(
     _transactions,
     _defects,
     language
   )}) / (${_getTotalFilter(
     _transactions
-  )})) AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${_getAgentHTTPResponseAttributeName(
+  )}))) * 100 AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${_getAgentHTTPResponseAttributeName(
     language
   )} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
   return __NRQL;
@@ -174,8 +174,7 @@ const ErrorBudgetSLO = {
   generateQueries: props => {
     const { document, scope, timeRange } = props;
 
-    // eslint-disable-next-line no-unused-vars
-    const { begin_time, duration, end_time } = updateTimeRangeFromScope({
+    const { begin_time, end_time } = updateTimeRangeFromScope({
       scope,
       timeRange
     });
@@ -193,4 +192,4 @@ const ErrorBudgetSLO = {
   }
 };
 
-export default ErrorBudgetSLO; // ErrorBudgetSLO
+export default ErrorBudgetSLO;

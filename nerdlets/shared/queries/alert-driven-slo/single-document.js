@@ -65,14 +65,12 @@ const _getClosedAlertNRQL = function(_alerts, _begin, _end) {
 const _getAlertDrivenSLOData = async function(props) {
   const { accountId, alerts, scope, timeRange } = props;
 
-  const {
-    begin_time: __beginTS,
-    // duration: __duration,
-    end_time: __endTS
-  } = updateTimeRangeFromScope({
-    scope,
-    timeRange
-  });
+  const { begin_time: __beginTS, end_time: __endTS } = updateTimeRangeFromScope(
+    {
+      scope,
+      timeRange
+    }
+  );
 
   const __NRQL_OPEN = _getOpenedAlertNRQL(alerts, __beginTS, __endTS);
   const __NRQL_CLOSED = _getClosedAlertNRQL(alerts, __beginTS, __endTS);
@@ -152,7 +150,7 @@ const _getAlertDrivenSLOData = async function(props) {
     accumulatedMilliseconds: __accumulatedMillisecondsInAlertState,
     totalTimeMilliseconds: __endTS - __beginTS,
     slo_result:
-      100 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS)
+      (1 - __accumulatedMillisecondsInAlertState / (__endTS - __beginTS)) * 100
   };
 
   // set the SLO result as 100 - the percentage of time in violation

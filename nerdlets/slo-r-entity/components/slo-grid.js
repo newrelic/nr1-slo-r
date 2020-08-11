@@ -6,6 +6,7 @@ import { Grid, GridItem, Icon, Button, Tooltip } from 'nr1';
 import { sloIndicatorLabelLookup } from '../../shared/helpers';
 
 import SettingsMenu from './settings-menu';
+import SloGridTags from './slo-grid-tags/slo-grid-tags';
 
 export default class SLOGrid extends Component {
   static propTypes = {
@@ -23,6 +24,19 @@ export default class SLOGrid extends Component {
     const { data } = this.props;
 
     const SLOGridItems = data.map((document, index) => {
+      if (document.tags) {
+        return (
+          <SloGridTags
+            key={index}
+            document={document}
+            index={index}
+            toggleViewModal={this.props.toggleViewModal}
+            toggleUpdateModal={this.props.toggleUpdateModal}
+            deleteCallback={this.props.deleteCallback}
+          />
+        );
+      }
+
       return (
         <GridItem className="slo-grid-item" key={index} columnSpan={3}>
           <header className="slo-grid-item-header">
@@ -89,10 +103,12 @@ export default class SLOGrid extends Component {
             <span className="slo-grid-item-section-label">Current</span>
           </div>
           <div className="slo-grid-item-section section-tag">
-            <span className="slo-grid-item-section-value">
+            <div className="slo-grid-item-section-value">
               {document.slogroup}
+            </div>
+            <span className="slo-grid-item-section-label">
+              {document.slogroup ? 'SLO Group' : 'Tag'}
             </span>
-            <span className="slo-grid-item-section-label">SLO Group</span>
           </div>
           <div
             className={`slo-grid-item-section section-7day ${

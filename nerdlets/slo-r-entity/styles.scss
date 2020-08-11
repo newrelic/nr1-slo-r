@@ -2,6 +2,7 @@
 @import '~react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 @import "./nrds.scss";
 @import "./multi-select.scss";
+@import "./components/slo-grid-tags/slo-grid-tags.scss";
 
 #root>div {
   height: 100%;
@@ -122,7 +123,7 @@ p.empty-state-description {
 }
 
 
-.toolbar-container {
+.entity-toolbar-container {
   height: 70px;
   box-sizing: border-box;
   border-top: 1px solid #d5d7d7;
@@ -158,6 +159,9 @@ p.empty-state-description {
 
 .slo-table-container {
   margin-top: 0;
+  display: inline-block;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .slo-table {
@@ -165,6 +169,7 @@ p.empty-state-description {
   overflow: hidden;
   box-shadow: 0px 1px 0px rgba(0, 75, 82, 0.11), 0px 3px 0px rgba(0, 49, 54, 0.04), 0px 1px 3px rgba(0, 134, 148, 0.03), 0px 8px 7px rgba(70, 107, 111, 0.05);
   width: 100%;
+  table-layout: auto !important;
 
   th {
     background-color: #fff;
@@ -236,14 +241,13 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
 .slo-grid-container {
   grid-gap: 16px;
   position: relative;
-  grid-auto-rows: 232px;
   align-items: stretch;
 }
 
 .slo-grid-item {
   display: grid;
   grid-template-columns: repeat(6, 16.66666667%);
-  grid-template-rows: 114px 59px 59px;
+  grid-template-rows: 127px 59px 86px;
   grid-template-areas:
     "header header header header header header"
     "   a      a      a      b      b      b  "
@@ -264,7 +268,6 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 114px;
   text-align: center;
   border-bottom: 1px solid #EDEEEE;
   grid-area: header;
@@ -697,4 +700,29 @@ td .service-settings-dropdown {
 
 .empty-state-container div.tag-selector {
   margin-top: 16px;
+}
+
+.or-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+  color: #8e9494;
+  font-style: italic;
+
+  &:before {
+    content: '';
+    height: 1px;
+    width: 100%;
+    margin-right: 10px;
+    background: #b9bdbd;
+  }
+
+  &:after {
+    content: '';
+    height: 1px;
+    width: 100%;
+    margin-left: 10px;
+    background: #b9bdbd;
+  }
 }
