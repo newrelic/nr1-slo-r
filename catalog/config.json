@@ -13,5 +13,5 @@
       "url": "https://discuss.newrelic.com/t/track-your-service-level-objectives-with-the-slo-r-nerdpack/90046"
     }
   },
-  "whatsNew": "\n - Fix: Http attribute update for dotnet/python agents\n - Fix: Crash when Alert definition is incorrect\n - Fix: SLO error calculation"
+  "whatsNew": "\n - Fix: calculation fixes\n - Feat: Calendar view of attainment by day\n - Feat: Tagging SLO's\n - Feat: creating SLO's at the launcher level"
 }
