@@ -1,152 +1,278 @@
-/**
- * Provides the inital react context for assembling the complete list of SLO Groups.
- *
- * @file
- * @author Gil Rice
- */
-/** core */
-import React from 'react';
+import React, { Component } from 'react';
+import {
+  Icon,
+  Stack,
+  StackItem,
+  Button,
+  Spinner,
+  PlatformStateContext
+} from 'nr1';
+import { format } from 'date-fns';
+import get from 'lodash.get';
+import uniqWith from 'lodash.uniqwith';
+import isEqual from 'lodash.isequal';
 
-/** nr1 */
-import { NerdGraphQuery, Spinner, navigation } from 'nr1';
+import { NoSlosNotification } from '../shared/components';
+import { fetchSloDocuments } from '../shared/services/slo-documents';
+import { getTags, getEntities } from './queries';
+import { SloCombine, SloList, DefineSLOForm } from './components';
 
-/** local */
-import SLOREstate from './components/slo-r-estate';
+const PAGES = {
+  SLO_LIST: SloList,
+  COMBINE_SLOs: SloCombine
+};
 
-export default class SloRMain extends React.Component {
-  static propTypes = {
-    // propTypes
-  };
-
+export default class SLOR extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      entities: null
+      ActivePage: PAGES.COMBINE_SLOs,
+      entities: [],
+      tags: [],
+      slos: [],
+      isLoaded: false,
+      isRefreshing: true,
+      isTableViewActive: false,
+      isCreateModalActive: false,
+      lastUpdateDate: new Date(),
+      sloToBeEdited: undefined
     };
-  } // constructor
-
-  async componentDidMount() {
-    await this._getEntities();
-
-    const options = {
-      id: 'slo-r-calendar',
-      urlState: {
-        entityGuid
-      }
-    };
-
-    navigation.openStackedNerdlet(options);
   }
 
-  async _getEntities() {
-    const __query = `{
-      actor {
-        entitySearch(queryBuilder: {tags: {key: "slor", value: "true"}, domain: APM, type: APPLICATION}) {
-          count
-          query
-          results {
-            entities {
-              guid
-              name
-            }
-            nextCursor
-          }
-        }
-      }
-    }`;
+  componentDidMount = async () => {
+    await this.fetchData();
 
-    const __result = await NerdGraphQuery.query({
-      query: __query,
-      fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE
+    this.intervalId = setInterval(() => {
+      this.fetchData();
+    }, 60000);
+  };
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  fetchData = async () => {
+    this.setState({ isRefreshing: true });
+    const entities = await getEntities();
+    await this.fetchTags(entities);
+    await this.fetchSlos(entities);
+
+    this.setState({ entities, isRefreshing: false });
+  };
+
+  fetchTags = async entities => {
+    const promises = entities.map(({ guid }) => getTags(guid));
+    const results = await Promise.all(promises);
+
+    const allTags = [];
+
+    results.forEach(result => {
+      const tags = get(result, 'data.actor.entity.tags');
+      allTags.push(...tags);
     });
 
-    // TODO Need NULL checks to verify the query retured with reasonable data
-    let __entities = __result.data.actor.entitySearch.results.entities;
-    let __moarEntities = [];
+    let uniqTags = uniqWith(allTags, isEqual);
 
-    if (__result.data.actor.entitySearch.results.nextCursor !== null) {
-      __moarEntities = await this._getCursorEntities(
-        __result.data.actor.entitySearch.results.nextCursor
-      );
-    } // if
+    uniqTags = uniqTags.sort((a, b) =>
+      a.key.toLowerCase() > b.key.toLowerCase() ? 1 : -1
+    );
 
-    __entities = __entities.concat(__moarEntities);
+    this.setState({ tags: uniqTags });
+  };
+
+  fetchSlos = async entities => {
+    let slos = [];
+
+    const promises = entities.map(({ guid: entityGuid }) => {
+      return fetchSloDocuments({ entityGuid });
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach(result => slos.push(...result));
+
+    slos = slos.sort((a, b) =>
+      a.document.indicator > b.document.indicator ? 1 : -1
+    );
 
     this.setState({
-      entities: __entities
+      slos,
+      lastUpdateDate: new Date(),
+      isLoaded: true
     });
+  };
 
-    return __entities;
-  } // _getEntities
+  handleEditSLO = slo => {
+    this.setState({ sloToBeEdited: slo.document, isCreateModalActive: true });
+  };
 
-  async _getCursorEntities(_cursorId) {
-    let __gotCursor = true;
-    let __compositeResults = [];
-    let __cursorId = _cursorId;
-    let __query;
-    let __results;
+  handleDefineNewSLO = () => {
+    this.setState({ isCreateModalActive: true });
+  };
 
-    /* loop until all the cursors have been exhaused - 2400 records max
-       in general this shouldn't be an issue as we are scoping our slo lookup to those entities with the slor=true tag */
-    while (__gotCursor) {
-      __query = `{
-        actor {
-          entitySearch(queryBuilder: {tags: {key: "slor", value: "true"}, domain: APM, type: APPLICATION}) {
-            count
-            query
-            results(cursor: "${__cursorId}") {
-              entities {
-                guid
-                name
-              }
-              nextCursor
-            }
-          }
-        }
-      }`;
-
-      __results = await NerdGraphQuery.query({
-        query: __query,
-        fetchPolicyType: NerdGraphQuery.FETCH_POLICY_TYPE.NO_CACHE
-      });
-
-      if (
-        __results.data.actor.entitySearch.results !== null ||
-        __results.data.actor.entitySearch.results !== undefined
-      ) {
-        if (__results.data.actor.entitySearch.results.nextCursor !== null) {
-          __compositeResults = __compositeResults.concat(
-            __results.data.actor.entitySearch.results.entities
-          );
-          __cursorId = __results.data.actor.entitySearch.results.nextCursor;
-        } // if
-        else {
-          __gotCursor = false;
-        } // else
-      } // if
-      else {
-        __gotCursor = false;
-      } // else
-    } // while
-
-    return __compositeResults;
-  } // _getCursorEntities
+  removeFromList = slo => {
+    this.setState(prevState => ({
+      slos: prevState.slos.filter(prevSlo => {
+        return prevSlo.document.documentId !== slo.documentId;
+      })
+    }));
+  };
 
   render() {
-    if (this.state.entities === null) {
-      return (
-        <div>
-          <Spinner />
-        </div>
-      );
-    } // if
-    else {
-      return (
-        <div>
-          <SLOREstate entities={this.state.entities} />
-        </div>
-      );
-    } // else
-  } // render
-} // SloRMain
+    const {
+      ActivePage,
+      slos,
+      entities,
+      tags,
+      isLoaded,
+      isRefreshing,
+      isTableViewActive,
+      lastUpdateDate,
+      isCreateModalActive,
+      sloToBeEdited
+    } = this.state;
+
+    let emptyState = null;
+
+    if (isLoaded && slos.length === 0) {
+      emptyState = <NoSlosNotification handleClick={this.handleDefineNewSLO} />;
+    }
+
+    return (
+      <Stack
+        directionType={Stack.DIRECTION_TYPE.VERTICAL}
+        verticalType={Stack.VERTICAL_TYPE.FILL}
+        className="nerdlet-container"
+        fullWidth
+        fullHeight
+      >
+        <Stack fullWidth className="toolbar">
+          <StackItem className="toolbar__item toolbar__item--separator">
+            <Button
+              style={{
+                background: `${
+                  ActivePage === PAGES.COMBINE_SLOs ? '#E0E2E2' : ''
+                }`
+              }}
+              type={
+                ActivePage === PAGES.COMBINE_SLOs
+                  ? Button.TYPE.PLAIN
+                  : Button.TYPE.NORMAL
+              }
+              onClick={() => {
+                this.setState({ ActivePage: PAGES.COMBINE_SLOs });
+              }}
+              iconType={Button.ICON_TYPE.INTERFACE__VIEW__LAYER_LIST}
+            >
+              Combine SLOs
+            </Button>
+          </StackItem>
+          <StackItem className="toolbar__item toolbar__item--separator">
+            <Button
+              style={{
+                background: `${ActivePage === PAGES.SLO_LIST ? '#E0E2E2' : ''}`
+              }}
+              type={
+                ActivePage === PAGES.SLO_LIST
+                  ? Button.TYPE.PLAIN
+                  : Button.TYPE.NORMAL
+              }
+              onClick={() => {
+                this.setState({ ActivePage: PAGES.SLO_LIST });
+              }}
+              iconType={Button.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
+            >
+              View SLOs
+            </Button>
+          </StackItem>
+          <StackItem className="toolbar__item">
+            {ActivePage === PAGES.SLO_LIST && (
+              <div className="segmented-control-container">
+                <button
+                  type="button"
+                  className={`grid-view-button ${
+                    !isTableViewActive ? 'active' : ''
+                  }`}
+                  onClick={() => this.setState({ isTableViewActive: false })}
+                >
+                  <Icon
+                    type={Icon.TYPE.INTERFACE__OPERATIONS__GROUP}
+                    color={isTableViewActive ? '#007e8a' : '#ffffff'}
+                  />
+                  Grid
+                </button>
+                <button
+                  type="button"
+                  className={`table-view-button ${
+                    isTableViewActive ? 'active' : ''
+                  }`}
+                  onClick={() => this.setState({ isTableViewActive: true })}
+                >
+                  <Icon
+                    type={Icon.TYPE.INTERFACE__VIEW__LIST_VIEW}
+                    color={isTableViewActive ? '#ffffff' : '#007e8a'}
+                  />
+                  Table
+                </button>
+              </div>
+            )}
+          </StackItem>
+          <StackItem
+            grow
+            className="toolbar__item toolbar__item--separator toolbar__item--align-right"
+          >
+            {isRefreshing && <Spinner inline />}
+            Last updated at: {format(lastUpdateDate, 'hh:mm:ss')}
+          </StackItem>
+          <StackItem className="toolbar__item toolbar__item--align-right">
+            <Button
+              type={Button.TYPE.PRIMARY}
+              iconType={Button.ICON_TYPE.DOCUMENTS__DOCUMENTS__NOTES__A_ADD}
+              onClick={this.handleDefineNewSLO}
+            >
+              Define an SLO
+            </Button>
+          </StackItem>
+        </Stack>
+        <Stack
+          className="slos"
+          fullHeight
+          fullWidth
+          gapType={Stack.GAP_TYPE.NONE}
+        >
+          <PlatformStateContext.Consumer>
+            {platformUrlState => (
+              <>
+                {emptyState || (
+                  <ActivePage
+                    timeRange={platformUrlState.timeRange}
+                    slos={slos}
+                    tags={tags}
+                    isTableViewActive={isTableViewActive}
+                    removeFromList={this.removeFromList}
+                    handleEditSLO={this.handleEditSLO}
+                    handleDefineNewSLO={this.handleDefineNewSLO}
+                  />
+                )}
+                <DefineSLOForm
+                  slo={sloToBeEdited}
+                  isEdit={sloToBeEdited}
+                  timeRange={platformUrlState.timeRange}
+                  entities={entities}
+                  onSave={() => this.fetchSlos(entities)}
+                  onClose={() =>
+                    this.setState({
+                      sloToBeEdited: undefined,
+                      isCreateModalActive: false
+                    })
+                  }
+                  isOpen={isCreateModalActive}
+                />
+              </>
+            )}
+          </PlatformStateContext.Consumer>
+        </Stack>
+      </Stack>
+    );
+  }
+}

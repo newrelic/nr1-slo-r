@@ -84,7 +84,7 @@ export default class Day extends Component {
 
     const className = classNames(
       'value',
-      sloExists && value && (value < slo.target ? 'value--good' : 'value--bad')
+      sloExists && value && (value >= slo.target ? 'value--good' : 'value--bad')
     );
 
     const content = isProcessing ? (

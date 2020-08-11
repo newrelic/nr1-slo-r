@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { GridItem, Icon, Button, Tooltip } from 'nr1';
 import SettingsMenu from '../settings-menu';
-import { sloIndicatorLabelLookup } from '../../../shared/helpers';
+import { sloIndicatorLabelLookup } from '../../../../shared/helpers';
 
 const SloGridTags = ({
   document,
@@ -102,7 +102,7 @@ const SloGridTags = ({
           <li
             className="service-settings-dropdown-item destructive"
             onClick={() => {
-              deleteCallback({ document });
+              deleteCallback(document);
             }}
           >
             <Icon

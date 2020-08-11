@@ -106,12 +106,10 @@
 
     &--all-good {
       @extend .all-good;
-      background: none !important;
     }
 
     &--not-good {
-      @extend .not-good;
-      background: none !important;
+      @extend .not-good
     }
   }
 
@@ -172,10 +170,10 @@
 
 .not-good {
   color: #bf0015;
-  background: #fcf2f3d9;
+  background: rgba(252, 242, 243, 0.85);
 }
 
 .all-good {
-  background: #dbf8db66;
+  background: rgba(219, 248, 219, 0.4);
   color: #085300;
 }
