@@ -5,3 +5,4 @@ coverage
 dist
 tmp
 yarn.lock
+.DS_Store

@@ -83,16 +83,16 @@ For more information on sending alert data to New Relic, see [Sending Alerts dat
 
 SLO definitions are scoped and stored with service entities. Open a service entity by exploring your services in the [Entity explorer](https://docs.newrelic.com/docs/new-relic-one/use-new-relic-one/ui-data/new-relic-one-entity-explorer-view-performance-across-apps-services-hosts) from the [New Relic One homepage](https://one.newrelic.com).
 
-![Screenshot #6](catalog/screenshots/nr1-slo-r-06.png)
+![Screenshot #6](docs/images/nr1-slo-r-06.png)
 
 Select the service you are interested in creating SLOs for. In our example we will be using the Origami Portal Service.
-![Screenshot #7](catalog/screenshots/nr1-slo-r-07.png)
+![Screenshot #7](docs/images/nr1-slo-r-07.png)
 
 Select the SLO/R New Relic One app from the left-hand navigation in your entity.
-![Screenshot #16](catalog/screenshots/nr1-slo-r-16.png)
+![Screenshot #16](docs/images/nr1-slo-r-16.png)
 
 If you (or others) haven't configured an SLO the canvas will be empty. Just click on the **Define an SLO** button to begin configuring your first SLO.
-![Screenshot #1](catalog/screenshots/nr1-slo-r-01.png)
+![Screenshot #1](docs/images/nr1-slo-r-01.png)
 
 The UI will open a side-panel to facilitate configuration. Fill in the fields:
 
@@ -103,34 +103,34 @@ The UI will open a side-panel to facilitate configuration. Fill in the fields:
 - Indicator: There are four indicators for SLOs in SLO/R - **Error**, **Availability**, **Capacity**, and **Latency**. Error SLOs are calculated from _Transaction_ event defects. Availability, latency, and capacity SLOs are calculated by alert violations.
 
 Example error SLO
-![Screenshot #3](catalog/screenshots/nr1-slo-r-03.png)
+![Screenshot #3](docs/images/nr1-slo-r-03.png)
 
 For **Error** SLOs you need to define the defects you wish to measure and the transaction names you want to associate with this SLO.
 
 Example Availability SLO
-![Screenshot #2](catalog/screenshots/nr1-slo-r-02.png)
+![Screenshot #2](docs/images/nr1-slo-r-02.png)
 
 Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](./docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
 
 Once you've created a few SLOs you should see a view like the following:
 
-![Screenshot #4](catalog/screenshots/nr1-slo-r-04.png)
+![Screenshot #4](docs/images/nr1-slo-r-04.png)
 
 ### Configuration in Launcher app
 
 Other way of configuring SLO is through Launcher app. Difference between creating SLOs from Entity Explorer and from Launcher is that entity must be selected first.
 
-![Screenshot #27](catalog/screenshots/nr1-slo-r-27.png)
+![Screenshot #27](docs/images/nr1-slo-r-27.png)
 
 ### Using app from Launcher
 
 It is possible to combine multiple SLOs into tables and user selection is stored in NRDB.
 
-![Screenshot #26](catalog/screenshots/nr1-slo-r-26.png)
+![Screenshot #26](docs/images/nr1-slo-r-26.png)
 
 SLOs can be filtered by tags attached to them:
 
-![Screenshot #28](catalog/screenshots/nr1-slo-r-28.png)
+![Screenshot #28](docs/images/nr1-slo-r-28.png)
 
 ### How is SLO/R arriving at the SLO calculations?
 
