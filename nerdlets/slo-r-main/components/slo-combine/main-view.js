@@ -7,7 +7,6 @@ import isEqual from 'lodash.isequal';
 
 import SloList from './slo-list';
 import MainContent from './main-container';
-import { NoSlosNotification } from '../../../shared/components';
 
 const SLO_COLLECTION_KEY = 'slo_collection_v1';
 const SLO_DOCUMENT_ID = 'slo_document';

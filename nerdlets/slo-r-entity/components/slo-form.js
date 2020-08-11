@@ -565,6 +565,7 @@ export default class SloForm extends React.Component {
     });
   };
 
+  /* eslint-disable no-unused-vars */
   handleTagChange = tag => event => {
     this.inputHandler({
       field: 'tags',
@@ -575,6 +576,7 @@ export default class SloForm extends React.Component {
       selectedTags: [...tag]
     });
   };
+  /* eslint-enable */
 
   render() {
     const { documentId } = this.props;

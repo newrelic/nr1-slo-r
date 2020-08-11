@@ -117,7 +117,7 @@ export const validateSlo = function(document) {
     else {
       // review the document for problematic transaction characters
       const __updated_transactions = [];
-      document.transactions.map(_transaction => {
+      document.transactions.forEach(_transaction => {
         __updated_transactions.push(_transaction.replace(/\\/g, '%'));
       });
 

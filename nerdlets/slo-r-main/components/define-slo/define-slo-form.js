@@ -8,10 +8,7 @@ import * as Yup from 'yup';
 
 import { fetchEntity } from '../../../shared/services/entity';
 import { SLO_INDICATORS, SLO_DEFECTS } from '../../../shared/constants';
-import {
-  sloDocumentModel,
-  writeSloDocument
-} from '../../../shared/services/slo-documents';
+import { writeSloDocument } from '../../../shared/services/slo-documents';
 import { timeRangeToNrql } from '../../../shared/helpers';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';

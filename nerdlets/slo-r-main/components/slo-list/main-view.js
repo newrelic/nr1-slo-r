@@ -12,7 +12,6 @@ import isEqual from 'lodash.isequal';
 
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
-import { NoSlosNotification } from '../../../shared/components';
 
 import SloTileWrapper from './slo-tile-wrapper';
 import ViewDocument from './view-document';
