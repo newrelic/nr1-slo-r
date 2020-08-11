@@ -15,10 +15,12 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 **[dependencies](#dependencies)**
 
 * [@newrelic/nr1-community](#newrelicnr1-community)
+* [classnames](#classnames)
 * [date-fns](#date-fns)
-* [date-fns](#date-fns)
+* [formik](#formik)
 * [lodash.get](#lodashget)
 * [lodash.isequal](#lodashisequal)
+* [lodash.uniqwith](#lodashuniqwith)
 * [prop-types](#prop-types)
 * [react-bootstrap-table-next](#react-bootstrap-table-next)
 * [react-bootstrap-table2-filter](#react-bootstrap-table2-filter)
@@ -28,6 +30,7 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 * [react-widgets](#react-widgets)
 * [react](#react)
 * [uuid](#uuid)
+* [yup](#yup)
 
 **[devDependencies](#devDependencies)**
 
@@ -42,7 +45,7 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 
 ### @newrelic/nr1-community
 
-This product includes source derived from [@newrelic/nr1-community](https://github.com/newrelic/nr1-community) ([v1.1.1](https://github.com/newrelic/nr1-community/tree/v1.1.1)), distributed under the [Apache-2.0 License](https://github.com/newrelic/nr1-community/blob/v1.1.1/LICENSE):
+This product includes source derived from [@newrelic/nr1-community](https://github.com/newrelic/nr1-community) ([v1.2.0](https://github.com/newrelic/nr1-community/tree/v1.2.0)), distributed under the [Apache-2.0 License](https://github.com/newrelic/nr1-community/blob/v1.2.0/LICENSE):
 
 ```
                                  Apache License
@@ -249,11 +252,42 @@ This product includes source derived from [@newrelic/nr1-community](https://gith
 
 ```
 
-### date-fns
+### classnames
 
-This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.11.1](https://github.com/date-fns/date-fns/tree/v2.11.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.11.1/LICENSE.md):
+This product includes source derived from [classnames](https://github.com/JedWatson/classnames) ([v2.2.6](https://github.com/JedWatson/classnames/tree/v2.2.6)), distributed under the [MIT License](https://github.com/JedWatson/classnames/blob/v2.2.6/LICENSE):
 
 ```
+The MIT License (MIT)
+
+Copyright (c) 2017 Jed Watson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
+
+### date-fns
+
+This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.15.0](https://github.com/date-fns/date-fns/tree/v2.15.0)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.15.0/LICENSE.md):
+
+```
+Copyright (C) 2020 Sasha Koss and Lesha Koss
+
 # License
 
 date-fns is licensed under the [MIT license](http://kossnocorp.mit-license.org).
@@ -261,15 +295,32 @@ Read more about MIT at [TLDRLegal](https://tldrlegal.com/license/mit-license).
 
 ```
 
-### date-fns
+### formik
 
-This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.8.1](https://github.com/date-fns/date-fns/tree/v2.8.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.8.1/LICENSE.md):
+This product includes source derived from [formik](https://github.com/jaredpalmer/formik) ([v1.5.8](https://github.com/jaredpalmer/formik/tree/v1.5.8)), distributed under the [MIT License](https://github.com/jaredpalmer/formik/blob/v1.5.8/LICENSE):
 
 ```
-# License
+MIT License
 
-date-fns is licensed under the [MIT license](http://kossnocorp.mit-license.org).
-Read more about MIT at [TLDRLegal](https://tldrlegal.com/license/mit-license).
+Copyright (c) 2017 Jared Palmer http://jaredpalmer.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ```
 
@@ -383,6 +434,61 @@ terms above.
 
 ```
 
+### lodash.uniqwith
+
+This product includes source derived from [lodash.uniqwith](https://github.com/lodash/lodash) ([v4.5.0](https://github.com/lodash/lodash/tree/v4.5.0)), distributed under the [MIT License](https://github.com/lodash/lodash/blob/v4.5.0/LICENSE):
+
+```
+Copyright jQuery Foundation and other contributors <https://jquery.org/>
+
+Based on Underscore.js, copyright Jeremy Ashkenas,
+DocumentCloud and Investigative Reporters & Editors <http://underscorejs.org/>
+
+This software consists of voluntary contributions made by many
+individuals. For exact contribution history, see the revision history
+available at https://github.com/lodash/lodash
+
+The following license applies to all parts of this software except as
+documented below:
+
+====
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+====
+
+Copyright and related rights for sample code are waived via CC0. Sample
+code is defined as all source code displayed within the prose of the
+documentation.
+
+CC0: http://creativecommons.org/publicdomain/zero/1.0/
+
+====
+
+Files located in the node_modules and vendor directories are externally
+maintained libraries used by this software which have their own
+licenses; we recommend you read them, as their terms may differ from the
+terms above.
+
+```
+
 ### prop-types
 
 This product includes source derived from [prop-types](https://github.com/facebook/prop-types) ([v15.7.2](https://github.com/facebook/prop-types/tree/v15.7.2)), distributed under the [MIT License](https://github.com/facebook/prop-types/blob/v15.7.2/LICENSE):
@@ -414,7 +520,7 @@ SOFTWARE.
 
 ### react-bootstrap-table-next
 
-This product includes source derived from [react-bootstrap-table-next](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v3.3.1](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v3.3.1)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v3.3.1/README.md):
+This product includes source derived from [react-bootstrap-table-next](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v3.3.5](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v3.3.5)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v3.3.5/README.md):
 
 ```
 MIT License Copyright (c) <year> <copyright holders>
@@ -442,7 +548,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ### react-bootstrap-table2-toolkit
 
-This product includes source derived from [react-bootstrap-table2-toolkit](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v2.1.1](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v2.1.1)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v2.1.1/README.md):
+This product includes source derived from [react-bootstrap-table2-toolkit](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v2.1.3](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v2.1.3)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v2.1.3/README.md):
 
 ```
 MIT License Copyright (c) <year> <copyright holders>
@@ -596,6 +702,34 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+```
+
+### yup
+
+This product includes source derived from [yup](https://github.com/jquense/yup) ([v0.27.0](https://github.com/jquense/yup/tree/v0.27.0)), distributed under the [MIT License](https://github.com/jquense/yup/blob/v0.27.0/LICENSE.md):
+
+```
+The MIT License (MIT)
+
+Copyright (c) 2014 Jason Quense
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
 
