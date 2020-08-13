@@ -105,10 +105,6 @@ export default class SLOGrid extends Component {
           <div className="slo-grid-item-section section-tag">
             <div className="slo-grid-item-section-value">
               {document.slogroup}
-              {console.log(
-                'SLOGrid -> render -> document.slogroup',
-                document
-              )}{' '}
             </div>
             <span className="slo-grid-item-section-label">SLO Group</span>
           </div>
