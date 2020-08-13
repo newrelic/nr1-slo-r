@@ -94,7 +94,6 @@ export default SloGridTags;
 SloGridTags.propTypes = {
   document: PropTypes.object,
   toggleViewModal: PropTypes.func,
-  toggleUpdateModal: PropTypes.func,
   deleteCallback: PropTypes.func,
   index: PropTypes.number
 };
