@@ -34,9 +34,12 @@ export default class MainView extends Component {
   };
 
   componentDidUpdate = async prevProps => {
-    const { slos } = this.props;
+    const { slos, timeRange } = this.props;
 
-    if (!this.areSlosEqual(slos, prevProps.slos)) {
+    if (
+      !this.areSlosEqual(slos, prevProps.slos) ||
+      !isEqual(prevProps.timeRange, timeRange)
+    ) {
       this.clearAndFetch();
     }
   };
