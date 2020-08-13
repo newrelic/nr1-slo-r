@@ -24,7 +24,7 @@ export default class SLOGrid extends Component {
     const { data } = this.props;
 
     const SLOGridItems = data.map((document, index) => {
-      if (document.tags) {
+      if (document.tags && document.tags.length > 0) {
         return (
           <SloGridTags
             key={index}
@@ -105,10 +105,12 @@ export default class SLOGrid extends Component {
           <div className="slo-grid-item-section section-tag">
             <div className="slo-grid-item-section-value">
               {document.slogroup}
+              {console.log(
+                'SLOGrid -> render -> document.slogroup',
+                document
+              )}{' '}
             </div>
-            <span className="slo-grid-item-section-label">
-              {document.slogroup ? 'SLO Group' : 'Tag'}
-            </span>
+            <span className="slo-grid-item-section-label">SLO Group</span>
           </div>
           <div
             className={`slo-grid-item-section section-7day ${

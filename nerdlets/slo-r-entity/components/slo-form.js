@@ -198,7 +198,7 @@ export default class SloForm extends React.Component {
     // prevent default used to stop form submission to iframe
     e.preventDefault();
 
-    const { entityDetails, document, selectedGroup } = this.state;
+    const { entityDetails, document, selectedTags } = this.state;
     const currentDocument = { ...document };
 
     const isValid = validateSlo(currentDocument);
@@ -211,7 +211,7 @@ export default class SloForm extends React.Component {
       return;
     }
 
-    if (!selectedGroup || '') {
+    if (selectedTags.length > 0) {
       delete currentDocument.slogroup;
     }
 
@@ -233,6 +233,7 @@ export default class SloForm extends React.Component {
    * Add to NerdStorage and navigate
    */
   async writeNewSloDocument(document) {
+    console.log('writeNewSloDocument -> document', document);
     const { entityGuid } = this.props;
 
     const { mutation, result } = await writeSloDocument({
@@ -248,11 +249,14 @@ export default class SloForm extends React.Component {
   }
 
   inputHandler({ field, value }) {
+    console.log('inputHandler -> value', value);
+    console.log('inputHandler -> field', field);
     this.setState(previousState => {
       const updatedDocument = {
         ...previousState.document
       };
       updatedDocument[field] = value;
+      console.log('inputHandler -> updatedDocument', updatedDocument);
 
       return {
         ...previousState,

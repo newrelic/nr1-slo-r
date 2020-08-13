@@ -44,17 +44,6 @@ const SloGridTags = ({
             View details
           </li>
           <li
-            className="service-settings-dropdown-item"
-            onClick={() => {
-              toggleUpdateModal({
-                document
-              });
-            }}
-          >
-            <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
-            Edit
-          </li>
-          <li
             className="service-settings-dropdown-item destructive"
             onClick={() => deleteCallback(document)}
           >

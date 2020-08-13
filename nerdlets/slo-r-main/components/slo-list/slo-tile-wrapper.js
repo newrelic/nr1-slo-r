@@ -13,7 +13,7 @@ export default class SloTileWrapper extends Component {
       slo
     } = this.props;
 
-    return slo && slo.tags ? (
+    return slo && slo.tags && slo.tags.length > 0 ? (
       <SloGridTags
         deleteCallback={deleteCallback}
         toggleViewModal={toggleViewModal}
