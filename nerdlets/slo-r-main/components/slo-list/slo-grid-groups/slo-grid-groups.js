@@ -4,13 +4,7 @@ import { GridItem, Icon, Button, Tooltip } from 'nr1';
 import SettingsMenu from '../settings-menu';
 import { sloIndicatorLabelLookup } from '../../../../shared/helpers';
 
-const SloGridTags = ({
-  document,
-  index,
-  toggleViewModal,
-  toggleUpdateModal,
-  deleteCallback
-}) => {
+const SloGridTags = ({ document, index, toggleViewModal, deleteCallback }) => {
   return (
     <GridItem className="slo-grid-item" key={index} columnSpan={3}>
       <header className="slo-grid-item-header">
