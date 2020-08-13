@@ -4,13 +4,7 @@ import { GridItem, Icon, Button, Tooltip } from 'nr1';
 import SettingsMenu from '../settings-menu';
 import { sloIndicatorLabelLookup } from '../../../../shared/helpers';
 
-const SloGridTags = ({
-  document,
-  index,
-  toggleViewModal,
-  toggleUpdateModal,
-  deleteCallback
-}) => {
+const SloGridTags = ({ document, index, toggleViewModal, deleteCallback }) => {
   return (
     <GridItem className="slo-grid-item" key={index} columnSpan={3}>
       <header className="slo-grid-item-header">
@@ -42,17 +36,6 @@ const SloGridTags = ({
           >
             <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
             View details
-          </li>
-          <li
-            className="service-settings-dropdown-item"
-            onClick={() => {
-              toggleUpdateModal({
-                document
-              });
-            }}
-          >
-            <Icon type={Icon.TYPE.INTERFACE__OPERATIONS__EDIT} />
-            Edit
           </li>
           <li
             className="service-settings-dropdown-item destructive"
@@ -111,7 +94,6 @@ export default SloGridTags;
 SloGridTags.propTypes = {
   document: PropTypes.object,
   toggleViewModal: PropTypes.func,
-  toggleUpdateModal: PropTypes.func,
   deleteCallback: PropTypes.func,
   index: PropTypes.number
 };

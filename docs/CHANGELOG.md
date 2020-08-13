@@ -1,3 +1,14 @@
+## [1.6.2](https://github.com/newrelic/nr1-slo-r/compare/v1.6.1...v1.6.2) (2020-08-13)
+
+
+### Bug Fixes
+
+* console logs removed ([73aef9a](https://github.com/newrelic/nr1-slo-r/commit/73aef9a779e73e3ff22dc1de4101b0621f2699ad))
+* eslint fix ([22b6054](https://github.com/newrelic/nr1-slo-r/commit/22b60544bfe2d3ce13df2c535fe1b42e8745361c))
+* eslint fix ([c1b2f26](https://github.com/newrelic/nr1-slo-r/commit/c1b2f26e29b13fffc88a94980b2134202b2e4204))
+* showing correct tile for group-based fixed ([a83a58e](https://github.com/newrelic/nr1-slo-r/commit/a83a58e29cd9d659d232b93e3774343a36ae2204))
+* timerange change fixed ([8528794](https://github.com/newrelic/nr1-slo-r/commit/8528794a044c67f6086d15e4aa9335971093de18))
+
 ## [1.6.1](https://github.com/newrelic/nr1-slo-r/compare/v1.6.0...v1.6.1) (2020-08-11)
 
 
