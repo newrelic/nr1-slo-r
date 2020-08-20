@@ -100,8 +100,6 @@ export default class DefineSLOForm extends Component {
     const { entityDetails } = this.state;
     const { timeRange } = this.props;
 
-    const timeRangeNrql = timeRangeToNrql(timeRange);
-
     if (entityDetails) {
       const __query = `{
             actor {

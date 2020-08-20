@@ -143,8 +143,6 @@ export default class SloForm extends React.Component {
     const { entityDetails, document } = this.state;
     const { timeRange } = this.props;
 
-    const timeRangeNrql = timeRangeToNrql(timeRange);
-
     if (entityDetails && document.alerts.length < 1) {
       const __query = `{
             actor {
