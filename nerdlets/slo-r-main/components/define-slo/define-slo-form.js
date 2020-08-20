@@ -98,7 +98,6 @@ export default class DefineSLOForm extends Component {
 
   fetchAlerts = async () => {
     const { entityDetails } = this.state;
-    const { timeRange } = this.props;
 
     if (entityDetails) {
       const __query = `{

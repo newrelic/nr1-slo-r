@@ -141,7 +141,6 @@ export default class SloForm extends React.Component {
 
   async _updateAlertConfig() {
     const { entityDetails, document } = this.state;
-    const { timeRange } = this.props;
 
     if (entityDetails && document.alerts.length < 1) {
       const __query = `{
