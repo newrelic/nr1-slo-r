@@ -149,7 +149,7 @@ export default class SloForm extends React.Component {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
-                nrql(query: "SELECT count(*) FROM SLOR_ALERTS ${timeRangeNrql} FACET policy_name") {
+                nrql(query: "SELECT count(*) FROM SLOR_ALERTS SINCE 7 days ago FACET policy_name") {
                   results
                 }
               }
