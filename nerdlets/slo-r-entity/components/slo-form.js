@@ -141,15 +141,12 @@ export default class SloForm extends React.Component {
 
   async _updateAlertConfig() {
     const { entityDetails, document } = this.state;
-    const { timeRange } = this.props;
-
-    const timeRangeNrql = timeRangeToNrql(timeRange);
 
     if (entityDetails && document.alerts.length < 1) {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
-                nrql(query: "SELECT count(*) FROM SLOR_ALERTS ${timeRangeNrql} FACET policy_name") {
+                nrql(query: "SELECT count(*) FROM SLOR_ALERTS SINCE 7 days ago FACET policy_name") {
                   results
                 }
               }

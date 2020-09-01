@@ -98,15 +98,12 @@ export default class DefineSLOForm extends Component {
 
   fetchAlerts = async () => {
     const { entityDetails } = this.state;
-    const { timeRange } = this.props;
-
-    const timeRangeNrql = timeRangeToNrql(timeRange);
 
     if (entityDetails) {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
-                nrql(query: "SELECT count(*) FROM SLOR_ALERTS ${timeRangeNrql} FACET policy_name") {
+                nrql(query: "SELECT count(*) FROM SLOR_ALERTS SINCE 7 days ago FACET policy_name") {
                   results
                 }
               }
