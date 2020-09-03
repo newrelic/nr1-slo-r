@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/newrelic/nr1-slo-r/compare/v1.6.2...v1.6.3) (2020-09-03)
+
+
+### Bug Fixes
+
+* Trigger release and changelog generation (via GH Actions) ([1b9eb5b](https://github.com/newrelic/nr1-slo-r/commit/1b9eb5be051f78c2adc3288926a429724a717522))
+
 ## [1.6.2](https://github.com/newrelic/nr1-slo-r/compare/v1.6.1...v1.6.2) (2020-08-13)
 
 
