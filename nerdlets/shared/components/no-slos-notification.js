@@ -27,7 +27,7 @@ const NoSlosNotification = ({ handleClick }) => {
       </a>
       . We also have documentation for more specific information about{' '}
       <a
-        href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md"
+        href="https://github.com/newrelic/nr1-slo-r/blob/main/docs/error_slos.md"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -35,7 +35,7 @@ const NoSlosNotification = ({ handleClick }) => {
       </a>{' '}
       or{' '}
       <a
-        href="https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md"
+        href="https://github.com/newrelic/nr1-slo-r/blob/main/docs/alert_slos.md"
         target="_blank"
         rel="noopener noreferrer"
       >

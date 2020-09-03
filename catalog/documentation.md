@@ -11,11 +11,11 @@ Using New Relic as a consistent basis to define and measure your SLOs offers bet
 SLO/R provides two mechanisms for calculating SLOs: **error type** (calculated by defects on transactions) and **availability**, **capacity**, and **latency type** (calculated by total duration of alert violation).
 
 > We are keen to see SLO/R evolve and grow to include additional features and visualizations. For version 1.0.1, we wanted to ship the core SLO calculation capabilities. We expect to rapidly build upon this core functionality through several releases. Please add an issue to the repo is there's a feature you'd like to see.
-> For more details about the SLOs and their calculations, please see [error driven SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md) and [alert driven SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md).
+> For more details about the SLOs and their calculations, please see [error driven SLOs](https://github.com/newrelic/nr1-slo-r/blob/main/docs/error_slos.md) and [alert driven SLOs](https://github.com/newrelic/nr1-slo-r/blob/main/docs/alert_slos.md).
 
 ## Open source license
 
-This project is distributed under the [Apache 2 license](https://github.com/newrelic/nr1-slo-r/blob/master/LICENSE).
+This project is distributed under the [Apache 2 license](https://github.com/newrelic/nr1-slo-r/blob/main/LICENSE).
 
 ## Dependencies
 
@@ -67,7 +67,7 @@ Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerd
 
 The availability, capacity, and latency SLO types within SLO/R are calculated using the total duration of alert violations. In order to record those alert violations we need to enable an Insights directed Webhook to capture the `open` and `close` events.
 
-The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to enable the alert event forwarding.
+The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](https://github.com/newrelic/nr1-slo-r/blob//docs/slor_alerts_config.md) to enable the alert event forwarding.
 
 For more information on sending alert data to New Relic, see [Sending Alerts data to New Relic](https://blog.newrelic.com/product-news/sending-alerts-data-to-insights/).
 
@@ -95,13 +95,13 @@ For **Error** SLOs you need to define the defects you wish to measure and the tr
 
 Example Availability SLO
 
-Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
+Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](https://github.com/newrelic/nr1-slo-r/blob/main/docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
 
 Once you've created a few SLOs you should see a view like the following:
 
 ### How is SLO/R arriving at the SLO calculations?
 
-For details, see [Alert SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md) and [Error SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md).
+For details, see [Alert SLOs](https://github.com/newrelic/nr1-slo-r/blob/main/docs/alert_slos.md) and [Error SLOs](https://github.com/newrelic/nr1-slo-r/blob/main/docs/error_slos.md).
 
 ## Community Support
 
@@ -117,6 +117,6 @@ Issues and enhancement requests can be submitted in the [Issues tab of this repo
 
 ## Contributing
 
-Contributions are welcome (and if you submit an enhancement request, expect to be invited to contribute it yourself :grin:). Please review our [contributors guide](https://github.com/newrelic/nr1-slo-r/blob/master/CONTRIBUTING.md).
+Contributions are welcome (and if you submit an enhancement request, expect to be invited to contribute it yourself :grin:). Please review our [contributors guide](https://github.com/newrelic/nr1-slo-r/blob/main/CONTRIBUTING.md).
 
 Keep in mind that when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. If you'd like to execute our corporate CLA, or if you have any questions, please drop us an email at opensource+nr1-slo-r@newrelic.com.

@@ -31,7 +31,7 @@ Visit [https://one.newrelic.com/?nerdpacks=local](https://one.newrelic.com/?nerd
 
 The availability, capacity, and latency SLO types within SLO/R are calculated using the total duration of alert violations. In order to record those alert violations we need to enable an Insights directed Webhook to capture the `open` and `close` events.
 
-The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to enable the alert event forwarding.
+The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](https://github.com/newrelic/nr1-slo-r/blob/main/docs/slor_alerts_config.md) to enable the alert event forwarding.
 
 For more information on sending alert data to New Relic, see [Sending Alerts data to New Relic](https://blog.newrelic.com/product-news/sending-alerts-data-to-insights/).
 
@@ -59,10 +59,10 @@ For **Error** SLOs you need to define the defects you wish to measure and the tr
 
 Example Availability SLO
 
-Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](https://github.com/newrelic/nr1-slo-r/blob/master/docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
+Alert driven SLOs depend on alert events being reported in the SLOR_ALERTS table. Please see [SLO/R alerts config](https://github.com/newrelic/nr1-slo-r/blob/main/docs/slor_alerts_config.md) to ensure you're set up to capture alert events.
 
 Once you've created a few SLOs you should see a view like the following:
 
 ### How is SLO/R arriving at the SLO calculations?
 
-For details, see [Alert SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/alert_slos.md) and [Error SLOs](https://github.com/newrelic/nr1-slo-r/blob/master/docs/error_slos.md).
+For details, see [Alert SLOs](https://github.com/newrelic/nr1-slo-r/blob/main/docs/alert_slos.md) and [Error SLOs](https://github.com/newrelic/nr1-slo-r/blob/main/docs/error_slos.md).
