@@ -25,10 +25,8 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 * [react-bootstrap-table-next](#react-bootstrap-table-next)
 * [react-bootstrap-table2-filter](#react-bootstrap-table2-filter)
 * [react-bootstrap-table2-toolkit](#react-bootstrap-table2-toolkit)
-* [react-dom](#react-dom)
 * [react-syntax-highlighter](#react-syntax-highlighter)
 * [react-widgets](#react-widgets)
-* [react](#react)
 * [uuid](#uuid)
 * [yup](#yup)
 
@@ -39,6 +37,8 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 * [@semantic-release/git](#semantic-releasegit)
 * [eslint](#eslint)
 * [prettier](#prettier)
+* [react-dom](#react-dom)
+* [react](#react)
 
 
 ## dependencies
@@ -283,7 +283,7 @@ SOFTWARE.
 
 ### date-fns
 
-This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.15.0](https://github.com/date-fns/date-fns/tree/v2.15.0)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.15.0/LICENSE.md):
+This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.16.1](https://github.com/date-fns/date-fns/tree/v2.16.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.16.1/LICENSE.md):
 
 ```
 Copyright (C) 2020 Sasha Koss and Lesha Koss
@@ -534,7 +534,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ### react-bootstrap-table2-filter
 
-This product includes source derived from [react-bootstrap-table2-filter](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v1.3.0](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v1.3.0)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v1.3.0/README.md):
+This product includes source derived from [react-bootstrap-table2-filter](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v1.3.3](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v1.3.3)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v1.3.3/README.md):
 
 ```
 MIT License Copyright (c) <year> <copyright holders>
@@ -558,35 +558,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```
-
-### react-dom
-
-This product includes source derived from [react-dom](https://github.com/facebook/react) ([v16.11.0](https://github.com/facebook/react/tree/v16.11.0)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.11.0/LICENSE):
-
-```
-MIT License
-
-Copyright (c) Facebook, Inc. and its affiliates.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
 ```
 
 ### react-syntax-highlighter
@@ -620,7 +591,7 @@ SOFTWARE.
 
 ### react-widgets
 
-This product includes source derived from [react-widgets](https://github.com/jquense/react-widgets) ([v4.4.11](https://github.com/jquense/react-widgets/tree/v4.4.11)), distributed under the [MIT License](https://github.com/jquense/react-widgets/blob/v4.4.11/LICENSE.md):
+This product includes source derived from [react-widgets](https://github.com/jquense/react-widgets) ([v4.5.0](https://github.com/jquense/react-widgets/tree/v4.5.0)), distributed under the [MIT License](https://github.com/jquense/react-widgets/blob/v4.5.0/LICENSE.md):
 
 ```
 The MIT License (MIT)
@@ -646,38 +617,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### react
-
-This product includes source derived from [react](https://github.com/facebook/react) ([v16.11.0](https://github.com/facebook/react/tree/v16.11.0)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.11.0/LICENSE):
-
-```
-MIT License
-
-Copyright (c) Facebook, Inc. and its affiliates.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-```
-
 ### uuid
 
-This product includes source derived from [uuid](https://github.com/kelektiv/node-uuid) ([v3.3.3](https://github.com/kelektiv/node-uuid/tree/v3.3.3)), distributed under the [MIT License](https://github.com/kelektiv/node-uuid/blob/v3.3.3/LICENSE.md):
+This product includes source derived from [uuid](https://github.com/uuidjs/uuid) ([v3.4.0](https://github.com/uuidjs/uuid/tree/v3.4.0)), distributed under the [MIT License](https://github.com/uuidjs/uuid/blob/v3.4.0/LICENSE.md):
 
 ```
 The MIT License (MIT)
@@ -737,7 +679,7 @@ SOFTWARE.
 
 ### @newrelic/eslint-plugin-newrelic
 
-This product includes source derived from [@newrelic/eslint-plugin-newrelic](https://github.com/NewRelic/eslint-plugin-newrelic) ([v0.3.0](https://github.com/NewRelic/eslint-plugin-newrelic/tree/v0.3.0)), distributed under the [Apache-2.0 License](https://github.com/NewRelic/eslint-plugin-newrelic/blob/v0.3.0/LICENSE):
+This product includes source derived from [@newrelic/eslint-plugin-newrelic](https://github.com/NewRelic/eslint-plugin-newrelic) ([v0.3.1](https://github.com/NewRelic/eslint-plugin-newrelic/tree/v0.3.1)), distributed under the [Apache-2.0 License](https://github.com/NewRelic/eslint-plugin-newrelic/blob/v0.3.1/LICENSE):
 
 ```
                                  Apache License
@@ -1041,6 +983,64 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+```
+
+### react-dom
+
+This product includes source derived from [react-dom](https://github.com/facebook/react) ([v16.6.3](https://github.com/facebook/react/tree/v16.6.3)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.6.3/LICENSE):
+
+```
+MIT License
+
+Copyright (c) Facebook, Inc. and its affiliates.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
+
+### react
+
+This product includes source derived from [react](https://github.com/facebook/react) ([v16.6.3](https://github.com/facebook/react/tree/v16.6.3)), distributed under the [MIT License](https://github.com/facebook/react/blob/v16.6.3/LICENSE):
+
+```
+MIT License
+
+Copyright (c) Facebook, Inc. and its affiliates.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ```
 
