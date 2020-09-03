@@ -2,7 +2,8 @@ export const SLO_INDICATORS = [
   { value: 'error_budget', label: 'Errors' },
   { value: 'availability', label: 'Availability' },
   { value: 'capacity', label: 'Capacity' },
-  { value: 'latency', label: 'Latency' }
+  { value: 'latency', label: 'Latency' },
+  { value: 'latency_budget', label: 'Latency (Calculated)' }
 ];
 
 export const ENTITY_COLLECTION_NAME = 'nr1-csg-slo-r';
