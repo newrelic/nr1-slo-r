@@ -249,7 +249,7 @@ export default class DefineSLOForm extends Component {
               validationText={errors.limit}
             />
 
-            <span className="multiselect__validation">{errors.defects}</span>
+            <span className="text-field__validation">{errors.defects}</span>
             <small className="input-description">
               Transactions with a duration greater than the limit will be
               counted against error budget attainment.
