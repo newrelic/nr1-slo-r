@@ -338,21 +338,21 @@ export default class DefineSLOForm extends Component {
               .required('Target is required'),
             indicator: Yup.string().required('Indicator is required'),
             alerts: Yup.array().when('indicator', {
-              is: 'error_budget',
+              is: ('error_budget', 'latency_budget'),
               otherwise: Yup.array().min(
                 1,
                 'At least one alert must be selected'
               )
             }),
             transactions: Yup.array().when('indicator', {
-              is: 'error_budget',
+              is: ('error_budget', 'latency_budget'),
               then: Yup.array().min(
                 1,
                 'At least one transaction must be selected'
               )
             }),
             defects: Yup.array().when('indicator', {
-              is: 'error_budget',
+              is: ('error_budget', 'latency_budget'),
               then: Yup.array().min(1, 'At least one defect must be selected')
             })
           })}
