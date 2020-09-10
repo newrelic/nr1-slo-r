@@ -49,7 +49,7 @@ export default class SummaryTable extends Component {
       const promises = [];
 
       const summaryFunction =
-        indicator === 'error_budget'
+        indicator === 'error_budget' || indicator === 'latency_budget'
           ? CompositeErrorBudgetSlo
           : CompositeAlertSlo;
 
