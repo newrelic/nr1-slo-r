@@ -187,14 +187,7 @@ export default class DefineSLOForm extends Component {
               data={SLO_DEFECTS}
               className="defects-dropdown react-select-dropdown"
               placeholder="Select one or more defects"
-              onChange={e =>
-                setFieldValue('defects', [
-                  {
-                    value: `duration > ${e.target.value}`,
-                    label: `Duration > ${e.target.value}`
-                  }
-                ])
-              }
+              onChange={value => setFieldValue('defects', value)}
               defaultValue={values.defects}
             />
 
@@ -244,7 +237,12 @@ export default class DefineSLOForm extends Component {
             <h4 className="dropdown-label">Duration Limit</h4>
             <TextField
               onChange={e =>
-                setFieldValue('defects', [`duration > ${e.target.value}`])
+                setFieldValue('defects', [
+                  {
+                    value: `duration > ${e.target.value}`,
+                    label: `Duration > ${e.target.value}`
+                  }
+                ])
               }
               validationText={errors.limit}
             />
