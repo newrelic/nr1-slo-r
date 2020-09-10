@@ -92,7 +92,10 @@ export default class MainView extends Component {
     const { document } = slo;
 
     const promises = scopes.map(scope => {
-      if (document.indicator === 'error_budget') {
+      if (
+        document.indicator === 'error_budget' ||
+        document.indicator === 'latency_budget'
+      ) {
         return ErrorBudgetSLO.query({
           scope,
           document,

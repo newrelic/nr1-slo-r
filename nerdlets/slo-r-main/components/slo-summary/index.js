@@ -82,7 +82,7 @@ export default class SloSummary extends React.Component {
     }
 
     const summaryFunction =
-      activeIndicator === 'error_budget'
+      activeIndicator === 'error_budget' || activeIndicator === 'latency_budget'
         ? CompositeErrorBudgetSlo
         : CompositeAlertSlo;
 
