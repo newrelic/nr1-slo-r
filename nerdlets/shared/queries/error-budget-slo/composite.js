@@ -40,8 +40,9 @@ const _getErrorFilter = function(_transactions, _defects, language) {
         if (defect === 'apdex_frustrated') {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN}apdexPerfZone = 'F'`;
-        } // if
-        else {
+        } else if (defect.match(/duration > \.*\d+/)) {
+          __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}${defect}`;
+        } else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
             _getAgentHTTPResponseAttributeName(language)} LIKE '${defect}'`;

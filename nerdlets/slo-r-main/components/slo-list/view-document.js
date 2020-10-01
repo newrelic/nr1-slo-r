@@ -100,7 +100,10 @@ export default class ViewDocument extends React.Component {
     }
 
     const nrqlFunction =
-      document.indicator === 'error_budget' || document.type === 'error_budget'
+      document.indicator === 'error_budget' ||
+      document.type === 'error_budget' ||
+      document.indicator === 'latency_budget' ||
+      document.type === 'latency_budget'
         ? ErrorBudgetSLO
         : AlertDrivenSLO;
 

@@ -43,7 +43,7 @@ export default class DefineSLOForm extends Component {
     await this.getEntityInformation(entityGuid);
     const tags = await this.fetchEntityTags(entityGuid);
 
-    if (indicator === 'error_budget') {
+    if (indicator === 'error_budget' || indicator === 'latency_budget') {
       await this.fetchEntityTransactions();
     } else {
       await this.fetchAlerts();
@@ -119,7 +119,11 @@ export default class DefineSLOForm extends Component {
   };
 
   renderAlerts(values, setFieldValue, errors) {
-    if (!values.indicator || values.indicator === 'error_budget') {
+    if (
+      !values.indicator ||
+      values.indicator === 'error_budget' ||
+      values.indicator === 'latency_budget'
+    ) {
       return null;
     }
 
@@ -219,6 +223,61 @@ export default class DefineSLOForm extends Component {
     );
   }
 
+  renderLatencyBudget(values, setFieldValue, errors) {
+    if (values.indicator !== 'latency_budget') {
+      return null;
+    }
+
+    const { transactions } = this.state;
+
+    return (
+      <div>
+        <div className="latency-budget-dependency">
+          <div className="limit-field-container">
+            <h4 className="dropdown-label">Duration Limit</h4>
+            <TextField
+              onChange={e =>
+                setFieldValue('defects', [
+                  {
+                    value: `duration > ${e.target.value}`,
+                    label: `Duration > ${e.target.value}`
+                  }
+                ])
+              }
+              validationText={errors.limit}
+            />
+
+            <span className="text-field__validation">{errors.defects}</span>
+            <small className="input-description">
+              Transactions with a duration greater than the limit will be
+              counted against error budget attainment.
+            </small>
+          </div>
+        </div>
+
+        <div className="latency-budget-dependency">
+          <div className="transactions-dropdown-container">
+            <h4 className="dropdown-label">Transactions</h4>
+            <Multiselect
+              data={transactions.map(({ name }) => name)}
+              className="transactions-dropdown react-select-dropdown"
+              placeholder="Select one or more transactions"
+              onChange={value => setFieldValue('transactions', value)}
+              defaultValue={values.transactions}
+            />
+            <span className="multiselect__validation">
+              {errors.transactions}
+            </span>
+
+            <small className="input-description">
+              Select one or more transactions evaluate for this error budget.
+            </small>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { slo, isEdit, isOpen, onClose, onSave, entities } = this.props;
     const { tags, isProcessing } = this.state;
@@ -277,21 +336,21 @@ export default class DefineSLOForm extends Component {
               .required('Target is required'),
             indicator: Yup.string().required('Indicator is required'),
             alerts: Yup.array().when('indicator', {
-              is: 'error_budget',
+              is: indicator => indicator.matches(/budget/) === true,
               otherwise: Yup.array().min(
                 1,
                 'At least one alert must be selected'
               )
             }),
             transactions: Yup.array().when('indicator', {
-              is: 'error_budget',
+              is: indicator => indicator.matches(/budget/) === true,
               then: Yup.array().min(
                 1,
                 'At least one transaction must be selected'
               )
             }),
             defects: Yup.array().when('indicator', {
-              is: 'error_budget',
+              is: indicator => indicator.matches(/budget/) === true,
               then: Yup.array().min(1, 'At least one defect must be selected')
             })
           })}
@@ -377,7 +436,10 @@ export default class DefineSLOForm extends Component {
                       value={values.indicator}
                       onChange={async value => {
                         this.setState({ isProcessing: true });
-                        if (value === 'error_budget') {
+                        if (
+                          value === 'error_budget' ||
+                          value === 'latency_budget'
+                        ) {
                           await this.fetchEntityTransactions();
                         } else {
                           await this.fetchAlerts();
@@ -392,6 +454,7 @@ export default class DefineSLOForm extends Component {
                     </span>
                   </div>
                   {this.renderErrorBudget(values, setFieldValue, errors)}
+                  {this.renderLatencyBudget(values, setFieldValue, errors)}
                   {this.renderAlerts(values, setFieldValue, errors)}
                 </>
               )}
