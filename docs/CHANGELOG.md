@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/newrelic/nr1-slo-r/compare/v1.6.3...v1.7.0) (2020-10-01)
+
+
+### Features
+
+* Add support for calculated latency SLOs ([e9c0178](https://github.com/newrelic/nr1-slo-r/commit/e9c0178e4a8c44e096b622299bf7b3dc595d17b0))
+
 ## [1.6.3](https://github.com/newrelic/nr1-slo-r/compare/v1.6.2...v1.6.3) (2020-09-03)
 
 
