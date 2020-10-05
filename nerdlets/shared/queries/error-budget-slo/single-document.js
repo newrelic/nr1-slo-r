@@ -155,6 +155,13 @@ const _getErrorBudgetSLOData = async function(props) {
   } // else
 }; // _getErrorBudgetSLOData
 
+const getErrorBudgetRemaining = async function(SLOTarget, SLOAttainment) {
+  const totalBudget = 100 - SLOTarget;
+  const usedBudget = SLOAttainment - SLOTarget;
+  const remainingBudget = ((usedBudget / totalBudget) * 100).toFixed();
+  return remainingBudget;
+};
+
 const ErrorBudgetSLO = {
   // Expects props.timeRange to exist
   query: async props => {
@@ -165,6 +172,10 @@ const ErrorBudgetSLO = {
     props.language = props.document.language;
 
     const slo_results = await _getErrorBudgetSLOData(props);
+    props.document.budget = await getErrorBudgetRemaining(
+      props.document.target,
+      Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
+    );
 
     return {
       document: props.document,

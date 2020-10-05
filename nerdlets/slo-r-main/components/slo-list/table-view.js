@@ -77,6 +77,23 @@ export default class TableView extends Component {
     return <span>{label}</span>;
   };
 
+  formatterBudgetCheck = (cell, row, _, formatExtraData) => {
+    const { positiveAttainmentHighlight = false } = formatExtraData;
+    const budget = row.budget;
+
+    const label = cell;
+
+    if (parseFloat(budget) < 0) {
+      return <span className="warning-cell">{label}</span>;
+    }
+
+    if (positiveAttainmentHighlight) {
+      return <span className="success-cell">{label}</span>;
+    }
+
+    return <span>{label}</span>;
+  };
+
   renderBootStrapTableView = () => {
     const { tableData, toggleViewModal, toggleUpdateModal } = this.props;
 
@@ -130,7 +147,8 @@ export default class TableView extends Component {
         sort: true,
         formatter: this.formatterAttainmentCheck,
         formatExtraData: {
-          scope: '7_day'
+          scope: '7_day',
+          positiveAttainmentHighlight: true
         }
       },
       {
@@ -139,7 +157,18 @@ export default class TableView extends Component {
         sort: true,
         formatter: this.formatterAttainmentCheck,
         formatExtraData: {
-          scope: '30_day'
+          scope: '30_day',
+          positiveAttainmentHighlight: true
+        }
+      },
+      {
+        dataField: 'budget',
+        text: 'Error Budget',
+        sort: true,
+        formatter: this.formatterBudgetCheck,
+        formatExtraData: {
+          scope: '30_day',
+          positiveAttainmentHighlight: true
         }
       },
       {
