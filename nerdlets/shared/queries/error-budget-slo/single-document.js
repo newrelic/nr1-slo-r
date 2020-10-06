@@ -155,7 +155,7 @@ const _getErrorBudgetSLOData = async function(props) {
   } // else
 }; // _getErrorBudgetSLOData
 
-const getErrorBudgetRemaining = async function(SLOTarget, SLOAttainment) {
+const _getErrorBudgetRemaining = async function(SLOTarget, SLOAttainment) {
   const totalBudget = 100 - SLOTarget;
   const usedBudget = SLOAttainment - SLOTarget;
   const remainingBudget = ((usedBudget / totalBudget) * 100).toFixed();
@@ -172,7 +172,14 @@ const ErrorBudgetSLO = {
     props.language = props.document.language;
 
     const slo_results = await _getErrorBudgetSLOData(props);
-    props.document.budget = await getErrorBudgetRemaining(
+    /* 
+    ESLint bug: https://github.com/eslint/eslint/issues/11899#issuecomment-506543054
+    Workaround: https://github.com/eslint/eslint/issues/11899#issuecomment-509262084
+    Disabling rule for this instance only is the more readable solution. 
+    */
+
+    // eslint-disable-next-line require-atomic-updates
+    props.document.budget = await _getErrorBudgetRemaining(
       props.document.target,
       Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
     );
