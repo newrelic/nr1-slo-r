@@ -85,6 +85,14 @@ const SloGridTags = ({ document, index, toggleViewModal, deleteCallback }) => {
         <span className="slo-grid-item-section-value">{document.target}</span>
         <span className="slo-grid-item-section-label">target</span>
       </div>
+      <div
+        className={`slo-grid-item-section section-budget ${
+          document.budget < 0 ? 'status-poor' : ''
+        }`}
+      >
+        <span className="slo-grid-item-section-value">{document.budget}</span>
+        <span className="slo-grid-item-section-label">Budget</span>
+      </div>
     </GridItem>
   );
 };

@@ -247,11 +247,12 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
 .slo-grid-item {
   display: grid;
   grid-template-columns: repeat(6, 16.66666667%);
-  grid-template-rows: 127px 59px 86px;
+  grid-template-rows: 127px 59px 59px 59px;
   grid-template-areas:
     "header header header header header header"
     "   a      a      a      b      b      b  "
-    "   c      c      d      d      e      e  ";
+    "   c      c      d      d      e      e  "
+    "   f      f      .      .      .      .  ";
   height: 100%;
   position: relative;
   background-color: #fff;
@@ -392,6 +393,10 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
 
 .section-target {
   grid-area: e;
+}
+
+.section-budget {
+  grid-area: f;
 }
 
 .slo-grid-item-section-value {
