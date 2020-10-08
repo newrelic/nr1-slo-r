@@ -94,12 +94,14 @@ export default class SummaryTable extends Component {
   }
 
   transformRow({ data }) {
+    console.log(data)
     const transformedData = {
       documentId: data.slo_document.documentId,
       entityGuid: data.slo_document.entityGuid,
 
       name: data.slo_document.name,
       target: data.slo_document.target,
+      budget: data.slo_document.budget,
 
       current: data.result_current.result,
       sevenDay: data.result_7_day.result,
@@ -219,6 +221,11 @@ export default class SummaryTable extends Component {
         dataField: 'thirtyDay',
         text: 'Thirty Day',
         footer: `${attainment.thirtyDayAttainment}`
+      },
+      {
+        dataField: 'budget',
+        text: 'Budget',
+        footer: '--'
       },
       {
         dataField: 'target',
