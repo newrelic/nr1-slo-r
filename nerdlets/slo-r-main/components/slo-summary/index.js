@@ -128,7 +128,6 @@ export default class SloSummary extends React.Component {
 
       name: data.slo_document.name,
       target: data.slo_document.target,
-      budget: data.slo_document.budget,
 
       current: data.result_current.result,
       sevenDay: data.result_7_day.result,
@@ -264,11 +263,6 @@ export default class SloSummary extends React.Component {
         dataField: 'thirtyDay',
         text: 'Thirty Day',
         footer: `${attainment.thirtyDayAttainment}`
-      },
-      {
-        dataField: 'budget',
-        text: 'Budget',
-        footer: '--'
       },
       {
         dataField: 'target',
