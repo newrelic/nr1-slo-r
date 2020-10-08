@@ -72,7 +72,7 @@ export default class DefineSLOForm extends Component {
       const __query = `{
             actor {
               account(id: ${entityDetails.accountId}) {
-                nrql(query: "SELECT count(*) FROM Transaction WHERE appName='${entityDetails.appName}' ${timeRangeNrql} FACET name LIMIT 100") {
+                nrql(query: "SELECT count(*) FROM Transaction WHERE appName='${entityDetails.appName}' ${timeRangeNrql} FACET name LIMIT 2000") {
                   results
                 }
               }
