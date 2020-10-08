@@ -163,7 +163,7 @@ export default class TableView extends Component {
       },
       {
         dataField: 'budget',
-        text: 'Error Budget',
+        text: 'Budget',
         sort: true,
         formatter: this.formatterBudgetCheck,
         formatExtraData: {
