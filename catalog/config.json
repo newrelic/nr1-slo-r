@@ -13,5 +13,5 @@
       "url": "https://discuss.newrelic.com/t/track-your-service-level-objectives-with-the-slo-r-nerdpack/90046"
     }
   },
-  "whatsNew": "\n - Fix: calculation fixes\n - Feat: Calendar view of attainment by day\n - Feat: Tagging SLO's\n - Feat: creating SLO's at the launcher level"
+  "whatsNew": "\n - Feat: Added the ability to define latency based transactional SLOs\n - Fix: Increased the number of transactiosn in definition scroll to 2000\n"
 }
