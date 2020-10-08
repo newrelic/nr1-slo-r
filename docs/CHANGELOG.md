@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/newrelic/nr1-slo-r/compare/v1.7.0...v1.7.1) (2020-10-08)
+
+
+### Bug Fixes
+
+* Trigger release with GH Actions ([5a43785](https://github.com/newrelic/nr1-slo-r/commit/5a437857c8361b93dde378056de35b2b28464546))
+
 # [1.7.0](https://github.com/newrelic/nr1-slo-r/compare/v1.6.3...v1.7.0) (2020-10-01)
 
 
