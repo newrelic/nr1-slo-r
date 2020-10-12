@@ -317,6 +317,13 @@ function _compareRanges(_a, _b) {
   return __comparison;
 } // _compareRanges
 
+const _getErrorBudgetRemaining = async function(SLOTarget, SLOAttainment) {
+  const totalBudget = 100 - SLOTarget;
+  const usedBudget = SLOAttainment - SLOTarget;
+  const remainingBudget = ((usedBudget / totalBudget) * 100).toFixed();
+  return remainingBudget;
+};
+
 const AlertDrivenSLO = {
   query: async props => {
     props.nerdlet_beginTS = props.timeRange.begin_time;
@@ -328,6 +335,17 @@ const AlertDrivenSLO = {
     props.target = props.document.target;
 
     const slo_result = await _getAlertDrivenSLOData(props);
+    /* 
+    ESLint bug: https://github.com/eslint/eslint/issues/11899#issuecomment-506543054
+    Workaround: https://github.com/eslint/eslint/issues/11899#issuecomment-509262084
+    Disabling rule for this instance only is the more readable solution. 
+    */
+
+    // eslint-disable-next-line require-atomic-updates
+    props.document.budget = await _getErrorBudgetRemaining(
+      props.document.target,
+      Math.round(slo_result.slo_result * 1000) / 1000
+    );
     return {
       document: props.document,
       scope: props.scope,
