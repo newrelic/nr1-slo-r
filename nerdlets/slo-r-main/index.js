@@ -15,11 +15,12 @@ import isEqual from 'lodash.isequal';
 import { NoSlosNotification } from '../shared/components';
 import { fetchSloDocuments } from '../shared/services/slo-documents';
 import { getTags, getEntities } from './queries';
-import { SloCombine, SloList, DefineSLOForm } from './components';
+import { SloCombine, SloList, SloFlows, DefineSLOForm } from './components';
 
 const PAGES = {
   SLO_LIST: SloList,
-  COMBINE_SLOs: SloCombine
+  COMBINE_SLOs: SloCombine,
+  SLO_FLOWS: SloFlows
 };
 
 export default class SLOR extends Component {
@@ -42,13 +43,13 @@ export default class SLOR extends Component {
   componentDidMount = async () => {
     await this.fetchData();
 
-    this.intervalId = setInterval(() => {
-      this.fetchData();
-    }, 60000);
+    // this.intervalId = setInterval(() => {
+    //   this.fetchData();
+    // }, 60000);
   };
 
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    //clearInterval(this.intervalId);
   }
 
   fetchData = async () => {
@@ -182,7 +183,25 @@ export default class SLOR extends Component {
               }}
               iconType={Button.ICON_TYPE.INTERFACE__VIEW__LIST_VIEW}
             >
-              View SLOs
+              View All SLOs
+            </Button>
+          </StackItem>
+          <StackItem className="toolbar__item toolbar__item--separator">
+            <Button
+              style={{
+                background: `${ActivePage === PAGES.SLO_FLOWS ? '#E0E2E2' : ''}`
+              }}
+              type={
+                ActivePage === PAGES.SLO_FLOWS
+                  ? Button.TYPE.PLAIN
+                  : Button.TYPE.NORMAL
+              }
+              onClick={() => {
+                this.setState({ ActivePage: PAGES.SLO_FLOWS });
+              }}
+              iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__OVERVIEW}
+            >
+              Flows
             </Button>
           </StackItem>
           <StackItem className="toolbar__item">

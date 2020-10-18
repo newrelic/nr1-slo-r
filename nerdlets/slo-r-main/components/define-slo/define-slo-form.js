@@ -22,13 +22,25 @@ export default class DefineSLOForm extends Component {
       tags: [],
       entityDetails: undefined,
       transactions: [],
+      allTransactions: false,
       alerts: [],
       isProcessing: false
     };
   }
 
+  componentDidMount() {
+    if (this.props.slo) {
+      if (this.props.slo.transactions == 'all') {
+        this.setState({allTransactions: true})
+      }
+    }
+  }
+
   componentDidUpdate = async prevProps => {
     if (this.props.slo && this.props.slo !== prevProps.slo) {
+      if (this.props.slo.transactions == 'all') {
+        this.setState({allTransactions: true})
+      }
       await this.refreshLists();
     }
   };
@@ -63,7 +75,7 @@ export default class DefineSLOForm extends Component {
   };
 
   fetchEntityTransactions = async () => {
-    const { entityDetails } = this.state;
+    const { allTransactions, entityDetails } = this.state;
     const { timeRange } = this.props;
 
     const timeRangeNrql = timeRangeToNrql(timeRange);
@@ -174,7 +186,7 @@ export default class DefineSLOForm extends Component {
       return null;
     }
 
-    const { transactions } = this.state;
+    const { allTransactions, transactions } = this.state;
 
     return (
       <div>
@@ -201,8 +213,22 @@ export default class DefineSLOForm extends Component {
 
         <div className="error-budget-dependancy">
           <div className="transactions-dropdown-container">
-            <h4 className="dropdown-label">Transactions</h4>
+            <h4 style={{display: 'inline-flex'}} className="dropdown-label">Transactions</h4>
+            <input
+              className="slo__allTx"
+              type="checkbox"
+              onChange={ (e) => {
+                this.setState({allTransactions: e.currentTarget.checked}, () => {
+                  if (!allTransactions) {
+                    setFieldValue('transactions', 'all', false)
+                  }
+                })
+              }}
+              checked={allTransactions}
+            />
+            <small style={{marginLeft: '3px', display: 'inline-flex'}}>All</small>
             <Multiselect
+              disabled={allTransactions}
               data={transactions.map(({ name }) => name)}
               className="transactions-dropdown react-select-dropdown"
               placeholder="Select one or more transactions"
@@ -228,7 +254,8 @@ export default class DefineSLOForm extends Component {
       return null;
     }
 
-    const { transactions } = this.state;
+    const { allTransactions, transactions } = this.state;
+    console.log(transactions)
 
     return (
       <div>
@@ -257,8 +284,22 @@ export default class DefineSLOForm extends Component {
 
         <div className="latency-budget-dependency">
           <div className="transactions-dropdown-container">
-            <h4 className="dropdown-label">Transactions</h4>
+            <h4 style={{display: 'inline-flex'}} className="dropdown-label">Transactions</h4>
+            <input
+              className="slo__allTx"
+              type="checkbox"
+              onChange={ (e) => {
+                this.setState({allTransactions: e.currentTarget.checked}, () => {
+                  if (!allTransactions) {
+                    setFieldValue('transactions', 'all', false)
+                  }
+                })
+              }}
+              checked={allTransactions}
+            />
+            <small style={{marginLeft: '3px', display: 'inline-flex'}}>All</small>
             <Multiselect
+              disabled={allTransactions}
               data={transactions.map(({ name }) => name)}
               className="transactions-dropdown react-select-dropdown"
               placeholder="Select one or more transactions"

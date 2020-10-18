@@ -1,12 +1,13 @@
 export const SLO_INDICATORS = [
-  { value: 'error_budget', label: 'Errors' },
-  { value: 'availability', label: 'Availability' },
-  { value: 'capacity', label: 'Capacity' },
-  { value: 'latency', label: 'Latency' },
-  { value: 'latency_budget', label: 'Latency (Calculated)' }
+  { value: 'error_budget', label: 'Availability (errors)' },
+  { value: 'availability', label: 'Availability (custom)' },
+  { value: 'capacity', label: 'Capacity (custom)' },
+  { value: 'latency', label: 'Latency (custom)' },
+  { value: 'latency_budget', label: 'Latency (threshold)' }
 ];
 
 export const ENTITY_COLLECTION_NAME = 'nr1-csg-slo-r';
+export const FLOW_COLLECTION_NAME = 'nr1-csg-slo-r-flows';
 
 export const SLO_DEFECTS = [
   { value: '5%', label: '5xx Errors' },

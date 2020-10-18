@@ -137,6 +137,12 @@ const SloGridTags = ({
           <p className="label">target</p>
         </div>
       </div>
+      <div className="slo-grid-item-tag__budget">
+        <div className="wrapper">
+          <p className="value">{document.budget}</p>
+          <p className="label">Budget Remaining</p>
+        </div>
+      </div>
       <div className="slo-grid-item-tag__tags">{tags}</div>
     </GridItem>
   );

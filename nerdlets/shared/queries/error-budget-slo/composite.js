@@ -17,12 +17,10 @@ import { updateTimeRangeFromScope } from '../../helpers';
 /** returns an nrql fragment string that describes the errors or defects to contemplate for the error budget slo */
 const _getErrorFilter = function(_transactions, _defects, language) {
   let __ERROR_FILTER = '';
-
-  _transactions.map(transaction => {
-    __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}' `;
-
+  if (_transactions == 'all') {
     if (_defects.length > 0) {
-      __ERROR_FILTER += `AND (`;
+      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*)`
+      __ERROR_FILTER += `, WHERE (`
 
       let __defectsIndex = 0;
       let __DEFECTS_JOIN = '';
@@ -45,18 +43,61 @@ const _getErrorFilter = function(_transactions, _defects, language) {
         } else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
-            _getAgentHTTPResponseAttributeName(language)} LIKE '${defect}'`;
+            _getAgentHTTPResponseAttributeName(language)} LIKE '${
+            defect
+          }'`;
         } // else
 
         __defectsIndex++;
       });
 
-      __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER})`;
+      __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER}))`;
+    } else {
+      __ERROR_FILTER = `${__ERROR_FILTER}count(*)`
     }
-    __ERROR_FILTER += `) + `; // lazy way to account for the array elements
-  });
+  } else {
+    _transactions.map(transaction => {
+      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}' `;
 
-  __ERROR_FILTER = `${__ERROR_FILTER}0`; // completes the expression on the final array element
+      if (_defects.length > 0) {
+        __ERROR_FILTER += `AND (`;
+
+        let __defectsIndex = 0;
+        let __DEFECTS_JOIN = '';
+        let __DEFECTS_FILTER = '';
+
+        _defects.map(defect => {
+          if (__defectsIndex > 0) {
+            __DEFECTS_JOIN = ' OR ';
+          } // if
+          else {
+            __DEFECTS_JOIN = '';
+          } // else
+
+          // evaluate if the defect is an httpResponseCode releated or apdexPerfZone
+          if (defect === 'apdex_frustrated') {
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER +
+              __DEFECTS_JOIN}apdexPerfZone = 'F'`;
+          } else if (defect.match(/duration > \.*\d+/)) {
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}${defect}`;
+          } else {
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER +
+              __DEFECTS_JOIN +
+              _getAgentHTTPResponseAttributeName(language)} LIKE '${
+              defect
+            }'`;
+          } // else
+
+          __defectsIndex++;
+        });
+
+        __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER})`;
+      }
+      __ERROR_FILTER += `) + `; // lazy way to account for the array elements
+    });
+
+    __ERROR_FILTER = `${__ERROR_FILTER}0`; // completes the expression on the final array element
+  }
 
   return __ERROR_FILTER;
 }; // getErrorFilter
@@ -65,10 +106,14 @@ const _getErrorFilter = function(_transactions, _defects, language) {
 const _getTotalFilter = function(_transactions) {
   let __TOTAL_FILTER = '';
 
-  _transactions.map(transaction => {
-    __TOTAL_FILTER = `${__TOTAL_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}') + `;
-  });
-  __TOTAL_FILTER = `${__TOTAL_FILTER}0`; // completes the expression on the array element
+  if (_transactions == 'all') {
+    __TOTAL_FILTER = `count(*)`;
+  } else {
+    _transactions.map(transaction => {
+      __TOTAL_FILTER = `${__TOTAL_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}') + `;
+    });
+    __TOTAL_FILTER = `${__TOTAL_FILTER}0`; // completes the expression on the array element
+  }
 
   return __TOTAL_FILTER;
 }; // getTotalFilter
@@ -92,7 +137,7 @@ const _getErrorBudgetNRQL = function(
     language
   )} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
 
-  // console.debug('NRQL Looks like what', __NRQL);
+  //console.debug('NRQL Looks like what', __NRQL);
   return __NRQL;
 }; // getErrorBudgerNRQL
 
@@ -145,6 +190,8 @@ const _getErrorBudgetSLOData = async function(props) {
     props.appName,
     props.language
   );
+
+  console.debug(__NRQL_current)
 
   const __7_day_TSObj = updateTimeRangeFromScope({
     timeRange: {

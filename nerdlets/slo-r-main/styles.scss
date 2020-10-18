@@ -337,6 +337,12 @@ h2.no-slos-for-indicator-header {
   &__input {
     cursor: pointer;
   }
+
+  &__allTx {
+    cursor: pointer;
+    display: inline-flex;
+    margin-left: 10px;
+  }
 }
 
 

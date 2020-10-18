@@ -249,9 +249,11 @@ div[class*=-nr-css-Table-body] div[class*=-nr-css-TableCell].is-odd {
   grid-template-columns: repeat(6, 16.66666667%);
   grid-template-rows: 127px 59px 86px;
   grid-template-areas:
-    "header header header header header header"
-    "   a      a      a      b      b      b  "
-    "   c      c      d      d      e      e  ";
+  "header header header header header header"
+  "   a      a      a      e      e      e  "
+  "   d      d      d      c      c      c  "
+  "   f      f      f      f      f      f  "
+  "   b      b      b      b      b      b  ";
   height: 100%;
   position: relative;
   background-color: #fff;
