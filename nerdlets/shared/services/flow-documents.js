@@ -7,17 +7,17 @@ import { FLOW_COLLECTION_NAME } from '../constants';
 
 const uuid = require('uuid/v4');
 
-export const fetchFlowDocuments = async function({ accounts }) {
-  console.log(accounts);
-  // const _query = {
-  //   actionType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
-  //   entityGuid: entityGuid,
-  //   collection: ENTITY_COLLECTION_NAME
-  // };
-  //
-  // const result = await EntityStorageQuery.query(_query);
-  // const documents = result.data || [];
-  //
+export const fetchFlowDocuments = async function(account) {
+  const _query = {
+    accountId: account.value,
+    collection: FLOW_COLLECTION_NAME
+  }
+
+  const result = await AccountStorageQuery.query(_query);
+  const documents = result.data || [];
+
+  return documents;
+
   // // raggimuffen
   // const __versionValidatedDocuments = await validateSLODocVersion(documents);
   //

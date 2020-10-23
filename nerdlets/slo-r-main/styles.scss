@@ -1,5 +1,6 @@
 @import "./nrds.scss";
 @import '~@newrelic/nr1-community/dist/index.css';
+@import url('//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css');
 
 /* -------------------- */
 // Utility Classes
@@ -399,4 +400,12 @@ h2.no-slos-for-indicator-header {
 
 .multiselect__validation {
   top: 3px;
+}
+
+.flow__displayHeader {
+  display: inline-flex;
+}
+
+.ui.steps:not(.unstackable) {
+  flex-wrap: wrap;
 }

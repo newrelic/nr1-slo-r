@@ -191,7 +191,7 @@ const _getErrorBudgetSLOData = async function(props) {
     props.language
   );
 
-  console.debug(__NRQL_current)
+  // console.debug(__NRQL_current)
 
   const __7_day_TSObj = updateTimeRangeFromScope({
     timeRange: {

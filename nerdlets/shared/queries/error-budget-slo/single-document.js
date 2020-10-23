@@ -229,6 +229,7 @@ const ErrorBudgetSLO = {
       Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
     );
 
+
     return {
       document: props.document,
       scope: props.scope,

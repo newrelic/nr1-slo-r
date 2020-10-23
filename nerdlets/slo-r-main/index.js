@@ -130,7 +130,8 @@ export default class SLOR extends Component {
       isTableViewActive,
       lastUpdateDate,
       isCreateModalActive,
-      sloToBeEdited
+      sloToBeEdited,
+      formattedSlos
     } = this.state;
 
     let emptyState = null;

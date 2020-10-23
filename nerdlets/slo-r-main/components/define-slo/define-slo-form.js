@@ -234,6 +234,8 @@ export default class DefineSLOForm extends Component {
               placeholder="Select one or more transactions"
               onChange={value => setFieldValue('transactions', value)}
               defaultValue={values.transactions}
+              caseSensitive={false}
+              filter='contains'
             />
             <span className="multiselect__validation">
               {errors.transactions}
@@ -255,7 +257,6 @@ export default class DefineSLOForm extends Component {
     }
 
     const { allTransactions, transactions } = this.state;
-    console.log(transactions)
 
     return (
       <div>
@@ -305,6 +306,8 @@ export default class DefineSLOForm extends Component {
               placeholder="Select one or more transactions"
               onChange={value => setFieldValue('transactions', value)}
               defaultValue={values.transactions}
+              caseSensitive={false}
+              filter='contains'
             />
             <span className="multiselect__validation">
               {errors.transactions}

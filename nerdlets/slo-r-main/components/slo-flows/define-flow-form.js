@@ -14,34 +14,21 @@ export default class DefineFlowForm extends Component {
     super(props);
     this.state = {
       flow: undefined,
-      isProcessing: true,
+      isProcessing: false,
       accounts: []
     };
   }
 
-  async getAccounts() {
-    let resp = await AccountsQuery.query();
-
-    if (resp.errors) {
-      console.debug('Error fetching accounts');
-      console.debug(resp.errors);
-    } else {
-      let accts = []
-      resp.data.forEach(acct => {
-        accts.push({ value: acct.id, label: acct.name });
-      })
-      this.setState({ accounts: accts })
-    }
-  }
-
-  componentDidMount = async () => {
-    await this.getAccounts();
-    this.setState({ isProcessing: false });
+  writeNewFlowDocument = async document => {
+    await writeFlowDocument({
+      document
+    });
   };
 
+
   render() {
-    const { accounts, isProcessing } = this.state;
-    const { flow, slos, isEdit, isOpen, onClose, onSave, timeRange } = this.props;
+    const { isProcessing } = this.state;
+    const { accounts, flow, slos, isEdit, isOpen, onClose, onSave, timeRange } = this.props;
 
     const isLoading = <Spinner />
 
@@ -80,9 +67,7 @@ export default class DefineFlowForm extends Component {
             const newFlow = {
               ...values
             }
-
-            console.log(newFlow)
-
+            
             await this.writeNewFlowDocument(newFlow);
             this.setState({ isProcessing: false })
 
