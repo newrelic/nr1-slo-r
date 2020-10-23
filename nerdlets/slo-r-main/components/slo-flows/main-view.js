@@ -43,10 +43,11 @@ export default class MainView extends Component {
     }
   }
 
-  componentDidMount = async () => { //save to accountStorage
+  componentDidMount = async () => {
     let { slos } = this.props;
     let { accounts } = this.state;
     let formatted = []
+
     slos.forEach(s => {
       formatted.push({ value: s.id, label: s.document.name, entity: s.document.entityGuid })
     })
@@ -54,13 +55,6 @@ export default class MainView extends Component {
     await this.fetchFlows();
     this.setState({ formattedSlos: formatted, isProcessing: false });
   };
-
-  // componentDidUpdate = async prevProps => {
-  //   // if (!this.areSlosEqual(prevProps.slos, this.props.slos)) {
-  //   //   const { selectedSlosIds } = this.state;
-  //   //   this.clearSelectionForNonExisting(selectedSlosIds);
-  //   // }
-  // };
 
   fetchFlows = async () => {
     const { accounts } = this.state;
@@ -191,23 +185,31 @@ export default class MainView extends Component {
               <Button onClick={this.handleNewFlowOpen}>
                 Define a Flow
               </Button>
-              <FlowList
-                flows={flows}
-                toggleViewModal={this.handleViewFlow}
-                toggleUpdateModal={this.handleEditFlow}
-                deleteCallback={this.deleteFlowCallback}
-              />
+              {flows.length > 0 ?
+                <FlowList
+                  flows={flows}
+                  toggleViewModal={this.handleViewFlow}
+                  toggleUpdateModal={this.handleEditFlow}
+                  deleteCallback={this.deleteFlowCallback}
+                />
+                :
+                ''
+              }
             </>
           }
           {this.renderAddNewFlow()}
         </StackItem>
-        <ViewFlow
-          flow={flowToBeViewed}
-          isOpen={openViewFlowModal}
-          handleClose={this.handleViewClose}
-          slos={slos}
-          timeRange={timeRange}
-        />
+        {openViewFlowModal === true ?
+          <ViewFlow
+            flow={flowToBeViewed}
+            isOpen={openViewFlowModal}
+            handleClose={this.handleViewClose}
+            slos={slos}
+            timeRange={timeRange}
+          />
+          :
+          ''
+        }
         <Modal
           hidden={!isDeleteFlowModalActive}
           onClose={() => this.setState({ isDeleteFlowModalActive: false })}

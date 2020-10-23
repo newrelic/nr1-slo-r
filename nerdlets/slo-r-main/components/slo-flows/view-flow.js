@@ -24,14 +24,12 @@ export default class ViewFlow extends Component {
     await this.filterSlos();
   }
 
-  componentDidUpdate = async (prevProps) => { //TODO: fix non-refresh occurring (displays same SLOs for different flows)
+  componentDidUpdate = async (prevProps) => {
     if (prevProps.flow !== this.props.flow) {
       this.setState({isLoading: true })
       await this.filterSlos();
     }
   }
-
-
 
   calculateAggregateScores() {
     const { slos } = this.state;
@@ -86,12 +84,6 @@ export default class ViewFlow extends Component {
 
     let pluckedSlos = await this.pluckSlos();
 
-    // const proms = flow.slos.map(s => {
-    //   return this.fetchSlo(s.entity, s.value)
-    // })
-    // const results = await Promise.all(proms);
-
-
     let filtered = pluckedSlos.filter((res) => res != null);
     if (filtered.length !== flow.slos.length) { //delete check - update the flow in AccountStorage if a SLO was deleted.
       flow.slos.forEach((s, i) => {
@@ -105,23 +97,6 @@ export default class ViewFlow extends Component {
 
     await this.fetchDetails(filtered);
   }
-
-  // async fetchSlo(entityGuid, docId) {
-  //   if (!entityGuid || !docId) {
-  //     return null;
-  //   }
-  //   const query = {
-  //     fetchPolicyType: EntityStorageQuery.FETCH_POLICY_TYPE.NO_CACHE,
-  //     collection: ENTITY_COLLECTION_NAME,
-  //     documentId: docId,
-  //     entityGuid: entityGuid
-  //   };
-  //
-  //   const result = await EntityStorageQuery.query(query);
-  //   const documents = result.data || null;
-  //
-  //   return documents;
-  // }
 
   fetchDetails = async (slos) => {
     const { timeRange } = this.props;
