@@ -43,13 +43,13 @@ export default class SLOR extends Component {
   componentDidMount = async () => {
     await this.fetchData();
 
-    // this.intervalId = setInterval(() => {
-    //   this.fetchData();
-    // }, 60000);
+    this.intervalId = setInterval(() => {
+      this.fetchData();
+    }, 60000);
   };
 
   componentWillUnmount() {
-    //clearInterval(this.intervalId);
+    clearInterval(this.intervalId);
   }
 
   fetchData = async () => {

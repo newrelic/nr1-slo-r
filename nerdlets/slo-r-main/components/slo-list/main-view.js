@@ -45,7 +45,7 @@ export default class MainView extends Component {
   };
 
   componentWillUnmount() {
-    //clearInterval(this.intervalId);
+    clearInterval(this.intervalId);
   }
 
   areSlosEqual = (newSlos, prevSlos) => {
@@ -57,7 +57,7 @@ export default class MainView extends Component {
   };
 
   clearAndFetch = () => {
-    //clearInterval(this.intervalId);
+    clearInterval(this.intervalId);
     this.setState(
       {
         isProcessing: true,
@@ -65,7 +65,7 @@ export default class MainView extends Component {
       },
       async () => {
         await this.fetchDetails();
-        //this.intervalId = setInterval(() => this.fetchDetails(), 60000);
+        this.intervalId = setInterval(() => this.fetchDetails(), 60000);
       }
     );
   };
