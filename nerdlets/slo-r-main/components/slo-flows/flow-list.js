@@ -52,21 +52,21 @@ export default class FlowList extends Component {
     return '';
   };
 
-  formatterSLO = cell => { //TODO: render SLO status (r, y, g) directly?
+  formatterSLO = cell => {
     return cell.length.toString();
   }
 
+  formatterName = (cell, row) => {
+    const { toggleViewModal } = this.props;
+    return (
+      <a onClick={() => toggleViewModal(row)}>{cell}</a>
+    )
+  }
+
   formatterMenu = (_, row) => {
-    const { toggleViewModal, toggleUpdateModal, deleteCallback } = this.props;
+    const { toggleUpdateModal, deleteCallback } = this.props;
     return (
       <SettingsMenu>
-        <li
-          className="service-settings-dropdown-item"
-          onClick={() => toggleViewModal(row)}
-        >
-          <Icon type={Icon.TYPE.INTERFACE__INFO__INFO} />
-          View details
-        </li>
         <li
           className="service-settings-dropdown-item"
           onClick={() => toggleUpdateModal(row)}
@@ -93,7 +93,8 @@ export default class FlowList extends Component {
       {
         dataField: 'name',
         text: 'Name',
-        sort: true
+        sort: true,
+        formatter: this.formatterName
       },
       {
         dataField: 'description',

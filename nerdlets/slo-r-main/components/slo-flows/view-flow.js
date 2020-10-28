@@ -251,15 +251,15 @@ export default class ViewFlow extends Component {
               <h2 style={{display: 'inline-flex', marginLeft: '20%'}}>Owner: {flow.owner}</h2>
               <Statistic.Group style={{display: 'inline-flex', marginLeft: '15%'}} size='small'>
                 <Statistic>
-                  <Statistic.Value>{aggregate['current'].toFixed(2)}</Statistic.Value>
+                  <Statistic.Value>{aggregate['current'] == 100 ? aggregate['current'] : aggregate['current'].toFixed(3)}</Statistic.Value>
                   <Statistic.Label>Current</Statistic.Label>
                 </Statistic>
                 <Statistic>
-                  <Statistic.Value>{aggregate['seven'].toFixed(2)}</Statistic.Value>
+                  <Statistic.Value>{aggregate['seven'] == 100 ? aggregate['seven'] : aggregate['seven'].toFixed(3)}</Statistic.Value>
                   <Statistic.Label>7 Day</Statistic.Label>
                 </Statistic>
                 <Statistic>
-                  <Statistic.Value>{aggregate['thirty'].toFixed(2)}</Statistic.Value>
+                  <Statistic.Value>{aggregate['thirty'] == 100 ? aggregate['thirty'] : aggregate['thirty'].toFixed(3)}</Statistic.Value>
                   <Statistic.Label>30 Day</Statistic.Label>
                 </Statistic>
               </Statistic.Group>
@@ -282,7 +282,7 @@ export default class ViewFlow extends Component {
                         <Card.Header style={{textAlign: 'center'}}><h3 style={{display: 'inline'}}>{s.name}</h3></Card.Header>
                         <Statistic.Group size='mini' widths={2}>
                           <Statistic color={s.current < s.target ? 'red' : 'green'}>
-                            <Statistic.Value>{s.current.toFixed(2)}</Statistic.Value>
+                            <Statistic.Value>{s.current == 100 ? s.current : s.current.toFixed(3)}</Statistic.Value>
                             <Statistic.Label>Current</Statistic.Label>
                           </Statistic>
                           <Statistic>
@@ -290,11 +290,11 @@ export default class ViewFlow extends Component {
                             <Statistic.Label>Target</Statistic.Label>
                           </Statistic>
                           <Statistic color={s['7_day'] < s.target ? 'red' : 'green'}>
-                            <Statistic.Value>{s['7_day'].toFixed(2)}</Statistic.Value>
+                            <Statistic.Value>{s['7_day'] == 100 ? s['7_day'] : s['7_day'].toFixed(3)}</Statistic.Value>
                             <Statistic.Label>7 Day</Statistic.Label>
                           </Statistic>
                           <Statistic color={s['30_day'] < s.target ? 'red' : 'green'}>
-                            <Statistic.Value>{s['30_day'].toFixed(2)}</Statistic.Value>
+                            <Statistic.Value>{s['30_day'] == 10 ? s['30_day'] : s['30_day'].toFixed(3)}</Statistic.Value>
                             <Statistic.Label>30 Day</Statistic.Label>
                           </Statistic>
                           <Statistic style={{margin: 'auto'}}>

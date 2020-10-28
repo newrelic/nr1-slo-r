@@ -148,6 +148,11 @@ export default class TableView extends Component {
         sort: true
       },
       {
+        dataField: 'budget',
+        text: 'Budget Remaining',
+        sort: true
+      },
+      {
         dataField: 'slogroup',
         formatter: cell => {
           if (cell) {
@@ -233,6 +238,7 @@ export default class TableView extends Component {
   };
 
   render() {
+    console.log(this.props.tableData)
     return (
       <div className="slo-list__table-container">
         {this.renderBootStrapTableView()}
