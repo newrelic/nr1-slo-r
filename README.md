@@ -14,7 +14,7 @@ By measuring SLO attainment across your service estate, you’ll be able to dete
 
 Using New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.
 
-SLO/R provides two mechanisms for calculating SLOs: **error type** (calculated by defects on transactions) and **availability**, **capacity**, and **latency type** (calculated by total duration of alert violation).
+SLO/R provides two mechanisms for calculating SLOs: **event based - availability/latency** (calculated by defects or a specified latency on transactions) and **custom (alert) based** which includes **availability**, **capacity**, and **latency** types (calculated by total duration of alert violation).
 
 > We are keen to see SLO/R evolve and grow to include additional features and visualizations. For version 1.0.1, we wanted to ship the core SLO calculation capabilities. We expect to rapidly build upon this core functionality through several releases. Please add an issue to the repo is there's a feature you'd like to see.
 > For more details about the SLOs and their calculations, please see [error driven SLOs](./docs/error_slos.md) and [alert driven SLOs](./docs/alert_slos.md).
@@ -29,8 +29,8 @@ Requires [`New Relic APM`](https://newrelic.com/products/application-monitoring)
 
 SLO/R is intended to work specifically with services reporting to New Relic via an APM Agent. The service provides an entity upon which to define SLOs.
 
-- `Error-based SLO’s` work with [APM Transaction data](https://docs.newrelic.com/docs/insights/insights-data-sources/default-data/apm-default-events-insights).
-- `Alert-based SLO’s` require a custom webhook configured to write `SLOR_ALERTS` events to NRDB. See [Configuring SLO/R Alert Webhook](#configuring-slor-alert-webhook) for specific instructions.
+- `Event-based SLO’s` work with [APM Transaction data](https://docs.newrelic.com/docs/insights/insights-data-sources/default-data/apm-default-events-insights).
+- `Custom (alert-based) SLO’s` require a custom webhook configured to write `SLOR_ALERTS` events to NRDB. See [Configuring SLO/R Alert Webhook](#configuring-slor-alert-webhook) for specific instructions.
 
 ## Getting started
 
@@ -71,7 +71,7 @@ Visit [https://one.newrelic.com](https://one.newrelic.com), navigate to the Nerd
 
 ## Configuring SLO/R Alert Webhook
 
-The availability, capacity, and latency SLO types within SLO/R are calculated using the total duration of alert violations. In order to record those alert violations we need to enable an Insights directed Webhook to capture the `open` and `close` events.
+The custom events - availability, capacity, and latency SLO types within SLO/R are calculated using the total duration of alert violations. In order to record those alert violations we need to enable an Insights directed Webhook to capture the `open` and `close` events.
 
 The alert payload needs to be as specified for SLO/R to operate as expected. Please follow [these instructions](./docs/slor_alerts_config.md) to enable the alert event forwarding.
 
