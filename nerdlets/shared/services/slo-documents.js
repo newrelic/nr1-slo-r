@@ -109,12 +109,12 @@ export const validateSlo = function(document) {
     return false;
   }
 
-  if (document.slogroup === '' && document.tags.length === 0) {
+  if (document.tags.length === 0) {
     return false;
   }
 
-  // Error Driven SLO
-  if (document.indicator === 'error_budget') {
+  // Error/Latency Driven SLO
+  if (document.indicator === 'error_budget' || document.indicator === 'latency_budget') {
     if (document.transactions == 'all') {
       return 'all';
     }
@@ -133,7 +133,7 @@ export const validateSlo = function(document) {
   } // if
 
   // Alert Driven SLO
-  if (document.indicator !== 'error_budget') {
+  if (document.indicator !== 'error_budget' && document.indicator !== 'latency_budget') {
     if (document.alerts.length === 0) {
       return false;
     }
