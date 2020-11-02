@@ -1,8 +1,4 @@
-import {
-  AccountStorageMutation,
-  AccountStorageQuery,
-  NerdGraphMutation
-} from 'nr1';
+import { AccountStorageMutation, AccountStorageQuery } from 'nr1';
 import { FLOW_COLLECTION_NAME } from '../constants';
 
 const uuid = require('uuid/v4');
@@ -11,7 +7,7 @@ export const fetchFlowDocuments = async function(account) {
   const _query = {
     accountId: account.value,
     collection: FLOW_COLLECTION_NAME
-  }
+  };
 
   const result = await AccountStorageQuery.query(_query);
   const documents = result.data || [];
@@ -22,6 +18,18 @@ export const fetchFlowDocuments = async function(account) {
   // const __versionValidatedDocuments = await validateSLODocVersion(documents);
   //
   // return __versionValidatedDocuments;
+};
+
+export const fetchAnAccountFlowDocuments = async function(account) {
+  const _query = {
+    accountId: account,
+    collection: FLOW_COLLECTION_NAME
+  };
+
+  const result = await AccountStorageQuery.query(_query);
+  const documents = result.data || [];
+
+  return documents;
 };
 
 // TO DO - Return null, undefined, false?

@@ -130,8 +130,7 @@ export default class SLOR extends Component {
       isTableViewActive,
       lastUpdateDate,
       isCreateModalActive,
-      sloToBeEdited,
-      formattedSlos
+      sloToBeEdited
     } = this.state;
 
     let emptyState = null;
@@ -200,7 +199,9 @@ export default class SLOR extends Component {
               onClick={() => {
                 this.setState({ ActivePage: PAGES.SLO_FLOWS });
               }}
-              iconType={Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__OVERVIEW}
+              iconType={
+                Button.ICON_TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__OVERVIEW
+              }
             >
               Flows
             </Button>

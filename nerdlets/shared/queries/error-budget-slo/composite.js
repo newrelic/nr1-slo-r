@@ -17,10 +17,10 @@ import { updateTimeRangeFromScope } from '../../helpers';
 /** returns an nrql fragment string that describes the errors or defects to contemplate for the error budget slo */
 const _getErrorFilter = function(_transactions, _defects, language) {
   let __ERROR_FILTER = '';
-  if (_transactions == 'all') {
+  if (_transactions === 'all') {
     if (_defects.length > 0) {
-      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*)`
-      __ERROR_FILTER += `, WHERE (`
+      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*)`;
+      __ERROR_FILTER += `, WHERE (`;
 
       let __defectsIndex = 0;
       let __DEFECTS_JOIN = '';
@@ -43,9 +43,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
         } else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
-            _getAgentHTTPResponseAttributeName(language)} LIKE '${
-            defect
-          }'`;
+            _getAgentHTTPResponseAttributeName(language)} LIKE '${defect}'`;
         } // else
 
         __defectsIndex++;
@@ -53,7 +51,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
 
       __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER}))`;
     } else {
-      __ERROR_FILTER = `${__ERROR_FILTER}count(*)`
+      __ERROR_FILTER = `${__ERROR_FILTER}count(*)`;
     }
   } else {
     _transactions.map(transaction => {
@@ -83,9 +81,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
           } else {
             __DEFECTS_FILTER = `${__DEFECTS_FILTER +
               __DEFECTS_JOIN +
-              _getAgentHTTPResponseAttributeName(language)} LIKE '${
-              defect
-            }'`;
+              _getAgentHTTPResponseAttributeName(language)} LIKE '${defect}'`;
           } // else
 
           __defectsIndex++;
@@ -106,7 +102,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
 const _getTotalFilter = function(_transactions) {
   let __TOTAL_FILTER = '';
 
-  if (_transactions == 'all') {
+  if (_transactions === 'all') {
     __TOTAL_FILTER = `count(*)`;
   } else {
     _transactions.map(transaction => {
@@ -137,7 +133,7 @@ const _getErrorBudgetNRQL = function(
     language
   )} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
 
-  //console.debug('NRQL Looks like what', __NRQL);
+  // console.debug('NRQL Looks like what', __NRQL);
   return __NRQL;
 }; // getErrorBudgerNRQL
 

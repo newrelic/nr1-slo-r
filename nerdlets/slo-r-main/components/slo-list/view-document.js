@@ -48,7 +48,8 @@ function Nrql({ query, scope, activeViewNRQLQuery, doc }) {
 Nrql.propTypes = {
   query: PropTypes.object,
   scope: PropTypes.string,
-  activeViewNRQLQuery: PropTypes.string
+  activeViewNRQLQuery: PropTypes.string,
+  doc: PropTypes.object
 };
 
 export default class ViewDocument extends React.Component {

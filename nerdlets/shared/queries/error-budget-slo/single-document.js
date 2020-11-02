@@ -21,10 +21,11 @@ import { updateTimeRangeFromScope } from '../../helpers';
 const _getErrorFilter = function(_transactions, _defects, language) {
   let __ERROR_FILTER = '';
 
-  if (_transactions == 'all') { //All transactions selected
+  if (_transactions === 'all') {
+    // All transactions selected
     if (_defects.length > 0) {
-      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*)`
-      __ERROR_FILTER += `, WHERE (`
+      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*)`;
+      __ERROR_FILTER += `, WHERE (`;
 
       let __defectsIndex = 0;
       let __DEFECTS_JOIN = '';
@@ -58,7 +59,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
 
       __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER}))`;
     } else {
-      __ERROR_FILTER = `${__ERROR_FILTER}count(*)`
+      __ERROR_FILTER = `${__ERROR_FILTER}count(*)`;
     }
   } else {
     _transactions.map(transaction => {
@@ -112,7 +113,7 @@ const _getErrorFilter = function(_transactions, _defects, language) {
 const _getTotalFilter = function(_transactions) {
   let __TOTAL_FILTER = '';
 
-  if (_transactions == 'all') {
+  if (_transactions === 'all') {
     __TOTAL_FILTER = `count(*)`;
   } else {
     _transactions.map(transaction => {
@@ -228,7 +229,6 @@ const ErrorBudgetSLO = {
       props.document.target,
       Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
     );
-
 
     return {
       document: props.document,

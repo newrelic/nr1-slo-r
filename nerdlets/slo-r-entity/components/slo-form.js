@@ -121,7 +121,7 @@ export default class SloForm extends React.Component {
     if (entityGuid && documentId) {
       const response = await fetchDocumentById({ entityGuid, documentId });
 
-      if (response.transactions == 'all') {
+      if (response.transactions === 'all') {
         all = true;
       }
 
@@ -231,7 +231,7 @@ export default class SloForm extends React.Component {
 
     // write the document
     this.writeNewSloDocument(newDocument);
-    this.handleClickReset(); //clear tags
+    this.handleClickReset(); // clear tags
   }
 
   /*
@@ -339,20 +339,30 @@ export default class SloForm extends React.Component {
 
         <div className="error-budget-dependency">
           <div className="transactions-dropdown-container">
-            <h4 style={{display: 'inline-flex'}} className="dropdown-label">Transactions</h4>
+            <h4 style={{ display: 'inline-flex' }} className="dropdown-label">
+              Transactions
+            </h4>
             <input
               className="slo__allTx"
               type="checkbox"
-              onChange={ (e) => {
-                this.setState({allTransactions: e.currentTarget.checked}, () => {
-                  if (!allTransactions) {
-                    this.inputHandler({ field: 'transactions', value: 'all' })
+              onChange={e => {
+                this.setState(
+                  { allTransactions: e.currentTarget.checked },
+                  () => {
+                    if (!allTransactions) {
+                      this.inputHandler({
+                        field: 'transactions',
+                        value: 'all'
+                      });
+                    }
                   }
-                })
+                );
               }}
               checked={allTransactions}
             />
-            <small style={{marginLeft: '3px', display: 'inline-flex'}}>All</small>
+            <small style={{ marginLeft: '3px', display: 'inline-flex' }}>
+              All
+            </small>
             <Multiselect
               disabled={allTransactions}
               data={transactionOptions}
@@ -366,7 +376,7 @@ export default class SloForm extends React.Component {
               }
               defaultValue={this.getValue({ field: 'transactions' })}
               caseSensitive={false}
-              filter='contains'
+              filter="contains"
             />
 
             <small className="input-description">
@@ -388,46 +398,56 @@ export default class SloForm extends React.Component {
 
     return (
       <div>
-      <div className="latency-budget-dependency">
-        <div className="limit-field-container">
-          <h4 className="dropdown-label">Duration Limit</h4>
-          <TextField
-            onChange={e =>
-              this.inputHandler({
-                field: 'defects',
-                value: [
-                  {
-                    value: `duration > ${e.target.value}`,
-                    label: `Duration > ${e.target.value}`
-                  }
-                ]
-              })
-            }
-          />
+        <div className="latency-budget-dependency">
+          <div className="limit-field-container">
+            <h4 className="dropdown-label">Duration Limit</h4>
+            <TextField
+              onChange={e =>
+                this.inputHandler({
+                  field: 'defects',
+                  value: [
+                    {
+                      value: `duration > ${e.target.value}`,
+                      label: `Duration > ${e.target.value}`
+                    }
+                  ]
+                })
+              }
+            />
 
-          <small className="input-description">
-            Transactions with a duration greater than the limit will be
-            counted against error budget attainment.
-          </small>
+            <small className="input-description">
+              Transactions with a duration greater than the limit will be
+              counted against error budget attainment.
+            </small>
+          </div>
         </div>
-      </div>
 
         <div className="latency-budget-dependency">
           <div className="transactions-dropdown-container">
-            <h4 style={{display: 'inline-flex'}} className="dropdown-label">Transactions</h4>
+            <h4 style={{ display: 'inline-flex' }} className="dropdown-label">
+              Transactions
+            </h4>
             <input
               className="slo__allTx"
               type="checkbox"
-              onChange={ (e) => {
-                this.setState({allTransactions: e.currentTarget.checked}, () => {
-                  if (!allTransactions) {
-                    this.inputHandler({ field: 'transactions', value: 'all' })
+              onChange={e => {
+                this.setState(
+                  { allTransactions: e.currentTarget.checked },
+                  () => {
+                    if (!allTransactions) {
+                      this.inputHandler({
+                        field: 'transactions',
+                        value: 'all'
+                      });
+                    }
                   }
-                })
+                );
               }}
               checked={allTransactions}
             />
-            <small style={{marginLeft: '3px', display: 'inline-flex'}}>All</small>
+            <small style={{ marginLeft: '3px', display: 'inline-flex' }}>
+              All
+            </small>
             <Multiselect
               disabled={allTransactions}
               data={transactionOptions}
@@ -441,7 +461,7 @@ export default class SloForm extends React.Component {
               }
               defaultValue={this.getValue({ field: 'transactions' })}
               caseSensitive={false}
-              filter='contains'
+              filter="contains"
             />
 
             <small className="input-description">
@@ -455,7 +475,10 @@ export default class SloForm extends React.Component {
 
   renderAlerts() {
     const { document, alertOptions } = this.state;
-    if (document.indicator === 'error_budget' || document.indicator === 'latency_budget') {
+    if (
+      document.indicator === 'error_budget' ||
+      document.indicator === 'latency_budget'
+    ) {
       return null;
     }
 

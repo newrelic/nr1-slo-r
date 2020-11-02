@@ -30,18 +30,18 @@ export default class DefineSLOForm extends Component {
 
   componentDidMount() {
     if (this.props.slo) {
-      if (this.props.slo.transactions == 'all') {
-        this.setState({allTransactions: true})
+      if (this.props.slo.transactions === 'all') {
+        this.setState({ allTransactions: true });
       }
     }
   }
 
   componentDidUpdate = async prevProps => {
     if (this.props.slo && this.props.slo !== prevProps.slo) {
-      if (this.props.slo.transactions == 'all') {
-        this.setState({allTransactions: true})
+      if (this.props.slo.transactions === 'all') {
+        this.setState({ allTransactions: true }); // eslint-disable-line react/no-did-update-set-state
+        await this.refreshLists();
       }
-      await this.refreshLists();
     }
   };
 
@@ -75,7 +75,7 @@ export default class DefineSLOForm extends Component {
   };
 
   fetchEntityTransactions = async () => {
-    const { allTransactions, entityDetails } = this.state;
+    const { entityDetails } = this.state;
     const { timeRange } = this.props;
 
     const timeRangeNrql = timeRangeToNrql(timeRange);
@@ -213,20 +213,27 @@ export default class DefineSLOForm extends Component {
 
         <div className="error-budget-dependancy">
           <div className="transactions-dropdown-container">
-            <h4 style={{display: 'inline-flex'}} className="dropdown-label">Transactions</h4>
+            <h4 style={{ display: 'inline-flex' }} className="dropdown-label">
+              Transactions
+            </h4>
             <input
               className="slo__allTx"
               type="checkbox"
-              onChange={ (e) => {
-                this.setState({allTransactions: e.currentTarget.checked}, () => {
-                  if (!allTransactions) {
-                    setFieldValue('transactions', 'all', false)
+              onChange={e => {
+                this.setState(
+                  { allTransactions: e.currentTarget.checked },
+                  () => {
+                    if (!allTransactions) {
+                      setFieldValue('transactions', 'all', false);
+                    }
                   }
-                })
+                );
               }}
               checked={allTransactions}
             />
-            <small style={{marginLeft: '3px', display: 'inline-flex'}}>All</small>
+            <small style={{ marginLeft: '3px', display: 'inline-flex' }}>
+              All
+            </small>
             <Multiselect
               disabled={allTransactions}
               data={transactions.map(({ name }) => name)}
@@ -235,7 +242,7 @@ export default class DefineSLOForm extends Component {
               onChange={value => setFieldValue('transactions', value)}
               defaultValue={values.transactions}
               caseSensitive={false}
-              filter='contains'
+              filter="contains"
             />
             <span className="multiselect__validation">
               {errors.transactions}
@@ -285,20 +292,27 @@ export default class DefineSLOForm extends Component {
 
         <div className="latency-budget-dependency">
           <div className="transactions-dropdown-container">
-            <h4 style={{display: 'inline-flex'}} className="dropdown-label">Transactions</h4>
+            <h4 style={{ display: 'inline-flex' }} className="dropdown-label">
+              Transactions
+            </h4>
             <input
               className="slo__allTx"
               type="checkbox"
-              onChange={ (e) => {
-                this.setState({allTransactions: e.currentTarget.checked}, () => {
-                  if (!allTransactions) {
-                    setFieldValue('transactions', 'all', false)
+              onChange={e => {
+                this.setState(
+                  { allTransactions: e.currentTarget.checked },
+                  () => {
+                    if (!allTransactions) {
+                      setFieldValue('transactions', 'all', false);
+                    }
                   }
-                })
+                );
               }}
               checked={allTransactions}
             />
-            <small style={{marginLeft: '3px', display: 'inline-flex'}}>All</small>
+            <small style={{ marginLeft: '3px', display: 'inline-flex' }}>
+              All
+            </small>
             <Multiselect
               disabled={allTransactions}
               data={transactions.map(({ name }) => name)}
@@ -307,7 +321,7 @@ export default class DefineSLOForm extends Component {
               onChange={value => setFieldValue('transactions', value)}
               defaultValue={values.transactions}
               caseSensitive={false}
-              filter='contains'
+              filter="contains"
             />
             <span className="multiselect__validation">
               {errors.transactions}

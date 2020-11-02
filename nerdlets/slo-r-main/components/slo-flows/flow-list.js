@@ -8,7 +8,6 @@ import searchIcon from '../../../../assets/icon-search.svg';
 import SettingsMenu from './settings-menu';
 
 export default class FlowList extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -18,25 +17,25 @@ export default class FlowList extends Component {
 
   componentDidMount() {
     const { flows } = this.props;
-    let t = [];
+    const t = [];
 
     flows.forEach(f => {
       t.push(f.document);
-    })
+    });
 
     this.setState({ table: t });
   }
 
   componentDidUpdate(prevProps) {
-    let { flows } = this.props;
+    const { flows } = this.props;
     if (prevProps.flows !== this.props.flows) {
-      let t = [];
+      const t = [];
 
       flows.forEach(f => {
         t.push(f.document);
-      })
+      });
 
-      this.setState({ table: t });
+      this.setState({ table: t }); // eslint-disable-line react/no-did-update-set-state
     }
   }
 
@@ -54,14 +53,12 @@ export default class FlowList extends Component {
 
   formatterSLO = cell => {
     return cell.length.toString();
-  }
+  };
 
   formatterName = (cell, row) => {
     const { toggleViewModal } = this.props;
-    return (
-      <a onClick={() => toggleViewModal(row)}>{cell}</a>
-    )
-  }
+    return <a onClick={() => toggleViewModal(row)}>{cell}</a>;
+  };
 
   formatterMenu = (_, row) => {
     const { toggleUpdateModal, deleteCallback } = this.props;
@@ -157,13 +154,11 @@ export default class FlowList extends Component {
         </ToolkitProvider>
       </>
     );
-  }
+  };
 
   render() {
     return (
-      <div className="slo-list__table-container">
-        {this.renderFlowTable()}
-      </div>
+      <div className="slo-list__table-container">{this.renderFlowTable()}</div>
     );
   }
 }

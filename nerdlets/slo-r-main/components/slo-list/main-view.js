@@ -12,6 +12,10 @@ import isEqual from 'lodash.isequal';
 
 import ErrorBudgetSLO from '../../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../../shared/queries/alert-driven-slo/single-document';
+import {
+  fetchAnAccountFlowDocuments,
+  writeFlowDocument
+} from '../../../shared/services/flow-documents';
 
 import SloTileWrapper from './slo-tile-wrapper';
 import ViewDocument from './view-document';
@@ -186,7 +190,23 @@ export default class MainView extends Component {
     }
 
     this.removeDocumentFromList(document);
+    const flows = await fetchAnAccountFlowDocuments(document.accountId);
+    if (flows.length > 0) {
+      const updatedFlows = await this.checkAndRemoveSlosFromFlows(
+        flows,
+        document
+      );
+      updatedFlows.forEach(flow => {
+        this.writeNewFlowDocument(flow.document);
+      });
+    }
     // TODO: Check to see the entity in question has any other SLO documents in the collection and remove the tag slor=true if there are none.
+  };
+
+  writeNewFlowDocument = async document => {
+    await writeFlowDocument({
+      document
+    });
   };
 
   deleteDocumentCallback = document => {
@@ -203,6 +223,17 @@ export default class MainView extends Component {
     this.setState({
       isDeleteSloModalActive: false
     });
+  };
+
+  checkAndRemoveSlosFromFlows = (flows, document) => {
+    flows.forEach(f => {
+      const obj = f.document.slos.filter(s => s.value !== document.documentId);
+      if (obj !== undefined) {
+        f.document.slos = obj;
+      }
+    });
+
+    return flows;
   };
 
   render() {

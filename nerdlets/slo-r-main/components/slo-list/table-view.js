@@ -238,7 +238,6 @@ export default class TableView extends Component {
   };
 
   render() {
-    console.log(this.props.tableData)
     return (
       <div className="slo-list__table-container">
         {this.renderBootStrapTableView()}

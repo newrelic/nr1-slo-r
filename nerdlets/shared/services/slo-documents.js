@@ -66,7 +66,7 @@ export const writeSloDocument = async function({ entityGuid, document }) {
   }
 
   if (document.indicator.includes('budget') && document.defects.length === 0) {
-    throw new Error('Error - No Defects Selected')
+    throw new Error('Error - No Defects Selected');
   }
 
   // console.debug(JSON.stringify(__write_mutation, null, 2));
@@ -114,8 +114,11 @@ export const validateSlo = function(document) {
   }
 
   // Error/Latency Driven SLO
-  if (document.indicator === 'error_budget' || document.indicator === 'latency_budget') {
-    if (document.transactions == 'all') {
+  if (
+    document.indicator === 'error_budget' ||
+    document.indicator === 'latency_budget'
+  ) {
+    if (document.transactions === 'all') {
       return 'all';
     }
     if (document.transactions.length === 0 || document.defects.length === 0) {
@@ -133,7 +136,10 @@ export const validateSlo = function(document) {
   } // if
 
   // Alert Driven SLO
-  if (document.indicator !== 'error_budget' && document.indicator !== 'latency_budget') {
+  if (
+    document.indicator !== 'error_budget' &&
+    document.indicator !== 'latency_budget'
+  ) {
     if (document.alerts.length === 0) {
       return false;
     }

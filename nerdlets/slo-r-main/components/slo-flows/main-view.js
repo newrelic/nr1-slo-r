@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StackItem, Button, AccountsQuery, AccountStorageQuery, AccountStorageMutation, Spinner, Modal, HeadingText } from 'nr1';
+import {
+  StackItem,
+  Button,
+  AccountsQuery,
+  AccountStorageMutation,
+  Spinner,
+  Modal,
+  HeadingText
+} from 'nr1';
 import { EmptyState } from '@newrelic/nr1-community';
-import { Multiselect } from 'react-widgets';
-import isEqual from 'lodash.isequal';
 
 import FlowList from './flow-list';
 import ViewFlow from './view-flow';
-import { fetchFlowDocuments, writeFlowDocument } from '../../../shared/services/flow-documents';
+import {
+  fetchFlowDocuments,
+  writeFlowDocument
+} from '../../../shared/services/flow-documents';
 import DefineFlowForm from './define-flow-form';
 import { FLOW_COLLECTION_NAME } from '../../../shared/constants';
 
@@ -16,7 +25,6 @@ export default class MainView extends Component {
     super(props);
     this.state = {
       isProcessing: true,
-      isSaving: false,
       isDeleteFlowModalActive: false,
       flows: [],
       accounts: [],
@@ -24,61 +32,64 @@ export default class MainView extends Component {
       openViewFlowModal: false,
       flowToBeEdited: undefined,
       flowToBeDeleted: undefined,
-      flowToBeViewed: {},
+      flowToBeViewed: {}
     };
   }
 
-  async getAccounts() {
-    let resp = await AccountsQuery.query();
-
-    if (resp.errors) {
-      console.debug('Error fetching accounts');
-      console.debug(resp.errors);
-    } else {
-      let accts = []
-      resp.data.forEach(acct => {
-        accts.push({ value: acct.id, label: acct.name });
-      })
-      this.setState({ accounts: accts })
-    }
-  }
-
   componentDidMount = async () => {
-    let { slos } = this.props;
-    let { accounts } = this.state;
-    let formatted = []
+    const { slos } = this.props;
+    const formatted = [];
 
     slos.forEach(s => {
-      formatted.push({ value: s.id, label: s.document.name, entity: s.document.entityGuid })
-    })
+      formatted.push({
+        value: s.id,
+        label: s.document.name,
+        entity: s.document.entityGuid
+      });
+    });
     await this.getAccounts();
     await this.fetchFlows();
     this.setState({ formattedSlos: formatted, isProcessing: false });
   };
 
+  async getAccounts() {
+    const resp = await AccountsQuery.query();
+
+    if (resp.errors) {
+      console.debug('Error fetching accounts'); // eslint-disable-line no-console
+      console.debug(resp.errors); // eslint-disable-line no-console
+    } else {
+      const accts = [];
+      resp.data.forEach(acct => {
+        accts.push({ value: acct.id, label: acct.name });
+      });
+      this.setState({ accounts: accts });
+    }
+  }
+
   fetchFlows = async () => {
     const { accounts } = this.state;
-    let flows = [];
+    const flows = [];
     const proms = accounts.map(acct => {
       return fetchFlowDocuments(acct);
-    })
+    });
 
     const results = await Promise.all(proms);
     results.forEach(result => flows.push(...result));
     this.setState({ flows: flows });
-  }
+  };
 
   handleNewFlowOpen = () => {
-    this.setState({ openAddFlowMenu: true })
-  }
+    this.setState({ openAddFlowMenu: true });
+  };
 
   handleEditFlow = flow => {
     this.setState({ flowToBeEdited: flow, openAddFlowMenu: true });
   };
 
   handleViewFlow = flow => {
-    this.setState({ flowToBeViewed: flow, openViewFlowModal: true })
-  }
+    this.setState({ flowToBeViewed: flow, openViewFlowModal: true });
+  };
 
   writeNewFlowDocument = async document => {
     await writeFlowDocument({
@@ -88,20 +99,28 @@ export default class MainView extends Component {
 
   handleViewClose = async slos => {
     const { flowToBeViewed } = this.state;
-    let flowCopy = flowToBeViewed
+    const flowCopy = flowToBeViewed;
 
-    if (flowToBeViewed.slos.length === slos.length && flowToBeViewed.slos.every((val, index) => val.value === slos[index].documentId) == false) {
-        this.setState({ isProcessing: true });
-        flowCopy.slos.sort((a, b) => {
-          return slos.findIndex(s => s.documentId === a.value) - slos.findIndex(s => s.documentId === b.value);
-        })
-        await this.writeNewFlowDocument(flowCopy);
-        await this.fetchFlows();
-        this.setState({ isProcessing: false });
+    if (
+      flowToBeViewed.slos.length === slos.length &&
+      flowToBeViewed.slos.every(
+        (val, index) => val.value === slos[index].documentId
+      ) === false
+    ) {
+      this.setState({ isProcessing: true });
+      flowCopy.slos.sort((a, b) => {
+        return (
+          slos.findIndex(s => s.documentId === a.value) -
+          slos.findIndex(s => s.documentId === b.value)
+        );
+      });
+      await this.writeNewFlowDocument(flowCopy);
+      await this.fetchFlows();
+      this.setState({ isProcessing: false });
     }
 
     this.setState({ flowToBeViewed: {}, openViewFlowModal: false });
-  }
+  };
 
   deleteFlowCallback = document => {
     this.setState({
@@ -112,14 +131,14 @@ export default class MainView extends Component {
 
   deleteFlow = async () => {
     this.setState({ isProcessing: true });
-    let { flowToBeDeleted } = this.state;
+    const { flowToBeDeleted } = this.state;
 
     const mutation = {
       accountId: flowToBeDeleted.account,
       actionType: AccountStorageMutation.ACTION_TYPE.DELETE_DOCUMENT,
       collection: FLOW_COLLECTION_NAME,
       documentId: flowToBeDeleted.documentId
-    }
+    };
 
     const result = await AccountStorageMutation.mutate(mutation);
 
@@ -128,10 +147,15 @@ export default class MainView extends Component {
     }
     await this.fetchFlows();
     this.setState({ isDeleteFlowModalActive: false, isProcessing: false });
-  }
+  };
 
   renderAddNewFlow() {
-    const { accounts, formattedSlos, flowToBeEdited, openAddFlowMenu } = this.state;
+    const {
+      accounts,
+      formattedSlos,
+      flowToBeEdited,
+      openAddFlowMenu
+    } = this.state;
 
     return (
       <DefineFlowForm
@@ -142,15 +166,14 @@ export default class MainView extends Component {
         isOpen={openAddFlowMenu}
         onSave={() => this.fetchFlows(accounts)}
         onClose={() =>
-          this.setState({flowToBeEdited: undefined, openAddFlowMenu: false})
+          this.setState({ flowToBeEdited: undefined, openAddFlowMenu: false })
         }
       />
-    )
+    );
   }
 
   render() {
     const {
-      accounts,
       isDeleteFlowModalActive,
       isProcessing,
       flows,
@@ -174,32 +197,32 @@ export default class MainView extends Component {
     }
 
     if (isProcessing) {
-      return <Spinner />
+      return <Spinner />;
     }
 
     return (
       <>
         <StackItem grow className="main-content-container">
-          {flows.length === 0 ? noFlowsSelected :
+          {flows.length === 0 ? (
+            noFlowsSelected
+          ) : (
             <>
-              <Button onClick={this.handleNewFlowOpen}>
-                Define a Flow
-              </Button>
-              {flows.length > 0 ?
+              <Button onClick={this.handleNewFlowOpen}>Define a Flow</Button>
+              {flows.length > 0 ? (
                 <FlowList
                   flows={flows}
                   toggleViewModal={this.handleViewFlow}
                   toggleUpdateModal={this.handleEditFlow}
                   deleteCallback={this.deleteFlowCallback}
                 />
-                :
+              ) : (
                 ''
-              }
+              )}
             </>
-          }
+          )}
           {this.renderAddNewFlow()}
         </StackItem>
-        {openViewFlowModal === true ?
+        {openViewFlowModal === true ? (
           <ViewFlow
             flow={flowToBeViewed}
             isOpen={openViewFlowModal}
@@ -207,9 +230,9 @@ export default class MainView extends Component {
             slos={slos}
             timeRange={timeRange}
           />
-          :
+        ) : (
           ''
-        }
+        )}
         <Modal
           hidden={!isDeleteFlowModalActive}
           onClose={() => this.setState({ isDeleteFlowModalActive: false })}
@@ -242,6 +265,5 @@ export default class MainView extends Component {
 
 MainView.propTypes = {
   slos: PropTypes.array.isRequired,
-  timeRange: PropTypes.object,
-  tags: PropTypes.array.isRequired
+  timeRange: PropTypes.object
 };
