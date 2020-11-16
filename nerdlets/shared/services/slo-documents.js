@@ -65,6 +65,10 @@ export const writeSloDocument = async function({ entityGuid, document }) {
     throw new Error('Error - no SLO name provided');
   }
 
+  if (document.indicator.includes('budget') && document.defects.length === 0) {
+    throw new Error('Error - No Defects Selected');
+  }
+
   // console.debug(JSON.stringify(__write_mutation, null, 2));
   const __write_result = await EntityStorageMutation.mutate(__write_mutation);
 
@@ -105,12 +109,18 @@ export const validateSlo = function(document) {
     return false;
   }
 
-  if (document.slogroup === '' && document.tags.length === 0) {
+  if (document.tags.length === 0) {
     return false;
   }
 
-  // Error Driven SLO
-  if (document.indicator === 'error_budget') {
+  // Error/Latency Driven SLO
+  if (
+    document.indicator === 'error_budget' ||
+    document.indicator === 'latency_budget'
+  ) {
+    if (document.transactions === 'all') {
+      return 'all';
+    }
     if (document.transactions.length === 0 || document.defects.length === 0) {
       return false;
     } // if
@@ -126,7 +136,10 @@ export const validateSlo = function(document) {
   } // if
 
   // Alert Driven SLO
-  if (document.indicator !== 'error_budget') {
+  if (
+    document.indicator !== 'error_budget' &&
+    document.indicator !== 'latency_budget'
+  ) {
     if (document.alerts.length === 0) {
       return false;
     }

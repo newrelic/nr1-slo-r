@@ -21,11 +21,11 @@ import { updateTimeRangeFromScope } from '../../helpers';
 const _getErrorFilter = function(_transactions, _defects, language) {
   let __ERROR_FILTER = '';
 
-  _transactions.map(transaction => {
-    __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}' `;
-
+  if (_transactions === 'all') {
+    // All transactions selected
     if (_defects.length > 0) {
-      __ERROR_FILTER += `AND (`;
+      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*)`;
+      __ERROR_FILTER += `, WHERE (`;
 
       let __defectsIndex = 0;
       let __DEFECTS_JOIN = '';
@@ -57,12 +57,54 @@ const _getErrorFilter = function(_transactions, _defects, language) {
         __defectsIndex++;
       });
 
-      __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER})`;
+      __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER}))`;
+    } else {
+      __ERROR_FILTER = `${__ERROR_FILTER}count(*)`;
     }
-    __ERROR_FILTER += `) + `; // lazy way to account for the array elements
-  });
+  } else {
+    _transactions.map(transaction => {
+      __ERROR_FILTER = `${__ERROR_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}' `;
 
-  __ERROR_FILTER = `${__ERROR_FILTER}0`; // completes the expression on the final array element
+      if (_defects.length > 0) {
+        __ERROR_FILTER += `AND (`;
+
+        let __defectsIndex = 0;
+        let __DEFECTS_JOIN = '';
+        let __DEFECTS_FILTER = '';
+
+        _defects.map(defect => {
+          if (__defectsIndex > 0) {
+            __DEFECTS_JOIN = ' OR ';
+          } // if
+          else {
+            __DEFECTS_JOIN = '';
+          } // else
+
+          // evaluate if the defect is an httpResponseCode releated or apdexPerfZone
+          if (defect.value === 'apdex_frustrated') {
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER +
+              __DEFECTS_JOIN}apdexPerfZone = 'F'`;
+          } else if (defect.value.match(/duration > \.*\d+/)) {
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}
+            ${defect.value}`;
+          } else {
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER +
+              __DEFECTS_JOIN +
+              _getAgentHTTPResponseAttributeName(language)} LIKE '${
+              defect.value
+            }'`;
+          } // else
+
+          __defectsIndex++;
+        });
+
+        __ERROR_FILTER = `${__ERROR_FILTER + __DEFECTS_FILTER})`;
+      }
+      __ERROR_FILTER += `) + `; // lazy way to account for the array elements
+    });
+
+    __ERROR_FILTER = `${__ERROR_FILTER}0`; // completes the expression on the final array element
+  }
 
   return __ERROR_FILTER;
 }; // getErrorFilter
@@ -71,10 +113,14 @@ const _getErrorFilter = function(_transactions, _defects, language) {
 const _getTotalFilter = function(_transactions) {
   let __TOTAL_FILTER = '';
 
-  _transactions.map(transaction => {
-    __TOTAL_FILTER = `${__TOTAL_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}') + `;
-  });
-  __TOTAL_FILTER = `${__TOTAL_FILTER}0`; // completes the expression on the array element
+  if (_transactions === 'all') {
+    __TOTAL_FILTER = `count(*)`;
+  } else {
+    _transactions.map(transaction => {
+      __TOTAL_FILTER = `${__TOTAL_FILTER}FILTER(count(*), WHERE name LIKE '${transaction}') + `;
+    });
+    __TOTAL_FILTER = `${__TOTAL_FILTER}0`; // completes the expression on the array element
+  }
 
   return __TOTAL_FILTER;
 }; // getTotalFilter
@@ -155,6 +201,13 @@ const _getErrorBudgetSLOData = async function(props) {
   } // else
 }; // _getErrorBudgetSLOData
 
+const _getErrorBudgetRemaining = async function(SLOTarget, SLOAttainment) {
+  const totalBudget = 100 - SLOTarget;
+  const usedBudget = SLOAttainment - SLOTarget;
+  const remainingBudget = ((usedBudget / totalBudget) * 100).toFixed();
+  return remainingBudget;
+};
+
 const ErrorBudgetSLO = {
   // Expects props.timeRange to exist
   query: async props => {
@@ -165,6 +218,17 @@ const ErrorBudgetSLO = {
     props.language = props.document.language;
 
     const slo_results = await _getErrorBudgetSLOData(props);
+    /*
+    ESLint bug: https://github.com/eslint/eslint/issues/11899#issuecomment-506543054
+    Workaround: https://github.com/eslint/eslint/issues/11899#issuecomment-509262084
+    Disabling rule for this instance only is the more readable solution.
+    */
+
+    // eslint-disable-next-line require-atomic-updates
+    props.document.budget = await _getErrorBudgetRemaining(
+      props.document.target,
+      Math.round(slo_results.chart[0].data[0].SLO * 1000) / 1000
+    );
 
     return {
       document: props.document,

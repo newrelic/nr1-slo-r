@@ -9,20 +9,20 @@ import { fetchDocumentById } from '../../shared/services/slo-documents';
 import ErrorBudgetSLO from '../../shared/queries/error-budget-slo/single-document';
 import AlertDrivenSLO from '../../shared/queries/alert-driven-slo/single-document';
 
-function openChartBuilder(query) {
+function openChartBuilder(query, doc) {
   const nerdlet = {
     id: 'wanda-data-exploration.nrql-editor',
     urlState: {
       initialActiveInterface: 'nrqlEditor',
-      // initialAccountId: account.id,
-      initialNrqlValue: query,
+      initialAccountId: doc.accountId,
+      initialNrqlValue: query.query,
       isViewingQuery: true
     }
   };
   navigation.openOverlay(nerdlet);
 }
 
-function Nrql({ query, scope, activeViewNRQLQuery }) {
+function Nrql({ query, scope, activeViewNRQLQuery, doc }) {
   const scopeNormalized = scope
     .replace(/_/g, '')
     .replace(/\s+/g, '')
@@ -34,7 +34,7 @@ function Nrql({ query, scope, activeViewNRQLQuery }) {
         className={`nrql-query-container ${
           activeViewNRQLQuery === scopeNormalized ? 'active' : ''
         }`}
-        onClick={() => openChartBuilder(query)}
+        onClick={() => openChartBuilder(query, doc)}
       >
         <HeadingText type={HeadingText.TYPE.HEADING_4}>
           {query.name}
@@ -47,7 +47,8 @@ function Nrql({ query, scope, activeViewNRQLQuery }) {
 Nrql.propTypes = {
   query: PropTypes.object,
   scope: PropTypes.string,
-  activeViewNRQLQuery: PropTypes.string
+  activeViewNRQLQuery: PropTypes.string,
+  doc: PropTypes.object
 };
 
 export default class ViewDocument extends React.Component {
@@ -99,7 +100,10 @@ export default class ViewDocument extends React.Component {
     }
 
     const nrqlFunction =
-      document.indicator === 'error_budget' || document.type === 'error_budget'
+      document.indicator === 'error_budget' ||
+      document.type === 'error_budget' ||
+      document.indicator === 'latency_budget' ||
+      document.type === 'latency_budget'
         ? ErrorBudgetSLO
         : AlertDrivenSLO;
 
@@ -121,6 +125,7 @@ export default class ViewDocument extends React.Component {
             query={query}
             scope={scope}
             activeViewNRQLQuery={activeViewNRQLQuery}
+            doc={document}
           />
         );
       });

@@ -148,6 +148,11 @@ export default class TableView extends Component {
         sort: true
       },
       {
+        dataField: 'budget',
+        text: 'Budget Remaining',
+        sort: true
+      },
+      {
         dataField: 'slogroup',
         formatter: cell => {
           if (cell) {

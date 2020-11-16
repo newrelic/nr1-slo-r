@@ -15,14 +15,15 @@
   text-transform: capitalize;
 }
 
-.slo-grid-item-tag {  
+.slo-grid-item-tag {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 125px 59px 59px 30px;
-  grid-template-areas: 
+  grid-template-rows: 125px 59px 59px 59px 30px;
+  grid-template-areas:
     "header header"
-    "current sevendays"
-    "thirtydays target"
+    "current target"
+    "sevendays thirtydays"
+    "budget budget"
     "tags tags";
   height: 100%;
   position: relative;
@@ -53,14 +54,14 @@
     border-top: 1px solid #edeeee;
     border-bottom: 1px solid #edeeee;
     border-right: 1px solid #edeeee;
-    
+
   }
 
   &__sevendays {
     grid-area: sevendays;
     @extend .center-flex;
     align-items: initial;
-    border-top: 1px solid #edeeee;
+    border-right: 1px solid #edeeee;
     border-bottom: 1px solid #edeeee;
   }
 
@@ -74,6 +75,14 @@
 
   &__target {
     grid-area: target;
+    @extend .center-flex;
+    align-items: initial;
+    border-top: 1px solid #edeeee;
+    border-bottom: 1px solid #edeeee;
+  }
+
+  &__budget {
+    grid-area: budget;
     @extend .center-flex;
     align-items: initial;
     border-bottom: 1px solid #edeeee;
