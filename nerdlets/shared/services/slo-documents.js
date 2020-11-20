@@ -101,6 +101,8 @@ export const writeSloDocument = async function({ entityGuid, document }) {
 };
 
 export const validateSlo = function(document) {
+
+  console.debug("WHAT DOC", document); 
   if (document.name === '') {
     return false;
   }
@@ -109,39 +111,43 @@ export const validateSlo = function(document) {
     return false;
   }
 
-  if (document.tags.length === 0) {
+  if (document.tags.length === 0 && document.slogroup === "") {
     return false;
   }
 
   // Error/Latency Driven SLO
-  if (
-    document.indicator === 'error_budget' ||
-    document.indicator === 'latency_budget'
-  ) {
-    if (document.transactions === 'all') {
-      return 'all';
-    }
-    if (document.transactions.length === 0 || document.defects.length === 0) {
-      return false;
-    } // if
-    else {
-      // review the document for problematic transaction characters
-      const __updated_transactions = [];
-      document.transactions.forEach(_transaction => {
-        __updated_transactions.push(_transaction.replace(/\\/g, '%'));
-      });
+  if ( document.indicator === 'error_budget' || document.indicator === 'latency_budget') {
 
-      document.transactions = __updated_transactions;
-    } // else
+    // console.debug("validating the error or latency budge");
+    if (document.transactions !== 'all') {
+       //console.error("all???");
+       //return 'all';
+
+       if (document.transactions.length === 0 || document.defects.length === 0) {
+      
+        return false;
+       } // if
+       else {
+         // review the document for problematic transaction characters
+         const __updated_transactions = [];
+         document.transactions.forEach(_transaction => {
+           __updated_transactions.push(_transaction.replace(/\\/g, '%'));
+         });
+   
+         document.transactions = __updated_transactions;
+       } // else
+
+    } // if
+
   } // if
 
   // Alert Driven SLO
-  if (
-    document.indicator !== 'error_budget' &&
-    document.indicator !== 'latency_budget'
-  ) {
+  if ( document.indicator !== 'error_budget' && document.indicator !== 'latency_budget' ) {
+    console.debug("not error or lats foo ");
     if (document.alerts.length === 0) {
+      console.debug("hold - alerts length failure");
       return false;
+
     }
     // add validation to ensure we have the alerts object array
     try {
@@ -149,10 +155,12 @@ export const validateSlo = function(document) {
         document.alerts[0].policy_name === null ||
         document.alerts[0].policy_name === undefined
       ) {
+        console.debug("hold - alerts polict name foo");
         return false;
       }
-    } catch {
+    } catch (_err) {
       // try
+      console.debug("error", _err);
       return false;
     } // catch
   } // if (alert driven SLOs)

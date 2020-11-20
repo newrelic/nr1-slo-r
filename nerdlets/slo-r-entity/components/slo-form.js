@@ -85,6 +85,17 @@ export default class SloForm extends React.Component {
       query: tags(entityGuid)
     });
 
+
+    // adding a null check and information message 
+    // we've seen issues with persistent null returns
+    // and need to track down the root cause 
+
+    if (result.data.actor.entity === null) {
+
+      console.error("Entity query has returned null, DEBUG DETAILS", result);
+      alert("The entity lookup for this Service failed. Please try again. If the error continues please open an issue at https://github.com/newrelic/nr1-slo-r/issues ");
+    } 
+
     this.setState({
       entityTags: result.data.actor.entity.tags
     });
@@ -206,7 +217,7 @@ export default class SloForm extends React.Component {
     const currentDocument = { ...document };
 
     const isValid = validateSlo(currentDocument);
-
+console.debug("the validation valie is ", isValid);
     if (!isValid) {
       // eslint-disable-next-line no-alert
       alert(
