@@ -228,7 +228,14 @@ console.debug("the validation valie is ", isValid);
     if (!isValid) {
       // eslint-disable-next-line no-alert
       alert(
-        'Problem with SLO definition! Please validate you have an SLO Name, Group, and Target defined. Also ensure your Error Budget includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.'
+        `Problem with SLO definition! 
+        
+        Please validate you have a 
+        SLO Name, 
+        Tag or Group,
+        and Target defined. 
+        
+        Also ensure your Availability (error) SLO includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.`
       );
       return;
     }
