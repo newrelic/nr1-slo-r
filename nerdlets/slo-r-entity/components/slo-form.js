@@ -92,10 +92,17 @@ export default class SloForm extends React.Component {
 
     if (result.data.actor.entity === null) {
 
-      console.error("Entity query has returned null, DEBUG DETAILS", result);
-      alert("The entity lookup for this Service failed. Please try again. If the error continues please open an issue at https://github.com/newrelic/nr1-slo-r/issues ");
+      console.error("Entity Query has returned null, DEBUG DETAILS", result);
+      alert(`
+      
+      There is a problem querying the details for this Entity. You will not be able to define or view SLOs. 
+
+      For more information about this error please see: https://github.com/newrelic/nr1-slo-r/blob/main/docs/entity_lookup_error.md 
+      
+      `);
     } 
 
+    //TODO Provide better null handling of entity lookup. 
     this.setState({
       entityTags: result.data.actor.entity.tags
     });

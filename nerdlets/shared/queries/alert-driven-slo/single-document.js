@@ -17,6 +17,7 @@ import { updateTimeRangeFromScope } from '../../helpers';
 /** provides the where clause for the queries given the alerts array provided by the component properties */
 const _getAlertsWhereClause = function(_alerts) {
   // validate the _alert array being passed
+  
   try {
     if (
       _alerts[0].policy_name === null ||

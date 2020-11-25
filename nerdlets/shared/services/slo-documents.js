@@ -102,7 +102,6 @@ export const writeSloDocument = async function({ entityGuid, document }) {
 
 export const validateSlo = function(document) {
 
-  console.debug("WHAT DOC", document); 
   if (document.name === '') {
     return false;
   }
@@ -125,11 +124,12 @@ export const validateSlo = function(document) {
 
        if (document.transactions.length === 0 || document.defects.length === 0) {
       
+        console.debug("Invalid SLO document - no transactions or defects targeted.");
         return false;
        } // if
        else {
          // review the document for problematic transaction characters
-         const __updated_transactions = [];
+         var __updated_transactions = [];
          document.transactions.forEach(_transaction => {
            __updated_transactions.push(_transaction.replace(/\\/g, '%'));
          });
@@ -143,24 +143,54 @@ export const validateSlo = function(document) {
 
   // Alert Driven SLO
   if ( document.indicator !== 'error_budget' && document.indicator !== 'latency_budget' ) {
-    console.debug("not error or lats foo ");
-    if (document.alerts.length === 0) {
-      console.debug("hold - alerts length failure");
-      return false;
 
+    if (document.alerts.length === 0) {
+      
+      console.debug("Invalid SLO document - no alerts targeted.");
+      return false;
     }
     // add validation to ensure we have the alerts object array
     try {
-      if (
-        document.alerts[0].policy_name === null ||
-        document.alerts[0].policy_name === undefined
-      ) {
-        console.debug("hold - alerts polict name foo");
+      
+      var __updated_alerts = [];
+      document.alerts.forEach(_alert => {
+
+        if (typeof _alert === 'object') {
+
+          if (document.alerts[0].policy_name === null || document.alerts[0].policy_name === undefined) {
+
+            console.debug("Invalid SLO Alert slkipping unexpected alert defined: " + _alert);
+          } //if
+          else {
+            //just add the alert
+            __updated_alerts.push(_alert);
+          } //else
+        } // if
+        else { 
+
+          __updated_alerts.push(
+            {
+              facet: _alert, 
+              count: 0, 
+              policy_name: _alert
+            }
+          );
+        } // else
+      }); // forEach
+
+      // ensure our transformation of the alerts types was successful. 
+      if (__updated_alerts.length > 0) {
+
+        document.alerts = __updated_alerts;
+      } //if
+      else {
+        console.debug("Invalid SLO document - no alerts defined after.");
         return false;
-      }
-    } catch (_err) {
-      // try
-      console.debug("error", _err);
+      } //else
+
+    } // try 
+    catch (_err) {
+      console.error("Problem validating SLO Document", _err);
       return false;
     } // catch
   } // if (alert driven SLOs)

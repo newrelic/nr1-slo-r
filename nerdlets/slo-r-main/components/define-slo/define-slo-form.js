@@ -284,7 +284,6 @@ export default class DefineSLOForm extends Component {
 
             <span className="text-field__validation">{errors.defects}</span>
               <small className="input-description">
-                Transactions with a duration greater than the limit will be
                 Transactions with a <a href="https://docs.newrelic.com/attribute-dictionary/transaction/duration" target="_blank">duration</a> greater than the limit will be
                 counted against error budget attainment.
               </small>
