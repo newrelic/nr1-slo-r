@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/newrelic/nr1-slo-r/compare/v1.7.1...v1.7.2) (2020-11-25)
+
+
+### Bug Fixes
+
+* Entity lookup validation ([dd5503a](https://github.com/newrelic/nr1-slo-r/commit/dd5503a71633d6f2f64838facb18a81353b607e9))
+
 ## [1.7.1](https://github.com/newrelic/nr1-slo-r/compare/v1.7.0...v1.7.1) (2020-10-08)
 
 
