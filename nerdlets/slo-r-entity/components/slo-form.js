@@ -85,24 +85,24 @@ export default class SloForm extends React.Component {
       query: tags(entityGuid)
     });
 
-
-    // adding a null check and information message 
+    // adding a null check and information message
     // we've seen issues with persistent null returns
-    // and need to track down the root cause 
+    // and need to track down the root cause
 
     if (result.data.actor.entity === null) {
-
-      console.error("Entity Query has returned null, DEBUG DETAILS", result);
+      console.error('Entity Query has returned null, DEBUG DETAILS', result); // eslint-disable-line no-console
+      /* eslint-disable no-alert */
       alert(`
-      
-      There is a problem querying the details for this Entity. You will not be able to define or view SLOs. 
 
-      For more information about this error please see: https://github.com/newrelic/nr1-slo-r/blob/main/docs/entity_lookup_error.md 
-      
+      There is a problem querying the details for this Entity. You will not be able to define or view SLOs.
+
+      For more information about this error please see: https://github.com/newrelic/nr1-slo-r/blob/main/docs/entity_lookup_error.md
+
       `);
-    } 
+      /* eslint-enable no-alert */
+    }
 
-    //TODO Provide better null handling of entity lookup. 
+    // TODO Provide better null handling of entity lookup.
     this.setState({
       entityTags: result.data.actor.entity.tags
     });
@@ -228,13 +228,13 @@ export default class SloForm extends React.Component {
     if (!isValid) {
       // eslint-disable-next-line no-alert
       alert(
-        `Problem with SLO definition! 
-        
-        Please validate you have a 
-        SLO Name, 
+        `Problem with SLO definition!
+
+        Please validate you have a
+        SLO Name,
         Tag or Group,
-        and Target defined. 
-        
+        and Target defined.
+
         Also ensure your Availability (error) SLO includes at least one transaction and one defect, or your Alert driven SLO includes an Alert.`
       );
       return;
