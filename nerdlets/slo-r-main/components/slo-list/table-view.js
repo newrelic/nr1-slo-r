@@ -78,7 +78,7 @@ export default class TableView extends Component {
   };
 
   renderBootStrapTableView = () => {
-    const { tableData, toggleViewModal, toggleUpdateModal } = this.props;
+    const { tableData, toggleViewModal, toggleUpdateModal, alertPolicyMap } = this.props;
 
     const { SearchBar } = Search;
     const indicatorOptions = SLO_INDICATORS.reduce(
@@ -161,6 +161,20 @@ export default class TableView extends Component {
           return '-';
         },
         text: 'SLO Group',
+        sort: true
+      },
+      {
+        dataField: 'alertPolicy',
+        formatter: cell => {
+          if (cell) {
+            let policy = alertPolicyMap.get(cell);
+            if(policy) {
+              return policy.name;
+            }
+          }
+          return '-';
+        },
+        text: 'Alert Policy',
         sort: true
       },
       {

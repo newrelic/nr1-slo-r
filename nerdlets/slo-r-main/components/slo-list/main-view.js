@@ -33,6 +33,15 @@ export default class MainView extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(!this.alertPolicyMap && nextProps.alertPolicies.length > 0) {
+      this.alertPolicyMap = new Map();
+      nextProps.alertPolicies.forEach(p => {
+        this.alertPolicyMap.set(p.id, p);
+      });
+    }
+	}
+
   componentDidMount = async () => {
     await this.fetchDetails();
   };
@@ -261,6 +270,7 @@ export default class MainView extends Component {
               toggleViewModal={this.toggleViewModal}
               toggleUpdateModal={handleEditSLO}
               deleteCallback={this.deleteDocumentCallback}
+              alertPolicyMap={this.alertPolicyMap}
             />
           ) : (
             <Grid className="grid-container">
