@@ -224,7 +224,7 @@ export default class SloForm extends React.Component {
     const currentDocument = { ...document };
 
     const isValid = validateSlo(currentDocument);
-console.debug("the validation valie is ", isValid);
+
     if (!isValid) {
       // eslint-disable-next-line no-alert
       alert(

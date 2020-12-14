@@ -133,7 +133,6 @@ const _getErrorBudgetNRQL = function(
     language
   )} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
 
-  // console.debug('NRQL Looks like what', __NRQL);
   return __NRQL;
 }; // getErrorBudgerNRQL
 

@@ -44,14 +44,11 @@ const _getErrorFilter = function(_transactions, _defects, language) {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN}apdexPerfZone = 'F'`;
         } else if (defect.value.match(/duration > \.*\d+/)) {
-          __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}
-          ${defect.value}`;
+          __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}${defect.value}`;
         } else {
           __DEFECTS_FILTER = `${__DEFECTS_FILTER +
             __DEFECTS_JOIN +
-            _getAgentHTTPResponseAttributeName(language)} LIKE '${
-            defect.value
-          }'`;
+            _getAgentHTTPResponseAttributeName(language)} LIKE '${defect.value}'`;
         } // else
 
         __defectsIndex++;
@@ -85,14 +82,11 @@ const _getErrorFilter = function(_transactions, _defects, language) {
             __DEFECTS_FILTER = `${__DEFECTS_FILTER +
               __DEFECTS_JOIN}apdexPerfZone = 'F'`;
           } else if (defect.value.match(/duration > \.*\d+/)) {
-            __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}
-            ${defect.value}`;
+            __DEFECTS_FILTER = `${__DEFECTS_FILTER + __DEFECTS_JOIN}${defect.value}`;
           } else {
             __DEFECTS_FILTER = `${__DEFECTS_FILTER +
               __DEFECTS_JOIN +
-              _getAgentHTTPResponseAttributeName(language)} LIKE '${
-              defect.value
-            }'`;
+              _getAgentHTTPResponseAttributeName(language)} LIKE '${defect.value}'`;
           } // else
 
           __defectsIndex++;
