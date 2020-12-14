@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/newrelic/nr1-slo-r/compare/v1.7.2...v1.7.3) (2020-12-14)
+
+
+### Bug Fixes
+
+* carriage return concatenated in latency value nrql ([c79a3bc](https://github.com/newrelic/nr1-slo-r/commit/c79a3bc45b91d22ad517e30fe01a5e919e59932c))
+
 ## [1.7.2](https://github.com/newrelic/nr1-slo-r/compare/v1.7.1...v1.7.2) (2020-11-25)
 
 
