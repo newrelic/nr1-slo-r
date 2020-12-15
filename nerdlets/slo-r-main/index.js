@@ -14,6 +14,7 @@ import isEqual from 'lodash.isequal';
 
 import { NoSlosNotification } from '../shared/components';
 import { fetchSloDocuments } from '../shared/services/slo-documents';
+import { getAlertPolicies } from '../shared/services/alert-policies';
 import { getTags, getEntities } from './queries';
 import { SloCombine, SloList, SloFlows, DefineSLOForm } from './components';
 
@@ -29,6 +30,7 @@ export default class SLOR extends Component {
     this.state = {
       ActivePage: PAGES.COMBINE_SLOs,
       entities: [],
+      alertPolicies: [],
       tags: [],
       slos: [],
       isLoaded: false,
@@ -59,6 +61,8 @@ export default class SLOR extends Component {
     await this.fetchSlos(entities);
 
     this.setState({ entities, isRefreshing: false });
+
+    this.fetchAlertPolicies();
   };
 
   fetchTags = async entities => {
@@ -103,6 +107,10 @@ export default class SLOR extends Component {
     });
   };
 
+  fetchAlertPolicies = async () => {
+    this.setState({ alertPolicies: await getAlertPolicies() });
+  };
+
   handleEditSLO = slo => {
     this.setState({ sloToBeEdited: slo.document, isCreateModalActive: true });
   };
@@ -124,6 +132,7 @@ export default class SLOR extends Component {
       ActivePage,
       slos,
       entities,
+      alertPolicies,
       tags,
       isLoaded,
       isRefreshing,
@@ -269,6 +278,7 @@ export default class SLOR extends Component {
                     timeRange={platformUrlState.timeRange}
                     slos={slos}
                     tags={tags}
+                    alertPolicies={alertPolicies}
                     isTableViewActive={isTableViewActive}
                     removeFromList={this.removeFromList}
                     handleEditSLO={this.handleEditSLO}
@@ -280,6 +290,7 @@ export default class SLOR extends Component {
                   isEdit={sloToBeEdited}
                   timeRange={platformUrlState.timeRange}
                   entities={entities}
+                  alertPolicies={alertPolicies}
                   onSave={() => this.fetchSlos(entities)}
                   onClose={() =>
                     this.setState({

@@ -18,6 +18,11 @@ export const fetchSloDocuments = async function({ entityGuid }) {
   const result = await EntityStorageQuery.query(_query);
   const documents = result.data || [];
 
+  // documents.forEach((doc) => {
+  //   // console.debug('$$$$$$$ ' + JSON.stringify(doc, null, 2));
+  //   console.debug('**** Loaded ' + doc.document.name + ', policy ' + doc.document.alertPolicy + ', docId ' + doc.id);
+  // });
+
   // raggimuffen
   const __versionValidatedDocuments = await validateSLODocVersion(documents);
 

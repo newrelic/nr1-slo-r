@@ -128,11 +128,26 @@ const _getTotalFilter = function(_transactions) {
 }; // getTotalFilter
 
 /** returns the full nrql needed to calculate the error budget */
-const _getErrorBudgetNRQL = function(
+const _getErrorBudgetNRQLForTimeRange = function(
   _transactions,
   _defects,
   _begin,
   _end,
+  _appName,
+  language
+) {
+  return `${getErrorBudgetNRQL(
+    _transactions,
+    _defects,
+    _appName,
+    language
+  )} SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
+}; // getErrorBudgetNRQLForTimeRange
+
+/** returns the full nrql needed to calculate the error budget, without a specific time range */
+export const getErrorBudgetNRQL = function(
+  _transactions,
+  _defects,
   _appName,
   language
 ) {
@@ -144,9 +159,9 @@ const _getErrorBudgetNRQL = function(
     _transactions
   )}))) * 100 AS 'SLO' FROM Transaction WHERE appName = '${_appName}' AND ${_getAgentHTTPResponseAttributeName(
     language
-  )} IS NOT NULL SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
+  )} IS NOT NULL`;
   return __NRQL;
-}; // getErrorBudgerNRQL
+}; // getErrorBudgetNRQL
 
 /** returns a string the describes the attribute name for the http response code for our language agents */
 const _getAgentHTTPResponseAttributeName = function(language) {
@@ -168,7 +183,7 @@ const _getErrorBudgetSLOData = async function(props) {
     timeRange
   });
 
-  const __NRQL = _getErrorBudgetNRQL(
+  const __NRQL = _getErrorBudgetNRQLForTimeRange(
     props.transactions,
     props.defects,
     begin_time,
@@ -247,7 +262,7 @@ const ErrorBudgetSLO = {
       timeRange
     });
 
-    const query = _getErrorBudgetNRQL(
+    const query = _getErrorBudgetNRQLForTimeRange(
       document.transactions,
       document.defects,
       begin_time,

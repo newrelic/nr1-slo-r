@@ -37,6 +37,15 @@ export default class MainView extends Component {
     await this.fetchDetails();
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (!this.alertPolicyMap && nextProps.alertPolicies.length > 0) {
+      this.alertPolicyMap = new Map();
+      nextProps.alertPolicies.forEach(p => {
+        this.alertPolicyMap.set(p.id, p);
+      });
+    }
+  }
+
   componentDidUpdate = async prevProps => {
     const { slos, timeRange } = this.props;
 
@@ -261,6 +270,7 @@ export default class MainView extends Component {
               toggleViewModal={this.toggleViewModal}
               toggleUpdateModal={handleEditSLO}
               deleteCallback={this.deleteDocumentCallback}
+              alertPolicyMap={this.alertPolicyMap}
             />
           ) : (
             <Grid className="grid-container">
@@ -318,5 +328,6 @@ MainView.propTypes = {
   timeRange: PropTypes.object.isRequired,
   isTableViewActive: PropTypes.bool,
   removeFromList: PropTypes.func.isRequired,
-  handleEditSLO: PropTypes.func.isRequired
+  handleEditSLO: PropTypes.func.isRequired,
+  alertPolicies: PropTypes.func.isRequired
 };
