@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Dropdown as NR1Dropdown, DropdownItem } from 'nr1';
 
 export default class Dropdown extends Component {
-
   constructor(props) {
     super(props);
 
@@ -11,22 +10,28 @@ export default class Dropdown extends Component {
 
     this.state = {
       search: this.getSearchText(this.props.value),
-      items: props.items,
-    }
+      items: props.items
+    };
   }
 
   getSearchText(value) {
     const selectedItem = this.props.items.find(item => item.value === value);
-    return this.searchEnabled ? (selectedItem ? selectedItem.label : this.props.search) : null;
+    if (this.searchEnabled) {
+      return selectedItem ? selectedItem.label : this.props.search;
+    } else {
+      return null;
+    }
   }
 
   handleOnSearch(text) {
     let search = text;
     let items;
 
-    if(search) {
+    if (search) {
       search = search.toLowerCase();
-      items = this.props.items.filter((item) => item.label.toLowerCase().includes(search));
+      items = this.props.items.filter(item =>
+        item.label.toLowerCase().includes(search)
+      );
     } else {
       items = this.props.items;
     }
@@ -41,13 +46,13 @@ export default class Dropdown extends Component {
     const { onChange } = this.props;
     onChange(value);
 
-    if(this.searchEnabled) {
-      this.setState({search: this.getSearchText(value)});
+    if (this.searchEnabled) {
+      this.setState({ search: this.getSearchText(value) });
     }
   };
 
-  handleOnOpen(e) {
-    if(this.searchEnabled) {
+  handleOnOpen() {
+    if (this.searchEnabled) {
       this.handleOnSearch(this.state.search);
     }
   }
@@ -72,10 +77,10 @@ export default class Dropdown extends Component {
         title={this.dropdownTitleLookup(value, items)}
         className="define-slo-input"
         search={search}
-        onSearch={(e) => {
+        onSearch={e => {
           this.handleOnSearch(e.target.value);
         }}
-        onOpen={(e) => {
+        onOpen={e => {
           this.handleOnOpen(e);
         }}
       >

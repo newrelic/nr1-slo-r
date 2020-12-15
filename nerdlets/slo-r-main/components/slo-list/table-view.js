@@ -78,7 +78,12 @@ export default class TableView extends Component {
   };
 
   renderBootStrapTableView = () => {
-    const { tableData, toggleViewModal, toggleUpdateModal, alertPolicyMap } = this.props;
+    const {
+      tableData,
+      toggleViewModal,
+      toggleUpdateModal,
+      alertPolicyMap
+    } = this.props;
 
     const { SearchBar } = Search;
     const indicatorOptions = SLO_INDICATORS.reduce(
@@ -167,8 +172,8 @@ export default class TableView extends Component {
         dataField: 'alertPolicy',
         formatter: cell => {
           if (cell) {
-            let policy = alertPolicyMap.get(cell);
-            if(policy) {
+            const policy = alertPolicyMap.get(cell);
+            if (policy) {
               return policy.name;
             }
           }
@@ -264,5 +269,6 @@ TableView.propTypes = {
   tableData: PropTypes.array.isRequired,
   toggleViewModal: PropTypes.func.isRequired,
   toggleUpdateModal: PropTypes.func.isRequired,
-  deleteCallback: PropTypes.func.isRequired
+  deleteCallback: PropTypes.func.isRequired,
+  alertPolicyMap: PropTypes.object
 };

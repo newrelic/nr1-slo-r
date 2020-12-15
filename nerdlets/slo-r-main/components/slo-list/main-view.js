@@ -33,18 +33,18 @@ export default class MainView extends Component {
     };
   }
 
+  componentDidMount = async () => {
+    await this.fetchDetails();
+  };
+
   componentWillReceiveProps(nextProps) {
-    if(!this.alertPolicyMap && nextProps.alertPolicies.length > 0) {
+    if (!this.alertPolicyMap && nextProps.alertPolicies.length > 0) {
       this.alertPolicyMap = new Map();
       nextProps.alertPolicies.forEach(p => {
         this.alertPolicyMap.set(p.id, p);
       });
     }
-	}
-
-  componentDidMount = async () => {
-    await this.fetchDetails();
-  };
+  }
 
   componentDidUpdate = async prevProps => {
     const { slos, timeRange } = this.props;
@@ -328,5 +328,6 @@ MainView.propTypes = {
   timeRange: PropTypes.object.isRequired,
   isTableViewActive: PropTypes.bool,
   removeFromList: PropTypes.func.isRequired,
-  handleEditSLO: PropTypes.func.isRequired
+  handleEditSLO: PropTypes.func.isRequired,
+  alertPolicies: PropTypes.func.isRequired
 };

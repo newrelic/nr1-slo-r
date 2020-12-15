@@ -129,15 +129,19 @@ const _getTotalFilter = function(_transactions) {
 
 /** returns the full nrql needed to calculate the error budget */
 const _getErrorBudgetNRQLForTimeRange = function(
+  _transactions,
+  _defects,
+  _begin,
+  _end,
+  _appName,
+  language
+) {
+  return `${getErrorBudgetNRQL(
     _transactions,
     _defects,
-    _begin,
-    _end,
     _appName,
     language
-) {
-
-  return `${getErrorBudgetNRQL(_transactions, _defects, _appName, language)} SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
+  )} SINCE ${Math.round(_begin)} UNTIL ${Math.round(_end)}`;
 }; // getErrorBudgetNRQLForTimeRange
 
 /** returns the full nrql needed to calculate the error budget, without a specific time range */

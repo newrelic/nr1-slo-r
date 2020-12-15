@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {Button, HeadingText, Modal, NerdGraphQuery, Spinner} from 'nr1';
-import {Formik} from 'formik';
-import {Multiselect} from 'react-widgets';
+import { Button, HeadingText, Modal, NerdGraphQuery, Spinner } from 'nr1';
+import { Formik } from 'formik';
+import { Multiselect } from 'react-widgets';
 import get from 'lodash.get';
 import * as Yup from 'yup';
 
-import {fetchEntity} from '../../../shared/services/entity';
-import {SLO_DEFECTS, SLO_INDICATORS} from '../../../shared/constants';
-import {writeSloDocument} from '../../../shared/services/slo-documents';
+import { fetchEntity } from '../../../shared/services/entity';
+import { SLO_DEFECTS, SLO_INDICATORS } from '../../../shared/constants';
+import { writeSloDocument } from '../../../shared/services/slo-documents';
 import AlertSvc from '../../../shared/services/alert-policies';
-import {timeRangeToNrql} from '../../../shared/helpers';
+import { timeRangeToNrql } from '../../../shared/helpers';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
 import TextField from './text-field-wrapper';
-import {getTags} from '../../queries';
+import { getTags } from '../../queries';
 
 export default class DefineSLOForm extends Component {
   constructor(props) {
@@ -71,12 +71,13 @@ export default class DefineSLOForm extends Component {
 
     const newAlertPolicy = document.alertPolicy;
     const oldAlertPolicy = this.props.slo.alertPolicy;
-    if(newAlertPolicy) {
-      if(oldAlertPolicy) {
+    if (newAlertPolicy) {
+      if (oldAlertPolicy) {
         await this.deleteAlertCondition(this.props.slo);
       }
+      // eslint-disable-next-line require-atomic-updates
       document.alertCondition = await AlertSvc.createAlertCondition(document);
-    } else if(oldAlertPolicy) {
+    } else if (oldAlertPolicy) {
       await this.deleteAlertCondition(this.props.slo);
     }
 
@@ -87,7 +88,7 @@ export default class DefineSLOForm extends Component {
   };
 
   deleteAlertCondition = async document => {
-    await AlertSvc.deleteAlertCondition(document.accountId, document.alertCondition);
+    await AlertSvc.deleteAlertCondition(document);
     delete document.alertCondition;
     delete document.alertPolicy;
   };
@@ -363,7 +364,15 @@ export default class DefineSLOForm extends Component {
   }
 
   render() {
-    const { slo, isEdit, isOpen, onClose, onSave, entities, alertPolicies } = this.props;
+    const {
+      slo,
+      isEdit,
+      isOpen,
+      onClose,
+      onSave,
+      entities,
+      alertPolicies
+    } = this.props;
     const { tags, isProcessing } = this.state;
 
     return (
@@ -539,20 +548,22 @@ export default class DefineSLOForm extends Component {
                     </span>
                   </div>
                   <Dropdown
-                      label="Alert Policy"
-                      value={values.alertPolicy}
-                      onChange={value => {
-                        setFieldValue('alertPolicy', value);
-                      }}
-                      search='Search'
-                      items={[{
-                          label: 'None',
-                          value: 0
-                        },
-                        ...alertPolicies.map(({ id, name }) => ({
-                          label: name,
-                          value: id
-                        }))]}
+                    label="Alert Policy"
+                    value={values.alertPolicy}
+                    onChange={value => {
+                      setFieldValue('alertPolicy', value);
+                    }}
+                    search="Search"
+                    items={[
+                      {
+                        label: 'None',
+                        value: 0
+                      },
+                      ...alertPolicies.map(({ id, name }) => ({
+                        label: name,
+                        value: id
+                      }))
+                    ]}
                   />
                   {this.renderErrorBudget(values, setFieldValue, errors)}
                   {this.renderLatencyBudget(values, setFieldValue, errors)}
@@ -591,5 +602,6 @@ DefineSLOForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isEdit: PropTypes.bool,
-  timeRange: PropTypes.object.isRequired
+  timeRange: PropTypes.object.isRequired,
+  alertPolicies: PropTypes.array.isRequired
 };
