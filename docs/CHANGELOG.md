@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/newrelic/nr1-slo-r/compare/v1.7.3...v1.7.4) (2020-12-14)
+
+
+### Bug Fixes
+
+* eslint fixes ([f0c802d](https://github.com/newrelic/nr1-slo-r/commit/f0c802d97478763f107831071697be4e51a0cff8))
+
 ## [1.7.3](https://github.com/newrelic/nr1-slo-r/compare/v1.7.2...v1.7.3) (2020-12-14)
 
 
