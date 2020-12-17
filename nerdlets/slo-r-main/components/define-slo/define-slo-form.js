@@ -525,8 +525,9 @@ export default class DefineSLOForm extends Component {
                     validationText={errors.target}
                   />
                   <div>
+                    <br />
+                    <label className="Dropdown-label">Indicator Type</label>
                     <Dropdown
-                      label="Indicator"
                       value={values.indicator}
                       onChange={async value => {
                         this.setState({ isProcessing: true });
@@ -547,8 +548,9 @@ export default class DefineSLOForm extends Component {
                       {errors.indicator}
                     </span>
                   </div>
+                  <br />
+                  <label className="Dropdown-label">Alert Policy</label>
                   <Dropdown
-                    label="Alert Policy"
                     value={values.alertPolicy}
                     onChange={value => {
                       setFieldValue('alertPolicy', value);

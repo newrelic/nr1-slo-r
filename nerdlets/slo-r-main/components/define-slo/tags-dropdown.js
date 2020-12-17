@@ -5,7 +5,7 @@ import { Multiselect } from 'react-widgets';
 const TagsDropdown = ({ tags, selectedTags, handleTagChange, disabled }) => {
   return (
     <>
-      <h4 className="dropdown-label">Tags</h4>
+      <h4 className="Dropdown-label">Entity Tags</h4>
       <Multiselect
         style={{ marginBottom: '15px' }}
         data={tags}
