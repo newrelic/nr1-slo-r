@@ -1,3 +1,12 @@
+## [1.7.5](https://github.com/newrelic/nr1-slo-r/compare/v1.7.4...v1.7.5) (2020-12-17)
+
+
+### Bug Fixes
+
+* component deprications ([aaf4c06](https://github.com/newrelic/nr1-slo-r/commit/aaf4c06c856667d07c8a31625b9c593faa7e5f3c))
+* linting issues ([4870aab](https://github.com/newrelic/nr1-slo-r/commit/4870aabc3c97d4cf844902aaef15f4eb1f8ec05e))
+* more linting updates ([4ccdcf9](https://github.com/newrelic/nr1-slo-r/commit/4ccdcf952a9f7f342d203ad4f55e8c0043844e3f))
+
 ## [1.7.4](https://github.com/newrelic/nr1-slo-r/compare/v1.7.3...v1.7.4) (2020-12-14)
 
 
