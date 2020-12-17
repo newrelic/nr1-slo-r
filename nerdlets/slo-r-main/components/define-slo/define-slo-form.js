@@ -525,8 +525,8 @@ export default class DefineSLOForm extends Component {
                     validationText={errors.target}
                   />
                   <div>
-                  <br />
-                  <label className="Dropdown-label">Indicator Type</label>
+                    <br />
+                    <label className="Dropdown-label">Indicator Type</label>
                     <Dropdown
                       value={values.indicator}
                       onChange={async value => {
@@ -548,7 +548,7 @@ export default class DefineSLOForm extends Component {
                       {errors.indicator}
                     </span>
                   </div>
-                  <br/>
+                  <br />
                   <label className="Dropdown-label">Alert Policy</label>
                   <Dropdown
                     value={values.alertPolicy}
@@ -566,7 +566,7 @@ export default class DefineSLOForm extends Component {
                         value: id
                       }))
                     ]}
-                  /> 
+                  />
                   {this.renderErrorBudget(values, setFieldValue, errors)}
                   {this.renderLatencyBudget(values, setFieldValue, errors)}
                   {this.renderAlerts(values, setFieldValue, errors)}

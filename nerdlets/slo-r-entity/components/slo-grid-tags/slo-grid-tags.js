@@ -56,7 +56,7 @@ const SloGridTags = ({
 
   let tooltip;
 
-  if (document.description) { 
+  if (document.description) {
     tooltip = (
       <Tooltip text={document.description}>
         <Button
@@ -66,7 +66,7 @@ const SloGridTags = ({
           iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
         />
       </Tooltip>
-    ); 
+    );
   }
 
   return (

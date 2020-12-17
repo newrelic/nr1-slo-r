@@ -66,7 +66,7 @@ const SloGridTags = ({
           iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
         />
       </Tooltip>
-    ); 
+    );
   }
 
   return (
