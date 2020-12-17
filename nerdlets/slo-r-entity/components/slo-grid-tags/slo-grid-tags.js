@@ -58,9 +58,7 @@ const SloGridTags = ({
 
   if (document.description) { 
     tooltip = (
-      <Tooltip
-        text={document.description}
-      >
+      <Tooltip text={document.description}>
         <Button
           className="document-description-button"
           sizeType={Button.SIZE_TYPE.SMALL}

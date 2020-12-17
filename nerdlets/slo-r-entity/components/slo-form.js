@@ -26,8 +26,7 @@ import { SLO_INDICATORS, SLO_DEFECTS } from '../../shared/constants';
 import { tags } from '../../shared/queries/tags';
 
 import { timeRangeToNrql } from '../../shared/helpers';
-
-import OrLine from './or-line';
+// import OrLine from './or-line';
 import TagsDropdown from './tags-dropdown';
 
 export default class SloForm extends React.Component {
@@ -36,8 +35,7 @@ export default class SloForm extends React.Component {
     documentId: PropTypes.string,
     upsertDocumentCallback: PropTypes.func,
     modalToggleCallback: PropTypes.func,
-    timeRange: PropTypes.object,
-    groupList: PropTypes.array
+    timeRange: PropTypes.object
   };
 
   static defaultProps = {
@@ -598,64 +596,7 @@ export default class SloForm extends React.Component {
             this.state.document.slogroup
           }
         />
-        {/* BEGIN REMOVAL SLO GROUP FUNCTION IN FAVOUR OF TAGS 
-        <br/>
-        <label className="Dropdown-label">Select existing SLO group</label>
-        <Dropdown
-          title={
-            this.props.groupList.length === 0
-              ? 'no groups available'
-              : this.state.selectedGroup
-          }
-          className="define-slo-input"
-          disabled={
-            this.props.groupList?.length === 0 ||
-            this.state.selectedTags?.length > 0
-          }
-        >
-          <DropdownItem
-            onClick={() => {
-              this.setState({ selectedGroup: null });
-              this.inputHandler({ field: 'slogroup', value: null });
-            }}
-          />
-
-          {this.props.groupList?.map((group, index) => (
-            <DropdownItem
-              key={index}
-              onClick={() => {
-                this.setState({ selectedGroup: group });
-                this.inputHandler({
-                  field: 'slogroup',
-                  value: group
-                });
-              }}
-            >
-              {group}
-            </DropdownItem>
-          ))}
-        </Dropdown>
-
-        <OrLine />
-
-        <TextField
-          label="Create new SLO Group"
-          disabled={
-            this.state.selectedGroup || this.state.selectedTags?.length > 0
-          }
-          className="define-slo-input"
-          onChange={event => {
-            this.inputHandler({
-              field: 'slogroup',
-              value: event.target.value
-            });
-          }}
-          value={
-            this.state.selectedGroup ? '' : this.getValue({ field: 'slogroup' })
-          }
-        /> 
-        END REMOVAL OF SLO GROUP FEATURE IN DEFINITION */} 
-        <br/>
+        <br />
         <TextField
           label="Target Attainment"
           className="define-slo-input"

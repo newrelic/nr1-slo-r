@@ -238,11 +238,7 @@ export default class SloList extends React.Component {
 
   formatterDescription(cell) {
     if (cell !== undefined) {
-      return (
-        <Tooltip text={cell}>
-          {cell}
-        </Tooltip>
-      );
+      return <Tooltip text={cell}>{cell}</Tooltip>;
     }
 
     return '';

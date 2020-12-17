@@ -525,7 +525,7 @@ export default class DefineSLOForm extends Component {
                     validationText={errors.target}
                   />
                   <div>
-                  <br/>
+                  <br />
                   <label className="Dropdown-label">Indicator Type</label>
                     <Dropdown
                       value={values.indicator}

@@ -45,9 +45,7 @@ export default class SLOGrid extends Component {
               {sloIndicatorLabelLookup({ value: document.indicator })}
             </span>
             {document.description !== undefined && (
-              <Tooltip
-                text={document.description}
-              >
+              <Tooltip text={document.description}>
                 <Button
                   className="document-description-button"
                   sizeType={Button.SIZE_TYPE.SMALL}

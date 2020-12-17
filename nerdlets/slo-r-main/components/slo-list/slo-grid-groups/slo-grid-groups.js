@@ -13,9 +13,7 @@ const SloGridTags = ({ document, index, toggleViewModal, deleteCallback }) => {
           {sloIndicatorLabelLookup({ value: document.indicator })}
         </span>
         {document.description !== undefined && (
-          <Tooltip
-            text={document.description}
-          >
+          <Tooltip text={document.description}>
             <Button
               className="document-description-button"
               sizeType={Button.SIZE_TYPE.SMALL}
