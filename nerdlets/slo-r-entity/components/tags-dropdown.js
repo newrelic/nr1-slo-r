@@ -10,7 +10,7 @@ const TagsDropdown = ({
 }) => {
   return (
     <>
-      <h4 className="dropdown-label">Tags</h4>
+      <label className="Dropdown-label">Entity Tags</label>
       <Multiselect
         data={entityTags}
         textField={entityTag => `${entityTag.key}=${entityTag.values[0]}`}

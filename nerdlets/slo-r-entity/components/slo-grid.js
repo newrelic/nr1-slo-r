@@ -46,10 +46,10 @@ export default class SLOGrid extends Component {
             </span>
             {document.description !== undefined && (
               <Tooltip
-                className="document-description-button"
                 text={document.description}
               >
                 <Button
+                  className="document-description-button"
                   sizeType={Button.SIZE_TYPE.SMALL}
                   type={Button.TYPE.PLAIN_NEUTRAL}
                   iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}

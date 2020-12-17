@@ -222,7 +222,6 @@ export default class SloForm extends React.Component {
 
     const { entityDetails, document, selectedTags } = this.state;
     const currentDocument = { ...document };
-
     const isValid = validateSlo(currentDocument);
 
     if (!isValid) {
@@ -599,6 +598,9 @@ export default class SloForm extends React.Component {
             this.state.document.slogroup
           }
         />
+        {/* BEGIN REMOVAL SLO GROUP FUNCTION IN FAVOUR OF TAGS 
+        <br/>
+        <label className="Dropdown-label">Select existing SLO group</label>
         <Dropdown
           title={
             this.props.groupList.length === 0
@@ -606,7 +608,6 @@ export default class SloForm extends React.Component {
               : this.state.selectedGroup
           }
           className="define-slo-input"
-          label="Select existing SLO group"
           disabled={
             this.props.groupList?.length === 0 ||
             this.state.selectedTags?.length > 0
@@ -652,8 +653,9 @@ export default class SloForm extends React.Component {
           value={
             this.state.selectedGroup ? '' : this.getValue({ field: 'slogroup' })
           }
-        />
-
+        /> 
+        END REMOVAL OF SLO GROUP FEATURE IN DEFINITION */} 
+        <br/>
         <TextField
           label="Target Attainment"
           className="define-slo-input"
@@ -665,7 +667,7 @@ export default class SloForm extends React.Component {
           }}
           value={this.getValue({ field: 'target' })}
         />
-
+        <label className="Dropdown-label">Indicator Type</label>
         <Dropdown
           title={
             this.dropdownTitleLookup({
@@ -673,7 +675,6 @@ export default class SloForm extends React.Component {
               options: SLO_INDICATORS
             }) || 'Choose an Indicator'
           }
-          label="Indicator"
           className="define-slo-input"
         >
           {SLO_INDICATORS.map((indicator, index) => {

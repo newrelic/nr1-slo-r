@@ -56,19 +56,19 @@ const SloGridTags = ({
 
   let tooltip;
 
-  if (document.description) {
+  if (document.description) { 
     tooltip = (
       <Tooltip
-        className="document-description-button"
         text={document.description}
       >
         <Button
+          className="document-description-button"
           sizeType={Button.SIZE_TYPE.SMALL}
           type={Button.TYPE.PLAIN_NEUTRAL}
           iconType={Button.ICON_TYPE.INTERFACE__INFO__HELP}
         />
       </Tooltip>
-    );
+    ); 
   }
 
   return (
