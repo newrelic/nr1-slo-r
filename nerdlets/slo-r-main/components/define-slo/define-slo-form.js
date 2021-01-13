@@ -9,7 +9,10 @@ import * as Yup from 'yup';
 import { fetchEntity } from '../../../shared/services/entity';
 import { SLO_DEFECTS, SLO_INDICATORS } from '../../../shared/constants';
 import { writeSloDocument } from '../../../shared/services/slo-documents';
-import AlertSvc from '../../../shared/services/alert-policies';
+import {
+  createAlertCondition,
+  deleteAlertCondition
+} from '../../../shared/services/alert-policies';
 import { timeRangeToNrql } from '../../../shared/helpers';
 import Dropdown from './dropdown';
 import TagsDropdown from './tags-dropdown';
@@ -70,13 +73,13 @@ export default class DefineSLOForm extends Component {
     const { entityDetails } = this.state;
 
     const newAlertPolicy = document.alertPolicy;
-    const oldAlertPolicy = this.props.slo.alertPolicy;
+    const oldAlertPolicy = this.props.slo ? this.props.slo.alertPolicy : null;
     if (newAlertPolicy) {
       if (oldAlertPolicy) {
         await this.deleteAlertCondition(this.props.slo);
       }
       // eslint-disable-next-line require-atomic-updates
-      document.alertCondition = await AlertSvc.createAlertCondition(document);
+      document.alertCondition = await createAlertCondition(document);
     } else if (oldAlertPolicy) {
       await this.deleteAlertCondition(this.props.slo);
     }
@@ -88,7 +91,7 @@ export default class DefineSLOForm extends Component {
   };
 
   deleteAlertCondition = async document => {
-    await AlertSvc.deleteAlertCondition(document);
+    await deleteAlertCondition(document);
     delete document.alertCondition;
     delete document.alertPolicy;
   };

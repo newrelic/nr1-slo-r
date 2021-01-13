@@ -28,6 +28,7 @@ export const getEntities = async () => {
           entities {
             guid
             name
+            accountId
           }
           nextCursor
         }

@@ -62,7 +62,7 @@ export default class SLOR extends Component {
 
     this.setState({ entities, isRefreshing: false });
 
-    this.fetchAlertPolicies();
+    this.fetchAlertPolicies(entities);
   };
 
   fetchTags = async entities => {
@@ -107,8 +107,20 @@ export default class SLOR extends Component {
     });
   };
 
-  fetchAlertPolicies = async () => {
-    this.setState({ alertPolicies: await getAlertPolicies() });
+  fetchAlertPolicies = async entities => {
+    const policies = [];
+
+    const promises = [...new Set(entities.map(e => e.accountId))].map(
+      accountId => {
+        return getAlertPolicies(accountId);
+      }
+    );
+
+    const results = await Promise.all(promises);
+
+    results.forEach(result => policies.push(...result));
+
+    this.setState({ alertPolicies: policies });
   };
 
   handleEditSLO = slo => {
