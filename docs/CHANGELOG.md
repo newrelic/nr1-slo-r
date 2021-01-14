@@ -1,3 +1,10 @@
+## [1.7.6](https://github.com/newrelic/nr1-slo-r/compare/v1.7.5...v1.7.6) (2021-01-14)
+
+
+### Bug Fixes
+
+* removed unused tests ([629f321](https://github.com/newrelic/nr1-slo-r/commit/629f321081ebc7661e37c1c6a2282abff8d56660))
+
 ## [1.7.5](https://github.com/newrelic/nr1-slo-r/compare/v1.7.4...v1.7.5) (2020-12-17)
 
 
