@@ -1,7 +1,7 @@
 import { NerdGraphMutation, NerdGraphQuery } from 'nr1';
 import { getErrorBudgetNRQL } from '../queries/error-budget-slo/single-document';
 
-export const getAlertPolicies = async () => {
+export const getAlertPolicies = async accountId => {
   let cursor = null;
   let allPolicies = [];
 
@@ -11,7 +11,7 @@ export const getAlertPolicies = async () => {
       : 'policiesSearch {';
     const policiesQuery = `{
         actor {
-          account(id: 1092591) {
+          account(id: ${accountId}) {
             alerts {
               ${searchMethod}
                 nextCursor
@@ -39,7 +39,7 @@ export const getAlertPolicies = async () => {
   return allPolicies;
 };
 
-const createAlertCondition = async function(slo) {
+export const createAlertCondition = async slo => {
   const mutation = `mutation {
       alertsNrqlConditionStaticCreate(
           accountId: ${slo.accountId},
@@ -83,7 +83,7 @@ const createAlertCondition = async function(slo) {
   }
 };
 
-const deleteAlertCondition = async function(slo) {
+export const deleteAlertCondition = async slo => {
   const mutation = `mutation {
       alertsConditionDelete(accountId: ${slo.accountId}, id: ${slo.alertCondition}) {
           id
@@ -101,5 +101,3 @@ const deleteAlertCondition = async function(slo) {
     return true;
   }
 };
-
-export default { createAlertCondition, deleteAlertCondition };

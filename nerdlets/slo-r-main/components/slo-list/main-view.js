@@ -329,5 +329,5 @@ MainView.propTypes = {
   isTableViewActive: PropTypes.bool,
   removeFromList: PropTypes.func.isRequired,
   handleEditSLO: PropTypes.func.isRequired,
-  alertPolicies: PropTypes.func.isRequired
+  alertPolicies: PropTypes.array.isRequired
 };
