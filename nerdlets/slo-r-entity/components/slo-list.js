@@ -90,7 +90,10 @@ export default class SloList extends React.Component {
         const { document } = documentObject;
 
         scopes.forEach(scope => {
-          if (document.indicator === 'error_budget') {
+          if (
+            document.indicator === 'error_budget' ||
+            document.indicator === 'latency_budget'
+          ) {
             ErrorBudgetSLO.query({
               scope,
               document,
