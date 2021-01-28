@@ -1,3 +1,11 @@
+## [1.7.7](https://github.com/newrelic/nr1-slo-r/compare/v1.7.6...v1.7.7) (2021-01-28)
+
+
+### Bug Fixes
+
+* linting issues ([6187a8a](https://github.com/newrelic/nr1-slo-r/commit/6187a8a43909fc9fe9cd9dd81e2f285b1eedffe4))
+* removed deprecated attribute from dropdown ([cdfda47](https://github.com/newrelic/nr1-slo-r/commit/cdfda47339bcf12de7c5a3c5e836b01bba71354e))
+
 ## [1.7.6](https://github.com/newrelic/nr1-slo-r/compare/v1.7.5...v1.7.6) (2021-01-14)
 
 
