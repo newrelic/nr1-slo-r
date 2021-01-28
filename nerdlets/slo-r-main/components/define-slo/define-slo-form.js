@@ -475,8 +475,8 @@ export default class DefineSLOForm extends Component {
           {({ values, errors, setFieldValue, handleSubmit, resetForm }) => (
             <form onSubmit={handleSubmit}>
               <div>
+                <label className="Dropdown-label">Entity</label>
                 <Dropdown
-                  label="Entity"
                   value={values.entityGuid}
                   disabled={values.entityGuid}
                   onChange={async value => {
