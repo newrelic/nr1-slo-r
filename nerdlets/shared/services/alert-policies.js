@@ -40,6 +40,9 @@ export const getAlertPolicies = async accountId => {
 };
 
 export const createAlertCondition = async slo => {
+  /* Note: evaluationOffset is expressed as a number of aggregationWindows. 900 (15 minutes) is currently the max
+   aggregationWindow and thresholdDuration must be a multiple of aggregationWindow. */
+
   const mutation = `mutation {
       alertsNrqlConditionStaticCreate(
           accountId: ${slo.accountId},
@@ -59,7 +62,7 @@ export const createAlertCondition = async slo => {
                   operator: BELOW,
                   threshold: ${slo.target},
                   thresholdOccurrences: AT_LEAST_ONCE,
-                  thresholdDuration: 120,
+                  thresholdDuration: 900,
                   priority: CRITICAL
               },
               valueFunction: SINGLE_VALUE,
