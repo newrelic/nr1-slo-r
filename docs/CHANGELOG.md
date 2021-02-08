@@ -1,3 +1,10 @@
+## [1.7.8](https://github.com/newrelic/nr1-slo-r/compare/v1.7.7...v1.7.8) (2021-02-08)
+
+
+### Bug Fixes
+
+* update docs to support release. ([b471e44](https://github.com/newrelic/nr1-slo-r/commit/b471e44c3e489f3041c8f879ff85988861475a7a))
+
 ## [1.7.7](https://github.com/newrelic/nr1-slo-r/compare/v1.7.6...v1.7.7) (2021-01-28)
 
 
