@@ -9,9 +9,7 @@
 
 SLO/R lets you quickly define SLOs for **error**, **availability**, **capacity**, and **latency** conditions.
 
-You can use the application for reporting out your results.
-
-By measuring SLO attainment across your service estate, you’ll be able to determine what signals are most important.
+You can use the application for reporting out your results. By measuring SLO attainment across your service estate, you’ll be able to determine what signals are most important.
 
 Using New Relic as a consistent basis to define and measure your SLOs offers better insight into comparative SLO attainment in your service delivery organization.
 
