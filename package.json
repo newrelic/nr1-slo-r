@@ -12,7 +12,7 @@
   "dependencies": {
     "@newrelic/nr1-community": "^1.2.0",
     "classnames": "^2.2.6",
-    "date-fns": "^2.16.1",
+    "date-fns": "^2.19.0",
     "formik": "^1.5.8",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
