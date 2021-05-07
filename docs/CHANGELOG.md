@@ -1,3 +1,11 @@
+## [1.7.9](https://github.com/newrelic/nr1-slo-r/compare/v1.7.8...v1.7.9) (2021-05-07)
+
+
+### Bug Fixes
+
+* upgrade date-fns from 2.16.1 to 2.19.0 ([ac7c86f](https://github.com/newrelic/nr1-slo-r/commit/ac7c86fc604877ea8eeac4787ea42f34eb7fcb50))
+* upgrade yup from 0.27.0 to 0.32.9 ([36df756](https://github.com/newrelic/nr1-slo-r/commit/36df756ef9baae4a65d66eed8ebd84354abe1c82))
+
 ## [1.7.8](https://github.com/newrelic/nr1-slo-r/compare/v1.7.7...v1.7.8) (2021-02-08)
 
 
