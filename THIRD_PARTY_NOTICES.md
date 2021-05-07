@@ -27,6 +27,8 @@ code, the source code can be found at [https://github.com/newrelic/nr1-slo-r](ht
 * [react-bootstrap-table2-toolkit](#react-bootstrap-table2-toolkit)
 * [react-syntax-highlighter](#react-syntax-highlighter)
 * [react-widgets](#react-widgets)
+* [semantic-ui-css](#semantic-ui-css)
+* [semantic-ui-react](#semantic-ui-react)
 * [uuid](#uuid)
 * [yup](#yup)
 
@@ -283,7 +285,7 @@ SOFTWARE.
 
 ### date-fns
 
-This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.16.1](https://github.com/date-fns/date-fns/tree/v2.16.1)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.16.1/LICENSE.md):
+This product includes source derived from [date-fns](https://github.com/date-fns/date-fns) ([v2.19.0](https://github.com/date-fns/date-fns/tree/v2.19.0)), distributed under the [MIT License](https://github.com/date-fns/date-fns/blob/v2.19.0/LICENSE.md):
 
 ```
 Copyright (C) 2020 Sasha Koss and Lesha Koss
@@ -523,11 +525,13 @@ SOFTWARE.
 This product includes source derived from [react-bootstrap-table-next](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v3.3.5](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v3.3.5)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v3.3.5/README.md):
 
 ```
-MIT License Copyright (c) <year> <copyright holders>
+MIT License
+
+Copyright (c) <year> <copyright holders>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
@@ -537,11 +541,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This product includes source derived from [react-bootstrap-table2-filter](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v1.3.3](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v1.3.3)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v1.3.3/README.md):
 
 ```
-MIT License Copyright (c) <year> <copyright holders>
+MIT License
+
+Copyright (c) <year> <copyright holders>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
@@ -551,11 +557,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This product includes source derived from [react-bootstrap-table2-toolkit](https://github.com/react-bootstrap-table/react-bootstrap-table2) ([v2.1.3](https://github.com/react-bootstrap-table/react-bootstrap-table2/tree/v2.1.3)), distributed under the [MIT License](https://github.com/react-bootstrap-table/react-bootstrap-table2/blob/v2.1.3/README.md):
 
 ```
-MIT License Copyright (c) <year> <copyright holders>
+MIT License
+
+Copyright (c) <year> <copyright holders>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
@@ -617,6 +625,65 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+### semantic-ui-css
+
+This product includes source derived from [semantic-ui-css](https://github.com/Semantic-Org/Semantic-UI-CSS) ([v2.4.1](https://github.com/Semantic-Org/Semantic-UI-CSS/tree/v2.4.1)), distributed under the [MIT License](https://github.com/Semantic-Org/Semantic-UI-CSS/blob/v2.4.1/LICENSE):
+
+```
+The MIT License (MIT)
+
+Copyright (c) 2015 Semantic Org
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+```
+
+### semantic-ui-react
+
+This product includes source derived from [semantic-ui-react](https://github.com/Semantic-Org/Semantic-UI-React) ([v0.88.2](https://github.com/Semantic-Org/Semantic-UI-React/tree/v0.88.2)), distributed under the [MIT License](https://github.com/Semantic-Org/Semantic-UI-React/blob/v0.88.2/LICENSE.md):
+
+```
+MIT License
+
+Copyright (c) 2016 TechnologyAdvice
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```
+
 ### uuid
 
 This product includes source derived from [uuid](https://github.com/uuidjs/uuid) ([v3.4.0](https://github.com/uuidjs/uuid/tree/v3.4.0)), distributed under the [MIT License](https://github.com/uuidjs/uuid/blob/v3.4.0/LICENSE.md):
@@ -648,7 +715,7 @@ SOFTWARE.
 
 ### yup
 
-This product includes source derived from [yup](https://github.com/jquense/yup) ([v0.27.0](https://github.com/jquense/yup/tree/v0.27.0)), distributed under the [MIT License](https://github.com/jquense/yup/blob/v0.27.0/LICENSE.md):
+This product includes source derived from [yup](https://github.com/jquense/yup) ([v0.32.9](https://github.com/jquense/yup/tree/v0.32.9)), distributed under the [MIT License](https://github.com/jquense/yup/blob/v0.32.9/LICENSE.md):
 
 ```
 The MIT License (MIT)

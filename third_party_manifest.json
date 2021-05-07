@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "Thu Sep 03 2020 03:05:10 GMT+0000 (Coordinated Universal Time)",
+  "lastUpdated": "Fri May 07 2021 17:20:29 GMT+0000 (Coordinated Universal Time)",
   "projectName": "nr1-slo-r",
   "projectUrl": "https://github.com/newrelic/nr1-slo-r",
   "includeDev": true,
@@ -28,15 +28,15 @@
       "licenseTextSource": "file",
       "publisher": "Jed Watson"
     },
-    "date-fns@2.16.1": {
+    "date-fns@2.19.0": {
       "name": "date-fns",
-      "version": "2.16.1",
-      "range": "^2.16.1",
+      "version": "2.19.0",
+      "range": "^2.19.0",
       "licenses": "MIT",
       "repoUrl": "https://github.com/date-fns/date-fns",
-      "versionedRepoUrl": "https://github.com/date-fns/date-fns/tree/v2.16.1",
+      "versionedRepoUrl": "https://github.com/date-fns/date-fns/tree/v2.19.0",
       "licenseFile": "node_modules/date-fns/LICENSE.md",
-      "licenseUrl": "https://github.com/date-fns/date-fns/blob/v2.16.1/LICENSE.md",
+      "licenseUrl": "https://github.com/date-fns/date-fns/blob/v2.19.0/LICENSE.md",
       "licenseTextSource": "file"
     },
     "formik@1.5.8": {
@@ -166,6 +166,32 @@
       "publisher": "Jason",
       "email": "monastic.panic@gmail.com"
     },
+    "semantic-ui-css@2.4.1": {
+      "name": "semantic-ui-css",
+      "version": "2.4.1",
+      "range": "^2.4.1",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/Semantic-Org/Semantic-UI-CSS",
+      "versionedRepoUrl": "https://github.com/Semantic-Org/Semantic-UI-CSS/tree/v2.4.1",
+      "licenseFile": "node_modules/semantic-ui-css/LICENSE",
+      "licenseUrl": "https://github.com/Semantic-Org/Semantic-UI-CSS/blob/v2.4.1/LICENSE",
+      "licenseTextSource": "file",
+      "publisher": "Jack Lukic",
+      "email": "jack@semantic-ui.com"
+    },
+    "semantic-ui-react@0.88.2": {
+      "name": "semantic-ui-react",
+      "version": "0.88.2",
+      "range": "^0.88.2",
+      "licenses": "MIT",
+      "repoUrl": "https://github.com/Semantic-Org/Semantic-UI-React",
+      "versionedRepoUrl": "https://github.com/Semantic-Org/Semantic-UI-React/tree/v0.88.2",
+      "licenseFile": "node_modules/semantic-ui-react/LICENSE.md",
+      "licenseUrl": "https://github.com/Semantic-Org/Semantic-UI-React/blob/v0.88.2/LICENSE.md",
+      "licenseTextSource": "file",
+      "publisher": "Levi Thomason",
+      "email": "me@levithomason.com"
+    },
     "uuid@3.4.0": {
       "name": "uuid",
       "version": "3.4.0",
@@ -177,15 +203,15 @@
       "licenseUrl": "https://github.com/uuidjs/uuid/blob/v3.4.0/LICENSE.md",
       "licenseTextSource": "file"
     },
-    "yup@0.27.0": {
+    "yup@0.32.9": {
       "name": "yup",
-      "version": "0.27.0",
-      "range": "0.27.0",
+      "version": "0.32.9",
+      "range": "0.32.9",
       "licenses": "MIT",
       "repoUrl": "https://github.com/jquense/yup",
-      "versionedRepoUrl": "https://github.com/jquense/yup/tree/v0.27.0",
+      "versionedRepoUrl": "https://github.com/jquense/yup/tree/v0.32.9",
       "licenseFile": "node_modules/yup/LICENSE.md",
-      "licenseUrl": "https://github.com/jquense/yup/blob/v0.27.0/LICENSE.md",
+      "licenseUrl": "https://github.com/jquense/yup/blob/v0.32.9/LICENSE.md",
       "licenseTextSource": "file",
       "publisher": "@monasticpanic Jason Quense"
     }
